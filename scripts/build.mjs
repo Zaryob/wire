@@ -10,6 +10,16 @@ const e = value => String(value).replace(/[&<>"]/g, char => ({ '&': '&amp;', '<'
 const url = id => `${base}/${id ? `${id}/` : ''}`;
 const asset = name => `${base}/${name}`;
 const hex = (value, digits = 2) => value.toString(16).padStart(digits, '0');
+const layerKey = layer => {
+  switch (layer) {
+    case 'Bağlantı': return 'link';
+    case 'Ağ': return 'network';
+    case 'Taşıma':
+    case 'İletim': return 'transport';
+    case 'Uygulama': return 'application';
+    default: return 'default';
+  }
+};
 
 const protocols = await loadProtocols();
 const byId = new Map(protocols.map(protocol => [protocol.id, protocol]));
@@ -126,10 +136,12 @@ function protocolPage(protocol) {
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
   return page({ id: protocol.id, title: protocol.title, description: protocol.summary, body: `
 <nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>${e(protocol.id)}</span></nav>
-<header class="page-header"><p class="eyebrow">${e(protocol.layer)} katmanı · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits)) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
-<section aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
+<header class="page-header"><p class="eyebrow"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</span> · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits)) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
+<div class="overview-grid">
+  <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
 <p class="verified">Alan genişlikleri ${refLink(layoutRef)}${protocol.layout.section ? ` (${e(protocol.layout.label)})` : ''} ile derleme sırasında karşılaştırıldı: <code>${checks.get(protocol.id).found.join(' · ')}</code>${protocol.layout.kind === 'rfc826' && protocol.layout.part === 'arp' ? ' (n ve m: ar$hln ve ar$pln sekizli)' : ' bit'}.</p></section>
-<section aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
+  <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
+</div>
 <section aria-labelledby="fields-title"><h2 id="fields-title">Alanlar</h2><div class="table-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} alanları"><table class="fields"><thead><tr><th scope="col">Alan</th><th scope="col">Bit</th><th scope="col">Genişlik</th><th scope="col">Örnek</th><th scope="col">Açıklama ve kaynak</th></tr></thead><tbody>${table}</tbody></table></div></section>
 ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes-title">Notlar</h2><ul class="notes">${protocol.notes.map(note => `<li>${e(note)}</li>`).join('')}</ul></section>` : ''}
 <section aria-labelledby="refs-title"><h2 id="refs-title">Kaynaklar</h2><ol class="references">${protocol.refs.map(number => { const entry = rfcEntry(number); return `<li><a href="${url('kaynakca')}#rfc${number}">[RFC ${number}]</a> ${citation(entry)}</li>`; }).join('')}</ol></section>
@@ -142,9 +154,9 @@ function home() {
 <header class="page-header"><p class="eyebrow">~/wire · ağ protokolü başlıkları</p><h1>Tel üzerindeki her bit, kaynağıyla.</h1><p class="lead">Bir protokol seçin: başlığın bit şemasını, her alanın anlamını ve örnek bir paketin sekizlilerini yan yana görün. Bütün bilgiler RFC’lerden alınmıştır ve her alan dayandığı bölüme bağlanır. Ağ ve Ethernet protokollerinin ayrıntılı mimarisi için <a href="${url('kilavuz')}">kılavuzu</a> inceleyebilirsiniz.</p></header>
 <label class="filter"><span>Protokol ara</span><input id="protocol-filter" type="search" placeholder="tcp, sağlama toplamı, 791…" autocomplete="off" spellcheck="false"></label>
 <p id="filter-status" class="small" role="status" aria-live="polite"></p>
-${layers.map(layer => `<section class="layer" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}">${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
+${layers.map(layer => `<section class="layer layer--${layerKey(layer)}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${layerKey(layer)}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
     const { headerLength } = example(protocol.id);
-    return `<li class="protocol-card" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength} sekizli · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · RFC ${protocol.layout.rfc}</p></li>`;
+    return `<li class="protocol-card protocol-card--${layerKey(protocol.layer)}" data-layer="${layerKey(protocol.layer)}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><div class="protocol-card__header"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><span class="layer-pill layer-pill--${layerKey(protocol.layer)}">${e(protocol.layer)}</span></div><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength} sekizli · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · RFC ${protocol.layout.rfc}</p></li>`;
   }).join('')}</ul></section>`).join('')}` });
 }
 
@@ -170,6 +182,7 @@ function guidePage() {
     <li><a href="#bolum-8">8. Bütün Temel Ağ RFC’lerinin Kapsamlı Kataloğu</a></li>
     <li><a href="#bolum-9">9. Uçtan Uca Paket Analizleri ve Onaltılık (Hex) İncelemeler</a></li>
     <li><a href="#bolum-10">10. Ağ Analizi ve Paket İnceleme Araçları Rehberi</a></li>
+    <li><a href="#bolum-11">11. Tüm Katmanlardaki Protokollerin Araştırması ve wire Genişleme Yol Haritası</a></li>
   </ul>
 </div>
 
@@ -342,6 +355,35 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 # from scapy.all import Ether, IP, TCP, sendp
 # p = Ether(dst="00:00:5e:00:53:02") / IP(dst="198.51.100.7") / TCP(dport=80, flags="S")
 # sendp(p, iface="eth0")</code></pre>
+</section>
+
+<section id="bolum-11">
+  <h2>11. Tüm Katmanlardaki Protokollerin Araştırması ve wire Genişleme Yol Haritası</h2>
+  <p>wire sistemine yeni bir protokolün eklenebilmesi için resmi bir IETF RFC'sinde yayımlanmış olması, <code>src/rfc.mjs</code> tarafından doğrulanabilir bir ASCII başlık şemasına sahip olması ve deterministik olarak örnek bayt dizisi üretilebilmesi gerekir.</p>
+
+  <h3>Katman Katman Aday Protokoller</h3>
+  <div class="table-scroll"><table class="fields">
+    <thead><tr><th>Katman</th><th>Aday Protokol</th><th>RFC</th><th>Başlık Boyutu</th><th>Değerlendirme ve Fizibilite</th></tr></thead>
+    <tbody>
+      <tr><td>Bağlantı</td><td><strong>PPPoE</strong></td><td>RFC 2516 §4</td><td>6 sekizli</td><td><strong>Çok Yüksek</strong>. Version, Type, Code, Session_ID, Length alanları. DSL ve fiber optik genişbant erişiminde evrenseldir.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>IEEE 802.1Q (VLAN)</strong></td><td>RFC 3069 / IEEE</td><td>4 sekizli</td><td><strong>Yüksek</strong>. TPID (0x8100), PCP (3 bit), DEI (1 bit), VID (12 bit). Ethernet çerçevesine ek başlık olarak entegre edilebilir.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>RARP</strong></td><td>RFC 903</td><td>28 sekizli</td><td><strong>Yüksek</strong>. RFC 826 ARP ile birebir aynı yerleşimi paylaşır (op=3/4).</td></tr>
+      <tr><td>Ağ</td><td><strong>IGMPv2</strong></td><td>RFC 2236 §2</td><td>8 sekizli</td><td><strong>Çok Yüksek</strong>. Type (8), Max Resp Time (8), Checksum (16), Group Address (32). IP multicast ve IPTV için kritik; RFC 1071 sağlama toplamı kullanır.</td></tr>
+      <tr><td>Ağ</td><td><strong>IPv6 Fragment</strong></td><td>RFC 8200 §4.5</td><td>8 sekizli</td><td><strong>Çok Yüksek</strong>. Next Header (8), Reserved (8), Fragment Offset (13), M Flag (1), Identification (32). Sabit 32 bit ızgaraya oturur.</td></tr>
+      <tr><td>Ağ</td><td><strong>GRE</strong></td><td>RFC 2784 §2.1</td><td>4 sekizli</td><td><strong>Yüksek</strong>. Temel tünelleme başlığı (Flags/Reserved 16, Protocol Type 16).</td></tr>
+      <tr><td>Taşıma</td><td><strong>SCTP</strong></td><td>RFC 9260 §3</td><td>12 sekizli + chunk</td><td><strong>Çok Yüksek</strong>. Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32). Telekom altyapısı ve WebRTC için standarttır.</td></tr>
+      <tr><td>Uygulama</td><td><strong>DHCPv4 / BOOTP</strong></td><td>RFC 2131 §2</td><td>236 sekizli + seçenekler</td><td><strong>Çok Yüksek</strong>. 32-bit ASCII şeması tamdır. Paket yakalamalarında en çok aranan ve incelenen protokoldür.</td></tr>
+      <tr><td>Uygulama</td><td><strong>NTP</strong></td><td>RFC 5905 §7.3</td><td>48 sekizli</td><td><strong>Çok Yüksek</strong>. Sabit 384 bitlik şeması vardır; zaman senkronizasyonunun küresel standardıdır.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Önerilen Uygulama Sıralaması</h3>
+  <ul class="notes">
+    <li><strong>1. Faz (Hızlı Entegrasyon)</strong>: <code>PPPoE (RFC 2516)</code>, <code>IGMPv2 (RFC 2236)</code> ve <code>NTP (RFC 5905)</code> &mdash; Sabit boyutlu şemalar ve standart sağlama toplamları sayesinde altyapıya anında uyum sağlar.</li>
+    <li><strong>2. Faz (Temel Altyapı)</strong>: <code>DHCPv4 (RFC 2131)</code>, <code>SCTP (RFC 9260)</code> ve <code>IPv6 Fragment Header (RFC 8200)</code> &mdash; Eğitsel değeri yüksek, genişletilmiş başlıklar.</li>
+    <li><strong>3. Faz (Tünelleme ve Güvenlik)</strong>: <code>GRE (RFC 2784)</code>, <code>IPsec AH (RFC 4302)</code> ve <code>DHCPv6 (RFC 8415)</code>.</li>
+  </ul>
+</section>
 </article>` });
 }
 

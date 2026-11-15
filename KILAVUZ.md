@@ -59,6 +59,11 @@ Bu kılavuz; tel üzerindeki (on the wire) fiziksel bit dizilimlerinden başlaya
    - [Örnek 3: Ethernet + IPv4 + TCP SYN Paketi](#örnek-3-ethernet--ipv4--tcp-syn-paketi)
    - [Örnek 4: Ethernet + IPv6 + ICMPv6 Echo İsteği](#örnek-4-ethernet--ipv6--icmpv6-echo-i̇steği)
    - [Örnek 5: 802.1Q VLAN Etiketli Ethernet Çerçevesi](#örnek-5-8021q-vlan-etiketli-ethernet-çerçevesi)
+10. [Ağ Analizi ve Paket İnceleme Araçları Rehberi](#10-ağ-analizi-ve-paket-i̇nceleme-araçları-rehberi)
+11. [Tüm Katmanlardaki Protokollerin Araştırması ve wire Genişleme Yol Haritası](#11-tüm-katmanlardaki-protokollerin-araştırması-ve-wire-genişleme-yol-haritası)
+    - [Protokol Uygunluk ve Kabul Kriterleri](#protokol-uygunluk-ve-kabul-kriterleri)
+    - [Katman Katman Aday Protokoller](#katman-katman-aday-protokoller)
+    - [Önceliklendirme ve Uygulama Matrisi](#önceliklendirme-ve-uygulama-matrisi)
 
 ---
 
@@ -1089,6 +1094,81 @@ packet = (
 # Paketi bit düzeyinde tel üzerine basma
 sendp(packet, iface="eth0")
 ```
+
+---
+
+## 11. Tüm Katmanlardaki Protokollerin Araştırması ve wire Genişleme Yol Haritası
+
+Bu bölümde, bilgisayar ağlarının tüm katmanlarındaki protokoller `wire` projesinin mimari ilkeleri çerçevesinde taranmış; hangi protokollerin projeye başarıyla eklenebileceği, RFC şema uygunlukları, sağlama toplamı mantıkları ve entegrasyon zorlukları teknik olarak değerlendirilmiştir.
+
+### Protokol Uygunluk ve Kabul Kriterleri
+
+Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aranır:
+1. **Otoriter IETF RFC Metni**: Protokol bir IETF RFC'si olarak yayımlanmış olmalıdır (tescilli veya RFC dışı IEEE/ITU standartları doğrudan kaynak olamaz).
+2. **ASCII Başlık Şeması**: RFC düz metni içinde `src/rfc.mjs` ayrıştırıcısının okuyabileceği standart bir ASCII şeması (`+---+` sınırları ve `|Alan|` hücreleri) veya RFC 826 benzeri yapılandırılmış bir alan listesi bulunmalıdır.
+3. **Deterministik Kodlama ve Ayrıştırma**: Alan genişlikleri bit düzeyinde kesin olmalı, değişken kısımlar açıkça sınırlandırılabilmelidir.
+4. **Doğrulanabilir Örnek Paket**: Alan örnek değerlerinden deterministik olarak bir bayt dizisi üretilebilmeli ve gerekiyorsa sağlama toplamı (RFC 1071 veya CRC-32) matematiksel olarak doğrulanabilmelidir.
+
+---
+
+### Katman Katman Aday Protokoller
+
+#### 1. Bağlantı Katmanı (Link Layer) Adayları
+
+| Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
+|---|---|---|---|
+| **PPPoE (PPP over Ethernet)** | **RFC 2516** | §4 (Figure) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. 6 baytlık sabit başlık: Version (4), Type (4), Code (8), Session_ID (16), Length (16). RFC metninde temiz bir ASCII şeması mevcuttur. Genişbant DSL/FTTH erişiminde evrenseldir. |
+| **IEEE 802.1Q (VLAN Tagging)** | **RFC 3069** / IEEE | 16 bit ızgara | **Yüksek Uygunluk**. TPID (16: 0x8100), PCP (3), DEI (1), VID (12). Ethernet çerçevesine ek bir 4 baytlık başlık olarak modellenip Ethernet sayfasıyla entegre edilebilir. |
+| **RARP (Reverse ARP)** | **RFC 903** | RFC 826 şablonu | **Yüksek Uygunluk**. RFC 826 ile tamamen aynı 28 baytlık yerleşimi paylaşır (`ar$op = 3/4`). Tarihsel önemi yüksektir. |
+| **LLC / SNAP Kapsüllemesi** | **RFC 1042** | Liste tanımı | **Orta Uygunluk**. IEEE 802 ağlarında IP taşıma standardıdır (DSAP 8, SSAP 8, Control 8, OUI 24, EtherType 16). |
+
+#### 2. Ağ / İnternet Katmanı (Network Layer) Adayları
+
+| Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
+|---|---|---|---|
+| **IGMPv2 (Group Management)** | **RFC 2236** | §2 (Message Formats) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. Sabit 8 sekizli başlık: Type (8), Max Resp Time (8), Checksum (16), Group Address (32). Temiz 32-bit ASCII şeması vardır; sağlama toplamı doğrudan RFC 1071 standardındadır. IPTV ve multicast yönlendirmenin kalbidir. |
+| **IPv6 Fragment Header** | **RFC 8200** | §4.5 (Fragment Header) — 32 bit ızgara | **Çok Yüksek Uygunluk**. Sabit 8 sekizli uzantı başlığı: Next Header (8), Reserved (8), Fragment Offset (13), Res (2), M Flag (1), Identification (32). RFC 8200 içinde tam ASCII şeması bulunur. |
+| **GRE (Generic Routing Encapsulation)** | **RFC 2784** | §2.1 — 32 bit ızgara | **Yüksek Uygunluk**. C (1), Reserved0 (12), Version (3), Protocol Type (16). Temel tünelleme başlığı 4 sekizlidir. RFC 2890 ile anahtar ve sıra numarası seçenekleri de belgelenmiştir. |
+| **IPsec AH (Authentication Header)** | **RFC 4302** | §2.2 — 32 bit ızgara | **Orta Uygunluk**. Next Header (8), Payload Len (8), Reserved (16), SPI (32), Sequence Number (32), ICV (değişken). Değişken kimlik doğrulama verisi taşır. |
+| **IPsec ESP** | **RFC 4303** | §2 — 32 bit ızgara | **Orta Uygunluk**. SPI (32), Sequence Number (32), Payload (değişken), Padding, Pad Length (8), Next Header (8). Şifreli veri yükü içerdiğinden statik örnekleme dikkat gerektirir. |
+
+#### 3. İletim Katmanı (Transport Layer) Adayları
+
+| Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
+|---|---|---|---|
+| **SCTP (Stream Control Transmission)** | **RFC 9260** | §3.1 (Common Header) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. 12 baytlık ortak başlık: Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32 - CRC-32c). Ardından gelen Chunk Header (Type 8, Flags 8, Length 16) da temiz ASCII şemalarına sahiptir. Telekom altyapıları ve WebRTC için vazgeçilmezdir. |
+| **DCCP (Datagram Congestion Control)** | **RFC 4340** | §5.1 — 32 bit ızgara | **Orta Uygunluk**. Source Port (16), Dest Port (16), Data Offset (8), CCVal (4), CsCov (4), Checksum (16), Res (3), Type (4), X (1), Sequence Number (24/48). Güvenilmez ama tıkanıklık denetimli akış iletimi. |
+| **QUIC Paket Başlığı** | **RFC 9000** | §17 — Değişken şemalar | **Düşük-Orta Uygunluk**. Modern webin temelidir ancak başlık alanları sabit bitli değil değişken uzunluklu tamsayı (variable-length integer) kodlaması ve şifreli başlık bitleri içerir. |
+
+#### 4. Uygulama ve Ağ Yönetimi Katmanı (Application / Management Layer) Adayları
+
+| Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
+|---|---|---|---|
+| **DHCPv4 / BOOTP** | **RFC 2131** | §2 (Protocol Structure) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. 236 baytlık sabit kısım: op (8), htype (8), hlen (8), hops (8), xid (32), secs (16), flags (16), ciaddr (32), yiaddr (32), siaddr (32), giaddr (32), chaddr (16 bayt), sname (64 bayt), file (128 bayt) ve options. RFC 2131 §2 eksiksiz 32 bit ASCII şeması içerir. |
+| **NTP (Network Time Protocol)** | **RFC 5905** | §7.3 (Packet Header Format) — 32 bit ızgara | **Çok Yüksek Uygunluk**. Kesinlikle sabit 48 baytlık (384 bit) başlık: LI (2), VN (3), Mode (3), Stratum (8), Poll (8), Precision (8), Root Delay (32), Root Dispersion (32), Reference ID (32), Reference Timestamp (64), Origin Timestamp (64), Receive Timestamp (64), Transmit Timestamp (64). Şeması mükemmel hizalıdır. |
+| **DHCPv6** | **RFC 8415** | §7 — 32 bit ızgara | **Yüksek Uygunluk**. İstemci-sunucu mesajları için sabit 4 baytlık başlık: msg-type (8), transaction-id (24), ardından seçenekler. Relay mesajları için 34 baytlık başlık. |
+| **TLS 1.3 Record Layer** | **RFC 8446** | §5.1 — Bayt listesi | **Orta Uygunluk**. 5 baytlık kayıt başlığı: Content Type (8), Legacy Version (16: 0x0303), Length (16), Şifreli Yük. Şifreleme öncesi ve sonrası ayrımı gerektirir. |
+
+---
+
+### Önceliklendirme ve Uygulama Matrisi
+
+`wire` projesine yeni protokoller eklenirken izlenmesi tavsiye edilen fazlar ve gerekçeleri:
+
+```text
+[Faz 1 - Hızlı Kazanımlar]    ──>  PPPoE (RFC 2516) & IGMPv2 (RFC 2236) & NTP (RFC 5905)
+                                  (Temiz 32-bit ASCII şeması, sabit bayt boyutları, doğrudan RFC 1071 / UDP entegrasyonu)
+
+[Faz 2 - Temel Ağ Altyapısı]  ──>  DHCPv4 (RFC 2131) & SCTP (RFC 9260) & IPv6 Fragment (RFC 8200)
+                                  (Ağ mühendisliği için kritik değer, zengin alan tabloları)
+
+[Faz 3 - Tünelleme ve Güvenlik]──> GRE (RFC 2784) & IPsec AH (RFC 4302) & DHCPv6 (RFC 8415)
+```
+
+1. **IGMPv2 (RFC 2236)**: Ağ katmanındaki boşluğu doldurur. 8 baytlık başlığı RFC 792 ICMP ile benzer yapıda olduğundan kodlayıcı ve test altyapısına 1 saatte entegre edilebilir.
+2. **PPPoE (RFC 2516)**: Bağlantı katmanında Ethernet ile IP arasındaki eksik köprüyü tamamlar.
+3. **NTP (RFC 5905)**: 48 baytlık sabit ve kusursuz 32 bit şemasıyla UDP üzerinde taşınan en zarif protokoldür.
+4. **DHCPv4 (RFC 2131)**: Ziyaretçilerin ve öğrencilerin paket yakalamalarında en çok aradığı protokoldür; geniş alan tablosuyla siteye büyük eğitsel değer katar.
 
 ---
 
