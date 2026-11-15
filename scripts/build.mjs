@@ -147,8 +147,36 @@ function diagram(protocol) {
     }
     offset += field.bits;
   }
-  const ruler = Array.from({ length: cols }, (_, bit) => `<span>${bit % 10}</span>`).join('');
-  return `<div class="bits-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} bit şeması"><div class="bits" style="--cols:${cols}"><div class="bits-ruler" aria-hidden="true">${ruler}</div>${cells.map(cell => `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`).join('')}</div></div>`;
+
+  const byteCount = cols / 8;
+  const byteBands = Array.from({ length: byteCount }, (_, i) => {
+    const startBit = i * 8;
+    const endBit = startBit + 7;
+    return `<div class="bits-byte-band" style="grid-column:span 8" title="${i + 1}. Sekizli (Byte ${i}): Bit ${startBit}–${endBit}"><span>Sekizli ${i} <small>(Bit ${startBit}–${endBit})</small></span></div>`;
+  }).join('');
+
+  const bitNumbers = Array.from({ length: cols }, (_, bit) => {
+    const isByteBoundary = bit % 8 === 0;
+    const byteIndex = Math.floor(bit / 8);
+    return `<span class="bits-col-num${isByteBoundary ? ' bits-col-num--boundary' : ''}" title="Bit ${bit} (${byteIndex}. Sekizli, ${bit % 8}. bit)">${bit}</span>`;
+  }).join('');
+
+  return `<div class="bits-diagram-wrap">
+  <div class="bits-header">
+    <div class="bits-header__info">
+      <span class="bits-header__badge">Bit Cetveli</span>
+      <span class="bits-header__title">${cols} bitlik satır (${byteCount} sekizli / bayt)</span>
+    </div>
+    <span class="bits-header__order" title="Ağ Bayt Sıralaması (Network Byte Order): En anlamlı bit (MSB) daima en soldadır (Bit 0)">Ağ Sırası: En anlamlı bit (Bit 0) en solda</span>
+  </div>
+  <div class="bits-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} bit şeması">
+    <div class="bits" style="--cols:${cols}">
+      <div class="bits-ruler bits-ruler--bytes" aria-hidden="true">${byteBands}</div>
+      <div class="bits-ruler bits-ruler--bits" aria-hidden="true">${bitNumbers}</div>
+      ${cells.map(cell => `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`).join('')}
+    </div>
+  </div>
+</div>`;
 }
 
 function exampleValue(field, range, bytes) {
@@ -169,27 +197,41 @@ function protocolPage(protocol) {
   const subHeaderLen = subProto ? example(subProto.id).headerLength : 0;
   const subLayer = subProto ? layerKey(subProto.layer) : null;
 
-  const byteLayer = index => {
-    if (index < headerLength) return myLayer;
-    if (subProto && index < headerLength + subHeaderLen) return subLayer;
-    if (protocol.id === 'udp' || protocol.id === 'tcp' || (subProto && (subProto.id === 'udp' || subProto.id === 'tcp'))) return 'application';
-    if (protocol.id === 'dns') return 'application';
-    return myLayer;
-  };
+  const fieldIndexMap = new Map();
+  protocol.fields.forEach((f, i) => fieldIndexMap.set(f.key, i));
 
   const legendItems = [];
-  legendItems.push(`<span class="hex-legend__item hex-legend__item--${myLayer}"><span class="hex-legend__swatch"></span>${e(protocol.name)} başlığı (${headerLength} sekizli)</span>`);
+  legendItems.push(`<div class="hex-legend__item hex-legend__item--guide">
+    <span class="hex-legend__swatches" aria-hidden="true">
+      <span class="hex-legend__swatch hex-legend__swatch--f0"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--f1"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--f2"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--f3"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--f4"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--f5"></span>
+    </span>
+    <span><strong>${e(protocol.title)}</strong> (${headerLength} sekizli başlık — alanlar farklı renklerle ayrılmıştır)</span>
+  </div>`);
+
   if (subProto) {
-    legendItems.push(`<span class="hex-legend__item hex-legend__item--${subLayer}"><span class="hex-legend__swatch"></span>${e(subProto.name)} yükü (${subHeaderLen} sekizli)</span>`);
+    legendItems.push(`<div class="hex-legend__item">
+      <span class="hex-legend__swatch hex-legend__swatch--sub" aria-hidden="true"></span>
+      <span>Sarmalanmış ${e(subProto.name)} başlığı (${subHeaderLen} sekizli)</span>
+    </div>`);
     const remaining = bytes.length - (headerLength + subHeaderLen);
     if (remaining > 0) {
-      legendItems.push(`<span class="hex-legend__item hex-legend__item--application"><span class="hex-legend__swatch"></span>Uygulama verisi (${remaining} sekizli)</span>`);
+      legendItems.push(`<div class="hex-legend__item">
+        <span class="hex-legend__swatch hex-legend__swatch--data" aria-hidden="true"></span>
+        <span>Uygulama yükü (${remaining} sekizli veri)</span>
+      </div>`);
     }
   } else if (bytes.length > headerLength) {
     const remaining = bytes.length - headerLength;
-    const label = protocol.id === 'dns' ? 'Soru kaydı' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? 'İleti verisi' : 'Uygulama verisi';
-    const pLayer = protocol.id === 'dns' ? 'application' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? myLayer : 'application';
-    legendItems.push(`<span class="hex-legend__item hex-legend__item--${pLayer}"><span class="hex-legend__swatch"></span>${label} (${remaining} sekizli)</span>`);
+    const label = protocol.id === 'dns' ? 'Soru ve yanıt kayıtları' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? 'Hata / yankı verisi' : 'Yük verisi';
+    legendItems.push(`<div class="hex-legend__item">
+      <span class="hex-legend__swatch hex-legend__swatch--data" aria-hidden="true"></span>
+      <span>${label} (${remaining} sekizli)</span>
+    </div>`);
   }
 
   const fieldsAt = index => protocol.fields.filter(field => ranges[field.key] && ranges[field.key].offset < (index + 1) * 8 && ranges[field.key].offset + ranges[field.key].bits > index * 8).map(field => field.key);
@@ -197,12 +239,25 @@ function protocolPage(protocol) {
   for (let start = 0; start < bytes.length; start += 8) {
     rows.push(`<div class="hex-row"><span class="hex-offset">${hex(start, 4)}</span>${bytes.slice(start, start + 8).map((byte, i) => {
       const index = start + i;
-      const bLayer = byteLayer(index);
       const isPayload = index >= headerLength;
       const fields = fieldsAt(index);
       const dataAttr = fields.length ? ` data-fields="${fields.join(' ')}"` : '';
-      const payloadClass = isPayload ? ' hex-byte--payload' : '';
-      return `<span class="hex-byte hex-byte--${bLayer}${payloadClass}"${dataAttr}>${hex(byte)}</span>`;
+
+      let colorClass = '';
+      if (!isPayload) {
+        const fieldIdx = fields.length ? fieldIndexMap.get(fields[0]) : 0;
+        colorClass = `hex-byte--f${fieldIdx % 6}`;
+      } else if (subProto && index < headerLength + subHeaderLen) {
+        const subIndex = index - headerLength;
+        const subRanges = example(subProto.id).ranges;
+        const subFields = subProto.fields.filter(field => subRanges[field.key] && subRanges[field.key].offset < (subIndex + 1) * 8 && subRanges[field.key].offset + subRanges[field.key].bits > subIndex * 8).map(f => f.key);
+        const subFieldIdx = subFields.length ? subProto.fields.findIndex(f => f.key === subFields[0]) : 0;
+        colorClass = `hex-byte--sub hex-byte--f${subFieldIdx % 6}`;
+      } else {
+        colorClass = 'hex-byte--payload-data';
+      }
+
+      return `<span class="hex-byte ${colorClass}"${dataAttr}>${hex(byte)}</span>`;
     }).join('')}</div>`);
   }
   const table = protocol.fields.map(field => {
