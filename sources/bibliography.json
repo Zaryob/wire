@@ -1,0 +1,432 @@
+{
+  "retrieved": "2026-11-15",
+  "source": "https://www.rfc-editor.org/",
+  "entries": [
+    {
+      "number": 768,
+      "title": "User Datagram Protocol",
+      "authors": [
+        "J. Postel"
+      ],
+      "date": "August 1980",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC9868"
+      ],
+      "doi": "10.17487/RFC768",
+      "url": "https://www.rfc-editor.org/rfc/rfc768",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc768.txt",
+      "sha256": "7dc8880e1ecef9c3f9da0db4b876a16e96bfa4f0953cc9d977d414f8f680c2f0",
+      "bytes": 5896,
+      "use": "UDP başlığı ve sözde başlık"
+    },
+    {
+      "number": 791,
+      "title": "Internet Protocol",
+      "authors": [
+        "J. Postel"
+      ],
+      "date": "September 1981",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC760"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC1349",
+        "RFC2474",
+        "RFC6864"
+      ],
+      "doi": "10.17487/RFC791",
+      "url": "https://www.rfc-editor.org/rfc/rfc791",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc791.txt",
+      "sha256": "6cfb387fcecfc1b72f2f69343c5b6951b5d263d708162e2b5c66ab8f394f6265",
+      "bytes": 94892,
+      "use": "IPv4 başlığı"
+    },
+    {
+      "number": 792,
+      "title": "Internet Control Message Protocol",
+      "authors": [
+        "J. Postel"
+      ],
+      "date": "September 1981",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC777"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC950",
+        "RFC4884",
+        "RFC6633",
+        "RFC6918"
+      ],
+      "doi": "10.17487/RFC792",
+      "url": "https://www.rfc-editor.org/rfc/rfc792",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc792.txt",
+      "sha256": "58714393ded142bacf188d7e8977eef98f4110c4c87ac94595f750df5664c2c6",
+      "bytes": 29186,
+      "use": "ICMP iletileri"
+    },
+    {
+      "number": 826,
+      "title": "An Ethernet Address Resolution Protocol: Or Converting Network Protocol Addresses to 48.bit Ethernet Address for Transmission on Ethernet Hardware",
+      "authors": [
+        "D. Plummer"
+      ],
+      "date": "November 1982",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC5227",
+        "RFC5494"
+      ],
+      "doi": "10.17487/RFC826",
+      "url": "https://www.rfc-editor.org/rfc/rfc826",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc826.txt",
+      "sha256": "01bc62fe6a37e90f1246ac43e8e145f1322b4ed1474836145c3da93d2bd3c8a6",
+      "bytes": 21556,
+      "use": "ARP paketi ve Ethernet iletim katmanı alanları"
+    },
+    {
+      "number": 894,
+      "title": "A Standard for the Transmission of IP Datagrams over Ethernet Networks",
+      "authors": [
+        "C. Hornig"
+      ],
+      "date": "April 1984",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC894",
+      "url": "https://www.rfc-editor.org/rfc/rfc894",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc894.txt",
+      "sha256": "be88b9301e53f986aca3a0e55e488d1d79bae3f88fe3f257640397bc089e7035",
+      "bytes": 5697,
+      "use": "IP datagramlarının Ethernet çerçevesinde taşınması"
+    },
+    {
+      "number": 1035,
+      "title": "Domain names - implementation and specification",
+      "authors": [
+        "P. Mockapetris"
+      ],
+      "date": "November 1987",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC882",
+        "RFC883",
+        "RFC973"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC1101",
+        "RFC1183",
+        "RFC1348",
+        "RFC1876",
+        "RFC1982",
+        "RFC1995",
+        "RFC1996",
+        "RFC2065",
+        "RFC2136",
+        "RFC2137",
+        "RFC2181",
+        "RFC2308",
+        "RFC2535",
+        "RFC2673",
+        "RFC2845",
+        "RFC3425",
+        "RFC3658",
+        "RFC4033",
+        "RFC4034",
+        "RFC4035",
+        "RFC4343",
+        "RFC5936",
+        "RFC5966",
+        "RFC6604",
+        "RFC7766",
+        "RFC8482",
+        "RFC8490",
+        "RFC8767",
+        "RFC9619"
+      ],
+      "doi": "10.17487/RFC1035",
+      "url": "https://www.rfc-editor.org/rfc/rfc1035",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc1035.txt",
+      "sha256": "d14ae809fc9b41bbcae26bb38c937c9515808b944f3252b00de9fe0e95f4fdfb",
+      "bytes": 122549,
+      "use": "DNS ileti başlığı"
+    },
+    {
+      "number": 1071,
+      "title": "Computing the Internet checksum",
+      "authors": [
+        "R.T. Braden",
+        "D.A. Borman",
+        "C. Partridge"
+      ],
+      "date": "September 1988",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC1141"
+      ],
+      "doi": "10.17487/RFC1071",
+      "url": "https://www.rfc-editor.org/rfc/rfc1071",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc1071.txt",
+      "sha256": "e10dfd6816447843d47a7f1b990eba756a791a6308fd5b698a6276075a8e4f9b",
+      "bytes": 53524,
+      "use": "İnternet sağlama toplamının hesaplanması"
+    },
+    {
+      "number": 2474,
+      "title": "Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers",
+      "authors": [
+        "K. Nichols",
+        "S. Blake",
+        "F. Baker",
+        "D. Black"
+      ],
+      "date": "December 1998",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC1349",
+        "RFC1455"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC791"
+      ],
+      "updated_by": [
+        "RFC3168",
+        "RFC3260",
+        "RFC8436"
+      ],
+      "doi": "10.17487/RFC2474",
+      "url": "https://www.rfc-editor.org/rfc/rfc2474",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2474.txt",
+      "sha256": "c490f3e15aa0b85b4117fe31ffbe68f17bf12e68357e8a1651c520ba2589f909",
+      "bytes": 50576,
+      "use": "IPv4 TOS ve IPv6 Traffic Class sekizlisinin DS alanı olarak yeniden tanımı"
+    },
+    {
+      "number": 2606,
+      "title": "Reserved Top Level DNS Names",
+      "authors": [
+        "D. Eastlake 3rd",
+        "A. Panitz"
+      ],
+      "date": "June 1999",
+      "status": "BEST CURRENT PRACTICE",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC6761"
+      ],
+      "doi": "10.17487/RFC2606",
+      "url": "https://www.rfc-editor.org/rfc/rfc2606",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2606.txt",
+      "sha256": "b6869c8984701701bc2e6973b6ffc750d497f845cc1a65a106e9301590a13ab0",
+      "bytes": 8008,
+      "use": "Örneklerde kullanılan belgeleme alan adları"
+    },
+    {
+      "number": 3168,
+      "title": "The Addition of Explicit Congestion Notification (ECN) to IP",
+      "authors": [
+        "K. Ramakrishnan",
+        "S. Floyd",
+        "D. Black"
+      ],
+      "date": "September 2001",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC2481"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC793",
+        "RFC2003",
+        "RFC2401",
+        "RFC2474"
+      ],
+      "updated_by": [
+        "RFC4301",
+        "RFC6040",
+        "RFC8311",
+        "RFC9768"
+      ],
+      "doi": "10.17487/RFC3168",
+      "url": "https://www.rfc-editor.org/rfc/rfc3168",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3168.txt",
+      "sha256": "35b437f1826b2624d6c5e7af2f047a6ba0a3110cd5559ffbd0cefdc8c3d87b76",
+      "bytes": 170966,
+      "use": "IP ve TCP başlıklarında ECN"
+    },
+    {
+      "number": 3849,
+      "title": "IPv6 Address Prefix Reserved for Documentation",
+      "authors": [
+        "G. Huston",
+        "A. Lord",
+        "P. Smith"
+      ],
+      "date": "July 2004",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC9637"
+      ],
+      "doi": "10.17487/RFC3849",
+      "url": "https://www.rfc-editor.org/rfc/rfc3849",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3849.txt",
+      "sha256": "b0741fc609be565b356c62d2f9b9ef30469f3fe7bde386c2690e173751bb1941",
+      "bytes": 7872,
+      "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
+    },
+    {
+      "number": 4443,
+      "title": "Internet Control Message Protocol (ICMPv6) for the Internet Protocol Version 6 (IPv6) Specification",
+      "authors": [
+        "A. Conta",
+        "S. Deering",
+        "M. Gupta, Ed."
+      ],
+      "date": "March 2006",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC2463"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC2780"
+      ],
+      "updated_by": [
+        "RFC4884"
+      ],
+      "doi": "10.17487/RFC4443",
+      "url": "https://www.rfc-editor.org/rfc/rfc4443",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4443.txt",
+      "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf",
+      "bytes": 48969,
+      "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 5737,
+      "title": "IPv4 Address Blocks Reserved for Documentation",
+      "authors": [
+        "J. Arkko",
+        "M. Cotton",
+        "L. Vegoda"
+      ],
+      "date": "January 2010",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC1166"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC5737",
+      "url": "https://www.rfc-editor.org/rfc/rfc5737",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5737.txt",
+      "sha256": "9d16217614a74a9b064eff900e5cd07a525793cf8227dca1267100e880f0c410",
+      "bytes": 7036,
+      "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
+    },
+    {
+      "number": 8200,
+      "title": "Internet Protocol, Version 6 (IPv6) Specification",
+      "authors": [
+        "S. Deering",
+        "R. Hinden"
+      ],
+      "date": "July 2017",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC2460"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC9673"
+      ],
+      "doi": "10.17487/RFC8200",
+      "url": "https://www.rfc-editor.org/rfc/rfc8200",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc8200.txt",
+      "sha256": "371ae3f133d562db5d6385e6def4ca9914c4f831be228ea7779fd28799c2f490",
+      "bytes": 93162,
+      "use": "IPv6 başlığı ve IPv6 sözde başlığı"
+    },
+    {
+      "number": 9293,
+      "title": "Transmission Control Protocol (TCP)",
+      "authors": [
+        "W. Eddy, Ed."
+      ],
+      "date": "August 2022",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC793",
+        "RFC879",
+        "RFC2873",
+        "RFC6093",
+        "RFC6429",
+        "RFC6528",
+        "RFC6691"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC1011",
+        "RFC1122",
+        "RFC5961"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC9293",
+      "url": "https://www.rfc-editor.org/rfc/rfc9293",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9293.txt",
+      "sha256": "6d9ac8be4b0286f8c3d337addf442b2eb6a9b14e1366594ea7fbc273f93dc2d9",
+      "bytes": 263696,
+      "use": "TCP başlığı"
+    },
+    {
+      "number": 9542,
+      "title": "IANA Considerations and IETF Protocol and Documentation Usage for IEEE 802 Parameters",
+      "authors": [
+        "D. Eastlake 3rd",
+        "J. Abley",
+        "Y. Li"
+      ],
+      "date": "April 2024",
+      "status": "BEST CURRENT PRACTICE",
+      "obsoletes": [
+        "RFC7042"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9542",
+      "url": "https://www.rfc-editor.org/rfc/rfc9542",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9542.txt",
+      "sha256": "5c52f6cb6aacb1dea947a206bc8775ec8aaed52d74b92c600f1b1166d5c3c0f1",
+      "bytes": 79284,
+      "use": "Örneklerde kullanılan belgeleme MAC adresleri"
+    }
+  ]
+}

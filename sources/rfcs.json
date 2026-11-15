@@ -1,0 +1,69 @@
+{
+  "note": "Sitedeki her bilgi bu listedeki RFC'lere dayanır. `npm run sync` metinleri rfc-editor.org'dan indirir, sha256 özetlerini ve künyeleri sources/bibliography.json dosyasına yazar.",
+  "rfcs": [
+    {
+      "number": 768,
+      "use": "UDP başlığı ve sözde başlık"
+    },
+    {
+      "number": 791,
+      "use": "IPv4 başlığı"
+    },
+    {
+      "number": 792,
+      "use": "ICMP iletileri"
+    },
+    {
+      "number": 826,
+      "use": "ARP paketi ve Ethernet iletim katmanı alanları"
+    },
+    {
+      "number": 894,
+      "use": "IP datagramlarının Ethernet çerçevesinde taşınması"
+    },
+    {
+      "number": 1035,
+      "use": "DNS ileti başlığı"
+    },
+    {
+      "number": 1071,
+      "use": "İnternet sağlama toplamının hesaplanması"
+    },
+    {
+      "number": 2474,
+      "use": "IPv4 TOS ve IPv6 Traffic Class sekizlisinin DS alanı olarak yeniden tanımı"
+    },
+    {
+      "number": 2606,
+      "use": "Örneklerde kullanılan belgeleme alan adları"
+    },
+    {
+      "number": 3168,
+      "use": "IP ve TCP başlıklarında ECN"
+    },
+    {
+      "number": 3849,
+      "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
+    },
+    {
+      "number": 4443,
+      "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 5737,
+      "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
+    },
+    {
+      "number": 8200,
+      "use": "IPv6 başlığı ve IPv6 sözde başlığı"
+    },
+    {
+      "number": 9293,
+      "use": "TCP başlığı"
+    },
+    {
+      "number": 9542,
+      "use": "Örneklerde kullanılan belgeleme MAC adresleri"
+    }
+  ]
+}

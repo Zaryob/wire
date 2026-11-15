@@ -1,0 +1,236 @@
+{
+  "order": 8,
+  "name": "TCP",
+  "title": "TCP başlığı",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "İletim Denetim Protokolü segmentinin başlığı. Seçenek taşımadığında 20 sekizlidir; Data Offset alanı başlığın gerçek uzunluğunu verir.",
+  "layout": {
+    "rfc": 9293,
+    "section": "3.1",
+    "kind": "diagram",
+    "anchor": "|          Source Port          |       Destination Port        |",
+    "label": "Figure 1"
+  },
+  "notes": [
+    "Sağlama toplamı, başlık ve veriyle birlikte bir sözde başlığı da kapsar: IPv4 için 96 bit, IPv6 için 320 bit.",
+    "CWR ve ECE bayraklarını RFC 3168 tanımlar; RFC 9293 bu iki bit için o belgeye gönderme yapar."
+  ],
+  "fields": [
+    {
+      "key": "sport",
+      "name": "Source Port",
+      "bits": 16,
+      "desc": "Kaynak port numarası.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 49152
+    },
+    {
+      "key": "dport",
+      "name": "Destination Port",
+      "bits": 16,
+      "desc": "Hedef port numarası.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 53
+    },
+    {
+      "key": "seq",
+      "name": "Sequence Number",
+      "bits": 32,
+      "desc": "Segmentteki ilk veri sekizlisinin sıra numarası. SYN bayrağı varsa bu değer başlangıç sıra numarasıdır (ISN) ve ilk veri sekizlisi ISN+1’dir.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 1000
+    },
+    {
+      "key": "ack",
+      "name": "Acknowledgment Number",
+      "bits": 32,
+      "desc": "ACK biti varsa, gönderenin almayı beklediği bir sonraki sıra numarası. Bağlantı kurulduktan sonra her zaman gönderilir.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "doff",
+      "name": "Data Offset",
+      "bits": 4,
+      "desc": "TCP başlığındaki 32 bitlik sözcük sayısı; verinin nerede başladığını gösterir.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 5
+    },
+    {
+      "key": "rsrvd",
+      "name": "Reserved",
+      "bits": 4,
+      "desc": "İleride kullanılmak üzere ayrılmış denetim bitleri. Üretilen segmentlerde sıfır olmalı, alınan segmentlerde yok sayılmalıdır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "cwr",
+      "name": "CWR",
+      "bits": 1,
+      "desc": "Congestion Window Reduced.",
+      "ref": {
+        "rfc": 3168,
+        "section": "6.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "ece",
+      "name": "ECE",
+      "bits": 1,
+      "desc": "ECN-Echo.",
+      "ref": {
+        "rfc": 3168,
+        "section": "6.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "urg",
+      "name": "URG",
+      "bits": 1,
+      "desc": "Urgent Pointer alanı anlamlıdır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "ackf",
+      "name": "ACK",
+      "bits": 1,
+      "desc": "Acknowledgment alanı anlamlıdır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "psh",
+      "name": "PSH",
+      "bits": 1,
+      "desc": "Push işlevi.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "rst",
+      "name": "RST",
+      "bits": 1,
+      "desc": "Bağlantıyı sıfırla.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "syn",
+      "name": "SYN",
+      "bits": 1,
+      "desc": "Sıra numaralarını eşzamanla.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 1
+    },
+    {
+      "key": "fin",
+      "name": "FIN",
+      "bits": 1,
+      "desc": "Gönderenden başka veri yok.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "window",
+      "name": "Window",
+      "bits": 16,
+      "desc": "Gönderenin, Acknowledgment alanındaki numaradan başlayarak kabul etmeye hazır olduğu veri sekizlisi sayısı. İşaretsiz sayı olarak ele alınmalıdır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 65535
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "Başlık ve metindeki 16 bitlik sözcüklerin bire tümleyen toplamının 16 bitlik bire tümleyeni. Hesap sırasında alanın kendisi sıfır sayılır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "checksum": "pseudo4",
+      "hex": true
+    },
+    {
+      "key": "urgent",
+      "name": "Urgent Pointer",
+      "bits": 16,
+      "desc": "Acil verinin yerini segmentin sıra numarasına göre pozitif bir uzaklık olarak verir. Yalnızca URG biti olan segmentlerde yorumlanır.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "options",
+      "name": "Options",
+      "bits": null,
+      "desc": "Değişken uzunlukta seçenekler; başlık 32 bitin katı olacak biçimde doldurulur.",
+      "ref": {
+        "rfc": 9293,
+        "section": "3.1"
+      }
+    }
+  ],
+  "example": {
+    "pseudo": {
+      "source": "192.0.2.1",
+      "destination": "198.51.100.7",
+      "protocol": 6
+    },
+    "note": "Başlangıç sıra numarası 1000 olan, veri taşımayan bir SYN segmenti. Sağlama toplamı 192.0.2.1 → 198.51.100.7 sözde başlığıyla hesaplanmıştır."
+  },
+  "refs": [
+    9293,
+    3168,
+    1071,
+    8200,
+    5737,
+    1035
+  ],
+  "id": "tcp"
+}

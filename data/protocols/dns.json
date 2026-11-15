@@ -1,0 +1,232 @@
+{
+  "order": 9,
+  "name": "DNS",
+  "title": "DNS ileti başlığı",
+  "layer": "Uygulama",
+  "rowBits": 16,
+  "summary": "Her DNS iletisi 12 sekizlilik bir başlıkla başlar. Başlık, iletinin sorgu mu yanıt mı olduğunu ve ardından gelen dört bölümde kaç kayıt bulunduğunu belirtir.",
+  "layout": {
+    "rfc": 1035,
+    "section": "4.1.1",
+    "kind": "diagram",
+    "anchor": "|QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |",
+    "label": "Header section format"
+  },
+  "notes": [
+    "Başlığı sırasıyla soru, yanıt, yetki ve ek bölümleri izler; QDCOUNT, ANCOUNT, NSCOUNT ve ARCOUNT bu bölümlerdeki kayıt sayılarıdır.",
+    "DNS iletileri UDP üzerinde 53 numaralı porttan (RFC 1035 §4.2.1), TCP üzerinde yine 53 numaralı porttan (§4.2.2) taşınır."
+  ],
+  "fields": [
+    {
+      "key": "id",
+      "name": "ID",
+      "bits": 16,
+      "desc": "Sorguyu üreten programın atadığı tanımlayıcı. Yanıta kopyalanır; istekte bulunan bununla yanıtları bekleyen sorgularla eşleştirir.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": "0x1a2b",
+      "hex": true
+    },
+    {
+      "key": "qr",
+      "name": "QR",
+      "bits": 1,
+      "desc": "İletinin sorgu (0) mu yanıt (1) mı olduğunu belirtir.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "opcode",
+      "name": "OPCODE",
+      "bits": 4,
+      "desc": "Sorgunun türü. Sorguyu başlatan belirler, yanıta kopyalanır.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "Standart sorgu (QUERY)"
+        ],
+        [
+          "1",
+          "Ters sorgu (IQUERY)"
+        ],
+        [
+          "2",
+          "Sunucu durum isteği (STATUS)"
+        ],
+        [
+          "3–15",
+          "İleride kullanım için ayrılmış"
+        ]
+      ]
+    },
+    {
+      "key": "aa",
+      "name": "AA",
+      "bits": 1,
+      "desc": "Authoritative Answer. Yanıtlarda geçerlidir: yanıtlayan ad sunucusu, soru bölümündeki alan adı için yetkilidir.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "tc",
+      "name": "TC",
+      "bits": 1,
+      "desc": "TrunCation. İleti, iletim kanalının izin verdiğinden uzun olduğu için kesilmiştir.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "rd",
+      "name": "RD",
+      "bits": 1,
+      "desc": "Recursion Desired. Sorguda ayarlanabilir ve yanıta kopyalanır; ad sunucusundan sorguyu özyinelemeli izlemesini ister.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 1
+    },
+    {
+      "key": "ra",
+      "name": "RA",
+      "bits": 1,
+      "desc": "Recursion Available. Yanıtta, ad sunucusunun özyinelemeli sorgu desteği sunup sunmadığını belirtir.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "z",
+      "name": "Z",
+      "bits": 3,
+      "desc": "İleride kullanım için ayrılmıştır. Bütün sorgu ve yanıtlarda sıfır olmalıdır.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "rcode",
+      "name": "RCODE",
+      "bits": 4,
+      "desc": "Yanıt kodu; yanıtlarda ayarlanır.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "Hata yok"
+        ],
+        [
+          "1",
+          "Biçim hatası"
+        ],
+        [
+          "2",
+          "Sunucu hatası"
+        ],
+        [
+          "3",
+          "Ad hatası: alan adı yok"
+        ],
+        [
+          "4",
+          "Uygulanmamış"
+        ],
+        [
+          "5",
+          "Reddedildi"
+        ],
+        [
+          "6–15",
+          "İleride kullanım için ayrılmış"
+        ]
+      ]
+    },
+    {
+      "key": "qdcount",
+      "name": "QDCOUNT",
+      "bits": 16,
+      "desc": "Soru bölümündeki kayıt sayısı.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 1
+    },
+    {
+      "key": "ancount",
+      "name": "ANCOUNT",
+      "bits": 16,
+      "desc": "Yanıt bölümündeki kaynak kaydı sayısı.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "nscount",
+      "name": "NSCOUNT",
+      "bits": 16,
+      "desc": "Yetki kayıtları bölümündeki ad sunucusu kaynak kaydı sayısı.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "arcount",
+      "name": "ARCOUNT",
+      "bits": 16,
+      "desc": "Ek kayıtlar bölümündeki kaynak kaydı sayısı.",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "sections",
+      "name": "Bölümler",
+      "bits": null,
+      "desc": "Soru, yanıt, yetki ve ek bölümleri. Örnekte tek bir soru vardır: QNAME, QTYPE ve QCLASS (RFC 1035 §4.1.2).",
+      "ref": {
+        "rfc": 1035,
+        "section": "4.1"
+      }
+    }
+  ],
+  "example": {
+    "payload": "076578616d706c6503636f6d0000010001",
+    "note": "Özyineleme isteyen tek soruluk bir sorgu. Başlıktan sonraki 17 sekizli soru bölümüdür: QNAME “example.com”, QTYPE 1 (A), QCLASS 1 (IN). example.com belgeleme için ayrılmış bir alan adıdır (RFC 2606 §3)."
+  },
+  "refs": [
+    1035,
+    2606
+  ],
+  "id": "dns"
+}

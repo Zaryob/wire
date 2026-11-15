@@ -1,0 +1,137 @@
+{
+  "order": 4,
+  "name": "IPv6",
+  "title": "IPv6 başlığı",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "İnternet Protokolü sürüm 6 paketinin sabit başlığı. Her zaman 40 sekizlidir; ek bilgiler uzantı başlıklarında taşınır.",
+  "layout": {
+    "rfc": 8200,
+    "section": "3",
+    "kind": "diagram",
+    "anchor": "|Version| Traffic Class |           Flow Label                  |",
+    "label": "IPv6 Header Format"
+  },
+  "notes": [
+    "IPv6 başlığında sağlama toplamı yoktur. Üst katman protokolleri sağlama toplamlarına 128 bitlik adresleri içeren bir sözde başlık katar (RFC 8200 §8.1).",
+    "Traffic Class sekizlisi IPv4’teki gibi DS alanı (RFC 2474 §3) ve ECN alanı (RFC 3168 §5) olarak kullanılır."
+  ],
+  "fields": [
+    {
+      "key": "version",
+      "name": "Version",
+      "bits": 4,
+      "desc": "İnternet Protokolü sürüm numarası; değeri 6’dır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 6
+    },
+    {
+      "key": "tc",
+      "name": "Traffic Class",
+      "bits": 8,
+      "desc": "8 bitlik trafik sınıfı alanı.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 0
+    },
+    {
+      "key": "flow",
+      "name": "Flow Label",
+      "bits": 20,
+      "desc": "20 bitlik akış etiketi.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 0
+    },
+    {
+      "key": "length",
+      "name": "Payload Length",
+      "bits": 16,
+      "desc": "Bu başlıktan sonra gelen yükün sekizli cinsinden uzunluğu. Uzantı başlıkları yükün parçası sayılır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 12
+    },
+    {
+      "key": "next",
+      "name": "Next Header",
+      "bits": 8,
+      "desc": "IPv6 başlığının hemen ardından gelen başlığın türü. IPv4 Protocol alanıyla aynı değerleri kullanır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 58,
+      "values": [
+        [
+          "6",
+          "TCP (RFC 8200 §8.1)"
+        ],
+        [
+          "17",
+          "UDP (RFC 8200 §8.1)"
+        ],
+        [
+          "58",
+          "ICMPv6 (RFC 4443 §2.3)"
+        ]
+      ]
+    },
+    {
+      "key": "hop",
+      "name": "Hop Limit",
+      "bits": 8,
+      "desc": "Paketi ileten her düğüm değeri bir azaltır. Sıfır olarak gelen ya da sıfıra düşen paket iletilmez, atılır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "example": 64
+    },
+    {
+      "key": "src",
+      "name": "Source Address",
+      "bits": 128,
+      "desc": "Paketi oluşturanın 128 bitlik adresi.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "type": "ipv6",
+      "example": "2001:db8::1"
+    },
+    {
+      "key": "dst",
+      "name": "Destination Address",
+      "bits": 128,
+      "desc": "Paketin hedeflenen alıcısının 128 bitlik adresi. Routing başlığı varsa nihai alıcı olmayabilir.",
+      "ref": {
+        "rfc": 8200,
+        "section": "3"
+      },
+      "type": "ipv6",
+      "example": "2001:db8::2"
+    }
+  ],
+  "example": {
+    "payloadFrom": "icmpv6",
+    "note": "2001:db8::1’den 2001:db8::2’ye giden, ICMPv6 sayfasındaki yankı isteğini taşıyan bir paket. Adresler belgeleme önekindendir (RFC 3849)."
+  },
+  "refs": [
+    8200,
+    2474,
+    3168,
+    4443,
+    3849
+  ],
+  "id": "ipv6"
+}

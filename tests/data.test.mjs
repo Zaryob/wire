@@ -1,0 +1,90 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { root, bibliography, rfcEntry, rfcText, verifyLayout, loadProtocols } from '../src/sources.mjs';
+import { diagramWidths, rfc826Layout } from '../src/rfc.mjs';
+import { encodeExample, internetChecksum, ipv6Bytes } from '../src/encode.mjs';
+
+const protocols = await loadProtocols();
+const byId = new Map(protocols.map(protocol => [protocol.id, protocol]));
+const hex = bytes => bytes.map(byte => byte.toString(16).padStart(2, '0')).join('');
+const encode = id => {
+  const protocol = byId.get(id);
+  const from = protocol.example?.payloadFrom;
+  return encodeExample(from ? { ...protocol, example: { ...protocol.example, payload: hex(encode(from).bytes) } } : protocol);
+};
+
+test('every protocol layout matches the RFC text it cites', async () => {
+  for (const protocol of protocols) {
+    const check = await verifyLayout(protocol);
+    assert.deepEqual(check.found, check.expected, `${protocol.id} against RFC ${protocol.layout.rfc}`);
+  }
+});
+
+test('diagram reader handles the RFC diagram styles in use', async () => {
+  assert.deepEqual(diagramWidths(await rfcText(791), '|Version|  IHL  |'), [4, 4, 8, 16, 16, 3, 13, 8, 8, 16, 32, 32, 24, 8]);
+  assert.deepEqual(diagramWidths(await rfcText(8200), '|Version| Traffic Class |').slice(-2), [128, 128]);
+  assert.deepEqual(diagramWidths(await rfcText(768), '|     Source      |   Destination   |'), [16, 16, 16, 16]);
+  assert.deepEqual(diagramWidths(await rfcText(1035), '|QR|   Opcode  |', 16).slice(0, 3), [16, 1, 4]);
+  assert.deepEqual(rfc826Layout(await rfcText(826)).arp.map(item => item.name), ['hrd', 'pro', 'hln', 'pln', 'op', 'sha', 'spa', 'tha', 'tpa']);
+  assert.throws(() => diagramWidths('no diagram here', '|Version|'));
+});
+
+test('every citation resolves to the bibliography and every listed RFC is used', async () => {
+  const listed = JSON.parse(await readFile(path.join(root, 'sources/rfcs.json'), 'utf8')).rfcs.map(item => item.number);
+  assert.deepEqual(bibliography.entries.map(entry => entry.number), listed);
+  const cited = new Set();
+  for (const protocol of protocols) {
+    for (const number of protocol.refs) { rfcEntry(number); cited.add(number); }
+    for (const field of protocol.fields) {
+      assert.ok(protocol.refs.includes(field.ref.rfc), `${protocol.id}.${field.key} cites RFC ${field.ref.rfc} outside its page references`);
+      assert.ok(field.desc && field.name, `${protocol.id}.${field.key} needs a name and description`);
+    }
+  }
+  assert.deepEqual(listed.filter(number => !cited.has(number)), [], 'RFCs in sources/rfcs.json that no page cites');
+});
+
+test('cited section numbers exist in the RFC text', async () => {
+  for (const protocol of protocols) {
+    for (const ref of [protocol.layout, ...protocol.fields.map(field => field.ref)]) {
+      if (!ref.section) continue;
+      const text = await rfcText(ref.rfc);
+      const pattern = new RegExp(`^\\s{0,3}${ref.section.replace(/\./g, '\\.')}\\.?\\s+\\S`, 'm');
+      assert.match(text, pattern, `RFC ${ref.rfc} has no section ${ref.section} (${protocol.id})`);
+    }
+  }
+});
+
+test('RFC 1071 checksum: the worked example from section 3', () => {
+  // RFC 1071 §3 sums 0001 f203 f4f5 f6f7 to ddf2 (ones' complement sum).
+  assert.equal(internetChecksum([0x00, 0x01, 0xf2, 0x03, 0xf4, 0xf5, 0xf6, 0xf7]), (~0xddf2) & 0xffff);
+});
+
+test('example packets are internally consistent', () => {
+  const ipv4 = encode('ipv4');
+  assert.equal(ipv4.headerLength, 20);
+  assert.equal((ipv4.bytes[2] << 8) | ipv4.bytes[3], ipv4.bytes.length, 'IPv4 Total Length');
+  assert.equal(internetChecksum(ipv4.bytes.slice(0, 20)), 0, 'IPv4 header checksum verifies');
+  const udp = encode('udp');
+  assert.equal((udp.bytes[4] << 8) | udp.bytes[5], udp.bytes.length, 'UDP Length');
+  assert.equal(hex(ipv4.bytes.slice(20)), hex(udp.bytes), 'IPv4 example carries the UDP example');
+  const pseudo = [192, 0, 2, 1, 198, 51, 100, 7, 0, 17, 0, udp.bytes.length];
+  assert.equal(internetChecksum([...pseudo, ...udp.bytes]), 0, 'UDP checksum verifies with its pseudo-header');
+  const icmp = encode('icmp');
+  assert.equal(internetChecksum(icmp.bytes), 0, 'ICMP checksum verifies');
+  const ipv6 = encode('ipv6');
+  assert.equal(ipv6.headerLength, 40);
+  assert.equal((ipv6.bytes[4] << 8) | ipv6.bytes[5], ipv6.bytes.length - 40, 'IPv6 Payload Length');
+  const icmpv6 = encode('icmpv6');
+  const pseudo6 = [...ipv6Bytes('2001:db8::1'), ...ipv6Bytes('2001:db8::2'), 0, 0, 0, icmpv6.bytes.length, 0, 0, 0, 58];
+  assert.equal(internetChecksum([...pseudo6, ...icmpv6.bytes]), 0, 'ICMPv6 checksum verifies with the IPv6 pseudo-header');
+  const tcp = encode('tcp');
+  assert.equal(tcp.headerLength, 20);
+  assert.equal(tcp.bytes[12] >> 4, 5, 'TCP Data Offset');
+  assert.equal(tcp.bytes[13], 0x02, 'only SYN is set');
+  assert.equal(internetChecksum([192, 0, 2, 1, 198, 51, 100, 7, 0, 6, 0, 20, ...tcp.bytes]), 0, 'TCP checksum verifies');
+  assert.equal(encode('dns').headerLength, 12);
+  assert.equal(encode('arp').bytes.length, 28);
+  assert.equal(encode('ethernet').bytes.length, 14);
+});

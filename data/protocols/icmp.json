@@ -1,0 +1,137 @@
+{
+  "order": 5,
+  "name": "ICMP",
+  "title": "ICMP yankı iletisi",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "İnternet Denetim İleti Protokolü, IP datagramının veri kısmında taşınır (protokol numarası 1). Her ileti tür, kod ve sağlama toplamı ile başlar; devamı türe göre değişir. Burada yankı (echo) iletisinin yerleşimi gösterilir.",
+  "layout": {
+    "rfc": 792,
+    "kind": "diagram",
+    "anchor": "|           Identifier          |        Sequence Number        |",
+    "label": "Echo or Echo Reply Message"
+  },
+  "notes": [
+    "Sağlama toplamı, Type alanından başlayarak ICMP iletisinin tamamı üzerinde hesaplanır; hesap sırasında alanın kendisi sıfır sayılır."
+  ],
+  "fields": [
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "İletinin türü. Yankı isteği için 8, yankı yanıtı için 0.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      },
+      "example": 8,
+      "values": [
+        [
+          "0",
+          "Echo Reply"
+        ],
+        [
+          "3",
+          "Destination Unreachable"
+        ],
+        [
+          "4",
+          "Source Quench"
+        ],
+        [
+          "5",
+          "Redirect"
+        ],
+        [
+          "8",
+          "Echo"
+        ],
+        [
+          "11",
+          "Time Exceeded"
+        ],
+        [
+          "12",
+          "Parameter Problem"
+        ],
+        [
+          "13",
+          "Timestamp"
+        ],
+        [
+          "14",
+          "Timestamp Reply"
+        ],
+        [
+          "15",
+          "Information Request"
+        ]
+      ]
+    },
+    {
+      "key": "code",
+      "name": "Code",
+      "bits": 8,
+      "desc": "Türün alt ayrımı. Yankı iletilerinde 0.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      },
+      "example": 0
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "ICMP iletisinin bire tümleyen toplamının 16 bitlik bire tümleyeni.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      },
+      "checksum": "message",
+      "hex": true
+    },
+    {
+      "key": "id",
+      "name": "Identifier",
+      "bits": 16,
+      "desc": "Yankı isteklerini yanıtlarla eşleştirmeye yardım eden tanımlayıcı; sıfır olabilir.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      },
+      "example": "0x1234",
+      "hex": true
+    },
+    {
+      "key": "seq",
+      "name": "Sequence Number",
+      "bits": 16,
+      "desc": "Yankı isteklerini yanıtlarla eşleştirmeye yardım eden sıra numarası; sıfır olabilir.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      },
+      "example": 1
+    },
+    {
+      "key": "data",
+      "name": "Data",
+      "bits": null,
+      "desc": "Yankı isteğinde gelen veri, yanıtta aynen geri gönderilir.",
+      "ref": {
+        "rfc": 792,
+        "label": "Echo or Echo Reply Message"
+      }
+    }
+  ],
+  "example": {
+    "payload": "77697265",
+    "note": "Dört sekizlilik veri (ASCII “wire”) taşıyan bir yankı isteği."
+  },
+  "refs": [
+    792,
+    1071
+  ],
+  "id": "icmp"
+}

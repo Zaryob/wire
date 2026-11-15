@@ -1,0 +1,107 @@
+{
+  "order": 6,
+  "name": "ICMPv6",
+  "title": "ICMPv6 iletisi",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "IPv6 için İnternet Denetim İleti Protokolü. Her ileti tür, kod ve sağlama toplamı ile başlar; ileti gövdesinin biçimini tür belirler. Next Header değeri 58’dir.",
+  "layout": {
+    "rfc": 4443,
+    "section": "2.1",
+    "kind": "diagram",
+    "anchor": "|     Type      |     Code      |          Checksum             |",
+    "label": "Message General Format"
+  },
+  "notes": [
+    "IPv4’teki ICMP’den farklı olarak sağlama toplamına IPv6 sözde başlığı da katılır (RFC 4443 §2.3, RFC 8200 §8.1).",
+    "Tür değerinin en yüksek biti sıfırsa (0–127) ileti bir hata iletisidir, birse (128–255) bilgi iletisidir."
+  ],
+  "fields": [
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "İletinin türü; kalan verinin biçimini belirler.",
+      "ref": {
+        "rfc": 4443,
+        "section": "2.1"
+      },
+      "example": 128,
+      "values": [
+        [
+          "1",
+          "Destination Unreachable"
+        ],
+        [
+          "2",
+          "Packet Too Big"
+        ],
+        [
+          "3",
+          "Time Exceeded"
+        ],
+        [
+          "4",
+          "Parameter Problem"
+        ],
+        [
+          "128",
+          "Echo Request"
+        ],
+        [
+          "129",
+          "Echo Reply"
+        ]
+      ]
+    },
+    {
+      "key": "code",
+      "name": "Code",
+      "bits": 8,
+      "desc": "İleti türüne bağlıdır; iletiyi bir düzey daha ayrıntılandırır.",
+      "ref": {
+        "rfc": 4443,
+        "section": "2.1"
+      },
+      "example": 0
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "ICMPv6 iletisindeki ve IPv6 başlığının bazı alanlarındaki veri bozulmalarını saptar.",
+      "ref": {
+        "rfc": 4443,
+        "section": "2.3"
+      },
+      "checksum": "pseudo6",
+      "hex": true
+    },
+    {
+      "key": "body",
+      "name": "Message Body",
+      "bits": null,
+      "desc": "Türe göre değişen ileti gövdesi. Yankı isteğinde 16 bitlik tanımlayıcı, 16 bitlik sıra numarası ve veri bulunur (RFC 4443 §4.1).",
+      "ref": {
+        "rfc": 4443,
+        "section": "2.1"
+      }
+    }
+  ],
+  "example": {
+    "payload": "1234000177697265",
+    "pseudo": {
+      "source": "2001:db8::1",
+      "destination": "2001:db8::2",
+      "protocol": 58
+    },
+    "note": "Tanımlayıcısı 0x1234, sıra numarası 1 olan ve dört sekizlilik veri (ASCII “wire”) taşıyan bir yankı isteği. Sağlama toplamı 2001:db8::1 → 2001:db8::2 sözde başlığıyla hesaplanmıştır."
+  },
+  "refs": [
+    4443,
+    8200,
+    1071,
+    3849
+  ],
+  "id": "icmpv6"
+}

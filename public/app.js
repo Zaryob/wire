@@ -1,0 +1,39 @@
+// Field highlighting on protocol pages and the filter on the protocol list.
+const related = key => document.querySelectorAll(`[data-field="${key}"], [data-fields~="${key}"]`);
+let pinned = null;
+const show = key => {
+  document.querySelectorAll('.is-active').forEach(node => node.classList.remove('is-active'));
+  if (key) related(key).forEach(node => node.classList.add('is-active'));
+};
+const keysOf = node => (node.dataset.field ? [node.dataset.field] : (node.dataset.fields || '').split(' ').filter(Boolean));
+document.querySelectorAll('[data-field], [data-fields]').forEach(node => {
+  const keys = keysOf(node);
+  if (!keys.length) return;
+  // A byte shared by several narrow fields highlights the first of them.
+  const key = keys[0];
+  node.addEventListener('pointerenter', () => show(key));
+  node.addEventListener('pointerleave', () => show(pinned));
+  node.addEventListener('focus', () => show(key));
+  node.addEventListener('blur', () => show(pinned));
+  node.addEventListener('click', () => { pinned = pinned === key ? null : key; show(pinned); });
+});
+const fromHash = () => { const key = location.hash.startsWith('#f-') ? location.hash.slice(3) : null; if (key) { pinned = key; show(key); } };
+addEventListener('hashchange', fromHash);
+fromHash();
+
+const filter = document.getElementById('protocol-filter');
+if (filter) {
+  const cards = [...document.querySelectorAll('.protocol-card')];
+  const status = document.getElementById('filter-status');
+  filter.addEventListener('input', () => {
+    const terms = filter.value.toLocaleLowerCase('tr').split(/\s+/).filter(Boolean);
+    let visible = 0;
+    for (const card of cards) {
+      const match = terms.every(term => card.dataset.search.includes(term));
+      card.hidden = !match;
+      if (match) visible += 1;
+    }
+    document.querySelectorAll('.layer').forEach(layer => { layer.hidden = !layer.querySelector('.protocol-card:not([hidden])'); });
+    status.textContent = terms.length ? `${visible} protokol eşleşti.` : '';
+  });
+}

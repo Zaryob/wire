@@ -1,0 +1,85 @@
+{
+  "order": 1,
+  "name": "Ethernet",
+  "title": "Ethernet çerçeve başlığı",
+  "layer": "Bağlantı",
+  "rowBits": 16,
+  "summary": "Bir Ethernet çerçevesinin başındaki hedef adresi, kaynak adresi ve tür alanı. IP datagramı ya da ARP paketi bu üç alandan hemen sonra gelir.",
+  "layout": {
+    "rfc": 826,
+    "kind": "rfc826",
+    "part": "ethernet",
+    "label": "Packet format: Ethernet transmission layer"
+  },
+  "notes": [
+    "Bu sayfa yalnızca RFC’lerin tarif ettiği üç alanı kapsar. Çerçevenin fiziksel katman ayrıntıları (öntakı, çerçeve denetim dizisi) IEEE 802.3 standardındadır ve bu sitenin kaynak kümesinin dışındadır.",
+    "RFC 894’e göre veri alanı en az 46 sekizlidir; gerekirse sıfır sekizlileriyle doldurulur ve bu dolgu IP datagramının parçası sayılmaz. Bir Ethernet çerçevesinde taşınabilecek en uzun IP datagramı 1500 sekizlidir."
+  ],
+  "fields": [
+    {
+      "key": "dst",
+      "name": "Hedef adresi",
+      "bits": 48,
+      "desc": "Çerçevenin gönderildiği istasyonun 48 bitlik Ethernet adresi.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "mac",
+      "example": "00:00:5e:00:53:02"
+    },
+    {
+      "key": "src",
+      "name": "Kaynak adresi",
+      "bits": 48,
+      "desc": "Çerçeveyi gönderen istasyonun 48 bitlik Ethernet adresi.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "mac",
+      "example": "00:00:5e:00:53:01"
+    },
+    {
+      "key": "type",
+      "name": "Tür",
+      "bits": 16,
+      "desc": "Veri alanında hangi protokolün taşındığını belirtir. IP datagramı taşıyan çerçevelerde değeri onaltılık 0800 olmalıdır.",
+      "ref": {
+        "rfc": 894,
+        "label": "Frame Format"
+      },
+      "example": "0x0800",
+      "hex": true,
+      "values": [
+        [
+          "0x0800",
+          "IP datagramı (RFC 894)"
+        ],
+        [
+          "ether_type$ADDRESS_RESOLUTION",
+          "ARP paketi; RFC 826 bu türün sayısal değerini vermez"
+        ]
+      ]
+    },
+    {
+      "key": "data",
+      "name": "Veri",
+      "bits": null,
+      "desc": "Tür alanının belirttiği protokolün paketi. IP için: IP başlığı ve hemen ardından IP verisi.",
+      "ref": {
+        "rfc": 894,
+        "label": "Frame Format"
+      }
+    }
+  ],
+  "example": {
+    "note": "Belgeleme için ayrılmış MAC adresleri (RFC 9542 §2.1.4) arasında bir IP çerçevesinin başlığı. Veri alanı gösterilmemiştir."
+  },
+  "refs": [
+    826,
+    894,
+    9542
+  ],
+  "id": "ethernet"
+}

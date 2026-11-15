@@ -1,0 +1,153 @@
+{
+  "order": 2,
+  "name": "ARP",
+  "title": "ARP paketi",
+  "layer": "Bağlantı",
+  "rowBits": 16,
+  "summary": "Adres Çözümleme Protokolü, bir protokol adresine (örneğin bir IPv4 adresine) karşılık gelen 48 bitlik Ethernet adresini bulur. Paket, Ethernet çerçevesinin veri alanında taşınır.",
+  "layout": {
+    "rfc": 826,
+    "kind": "rfc826",
+    "part": "arp",
+    "label": "Packet format: Ethernet packet data"
+  },
+  "notes": [
+    "Adres alanlarının uzunluğu sabit değildir: donanım adresleri ar$hln, protokol adresleri ar$pln sekizli uzunluğundadır. Aşağıdaki yerleşim Ethernet üzerinde IPv4 içindir (hln = 6, pln = 4)."
+  ],
+  "fields": [
+    {
+      "key": "hrd",
+      "name": "Donanım adres uzayı (ar$hrd)",
+      "bits": 16,
+      "desc": "Donanım adresinin türü. Ethernet için 1.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "Ethernet (ares_hrd$Ethernet)"
+        ]
+      ]
+    },
+    {
+      "key": "pro",
+      "name": "Protokol adres uzayı (ar$pro)",
+      "bits": 16,
+      "desc": "Çözümlenen protokol adresinin türü. Ethernet donanımında bu değer Ethernet tür alanının değer kümesinden gelir.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": "0x0800",
+      "hex": true
+    },
+    {
+      "key": "hln",
+      "name": "Donanım adresi uzunluğu (ar$hln)",
+      "bits": 8,
+      "desc": "Her donanım adresinin sekizli cinsinden uzunluğu.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 6
+    },
+    {
+      "key": "pln",
+      "name": "Protokol adresi uzunluğu (ar$pln)",
+      "bits": 8,
+      "desc": "Her protokol adresinin sekizli cinsinden uzunluğu.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 4
+    },
+    {
+      "key": "op",
+      "name": "İşlem kodu (ar$op)",
+      "bits": 16,
+      "desc": "Paketin istek mi yanıt mı olduğunu belirtir.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "İstek (ares_op$REQUEST)"
+        ],
+        [
+          "2",
+          "Yanıt (ares_op$REPLY)"
+        ]
+      ]
+    },
+    {
+      "key": "sha",
+      "name": "Gönderenin donanım adresi (ar$sha)",
+      "bits": 48,
+      "desc": "Bu paketi gönderenin donanım adresi; uzunluğu ar$hln alanından gelir.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "mac",
+      "example": "00:00:5e:00:53:01",
+      "sizedBy": "n"
+    },
+    {
+      "key": "spa",
+      "name": "Gönderenin protokol adresi (ar$spa)",
+      "bits": 32,
+      "desc": "Bu paketi gönderenin protokol adresi; uzunluğu ar$pln alanından gelir.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "ipv4",
+      "example": "192.0.2.1",
+      "sizedBy": "m"
+    },
+    {
+      "key": "tha",
+      "name": "Hedefin donanım adresi (ar$tha)",
+      "bits": 48,
+      "desc": "Hedefin donanım adresi, biliniyorsa. İstek paketinde henüz bilinmez.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "mac",
+      "example": "00:00:00:00:00:00",
+      "sizedBy": "n"
+    },
+    {
+      "key": "tpa",
+      "name": "Hedefin protokol adresi (ar$tpa)",
+      "bits": 32,
+      "desc": "Donanım adresi aranan hedefin protokol adresi.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "ipv4",
+      "example": "192.0.2.2",
+      "sizedBy": "m"
+    }
+  ],
+  "example": {
+    "note": "192.0.2.1 adresli istasyonun 192.0.2.2 için gönderdiği bir ARP isteği. IPv4 adresleri TEST-NET-1 belgeleme bloğundandır (RFC 5737 §3)."
+  },
+  "refs": [
+    826,
+    894,
+    5737,
+    9542
+  ],
+  "id": "arp"
+}

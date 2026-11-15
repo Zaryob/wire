@@ -1,0 +1,18 @@
+{
+  "name": "wire",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde bir başvuru",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "sync": "node scripts/sync-rfc.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check public/app.js && npm run build && npm test"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "Suleyman Poyraz"
+}

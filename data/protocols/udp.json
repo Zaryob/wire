@@ -1,0 +1,92 @@
+{
+  "order": 7,
+  "name": "UDP",
+  "title": "UDP başlığı",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "Kullanıcı Datagram Protokolü başlığı dört alandan oluşur ve 8 sekizlidir. IP içinde protokol numarası 17’dir.",
+  "layout": {
+    "rfc": 768,
+    "kind": "diagram",
+    "anchor": "|     Source      |   Destination   |",
+    "label": "User Datagram Header Format"
+  },
+  "notes": [
+    "Hesaplanan sağlama toplamı sıfır çıkarsa tümü bir olarak gönderilir. Sıfır olarak gönderilen değer, gönderenin sağlama toplamı üretmediği anlamına gelir.",
+    "IPv6 üzerinde sözde başlık 128 bitlik adresleri içerir (RFC 8200 §8.1)."
+  ],
+  "fields": [
+    {
+      "key": "sport",
+      "name": "Source Port",
+      "bits": 16,
+      "desc": "İsteğe bağlı alan. Anlamlı olduğunda gönderen sürecin portunu belirtir; kullanılmıyorsa sıfır konur.",
+      "ref": {
+        "rfc": 768,
+        "label": "Fields"
+      },
+      "example": 49152
+    },
+    {
+      "key": "dport",
+      "name": "Destination Port",
+      "bits": 16,
+      "desc": "Belirli bir internet hedef adresi bağlamında anlam taşıyan hedef portu.",
+      "ref": {
+        "rfc": 768,
+        "label": "Fields"
+      },
+      "example": 53
+    },
+    {
+      "key": "length",
+      "name": "Length",
+      "bits": 16,
+      "desc": "Başlık ve veri dahil datagramın sekizli cinsinden uzunluğu; en küçük değeri 8’dir.",
+      "ref": {
+        "rfc": 768,
+        "label": "Fields"
+      },
+      "example": 12
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "IP başlığından alınan bilgilerle kurulan sözde başlığın, UDP başlığının ve verinin bire tümleyen toplamının 16 bitlik bire tümleyeni.",
+      "ref": {
+        "rfc": 768,
+        "label": "Fields"
+      },
+      "checksum": "pseudo4",
+      "hex": true
+    },
+    {
+      "key": "data",
+      "name": "Data",
+      "bits": null,
+      "desc": "Datagramın taşıdığı veri sekizlileri.",
+      "ref": {
+        "rfc": 768,
+        "label": "Format"
+      }
+    }
+  ],
+  "example": {
+    "payload": "77697265",
+    "pseudo": {
+      "source": "192.0.2.1",
+      "destination": "198.51.100.7",
+      "protocol": 17
+    },
+    "note": "53 numaralı porta giden, dört sekizlilik veri (ASCII “wire”) taşıyan bir datagram. Sağlama toplamı 192.0.2.1 → 198.51.100.7 sözde başlığıyla hesaplanmıştır."
+  },
+  "refs": [
+    768,
+    1071,
+    8200,
+    5737,
+    1035
+  ],
+  "id": "udp"
+}
