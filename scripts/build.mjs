@@ -108,7 +108,6 @@ function topbar(current, title = '', layer = '') {
     <a href="${url('kilavuz')}" class="button secondary help-btn" aria-label="Nasıl kullanılır ve RFC Kılavuzu">
       ${bookIcon}
       <span>Kılavuz</span>
-      <span aria-hidden="true">↗</span>
     </a>
   </div>
 </header>`;
