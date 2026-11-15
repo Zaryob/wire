@@ -4,7 +4,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { diagramWidths, rfc826Layout } from './rfc.mjs';
+import { diagramWidths, rfc826Layout, proseWidths, octetTable } from './rfc.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const bibliography = JSON.parse(await readFile(path.join(root, 'sources/bibliography.json'), 'utf8'));
@@ -37,9 +37,17 @@ export async function verifyLayout(protocol) {
   const fixed = protocol.fields.filter(field => Number.isInteger(field.bits));
   let expected;
   let found;
-  if (protocol.layout.kind === 'diagram') {
+  const { kind, anchor, prose = [] } = protocol.layout;
+  if (kind === 'diagram') {
+    // Leading fields may be checked against prose when the RFC draws them off
+    // the bit grid; the diagram is then read from the anchor row onward.
     expected = fixed.map(field => field.bits);
-    found = diagramWidths(text, protocol.layout.anchor, protocol.rowBits).slice(0, expected.length);
+    const lead = proseWidths(text, prose);
+    const rest = diagramWidths(text, anchor, protocol.rowBits, { fromAnchor: prose.length > 0 });
+    found = [...lead, ...rest.slice(0, expected.length - lead.length)];
+  } else if (kind === 'table') {
+    expected = fixed.map(field => field.bits);
+    found = octetTable(text, anchor).map(row => row.size).filter(Number.isInteger);
   } else {
     expected = fixed.map(field => field.sizedBy ?? field.bits);
     found = rfc826Layout(text)[protocol.layout.part].map(item => item.size);

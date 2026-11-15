@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { root, bibliography, rfcEntry, rfcText, verifyLayout, loadProtocols } from '../src/sources.mjs';
-import { diagramWidths, rfc826Layout } from '../src/rfc.mjs';
+import { diagramWidths, rfc826Layout, proseWidths, octetTable } from '../src/rfc.mjs';
 import { encodeExample, internetChecksum, ipv6Bytes } from '../src/encode.mjs';
 
 const protocols = await loadProtocols();
@@ -29,6 +29,15 @@ test('diagram reader handles the RFC diagram styles in use', async () => {
   assert.deepEqual(diagramWidths(await rfcText(1035), '|QR|   Opcode  |', 16).slice(0, 3), [16, 1, 4]);
   assert.deepEqual(rfc826Layout(await rfcText(826)).arp.map(item => item.name), ['hrd', 'pro', 'hln', 'pln', 'op', 'sha', 'spa', 'tha', 'tpa']);
   assert.throws(() => diagramWidths('no diagram here', '|Version|'));
+  // RFC 5905 Figure 8 draws its first row off the bit grid; the rest reads cleanly.
+  const ntp = await rfcText(5905);
+  assert.throws(() => diagramWidths(ntp, '|LI | VN  |Mode |'));
+  assert.deepEqual(diagramWidths(ntp, 'Root Delay', 32, { fromAnchor: true }).slice(0, 7), [32, 32, 32, 64, 64, 64, 64]);
+  assert.deepEqual(proseWidths(ntp, ['Poll: 8-bit']), [8]);
+  assert.throws(() => proseWidths(ntp, ['Poll: 16-bit']));
+  const table = octetTable(await rfcText(2131), 'FIELD      OCTETS       DESCRIPTION');
+  assert.deepEqual(table.map(row => row.name), ['op', 'htype', 'hlen', 'hops', 'xid', 'secs', 'flags', 'ciaddr', 'yiaddr', 'siaddr', 'giaddr', 'chaddr', 'sname', 'file', 'options']);
+  assert.equal(table.at(-1).size, 'var');
 });
 
 test('every citation resolves to the bibliography and every listed RFC is used', async () => {
@@ -94,4 +103,12 @@ test('example packets are internally consistent', () => {
   assert.equal(internetChecksum([...pseudoDccp, ...dccp.bytes]), 0, 'DCCP checksum verifies');
   assert.equal(encode('ah').headerLength, 12);
   assert.equal(encode('ethernet').bytes.length, 14);
+  const ntp = encode('ntp');
+  assert.equal(ntp.bytes.length, 48, 'NTP basic header is 48 octets');
+  assert.equal(ntp.bytes[0], 0x24, 'LI 0, VN 4, Mode 4 (server)');
+  const dhcp = encode('dhcp');
+  assert.equal(dhcp.headerLength, 236, 'DHCP fixed part is 236 octets');
+  assert.equal(hex(dhcp.bytes.slice(236, 240)), '63825363', 'options start with the magic cookie');
+  assert.equal(dhcp.bytes.at(-1), 255, 'options end with the End option');
+  assert.equal(hex(dhcp.bytes.slice(28, 34)), hex(encode('ethernet').bytes.slice(6, 12)), 'chaddr is the Ethernet example source MAC');
 });

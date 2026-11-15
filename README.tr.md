@@ -10,7 +10,7 @@ Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türk
 
 ## Kapsanan Protokoller ve Katmanlar
 
-Bu sürümde tel üzerindeki 19 protokol en ince ayrıntısına kadar incelenmektedir:
+Bu sürümde tel üzerindeki 21 protokol en ince ayrıntısına kadar incelenmektedir:
 
 1. **Bağlantı Katmanı (Data Link Layer)**
    - **Ethernet (RFC 826, RFC 894, RFC 9542)**: 48 bitlik hedef ve kaynak MAC adresleri, EtherType alanı ve çerçeve sınırları.
@@ -35,6 +35,8 @@ Bu sürümde tel üzerindeki 19 protokol en ince ayrıntısına kadar incelenmek
 4. **Uygulama Katmanı (Application Layer)**
    - **DNS (RFC 1035, RFC 2606)**: 12 sekizli sabit başlık, sorgu/yanıt bayrakları (QR, Opcode, RCODE) ve kaynak kayıtları (RR).
    - **CoAP (RFC 7252)**: Kısıtlı IoT cihazları ve düşük güçlü ağlar için ikili RESTful web aktarım protokolü.
+   - **DHCPv4 (RFC 2131, RFC 2132)**: BOOTP'tan devralınan 236 sekizlilik sabit kısım, BROADCAST bayrağı, sihirli çerez ve DORA adres alma akışı.
+   - **NTPv4 (RFC 5905)**: 48 sekizlilik temel başlık, Stratum ve kip alanları, dört adet 64 bitlik zaman damgası ve gecikme/saat farkı hesabı.
 
 Ayrıca [KILAVUZ.md](KILAVUZ.md) belgesi; **IEEE 802.3, 802.1Q (VLAN), PPPoE (RFC 2516), RARP (RFC 903), DHCPv4 (RFC 2131), DHCPv6 (RFC 8415), SCTP (RFC 9260), NDP (RFC 4861)** ve **ACD (RFC 5227)** protokollerini ve worked-example paket dökümlerini ayrıntılarıyla içerir.
 
@@ -54,6 +56,8 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına dayanır (`sources/rfcs.
 | **RFC 903** | A Reverse Address Resolution Protocol | RARP paket formatı ve ters adres çözümleme mekanizması. |
 | **RFC 1035** | Domain Names - Implementation and Specification | DNS ileti başlığı, bayraklar ve kaynak kayıt formatı. |
 | **RFC 1071** | Computing the Internet Checksum | 16-bit bire tümleyen internet sağlama toplamı hesaplama algoritması. |
+| **RFC 2131** | Dynamic Host Configuration Protocol | DHCPv4 ileti biçimi ve BOOTP ile ortak sabit alanlar. |
+| **RFC 2132** | DHCP Options and BOOTP Vendor Extensions | DHCP ileti türü, parametre istek listesi ve bitiş seçenekleri. |
 | **RFC 2236** | Internet Group Management Protocol, Version 2 | IGMPv2 çok noktaya yayın (multicast) üyelik raporları ve sorguları. |
 | **RFC 2474** | Definition of the Differentiated Services Field | IPv4 ToS ve IPv6 Traffic Class sekizlilerinin 6 bitlik DSCP olarak tanımı. |
 | **RFC 2516** | A Method for Transmitting PPP Over Ethernet (PPPoE) | PPPoE paket başlığı, keşif ve oturum aşamaları. |
@@ -65,6 +69,7 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına dayanır (`sources/rfcs.
 | **RFC 4340** | Datagram Congestion Control Protocol (DCCP) | DCCP paket başlığı ve çift yönlü tıkanıklık denetimi. |
 | **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 hata ve bilgilendirme iletileri. |
 | **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | Örneklerde kullanılan IPv4 belgeleme blokları (`192.0.2.0/24` vb.). |
+| **RFC 5905** | Network Time Protocol Version 4 | NTPv4 paket başlığı ve zaman damgası biçimleri. |
 | **RFC 7252** | The Constrained Application Protocol (CoAP) | CoAP IoT ileti başlığı ve ikili RESTful iletim. |
 | **RFC 7348** | Virtual eXtensible Local Area Network (VXLAN) | VXLAN katman 2 tünelleme başlığı ve sanal ağ kimliği (VNI). |
 | **RFC 8200** | Internet Protocol, Version 6 (IPv6) Specification | Sabit 40 sekizli IPv6 başlığı, uzantı başlıkları ve IPv6 sözde başlığı. |

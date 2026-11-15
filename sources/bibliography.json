@@ -214,6 +214,60 @@
       "use": "İnternet sağlama toplamının hesaplanması"
     },
     {
+      "number": 2131,
+      "title": "Dynamic Host Configuration Protocol",
+      "authors": [
+        "R. Droms"
+      ],
+      "date": "March 1997",
+      "status": "DRAFT STANDARD",
+      "obsoletes": [
+        "RFC1541"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC3396",
+        "RFC4361",
+        "RFC5494",
+        "RFC6842"
+      ],
+      "doi": "10.17487/RFC2131",
+      "url": "https://www.rfc-editor.org/rfc/rfc2131",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2131.txt",
+      "sha256": "a043b705785b81762505ded4cf71d61392b2b1da2b4ce1e32c13bc984de5f4a5",
+      "bytes": 113738,
+      "use": "DHCPv4 ileti biçimi ve BOOTP ile ortak sabit alanlar"
+    },
+    {
+      "number": 2132,
+      "title": "DHCP Options and BOOTP Vendor Extensions",
+      "authors": [
+        "S. Alexander",
+        "R. Droms"
+      ],
+      "date": "March 1997",
+      "status": "DRAFT STANDARD",
+      "obsoletes": [
+        "RFC1533"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC3442",
+        "RFC3942",
+        "RFC4361",
+        "RFC4833",
+        "RFC5494"
+      ],
+      "doi": "10.17487/RFC2132",
+      "url": "https://www.rfc-editor.org/rfc/rfc2132",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2132.txt",
+      "sha256": "0cfbedab7cfe859624ae78c07a722bc51bf8ea123a7b43b099fc546ddcf00b90",
+      "bytes": 63670,
+      "use": "DHCP seçenekleri: ileti türü, parametre istek listesi ve bitiş seçeneği"
+    },
+    {
       "number": 2236,
       "title": "Internet Group Management Protocol, Version 2",
       "authors": [
@@ -492,6 +546,37 @@
       "sha256": "9d16217614a74a9b064eff900e5cd07a525793cf8227dca1267100e880f0c410",
       "bytes": 7036,
       "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
+    },
+    {
+      "number": 5905,
+      "title": "Network Time Protocol Version 4: Protocol and Algorithms Specification",
+      "authors": [
+        "D. Mills",
+        "J. Martin, Ed.",
+        "J. Burbank",
+        "W. Kasch"
+      ],
+      "date": "June 2010",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC1305",
+        "RFC4330"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC7822",
+        "RFC8573",
+        "RFC9109",
+        "RFC9748",
+        "RFC9769"
+      ],
+      "doi": "10.17487/RFC5905",
+      "url": "https://www.rfc-editor.org/rfc/rfc5905",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5905.txt",
+      "sha256": "8b7abd903c60202e2953ee012fefa6916666c3b0c71825c748cdd262024fb268",
+      "bytes": 241096,
+      "use": "NTPv4 paket başlığı ve zaman damgası biçimleri"
     },
     {
       "number": 7252,

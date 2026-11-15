@@ -1,0 +1,237 @@
+{
+  "order": 21,
+  "name": "NTP",
+  "title": "NTPv4 başlığı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Ağ Zaman Protokolü (Network Time Protocol - NTPv4) paket başlığı. Temel başlık 48 sekizlidir ve dört adet 64 bitlik zaman damgası taşır; UDP üzerinde 123 numaralı portu kullanır.",
+  "layout": {
+    "rfc": 5905,
+    "section": "7.3",
+    "kind": "diagram",
+    "anchor": "|                         Root Delay                            |",
+    "label": "Figure 8",
+    "prose": [
+      "LI Leap Indicator (leap): 2-bit",
+      "VN Version Number (version): 3-bit",
+      "Mode (mode): 3-bit",
+      "Stratum (stratum): 8-bit",
+      "Poll: 8-bit",
+      "Precision: 8-bit"
+    ]
+  },
+  "notes": [
+    "RFC 5905 Figure 8'in ilk satırı bit ızgarasına tam oturmaz: Stratum ve Precision hücreleri bir karakter kaymış çizilmiştir. Bu yüzden ilk altı alanın genişliği §7.3 metnindeki \"2-bit\", \"3-bit\", \"8-bit\" tanımlarından, kalan alanlar şemadan doğrulanır.",
+    "Zaman damgaları 1 Ocak 1900 00:00 UTC'den bu yana geçen saniyeleri verir: üst 32 bit saniye, alt 32 bit saniyenin kesridir (RFC 5905 §6). Root Delay ve Root Dispersion ise 16 bit saniye + 16 bit kesirden oluşan kısa biçimdedir.",
+    "Destination Timestamp başlıkta taşınmaz; istemci yanıt geldiği anda kendisi kaydeder. Gidiş-dönüş gecikmesi (T4 − T1) − (T3 − T2), saat farkı ise ((T2 − T1) + (T3 − T4)) / 2 formülüyle hesaplanır.",
+    "Temel başlığın ardından isteğe bağlı uzantı alanları ile Key Identifier ve özetten (dgst) oluşan ileti doğrulama kodu (MAC) gelebilir."
+  ],
+  "fields": [
+    {
+      "key": "li",
+      "name": "LI",
+      "bits": 2,
+      "desc": "Leap Indicator (artık saniye göstergesi). Günün son dakikasına artık saniye eklenip çıkarılacağını bildirir. 3, saatin henüz eşzamanlanmadığı anlamına gelir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Leap Indicator"
+      },
+      "example": 0,
+      "values": [
+        ["0", "Uyarı yok"],
+        ["1", "Son dakika 61 saniye"],
+        ["2", "Son dakika 59 saniye"],
+        ["3", "Bilinmiyor (saat eşzamanlı değil)"]
+      ]
+    },
+    {
+      "key": "vn",
+      "name": "VN",
+      "bits": 3,
+      "desc": "Version Number: NTP sürüm numarası; NTPv4 için 4.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Version Number"
+      },
+      "example": 4
+    },
+    {
+      "key": "mode",
+      "name": "Mode",
+      "bits": 3,
+      "desc": "İletişim kipi. İstemci isteği 3, sunucu yanıtı 4 taşır.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Mode"
+      },
+      "example": 4,
+      "values": [
+        ["0", "Ayrılmış"],
+        ["1", "Simetrik etkin"],
+        ["2", "Simetrik edilgen"],
+        ["3", "İstemci"],
+        ["4", "Sunucu"],
+        ["5", "Yayın (broadcast)"],
+        ["6", "NTP denetim iletisi"],
+        ["7", "Özel kullanım için ayrılmış"]
+      ]
+    },
+    {
+      "key": "stratum",
+      "name": "Stratum",
+      "bits": 8,
+      "desc": "Sunucunun başvuru saatine uzaklığı. 1 birincil sunucu (ör. GPS alıcılı), 2–15 NTP ile eşzamanlanan ikincil sunucu, 16 eşzamansızdır. 0 ise Kiss-o'-Death paketini belirtir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Stratum"
+      },
+      "example": 2,
+      "values": [
+        ["0", "Belirtilmemiş / geçersiz (Kiss-o'-Death)"],
+        ["1", "Birincil sunucu"],
+        ["2–15", "İkincil sunucu"],
+        ["16", "Eşzamansız"]
+      ]
+    },
+    {
+      "key": "poll",
+      "name": "Poll",
+      "bits": 8,
+      "desc": "Ardışık iletiler arasındaki en uzun aralık, log₂ saniye cinsinden işaretli tamsayı. 6 değeri 2⁶ = 64 saniyedir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Poll"
+      },
+      "example": 6
+    },
+    {
+      "key": "precision",
+      "name": "Precision",
+      "bits": 8,
+      "desc": "Sistem saatinin duyarlılığı, log₂ saniye cinsinden işaretli (ikiye tümleyen) tamsayı. Örnekteki 0xe9 = −23, yani 2⁻²³ ≈ 119 nanosaniyedir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Precision"
+      },
+      "example": "0xe9",
+      "hex": true
+    },
+    {
+      "key": "rootdelay",
+      "name": "Root Delay",
+      "bits": 32,
+      "desc": "Başvuru saatine kadar toplam gidiş-dönüş gecikmesi, NTP kısa biçiminde (16.16). Örnekteki 0x00000a3d ≈ 0,040 saniyedir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Root Delay"
+      },
+      "example": "0x00000a3d",
+      "hex": true
+    },
+    {
+      "key": "rootdisp",
+      "name": "Root Dispersion",
+      "bits": 32,
+      "desc": "Başvuru saatine kadar biriken toplam belirsizlik (dispersion), NTP kısa biçiminde. Örnekteki 0x00000831 ≈ 0,032 saniyedir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Root Dispersion"
+      },
+      "example": "0x00000831",
+      "hex": true
+    },
+    {
+      "key": "refid",
+      "name": "Reference ID",
+      "bits": 32,
+      "type": "ipv4",
+      "desc": "Başvuru kaynağının kimliği. Stratum 1'de dört karakterlik ASCII saat kaynağı (\"GPS\", \"PPS\" gibi), Stratum 0'da kiss kodu (\"RATE\", \"DENY\"), daha üst stratumlarda IPv4 üzerinden üst sunucunun adresidir.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Reference ID"
+      },
+      "example": "192.0.2.123"
+    },
+    {
+      "key": "reftime",
+      "name": "Reference Timestamp",
+      "bits": 64,
+      "desc": "Sistem saatinin en son ayarlandığı an, 64 bitlik NTP zaman damgası biçiminde. Örnek: 16 Kasım 2026 11:58:20 UTC.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Reference Timestamp"
+      },
+      "example": "0xeea56e5c00000000",
+      "hex": true
+    },
+    {
+      "key": "org",
+      "name": "Origin Timestamp (T1)",
+      "bits": 64,
+      "desc": "İsteğin istemciden ayrıldığı an. Sunucu, istemcinin Transmit Timestamp değerini bu alana kopyalar; istemci bununla yanıtı kendi isteğiyle eşleştirir. Örnek: 12:00:00,000 UTC.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Origin Timestamp"
+      },
+      "example": "0xeea56ec000000000",
+      "hex": true
+    },
+    {
+      "key": "rec",
+      "name": "Receive Timestamp (T2)",
+      "bits": 64,
+      "desc": "İsteğin sunucuya ulaştığı an. Örnek: 12:00:00,012 UTC.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Receive Timestamp"
+      },
+      "example": "0xeea56ec003126e98",
+      "hex": true
+    },
+    {
+      "key": "xmt",
+      "name": "Transmit Timestamp (T3)",
+      "bits": 64,
+      "desc": "Yanıtın sunucudan ayrıldığı an. Örnek: 12:00:00,013 UTC.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Transmit Timestamp"
+      },
+      "example": "0xeea56ec00353f7cf",
+      "hex": true
+    },
+    {
+      "key": "ext",
+      "name": "Uzantı alanları ve MAC",
+      "bits": "değişken",
+      "desc": "İsteğe bağlı uzantı alanları ile Key Identifier (32 bit) ve ileti özeti (dgst). Temel 48 sekizlilik başlıkta bulunmaz.",
+      "ref": {
+        "rfc": 5905,
+        "section": "7.3",
+        "label": "Figure 8"
+      }
+    }
+  ],
+  "example": {
+    "note": "192.0.2.123 adresli üst sunucuya eşzamanlanmış Stratum 2 bir sunucunun istemciye gönderdiği yanıt (LI 0, VN 4, Mode 4, ilk sekizli 0x24). İstemci isteğini 12:00:00,000'da göndermiş, sunucu 12 ms sonra almış ve 1 ms sonra yanıtlamıştır. UDP üzerinde kaynak ve hedef portu 123'tür."
+  },
+  "refs": [
+    5905,
+    768,
+    5737
+  ],
+  "id": "ntp"
+}
