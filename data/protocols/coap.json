@@ -1,0 +1,158 @@
+{
+  "order": 12,
+  "name": "CoAP",
+  "title": "CoAP başlığı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Kısıtlı Uygulama Protokolü (Constrained Application Protocol - CoAP), kısıtlı IoT cihazları ve düşük güçlü kablosuz ağlar için tasarlanmış özel bir ikili web aktarım protokolüdür. HTTP benzeri RESTful modelini UDP üzerinde minimum ek yükle çalıştırır. Sabit başlığı 4 sekizlidir.",
+  "layout": {
+    "rfc": 7252,
+    "kind": "diagram",
+    "anchor": "|Ver| T |  TKL  |",
+    "section": "3",
+    "label": "Message Format"
+  },
+  "notes": [
+    "CoAP varsayılan olarak güvenli olmayan iletim için UDP port 5683, DTLS ile güvenli iletim için port 5684 kullanır.",
+    "İleti Kodu (Code) alanı 'sınıf.ayrıntı' (c.dd) biçiminde ifade edilir: 0.01 GET, 0.02 POST, 0.03 PUT, 0.04 DELETE istek yöntemleridir. 2.05 Content ise başarılı bir yanıt kodudur."
+  ],
+  "fields": [
+    {
+      "key": "ver",
+      "name": "Sürüm (Ver)",
+      "bits": 2,
+      "desc": "CoAP sürüm numarası. Bu belirtim için ikili 01 (1) değerinde olmalıdır.",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      },
+      "example": 1
+    },
+    {
+      "key": "t",
+      "name": "İleti Türü (T)",
+      "bits": 2,
+      "desc": "İletinin güvenilirlik türünü belirtir: 0: Onaylanabilir (CON), 1: Onaylanamaz (NON), 2: Onay (ACK), 3: Sıfırlama (RST).",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "Onaylanabilir (Confirmable - CON)"
+        ],
+        [
+          "1",
+          "Onaylanamaz (Non-confirmable - NON)"
+        ],
+        [
+          "2",
+          "Onay (Acknowledgement - ACK)"
+        ],
+        [
+          "3",
+          "Sıfırlama (Reset - RST)"
+        ]
+      ]
+    },
+    {
+      "key": "tkl",
+      "name": "Belirteç Uzunluğu (TKL)",
+      "bits": 4,
+      "desc": "Başlıktan hemen sonra gelen değişken uzunluklu Belirteç (Token) alanının sekizli cinsinden uzunluğu (0-8 sekizli).",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      },
+      "example": 4
+    },
+    {
+      "key": "code",
+      "name": "İleti Kodu (Code)",
+      "bits": 8,
+      "desc": "İstek yöntemini (0.xx) veya yanıt durum kodunu (2.xx, 4.xx, 5.xx) belirten 8 bitlik kod. 3 bit sınıf ve 5 bit ayrıntıdan oluşur.",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "GET (0.01)"
+        ],
+        [
+          "2",
+          "POST (0.02)"
+        ],
+        [
+          "3",
+          "PUT (0.03)"
+        ],
+        [
+          "4",
+          "DELETE (0.04)"
+        ],
+        [
+          "69",
+          "2.05 Content (Yanıt)"
+        ],
+        [
+          "132",
+          "4.04 Not Found (Yanıt)"
+        ]
+      ]
+    },
+    {
+      "key": "message_id",
+      "name": "İleti Kimliği (Message ID)",
+      "bits": 16,
+      "desc": "Yinelenen iletileri tespit etmek ve ACK/RST yanıtlarını isteklerle eşleştirmek için kullanılan 16 bitlik sıra numarası.",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      },
+      "example": "0x7d34",
+      "hex": true
+    },
+    {
+      "key": "token",
+      "name": "Belirteç (Token)",
+      "bits": "değişken",
+      "desc": "İstek ile yanıtı eşleştirmek için istemci tarafından oluşturulan TKL sekizli uzunluğundaki değer.",
+      "ref": {
+        "rfc": 7252,
+        "section": "3",
+        "label": "Message Format"
+      }
+    },
+    {
+      "key": "options",
+      "name": "Seçenekler (Options)",
+      "bits": "değişken",
+      "desc": "HTTP başlıklarına eşdeğer TLV formatındaki seçenekler (Uri-Path, Content-Format, Max-Age vb.).",
+      "ref": {
+        "rfc": 7252,
+        "section": "3.1",
+        "label": "Option Format"
+      }
+    }
+  ],
+  "example": {
+    "note": "Sıcaklık algılayıcısına gönderilen bir CoAP GET isteği (CON, Code 0.01, Uri-Path: 'temperature'). UDP port 5683 üzerinde taşınır.",
+    "payload": "73656e73bb74656d7065726174757265"
+  },
+  "refs": [
+    7252,
+    768,
+    5737
+  ],
+  "id": "coap"
+}

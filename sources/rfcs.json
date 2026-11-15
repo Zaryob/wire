@@ -62,6 +62,10 @@
       "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
     },
     {
+      "number": 7252,
+      "use": "CoAP ileti başlığı ve IoT istek/yanıt formatı"
+    },
+    {
       "number": 8200,
       "use": "IPv6 başlığı ve IPv6 sözde başlığı"
     },

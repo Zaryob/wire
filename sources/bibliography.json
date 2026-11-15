@@ -401,6 +401,33 @@
       "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
     },
     {
+      "number": 7252,
+      "title": "The Constrained Application Protocol (CoAP)",
+      "authors": [
+        "Z. Shelby",
+        "K. Hartke",
+        "C. Bormann"
+      ],
+      "date": "June 2014",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC7959",
+        "RFC8613",
+        "RFC8974",
+        "RFC9175",
+        "RFC9876"
+      ],
+      "doi": "10.17487/RFC7252",
+      "url": "https://www.rfc-editor.org/rfc/rfc7252",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc7252.txt",
+      "sha256": "abfe8cce3370b5b32487421b35725eb6eaf962ea454cad008b5a5cd052e27c5f",
+      "bytes": 258789,
+      "use": "CoAP ileti başlığı ve IoT istek/yanıt formatı"
+    },
+    {
       "number": 8200,
       "title": "Internet Protocol, Version 6 (IPv6) Specification",
       "authors": [
