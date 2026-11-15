@@ -1,0 +1,118 @@
+{
+  "order": 12,
+  "name": "IPsec AH",
+  "title": "IPsec AH başlığı",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "IP Kimlik Doğrulama Başlığı (IP Authentication Header - AH), IP datagramlarına bağlantısız veri bütünlüğü (integrity), veri kaynağı kimlik doğrulaması (authentication) ve isteğe bağlı tekrar oynatma saldırısı koruması (anti-replay) sağlar. IPv4 Protokol veya IPv6 Next Header numarası 51'dir.",
+  "layout": {
+    "rfc": 4302,
+    "kind": "diagram",
+    "anchor": "| Next Header   |  Payload Len  |          RESERVED             |",
+    "section": "2",
+    "label": "AH Format"
+  },
+  "notes": [
+    "AH başlığı, taşınan üst katman başlığından hemen önce yer alır; örneğin TCP taşınıyorsa Next Header değeri 6 olur.",
+    "Yük Uzunluğu (Payload Len), 32 bitlik sözcükler (4 sekizli) cinsinden AH başlığının toplam uzunluğundan 2 çıkarılarak hesaplanır (RFC 4302 §2.2). Örneğin 24 sekizlilik bir başlıkta değer (24 / 4) - 2 = 4 olur.",
+    "Bütünlük Denetim Değeri (ICV), IP başlığının değişmeyen alanları, AH başlığı (ICV sıfırlanmış olarak) ve paket yükü üzerinden kriptografik özet fonksiyonuyla (örneğin HMAC-SHA1-96 veya HMAC-SHA-256-128) hesaplanır."
+  ],
+  "fields": [
+    {
+      "key": "next_header",
+      "name": "Sonraki Başlık (Next Header)",
+      "bits": 8,
+      "desc": "Taşınan sonraki yükün protokol türünü belirtir (örneğin TCP için 6, UDP için 17, IPv4 tünellemesi için 4).",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.1",
+        "label": "Next Header"
+      },
+      "example": 6,
+      "values": [
+        [
+          "6",
+          "TCP (RFC 9293)"
+        ],
+        [
+          "17",
+          "UDP (RFC 768)"
+        ],
+        [
+          "4",
+          "IPv4 Kapsüllemesi (RFC 2003)"
+        ]
+      ]
+    },
+    {
+      "key": "payload_len",
+      "name": "Yük Uzunluğu (Payload Len)",
+      "bits": 8,
+      "desc": "AH başlığının 32 bitlik sözcük (4 sekizli) cinsinden toplam uzunluğundan 2 çıkarılmış değeri. 24 sekizlilik standart başlık için 4'tür.",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.2",
+        "label": "Payload Length"
+      },
+      "example": 4
+    },
+    {
+      "key": "reserved",
+      "name": "Ayrılmış (RESERVED)",
+      "bits": 16,
+      "desc": "Gelecekteki kullanım için ayrılmıştır; gönderici tarafından sıfırlanmalı ve alıcı tarafından yoksayılmalıdır.",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.3",
+        "label": "Reserved"
+      },
+      "example": 0
+    },
+    {
+      "key": "spi",
+      "name": "Güvenlik Parametreleri Dizini (SPI)",
+      "bits": 32,
+      "desc": "Alıcı tarafta paketin hangi Güvenlik İlişkisine (Security Association - SA) ait olduğunu belirten 32 bitlik dizin değeri.",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.4",
+        "label": "Security Parameters Index (SPI)"
+      },
+      "example": "0x00001000",
+      "hex": true
+    },
+    {
+      "key": "seq",
+      "name": "Sıra Numarası (Sequence Number)",
+      "bits": 32,
+      "desc": "Tekrar oynatma saldırılarını önlemek için her gönderilen pakette bir artırılan tekdüze artan 32 bitlik sıra numarası.",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.5",
+        "label": "Sequence Number"
+      },
+      "example": 1
+    },
+    {
+      "key": "icv",
+      "name": "Bütünlük Denetim Değeri (ICV)",
+      "bits": null,
+      "desc": "Kriptografik HMAC algoritmasıyla üretilen değişken uzunluklu (genellikle 96 veya 128 bit) Bütünlük Denetim Değeri. 32 bitin katı olacak şekilde doldurulur.",
+      "ref": {
+        "rfc": 4302,
+        "section": "2.6",
+        "label": "Integrity Check Value (ICV)"
+      }
+    }
+  ],
+  "example": {
+    "note": "192.0.2.1 ile 198.51.100.7 arasındaki bir SA (SPI: 0x00001000) kapsamında bir TCP segmentini (Next Header: 6) koruyan 24 sekizlilik IPsec AH başlığı. Sıra numarası 1'dir ve 96 bitlik (12 sekizli) ICV taşır.",
+    "payload": "a1b2c3d4e5f60718293a4b5c"
+  },
+  "refs": [
+    4302,
+    791,
+    9293
+  ],
+  "id": "ah"
+}

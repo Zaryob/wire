@@ -13,14 +13,14 @@ all field widths are machine-verified against ASCII diagrams in RFC texts.
 
 ## Protocols and Layers Covered
 
-This release covers nine fundamental on-the-wire protocols:
+This release covers 19 on-the-wire protocols:
 
-1. **Link Layer**: Ethernet (RFC 826, RFC 894, RFC 9542), ARP (RFC 826).
-2. **Network Layer**: IPv4 (RFC 791, RFC 2474, RFC 3168, RFC 5737), IPv6 (RFC 8200, RFC 2474, RFC 3168, RFC 3849), ICMPv4 (RFC 792), ICMPv6 (RFC 4443, RFC 8200).
-3. **Transport Layer**: UDP (RFC 768), TCP (RFC 9293, RFC 3168).
-4. **Application Layer**: DNS (RFC 1035, RFC 2606).
+1. **Link Layer**: Ethernet (RFC 826, RFC 894, RFC 9542), ARP (RFC 826), RARP (RFC 903), PPPoE (RFC 2516).
+2. **Network Layer**: IPv4 (RFC 791, RFC 2474, RFC 3168, RFC 5737), IPv6 (RFC 8200, RFC 2474, RFC 3168, RFC 3849), IPv6 Fragment (RFC 8200 §4.5), ICMPv4 (RFC 792), ICMPv6 (RFC 4443, RFC 8200), IGMPv2 (RFC 2236), GRE (RFC 2784), IPsec AH (RFC 4302).
+3. **Transport Layer**: UDP (RFC 768), TCP (RFC 9293, RFC 3168), SCTP (RFC 9260), DCCP (RFC 4340), VXLAN (RFC 7348).
+4. **Application Layer**: DNS (RFC 1035, RFC 2606), CoAP (RFC 7252).
 
-Additionally, the comprehensive reference guide [KILAVUZ.md](KILAVUZ.md) provides detailed explanations of **IEEE 802.3, 802.1Q (VLAN), PPPoE (RFC 2516), RARP (RFC 903), DHCPv4 (RFC 2131), DHCPv6 (RFC 8415), SCTP (RFC 9260), NDP (RFC 4861), and ACD (RFC 5227)** along with byte-by-byte worked example breakdowns.
+Additionally, the comprehensive reference guide [KILAVUZ.md](KILAVUZ.md) provides detailed explanations of **IEEE 802.3, 802.1Q (VLAN), DHCPv4 (RFC 2131), DHCPv6 (RFC 8415), NDP (RFC 4861), and ACD (RFC 5227)** along with byte-by-byte worked example breakdowns.
 
 ---
 
@@ -35,15 +35,24 @@ Every piece of information is anchored in IETF RFC specifications (`sources/rfcs
 | **RFC 792** | Internet Control Message Protocol | ICMP messages, types, codes, and checksums. |
 | **RFC 826** | An Ethernet Address Resolution Protocol | ARP packet format and Ethernet transmission fields. |
 | **RFC 894** | Transmission of IP Datagrams over Ethernet | IP packet encapsulation in Ethernet II frames (EtherType 0x0800). |
+| **RFC 903** | A Reverse Address Resolution Protocol | RARP packet format and reverse address resolution mechanism. |
 | **RFC 1035** | Domain Names - Implementation and Specification | DNS header format, flags, question/answer records. |
 | **RFC 1071** | Computing the Internet Checksum | 16-bit ones' complement checksum algorithm. |
+| **RFC 2236** | Internet Group Management Protocol, Version 2 | IGMPv2 multicast group membership reports and queries. |
 | **RFC 2474** | Definition of the Differentiated Services Field | DS field (DSCP) definition in IPv4 and IPv6 headers. |
+| **RFC 2516** | A Method for Transmitting PPP Over Ethernet (PPPoE) | PPPoE packet header, discovery and session stages. |
 | **RFC 2606** | Reserved Top Level DNS Names | Documentation domains (`.example`, `.test`, `example.com`). |
+| **RFC 2784** | Generic Routing Encapsulation (GRE) | GRE packet header and tunnel checksum verification. |
 | **RFC 3168** | The Addition of Explicit Congestion Notification to IP | ECN 2-bit field in IP and control flags in TCP. |
 | **RFC 3849** | IPv6 Address Prefix Reserved for Documentation | IPv6 documentation prefix (`2001:db8::/32`). |
+| **RFC 4302** | IP Authentication Header | IPsec AH header, data integrity and authentication. |
+| **RFC 4340** | Datagram Congestion Control Protocol (DCCP) | DCCP packet header and congestion-controlled datagram flows. |
 | **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 error and informational messages. |
 | **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | IPv4 documentation blocks (`192.0.2.0/24`, etc.). |
-| **RFC 8200** | Internet Protocol, Version 6 (IPv6) Specification | Fixed 40-octet IPv6 header and pseudo-header. |
+| **RFC 7252** | The Constrained Application Protocol (CoAP) | CoAP IoT message header and binary RESTful transmission. |
+| **RFC 7348** | Virtual eXtensible Local Area Network (VXLAN) | VXLAN L2-over-L4 tunneling header and Virtual Network Identifier (VNI). |
+| **RFC 8200** | Internet Protocol, Version 6 (IPv6) Specification | Fixed 40-octet IPv6 header, extension headers, and pseudo-header. |
+| **RFC 9260** | Stream Control Transmission Protocol | SCTP common header, multi-streaming, and 32-bit CRC-32c checksum. |
 | **RFC 9293** | Transmission Control Protocol (TCP) | Consolidates RFC 793 and modern TCP specifications. |
 | **RFC 9542** | IANA Considerations for IEEE 802 Parameters | Documentation MAC addresses (`00:00:5e:00:53:xx`). |
 

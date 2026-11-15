@@ -1,5 +1,5 @@
 {
-  "order": 3,
+  "order": 4,
   "name": "PPPoE",
   "title": "PPPoE başlığı",
   "layer": "Bağlantı",
@@ -102,7 +102,7 @@
         "section": "4",
         "label": "Payloads"
       },
-      "example": 22
+      "example": 30
     },
     {
       "key": "payload",
@@ -117,12 +117,14 @@
     }
   ],
   "example": {
-    "note": "Aktif bir PPPoE oturumunda (SESSION_ID: 0x002a) taşınan IPv4 paket yükü. Ethernet çerçevesindeki EtherType alanı 0x8864'tür (PPPoE Session Stage).",
-    "payload": "0021450000140001000040007ce7c0000201c0000202"
+    "note": "Aktif bir PPPoE oturumunda (SESSION_ID: 0x002a) taşınan ve 192.0.2.1'den 192.0.2.2'ye giden geçerli bir ICMP Echo İsteği (ping) taşıyan IPv4 datagramı (PPP Protokolü: 0x0021, Yük boyutu: 30 sekizli). IP ve ICMP sağlama toplamları tam doğrulanmıştır. Ethernet EtherType değeri 0x8864'tür.",
+    "payload": "00214500001c000100004001f6dcc0000201c00002020800e5ca12340001"
   },
   "refs": [
     2516,
-    9542
+    791,
+    792,
+    5737
   ],
   "id": "pppoe"
 }

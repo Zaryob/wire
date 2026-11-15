@@ -1,5 +1,5 @@
 {
-  "order": 13,
+  "order": 17,
   "name": "VXLAN",
   "title": "VXLAN başlığı",
   "layer": "Taşıma",
@@ -162,13 +162,15 @@
     }
   ],
   "example": {
-    "note": "VNI 100 segmentinde taşınan iç Ethernet çerçevesi. Dış UDP hedef portu 4789'dur (RFC 7348 §5).",
-    "payload": "00005e00530200005e0053010800450000140001000040007ce7c0000201c0000202"
+    "note": "VNI 100 segmentinde taşınan iç Ethernet çerçevesi. Çerçeve, 192.0.2.1'den 192.0.2.2'ye giden geçerli bir IPv4 ICMP Echo İsteği (ping) taşır; IP ve ICMP sağlama toplamları tam doğrulanmıştır. Dış UDP hedef portu 4789'dur (RFC 7348 §5).",
+    "payload": "00005e00530200005e00530108004500001c000100004001f6dcc0000201c00002020800e5ca12340001"
   },
   "refs": [
     7348,
     768,
-    9542
+    9542,
+    791,
+    792
   ],
   "id": "vxlan"
 }

@@ -1,0 +1,91 @@
+{
+  "order": 15,
+  "name": "SCTP",
+  "title": "SCTP başlığı",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "Akış Denetimi İletim Protokolü (Stream Control Transmission Protocol - SCTP), mesaj tabanlı, çoklu akış (multi-streaming) ve çoklu barındırma (multi-homing) yeteneklerine sahip güvenilir bir iletim katmanı protokolüdür. Telekomünikasyon altyapıları (SS7/SIGTRAN), Diameter ve WebRTC veri kanallarında kullanılır. Ortak başlığı 12 sekizlidir.",
+  "layout": {
+    "rfc": 9260,
+    "kind": "diagram",
+    "anchor": "|      Source Port Number       |    Destination Port Number    |",
+    "section": "3.1",
+    "label": "SCTP Common Header"
+  },
+  "notes": [
+    "SCTP ortak başlığı 12 sekizlidir; başlığı bir veya daha fazla denetim ya da veri yığını (chunk) izler.",
+    "Sağlama Toplamı (Checksum) alanı, RFC 9260 §3.1 uyarınca paketin tamamı üzerinden (sağlama alanı sıfırlanarak) 32 bitlik CRC-32c (Castagnoli) polinomu ile hesaplanır.",
+    "İlişki kurulumunu başlatan INIT yığını taşıyan paketlerde Doğrulama Etiketi (Verification Tag) 0 olmalıdır."
+  ],
+  "fields": [
+    {
+      "key": "sport",
+      "name": "Kaynak Port (Source Port)",
+      "bits": 16,
+      "desc": "Göndericinin SCTP port numarası. Sıfır değeri kullanılamaz.",
+      "ref": {
+        "rfc": 9260,
+        "section": "3.1",
+        "label": "Source Port Number"
+      },
+      "example": 5000
+    },
+    {
+      "key": "dport",
+      "name": "Hedef Port (Destination Port)",
+      "bits": 16,
+      "desc": "Hedef SCTP port numarası. Örneğin Diameter için 3868, M3UA için 2905.",
+      "ref": {
+        "rfc": 9260,
+        "section": "3.1",
+        "label": "Destination Port Number"
+      },
+      "example": 3868
+    },
+    {
+      "key": "vtag",
+      "name": "Doğrulama Etiketi (Verification Tag)",
+      "bits": 32,
+      "desc": "Alıcının paketi doğrulaması için kullanılan 32 bitlik rastgele kimlik. İlişki başlatılırken (INIT yığınında) 0x00000000 olmalıdır.",
+      "ref": {
+        "rfc": 9260,
+        "section": "3.1",
+        "label": "Verification Tag"
+      },
+      "example": "0x00000000",
+      "hex": true
+    },
+    {
+      "key": "checksum",
+      "name": "Sağlama Toplamı (Checksum)",
+      "bits": 32,
+      "desc": "Tüm SCTP paketini (ortak başlık ve yığınlar) koruyan 32 bitlik CRC-32c sağlama toplamı.",
+      "ref": {
+        "rfc": 9260,
+        "section": "3.1",
+        "label": "Checksum"
+      },
+      "example": "0x09edcf28",
+      "hex": true
+    },
+    {
+      "key": "chunks",
+      "name": "Yığınlar (Chunks)",
+      "bits": null,
+      "desc": "Pakette taşınan denetim veya veri yığınları (örneğin INIT, INIT ACK, SACK, DATA). Her yığın Tür (8 bit), Bayraklar (8 bit), Uzunluk (16 bit) ve Değer alanlarından oluşur.",
+      "ref": {
+        "rfc": 9260,
+        "section": "3.2",
+        "label": "Chunk Field Descriptions"
+      }
+    }
+  ],
+  "example": {
+    "note": "Diameter sunucusuna (Port 3868) bir SCTP ilişkisi başlatan standart bir INIT yığını (Initiate Tag: 0xa1b2c3d4, a_rwnd: 106496, Outbound: 10, Inbound: 10, Initial TSN: 0x12345678) taşıyan SCTP paketi. INIT kuralı gereğince Verification Tag 0'dır; CRC-32c sağlama toplamı hesaplanmıştır.",
+    "payload": "01000014a1b2c3d40001a000000a000a12345678"
+  },
+  "refs": [
+    9260
+  ],
+  "id": "sctp"
+}

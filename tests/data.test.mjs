@@ -86,5 +86,12 @@ test('example packets are internally consistent', () => {
   assert.equal(internetChecksum([192, 0, 2, 1, 198, 51, 100, 7, 0, 6, 0, 20, ...tcp.bytes]), 0, 'TCP checksum verifies');
   assert.equal(encode('dns').headerLength, 12);
   assert.equal(encode('arp').bytes.length, 28);
+  assert.equal(encode('rarp').bytes.length, 28);
+  assert.equal(encode('sctp').headerLength, 12);
+  const dccp = encode('dccp');
+  assert.equal(dccp.headerLength, 12);
+  const pseudoDccp = [192, 0, 2, 1, 198, 51, 100, 7, 0, 33, 0, dccp.bytes.length];
+  assert.equal(internetChecksum([...pseudoDccp, ...dccp.bytes]), 0, 'DCCP checksum verifies');
+  assert.equal(encode('ah').headerLength, 12);
   assert.equal(encode('ethernet').bytes.length, 14);
 });

@@ -1,5 +1,5 @@
 {
-  "order": 4,
+  "order": 5,
   "name": "IPv4",
   "title": "IPv4 başlığı",
   "layer": "Ağ",
@@ -59,7 +59,7 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 32
+      "example": 57
     },
     {
       "key": "id",
@@ -194,7 +194,7 @@
   ],
   "example": {
     "payloadFrom": "udp",
-    "note": "192.0.2.1’den 198.51.100.7’ye giden, UDP sayfasındaki örnek datagramı taşıyan bir IPv4 datagramı. Adresler belgeleme bloklarındandır (RFC 5737 §3)."
+    "note": "192.0.2.1’den 198.51.100.7’ye giden, UDP ve DNS sayfalarındaki example.com A kaydı sorgusunu taşıyan tam bir IPv4 datagramı (Toplam uzunluk: 57 sekizli). Adresler belgeleme bloklarındandır (RFC 5737 §3)."
   },
   "refs": [
     791,

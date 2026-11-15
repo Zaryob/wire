@@ -1,0 +1,179 @@
+{
+  "order": 16,
+  "name": "DCCP",
+  "title": "DCCP başlığı",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "Datagram Tıkanıklık Denetimi Protokolü (Datagram Congestion Control Protocol - DCCP), güvenilmez (unreliable) datagram akışları üzerinde iki yönlü tıkanıklık denetimi (congestion control) kuran bir iletim katmanı protokolüdür. Gerçek zamanlı ses/video akışı (VoIP, RTP/DCCP) ve etkileşimli ağ uygulamaları için tasarlanmıştır. Kısa sıra numaralı (X=0) genel başlığı 12 sekizlidir.",
+  "layout": {
+    "rfc": 4340,
+    "kind": "diagram",
+    "anchor": "| Res | Type  |=|          Sequence Number (low bits)           |",
+    "section": "5.1",
+    "label": "Generic Header"
+  },
+  "notes": [
+    "DCCP genel başlığı, Genişletilmiş Sıra Numarası (X) biti 0 olduğunda 12 sekizli, 1 olduğunda 16 sekizlidir.",
+    "Sağlama Toplamı (Checksum), RFC 1071 yöntemiyle hesaplanır ve TCP/UDP'deki gibi IP sözde başlığını kapsar (RFC 4340 §5.1). CsCov alanı sağlama kapsamını daraltmaya izin verir.",
+    "İleti Türü (Type) alanı DCCP'nin durum geçişlerini yönetir: 1 İstek (DCCP-Request), 2 Yanıt (DCCP-Response), 3 Veri (DCCP-Data), 4 Onay (DCCP-Ack), 7 Kapatma (DCCP-Close)."
+  ],
+  "fields": [
+    {
+      "key": "sport",
+      "name": "Kaynak Port (Source Port)",
+      "bits": 16,
+      "desc": "Paketi gönderen istemcinin port numarası.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 50194
+    },
+    {
+      "key": "dport",
+      "name": "Hedef Port (Dest Port)",
+      "bits": 16,
+      "desc": "Hedef port numarası. Örneğin RTP üzerinden DCCP ortam akışları için 5004.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 5004
+    },
+    {
+      "key": "data_offset",
+      "name": "Veri Ofseti (Data Offset)",
+      "bits": 8,
+      "desc": "DCCP başlığının ve seçeneklerinin 32 bitlik sözcük cinsinden uzunluğu. Yalnızca 12 sekizlilik temel başlık için 3'tür.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 3
+    },
+    {
+      "key": "ccval",
+      "name": "CCVal",
+      "bits": 4,
+      "desc": "Tıkanıklık Denetim Değeri (CCVal); göndericinin Tıkanıklık Denetim Profili (CCID) tarafından pencere veya RTT takibi için kullanılır.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "cscov",
+      "name": "Sağlama Kapsamı (CsCov)",
+      "bits": 4,
+      "desc": "Sağlama Toplamı Kapsamı (Checksum Coverage). 0 ise başlık ve yükün tamamı korunur.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "checksum",
+      "name": "Sağlama Toplamı (Checksum)",
+      "bits": 16,
+      "desc": "IP sözde başlığı ve DCCP paketi üzerinden RFC 1071 yöntemine göre hesaplanan 16 bitlik sağlama toplamı.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "checksum": "pseudo4",
+      "hex": true
+    },
+    {
+      "key": "res",
+      "name": "Ayrılmış (Res)",
+      "bits": 3,
+      "desc": "Ayrılmış 3 bit. Gönderimde sıfırlanmalıdır.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "type",
+      "name": "İleti Türü (Type)",
+      "bits": 4,
+      "desc": "DCCP paketinin türü: 1 DCCP-Request, 2 DCCP-Response, 3 DCCP-Data, 4 DCCP-Ack.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "DCCP-Request (Bağlantı İsteği)"
+        ],
+        [
+          "2",
+          "DCCP-Response (Bağlantı Yanıtı)"
+        ],
+        [
+          "3",
+          "DCCP-Data (Veri)"
+        ],
+        [
+          "4",
+          "DCCP-Ack (Onay)"
+        ],
+        [
+          "7",
+          "DCCP-Close (Kapatma)"
+        ]
+      ]
+    },
+    {
+      "key": "x",
+      "name": "Genişletilmiş Sıra (X)",
+      "bits": 1,
+      "desc": "Genişletilmiş Sıra Numarası bayrağı. 0 ise 24 bitlik, 1 ise 48 bitlik sıra numarası kullanılır.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "seq",
+      "name": "Sıra Numarası (Sequence Number)",
+      "bits": 24,
+      "desc": "24 bitlik sıra numarası (X=0 için alt bitler). Her gönderilen pakette artırılır.",
+      "ref": {
+        "rfc": 4340,
+        "section": "5.1",
+        "label": "Generic Header"
+      },
+      "example": 256
+    }
+  ],
+  "example": {
+    "pseudo": {
+      "source": "192.0.2.1",
+      "destination": "198.51.100.7",
+      "protocol": 33
+    },
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki medya sunucusuna (Port 5004 - RTP) yeni bir tıkanıklık denetimli akış başlatan standart bir DCCP-Request (Tür 1, X=0, Sıra No: 256) paketi. Sağlama toplamı IPv4 sözde başlığı (Protokol: 33) ile RFC 1071 yöntemine göre hesaplanmıştır."
+  },
+  "refs": [
+    4340,
+    1071,
+    5737
+  ],
+  "id": "dccp"
+}

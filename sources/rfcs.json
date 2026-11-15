@@ -22,6 +22,10 @@
       "use": "IP datagramlarının Ethernet çerçevesinde taşınması"
     },
     {
+      "number": 903,
+      "use": "RARP paketi ve ters adres çözümleme"
+    },
+    {
       "number": 1035,
       "use": "DNS ileti başlığı"
     },
@@ -58,6 +62,14 @@
       "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
     },
     {
+      "number": 4302,
+      "use": "IPsec AH başlığı ve veri bütünlüğü"
+    },
+    {
+      "number": 4340,
+      "use": "DCCP paket başlığı ve tıkanıklık denetimi"
+    },
+    {
       "number": 4443,
       "use": "ICMPv6 iletileri"
     },
@@ -76,6 +88,10 @@
     {
       "number": 8200,
       "use": "IPv6 başlığı ve IPv6 sözde başlığı"
+    },
+    {
+      "number": 9260,
+      "use": "SCTP ortak başlığı ve yığın formatı"
     },
     {
       "number": 9293,

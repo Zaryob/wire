@@ -1,5 +1,5 @@
 {
-  "order": 12,
+  "order": 14,
   "name": "TCP",
   "title": "TCP başlığı",
   "layer": "Taşıma",
@@ -26,18 +26,18 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 49152
+      "example": 50194
     },
     {
       "key": "dport",
       "name": "Destination Port",
       "bits": 16,
-      "desc": "Hedef port numarası.",
+      "desc": "Hedef port numarası. Örneğin standart HTTP web sunucusu için 80.",
       "ref": {
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 53
+      "example": 80
     },
     {
       "key": "seq",
@@ -48,7 +48,8 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 1000
+      "example": "0x12345678",
+      "hex": true
     },
     {
       "key": "ack",
@@ -180,7 +181,7 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 65535
+      "example": 29200
     },
     {
       "key": "checksum",
@@ -222,7 +223,7 @@
       "destination": "198.51.100.7",
       "protocol": 6
     },
-    "note": "Başlangıç sıra numarası 1000 olan, veri taşımayan bir SYN segmenti. Sağlama toplamı 192.0.2.1 → 198.51.100.7 sözde başlığıyla hesaplanmıştır."
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP web sunucusunun 80 numaralı portuna giden, 3 aşamalı el sıkışmanın ilk adımı olan standart bir TCP SYN segmenti (ISN: 0x12345678, Window: 29200). Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
   },
   "refs": [
     9293,

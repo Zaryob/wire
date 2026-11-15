@@ -1117,28 +1117,29 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 
 | Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
 |---|---|---|---|
-| **PPPoE (PPP over Ethernet)** | **RFC 2516** | §4 (Figure) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. 6 baytlık sabit başlık: Version (4), Type (4), Code (8), Session_ID (16), Length (16). RFC metninde temiz bir ASCII şeması mevcuttur. Genişbant DSL/FTTH erişiminde evrenseldir. |
-| **IEEE 802.1Q (VLAN Tagging)** | **RFC 3069** / IEEE | 16 bit ızgara | **Yüksek Uygunluk**. TPID (16: 0x8100), PCP (3), DEI (1), VID (12). Ethernet çerçevesine ek bir 4 baytlık başlık olarak modellenip Ethernet sayfasıyla entegre edilebilir. |
-| **RARP (Reverse ARP)** | **RFC 903** | RFC 826 şablonu | **Yüksek Uygunluk**. RFC 826 ile tamamen aynı 28 baytlık yerleşimi paylaşır (`ar$op = 3/4`). Tarihsel önemi yüksektir. |
-| **LLC / SNAP Kapsüllemesi** | **RFC 1042** | Liste tanımı | **Orta Uygunluk**. IEEE 802 ağlarında IP taşıma standardıdır (DSAP 8, SSAP 8, Control 8, OUI 24, EtherType 16). |
+| **PPPoE (PPP over Ethernet)** | **RFC 2516** | §4 (Figure) — 32 bit ızgara | **Eklendi**. 6 baytlık sabit başlık: Version (4), Type (4), Code (8), Session_ID (16), Length (16). Doğrulanmış IPv4/ICMP yükü ile çalışır. |
+| **IEEE 802.1Q (VLAN Tagging)** | **RFC 3069** / IEEE | 16 bit ızgara | **Yüksek Uygunluk**. TPID (16: 0x8100), PCP (3), DEI (1), VID (12). |
+| **RARP (Reverse ARP)** | **RFC 903** | RFC 826 şablonu | **Eklendi**. RFC 826 ile aynı 28 baytlık yerleşim (`ar$op = 3/4`), disksiz önyükleme için tam doğrulanmıştır. |
+| **LLC / SNAP Kapsüllemesi** | **RFC 1042** | Liste tanımı | **Orta Uygunluk**. IEEE 802 ağlarında IP taşıma standardıdır. |
 
 #### 2. Ağ / İnternet Katmanı (Network Layer) Adayları
 
 | Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
 |---|---|---|---|
-| **IGMPv2 (Group Management)** | **RFC 2236** | §2 (Message Formats) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. Sabit 8 sekizli başlık: Type (8), Max Resp Time (8), Checksum (16), Group Address (32). Temiz 32-bit ASCII şeması vardır; sağlama toplamı doğrudan RFC 1071 standardındadır. IPTV ve multicast yönlendirmenin kalbidir. |
-| **IPv6 Fragment Header** | **RFC 8200** | §4.5 (Fragment Header) — 32 bit ızgara | **Çok Yüksek Uygunluk**. Sabit 8 sekizli uzantı başlığı: Next Header (8), Reserved (8), Fragment Offset (13), Res (2), M Flag (1), Identification (32). RFC 8200 içinde tam ASCII şeması bulunur. |
-| **GRE (Generic Routing Encapsulation)** | **RFC 2784** | §2.1 — 32 bit ızgara | **Yüksek Uygunluk**. C (1), Reserved0 (12), Version (3), Protocol Type (16). Temel tünelleme başlığı 4 sekizlidir. RFC 2890 ile anahtar ve sıra numarası seçenekleri de belgelenmiştir. |
-| **IPsec AH (Authentication Header)** | **RFC 4302** | §2.2 — 32 bit ızgara | **Orta Uygunluk**. Next Header (8), Payload Len (8), Reserved (16), SPI (32), Sequence Number (32), ICV (değişken). Değişken kimlik doğrulama verisi taşır. |
-| **IPsec ESP** | **RFC 4303** | §2 — 32 bit ızgara | **Orta Uygunluk**. SPI (32), Sequence Number (32), Payload (değişken), Padding, Pad Length (8), Next Header (8). Şifreli veri yükü içerdiğinden statik örnekleme dikkat gerektirir. |
+| **IGMPv2 (Group Management)** | **RFC 2236** | §2 (Message Formats) — 32 bit ızgara | **Eklendi**. Sabit 8 sekizli başlık: Type (8), Max Resp Time (8), Checksum (16), Group Address (32). RFC 1071 sağlama toplamı. |
+| **IPv6 Fragment Header** | **RFC 8200** | §4.5 (Fragment Header) — 32 bit ızgara | **Eklendi**. Sabit 8 sekizli uzantı başlığı: Next Header (8), Reserved (8), Fragment Offset (13), Res (2), M Flag (1), Identification (32). |
+| **GRE (Generic Routing Encapsulation)** | **RFC 2784** | §2.1 — 32 bit ızgara | **Eklendi**. C (1), Reserved0 (12), Version (3), Protocol Type (16), Checksum (16), Reserved1 (16). Doğrulanmış IPv4 yükü taşır. |
+| **IPsec AH (Authentication Header)** | **RFC 4302** | §2 — 32 bit ızgara | **Eklendi**. Next Header (8), Payload Len (8), Reserved (16), SPI (32), Sequence Number (32), ICV (değişken). TCP segmentlerini korur. |
+| **IPsec ESP** | **RFC 4303** | §2 — 32 bit ızgara | **Orta Uygunluk**. SPI (32), Sequence Number (32), Payload (değişken), Padding, Pad Length (8), Next Header (8). |
 
 #### 3. İletim Katmanı (Transport Layer) Adayları
 
 | Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
 |---|---|---|---|
-| **SCTP (Stream Control Transmission)** | **RFC 9260** | §3.1 (Common Header) — 32 bit ızgara | **Çok Yüksek Uygunluk (En Güçlü Aday)**. 12 baytlık ortak başlık: Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32 - CRC-32c). Ardından gelen Chunk Header (Type 8, Flags 8, Length 16) da temiz ASCII şemalarına sahiptir. Telekom altyapıları ve WebRTC için vazgeçilmezdir. |
-| **DCCP (Datagram Congestion Control)** | **RFC 4340** | §5.1 — 32 bit ızgara | **Orta Uygunluk**. Source Port (16), Dest Port (16), Data Offset (8), CCVal (4), CsCov (4), Checksum (16), Res (3), Type (4), X (1), Sequence Number (24/48). Güvenilmez ama tıkanıklık denetimli akış iletimi. |
-| **QUIC Paket Başlığı** | **RFC 9000** | §17 — Değişken şemalar | **Düşük-Orta Uygunluk**. Modern webin temelidir ancak başlık alanları sabit bitli değil değişken uzunluklu tamsayı (variable-length integer) kodlaması ve şifreli başlık bitleri içerir. |
+| **SCTP (Stream Control Transmission)** | **RFC 9260** | §3.1 (Common Header) — 32 bit ızgara | **Eklendi**. 12 baytlık ortak başlık: Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32 - CRC-32c). Doğrulanmış INIT yığını taşır. |
+| **DCCP (Datagram Congestion Control)** | **RFC 4340** | §5.1 — 32 bit ızgara | **Eklendi**. Source Port (16), Dest Port (16), Data Offset (8), CCVal (4), CsCov (4), Checksum (16), Res (3), Type (4), X (1), Sequence Number (24). RFC 1071 sağlama toplamı. |
+| **VXLAN (Virtual eXtensible LAN)** | **RFC 7348** | §5 — 32 bit ızgara | **Eklendi**. Flags (8), Reserved (24), VNI (24), Reserved (8). İç Ethernet çerçevesini L4 üzerinden tüneller. |
+| **QUIC Paket Başlığı** | **RFC 9000** | §17 — Değişken şemalar | **Düşük-Orta Uygunluk**. Başlık alanları değişken uzunluklu tamsayı kodlaması ve şifreli başlık bitleri içerir. |
 
 #### 4. Uygulama ve Ağ Yönetimi Katmanı (Application / Management Layer) Adayları
 

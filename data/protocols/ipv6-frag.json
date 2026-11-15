@@ -1,5 +1,5 @@
 {
-  "order": 6,
+  "order": 7,
   "name": "IPv6 Parçalama",
   "title": "IPv6 Parçalama başlığı",
   "layer": "Ağ",
@@ -113,8 +113,8 @@
     }
   ],
   "example": {
-    "note": "1500 sekizliyi aşan bir IPv6 UDP paketinin ilk parçası (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header değeri 17'dir (UDP).",
-    "payload": "1f90003504d20000"
+    "note": "1500 sekizliyi aşan bir IPv6 UDP paketinin ilk parçası (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header değeri 17'dir (UDP). Yük, geçerli UDP başlığının ilk 8 sekizlisini taşır (RFC 8200 §8.1 uyarınca IPv6 UDP sağlama toplamı sıfır olamaz).",
+    "payload": "1f90003504d27b10"
   },
   "refs": [
     8200,

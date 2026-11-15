@@ -1,0 +1,158 @@
+{
+  "order": 3,
+  "name": "RARP",
+  "title": "RARP paketi",
+  "layer": "Bağlantı",
+  "rowBits": 16,
+  "summary": "Ters Adres Çözümleme Protokolü (Reverse Address Resolution Protocol - RARP), disksiz iş istasyonlarının ağ üzerinden önyükleme (bootstrapping) yaparken kendi fiziksel MAC adreslerini anons edip karşılık gelen IPv4 adreslerini dinamik olarak öğrenmelerini sağlar. Ethernet çerçevesinde EtherType 0x8035 ile taşınır.",
+  "layout": {
+    "rfc": 826,
+    "kind": "rfc826",
+    "part": "arp",
+    "label": "Packet format: Ethernet packet data"
+  },
+  "notes": [
+    "RARP, RFC 826'daki ARP ile tamamen aynı 28 sekizlilik paket biçimini kullanır; temel fark İşlem Kodu (ar$op) değerlerinin 3 (RARP İsteği) ve 4 (RARP Yanıtı) olmasıdır (RFC 903 §III).",
+    "İstek iletisinde gönderici kendi IPv4 adresini henüz bilmediğinden ar$spa ve ar$tpa alanları tanımsızdır (genellikle 0.0.0.0 doldurulur); ar$tha ise öğrenilmek istenen donanım adresidir."
+  ],
+  "fields": [
+    {
+      "key": "hrd",
+      "name": "Donanım adres uzayı (ar$hrd)",
+      "bits": 16,
+      "desc": "Donanım adresinin türü. Ethernet için 1.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "Ethernet (ares_hrd$Ethernet)"
+        ]
+      ]
+    },
+    {
+      "key": "pro",
+      "name": "Protokol adres uzayı (ar$pro)",
+      "bits": 16,
+      "desc": "Çözümlenen protokol adresinin türü. IPv4 için 0x0800.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": "0x0800",
+      "hex": true
+    },
+    {
+      "key": "hln",
+      "name": "Donanım adresi uzunluğu (ar$hln)",
+      "bits": 8,
+      "desc": "Her donanım adresinin sekizli cinsinden uzunluğu. 48 bitlik MAC adresleri için 6'dır.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 6
+    },
+    {
+      "key": "pln",
+      "name": "Protokol adresi uzunluğu (ar$pln)",
+      "bits": 8,
+      "desc": "Her protokol adresinin sekizli cinsinden uzunluğu. 32 bitlik IPv4 adresleri için 4'tür.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "example": 4
+    },
+    {
+      "key": "op",
+      "name": "İşlem kodu (ar$op)",
+      "bits": 16,
+      "desc": "Paketin ters istek mi yoksa ters yanıt mı olduğunu belirtir: 3 Ters İstek, 4 Ters Yanıt.",
+      "ref": {
+        "rfc": 903,
+        "section": "III",
+        "label": "The Proposed Protocol"
+      },
+      "example": 3,
+      "values": [
+        [
+          "3",
+          "Ters İstek (Reverse Request)"
+        ],
+        [
+          "4",
+          "Ters Yanıt (Reverse Reply)"
+        ]
+      ]
+    },
+    {
+      "key": "sha",
+      "name": "Gönderenin donanım adresi (ar$sha)",
+      "bits": 48,
+      "desc": "Bu paketi gönderen istasyonun donanım adresi; uzunluğu ar$hln alanından gelir.",
+      "ref": {
+        "rfc": 826,
+        "label": "Packet format"
+      },
+      "type": "mac",
+      "example": "00:00:5e:00:53:01",
+      "sizedBy": "n"
+    },
+    {
+      "key": "spa",
+      "name": "Gönderenin protokol adresi (ar$spa)",
+      "bits": 32,
+      "desc": "Gönderenin protokol adresi. RARP isteğinde gönderen kendi IP adresini henüz bilmediğinden tanımsızdır ve 0.0.0.0 girilir.",
+      "ref": {
+        "rfc": 903,
+        "section": "III",
+        "label": "The Proposed Protocol"
+      },
+      "type": "ipv4",
+      "example": "0.0.0.0",
+      "sizedBy": "m"
+    },
+    {
+      "key": "tha",
+      "name": "Hedefin donanım adresi (ar$tha)",
+      "bits": 48,
+      "desc": "Protokol adresi aranan hedef donanım adresi. İstek iletisinde arayan cihaz kendi donanım adresini girer.",
+      "ref": {
+        "rfc": 903,
+        "section": "III",
+        "label": "The Proposed Protocol"
+      },
+      "type": "mac",
+      "example": "00:00:5e:00:53:01",
+      "sizedBy": "n"
+    },
+    {
+      "key": "tpa",
+      "name": "Hedefin protokol adresi (ar$tpa)",
+      "bits": 32,
+      "desc": "Hedef protokol adresi. İstek iletisinde tanımsızdır ve 0.0.0.0 olarak gönderilir; RARP sunucusunun yanıtında doldurulur.",
+      "ref": {
+        "rfc": 903,
+        "section": "III",
+        "label": "The Proposed Protocol"
+      },
+      "type": "ipv4",
+      "example": "0.0.0.0",
+      "sizedBy": "m"
+    }
+  ],
+  "example": {
+    "note": "00:00:5e:00:53:01 MAC adresine sahip disksiz bir istasyonun ağa katılırken kendi IPv4 adresini öğrenmek için yayınladığı RARP İsteği (Opcode 3). Ethernet EtherType değeri 0x8035'tir."
+  },
+  "refs": [
+    903,
+    826,
+    9542,
+    5737
+  ],
+  "id": "rarp"
+}

@@ -1,5 +1,5 @@
 {
-  "order": 10,
+  "order": 11,
   "name": "GRE",
   "title": "GRE başlığı",
   "layer": "Ağ",
@@ -93,13 +93,15 @@
     }
   ],
   "example": {
-    "note": "Sağlama toplamı korumalı (C=1) bir GRE tüneli içinde taşınan IPv4 datagramı. Dış IP başlığında protokol numarası 47'dir (RFC 2784 §3).",
-    "payload": "450000140001000040007ce7c0000201c0000202"
+    "note": "Sağlama toplamı korumalı (C=1) bir GRE tüneli içinde taşınan ve 192.0.2.1'den 192.0.2.2'ye giden geçerli bir ICMP Echo İsteği IPv4 datagramı. GRE sağlama toplamı GRE başlığı ve taşınan yükün tamamı üzerinden RFC 1071 yöntemiyle hesaplanır. Dış IP başlığında protokol numarası 47'dir (RFC 2784 §3).",
+    "payload": "4500001c000100004001f6dcc0000201c00002020800e5ca12340001"
   },
   "refs": [
     2784,
     1071,
-    5737
+    5737,
+    791,
+    792
   ],
   "id": "gre"
 }

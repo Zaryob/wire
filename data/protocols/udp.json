@@ -1,5 +1,5 @@
 {
-  "order": 11,
+  "order": 13,
   "name": "UDP",
   "title": "UDP başlığı",
   "layer": "Taşıma",
@@ -25,7 +25,7 @@
         "rfc": 768,
         "label": "Fields"
       },
-      "example": 49152
+      "example": 50194
     },
     {
       "key": "dport",
@@ -47,7 +47,7 @@
         "rfc": 768,
         "label": "Fields"
       },
-      "example": 12
+      "example": 37
     },
     {
       "key": "checksum",
@@ -73,13 +73,13 @@
     }
   ],
   "example": {
-    "payload": "77697265",
+    "payloadFrom": "dns",
     "pseudo": {
       "source": "192.0.2.1",
       "destination": "198.51.100.7",
       "protocol": 17
     },
-    "note": "53 numaralı porta giden, dört sekizlilik veri (ASCII “wire”) taşıyan bir datagram. Sağlama toplamı 192.0.2.1 → 198.51.100.7 sözde başlığıyla hesaplanmıştır."
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki DNS sunucusunun 53 numaralı portuna giden, DNS sayfasındaki example.com A kaydı sorgusunu taşıyan standart bir UDP datagramı. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
   },
   "refs": [
     768,

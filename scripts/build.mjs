@@ -115,7 +115,7 @@ function topbar(current, title = '', layer = '') {
 }
 
 function suiteFooter() {
-  return `<nav class="console-suite" aria-label="Zaryob projeleri"><div class="console-suite__inner"><p class="console-suite__prompt" aria-hidden="true"><span>zaryob</span>:~ $ ls -F</p><ul class="console-suite__list">${projects.map(project => `<li><a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}/</small></a></li>`).join('')}</ul><p class="console-suite__meta"><a href="${origin}/hakkinda/" rel="author">Süleyman Poyraz</a><a href="https://github.com/Zaryob" rel="me">GitHub ↗</a><a href="${origin}/feed.xml">feed.xml</a></p></div></nav>`;
+  return `<nav class="console-suite" aria-label="Zaryob projeleri"><div class="console-suite__inner"><p class="console-suite__prompt">~/projeler/</p><ul class="console-suite__list">${projects.map(project => `<li><a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}" aria-label="${e(project.title)}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/</a></li>`).join('')}</ul><p class="console-suite__meta"><a href="${origin}/hakkinda/" rel="author">Süleyman Poyraz</a><a href="https://github.com/Zaryob" rel="me">GitHub ↗</a><a href="${origin}/feed.xml">feed.xml</a></p></div></nav>`;
 }
 
 function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '' }) {
