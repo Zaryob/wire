@@ -70,11 +70,11 @@ function header(current) {
 </div></header>`;
 }
 
-function page({ id, title, description, body, indexable = true }) {
+function page({ id, title, description, body, indexable = true, className = '' }) {
   const fullTitle = id === '' ? 'wire · Ağ protokolü başlıkları, bit bit' : `${title} · wire`;
   return `<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
-<body class="console-site wire-site">${header(id)}
+<body class="console-site wire-site${className ? ` ${className}` : ''}">${header(id)}
 <main id="main" class="wire-main" tabindex="-1">${body}</main>
 <footer class="console-footer wire-footer"><div><a href="${url('')}">wire</a> / Ağ protokolü başlıkları, bit bit.<br><span class="footer-note">Her alan bir RFC’ye dayanır; genişlikler RFC metnindeki şemalarla karşılaştırılır.</span></div><div class="footer-links"><a href="${url('kilavuz')}">Kılavuz</a><a href="${url('kaynakca')}">Kaynakça</a><a href="${url('yontem')}">Yöntem</a><a href="${asset('lisanslar/')}">Lisanslar</a><a href="#main">Başa dön ↑</a></div></footer>
 </body></html>`;
@@ -117,12 +117,46 @@ function exampleValue(field, range, bytes) {
 
 function protocolPage(protocol) {
   const { bytes, headerLength, ranges } = example(protocol.id);
+  const myLayer = layerKey(protocol.layer);
+  const fromId = protocol.example?.payloadFrom;
+  const subProto = fromId ? byId.get(fromId) : null;
+  const subHeaderLen = subProto ? example(subProto.id).headerLength : 0;
+  const subLayer = subProto ? layerKey(subProto.layer) : null;
+
+  const byteLayer = index => {
+    if (index < headerLength) return myLayer;
+    if (subProto && index < headerLength + subHeaderLen) return subLayer;
+    if (protocol.id === 'udp' || protocol.id === 'tcp' || (subProto && (subProto.id === 'udp' || subProto.id === 'tcp'))) return 'application';
+    if (protocol.id === 'dns') return 'application';
+    return myLayer;
+  };
+
+  const legendItems = [];
+  legendItems.push(`<span class="hex-legend__item hex-legend__item--${myLayer}"><span class="hex-legend__swatch"></span>${e(protocol.name)} başlığı (${headerLength} sekizli)</span>`);
+  if (subProto) {
+    legendItems.push(`<span class="hex-legend__item hex-legend__item--${subLayer}"><span class="hex-legend__swatch"></span>${e(subProto.name)} yükü (${subHeaderLen} sekizli)</span>`);
+    const remaining = bytes.length - (headerLength + subHeaderLen);
+    if (remaining > 0) {
+      legendItems.push(`<span class="hex-legend__item hex-legend__item--application"><span class="hex-legend__swatch"></span>Uygulama verisi (${remaining} sekizli)</span>`);
+    }
+  } else if (bytes.length > headerLength) {
+    const remaining = bytes.length - headerLength;
+    const label = protocol.id === 'dns' ? 'Soru kaydı' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? 'İleti verisi' : 'Uygulama verisi';
+    const pLayer = protocol.id === 'dns' ? 'application' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? myLayer : 'application';
+    legendItems.push(`<span class="hex-legend__item hex-legend__item--${pLayer}"><span class="hex-legend__swatch"></span>${label} (${remaining} sekizli)</span>`);
+  }
+
   const fieldsAt = index => protocol.fields.filter(field => ranges[field.key] && ranges[field.key].offset < (index + 1) * 8 && ranges[field.key].offset + ranges[field.key].bits > index * 8).map(field => field.key);
   const rows = [];
   for (let start = 0; start < bytes.length; start += 8) {
     rows.push(`<div class="hex-row"><span class="hex-offset">${hex(start, 4)}</span>${bytes.slice(start, start + 8).map((byte, i) => {
       const index = start + i;
-      return index < headerLength ? `<span class="hex-byte" data-fields="${fieldsAt(index).join(' ')}">${hex(byte)}</span>` : `<span class="hex-byte hex-byte--payload">${hex(byte)}</span>`;
+      const bLayer = byteLayer(index);
+      const isPayload = index >= headerLength;
+      const fields = fieldsAt(index);
+      const dataAttr = fields.length ? ` data-fields="${fields.join(' ')}"` : '';
+      const payloadClass = isPayload ? ' hex-byte--payload' : '';
+      return `<span class="hex-byte hex-byte--${bLayer}${payloadClass}"${dataAttr}>${hex(byte)}</span>`;
     }).join('')}</div>`);
   }
   const table = protocol.fields.map(field => {
@@ -134,13 +168,13 @@ function protocolPage(protocol) {
   const layoutRef = { rfc: protocol.layout.rfc, section: protocol.layout.section, label: protocol.layout.section ? undefined : protocol.layout.label };
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
-  return page({ id: protocol.id, title: protocol.title, description: protocol.summary, body: `
+  return page({ id: protocol.id, title: protocol.title, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
 <nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>${e(protocol.id)}</span></nav>
 <header class="page-header"><p class="eyebrow"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</span> · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits)) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
 <div class="overview-grid">
   <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
 <p class="verified">Alan genişlikleri ${refLink(layoutRef)}${protocol.layout.section ? ` (${e(protocol.layout.label)})` : ''} ile derleme sırasında karşılaştırıldı: <code>${checks.get(protocol.id).found.join(' · ')}</code>${protocol.layout.kind === 'rfc826' && protocol.layout.part === 'arp' ? ' (n ve m: ar$hln ve ar$pln sekizli)' : ' bit'}.</p></section>
-  <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
+  <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex-legend" aria-label="Paket katmanları">${legendItems.join('')}</div><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
 </div>
 <section aria-labelledby="fields-title"><h2 id="fields-title">Alanlar</h2><div class="table-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} alanları"><table class="fields"><thead><tr><th scope="col">Alan</th><th scope="col">Bit</th><th scope="col">Genişlik</th><th scope="col">Örnek</th><th scope="col">Açıklama ve kaynak</th></tr></thead><tbody>${table}</tbody></table></div></section>
 ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes-title">Notlar</h2><ul class="notes">${protocol.notes.map(note => `<li>${e(note)}</li>`).join('')}</ul></section>` : ''}
