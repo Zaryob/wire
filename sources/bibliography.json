@@ -428,6 +428,32 @@
       "use": "CoAP ileti başlığı ve IoT istek/yanıt formatı"
     },
     {
+      "number": 7348,
+      "title": "Virtual eXtensible Local Area Network (VXLAN): A Framework for Overlaying Virtualized Layer 2 Networks over Layer 3 Networks",
+      "authors": [
+        "M. Mahalingam",
+        "D. Dutt",
+        "K. Duda",
+        "P. Agarwal",
+        "L. Kreeger",
+        "T. Sridhar",
+        "M. Bursell",
+        "C. Wright"
+      ],
+      "date": "August 2014",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC7348",
+      "url": "https://www.rfc-editor.org/rfc/rfc7348",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc7348.txt",
+      "sha256": "731475429b30bf4b29a102a0c9217cb0d3522c34fd546ba7b134fec931e83574",
+      "bytes": 49406,
+      "use": "VXLAN paket başlığı ve katman 2 tünelleme formatı"
+    },
+    {
       "number": 8200,
       "title": "Internet Protocol, Version 6 (IPv6) Specification",
       "authors": [
