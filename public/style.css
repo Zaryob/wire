@@ -189,7 +189,7 @@ body.is-searching .home-stats { display: none; }
 .layer-pill--transport { color: var(--layer-transport); background: var(--layer-transport-bg); border: 1px solid var(--layer-transport-border); }
 .layer-pill--application { color: var(--layer-application); background: var(--layer-application-bg); border: 1px solid var(--layer-application-border); }
 
-.overview-grid { display: grid; grid-template-columns: 1fr; gap: 32px; margin-top: 36px; }
+.overview-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 32px; margin-top: 36px; }
 .overview-grid > section { margin-top: 0 !important; }
 .overview-grid__col { min-width: 0; }
 .overview-grid .hex { display: block; width: 100%; box-sizing: border-box; }
@@ -400,7 +400,7 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 .guide-content section { margin-top: 40px; }
 .guide-content h2 { margin-top: 48px; }
 .guide-content h3 { margin-top: 24px; color: var(--accent); }
-.guide-content p, .guide-content li { font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.7; max-width: 80ch; }
+.guide-content p, .guide-content li { font-family: var(--font-prose); font-size: var(--text-prose); line-height: var(--line-prose); max-width: 72ch; }
 .guide-content pre { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.6; }
 .guide-toc { padding: 16px 20px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); margin: 24px 0 40px; }
 .guide-toc h2 { border: 0; padding: 0; margin: 0 0 12px; font-size: var(--text-base); color: var(--accent); }
@@ -426,7 +426,6 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 
 .wire-site > main { flex: 1 0 auto; min-width: 0; }
 .wire-site .console-suite { margin-top: 0; }
-.guide-content p, .guide-content li { font-size: var(--text-prose); line-height: var(--line-prose); max-width: 72ch; }
 @media (max-width: 640px) {
   .topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; }
   .topbar-left, .topbar-right { display: contents; }
@@ -443,3 +442,10 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 }
 
 .bits-scroll-hint { margin: 8px 0 0; color: var(--muted); font-size: var(--text-sm); }
+
+.wire-site .guide-content { font: 400 var(--text-prose)/var(--line-prose) var(--font-prose); }
+
+.wire-main :is(h1,h2,h3,p,li,dt,dd,a) { min-width: 0; overflow-wrap: anywhere; }
+.protocol-card { min-width: 0; }
+.protocol-card__header, .bits-header, .bits-header__info { min-width: 0; flex-wrap: wrap; }
+.protocol-card__header > *, .bits-header > * { min-width: 0; overflow-wrap: anywhere; }

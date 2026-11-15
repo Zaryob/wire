@@ -392,7 +392,7 @@ function guidePage() {
   </ul>
 </div>
 
-<article class="guide-content">
+<article class="guide-content console-prose">
 
 <section id="bolum-1">
   <h2>1. Ağ Mimarisi ve Kapsülleme (Encapsulation) Prensipleri</h2>
