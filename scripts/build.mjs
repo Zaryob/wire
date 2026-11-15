@@ -52,29 +52,75 @@ const refLink = ref => `<a class="rfc-ref" href="${refUrl(ref)}">${e(refText(ref
 const citation = entry => `${e(entry.authors.join(', '))}, “${e(entry.title)}”, RFC ${entry.number}, ${e(entry.date)}.`;
 
 function header(current) {
-  const nav = [['', 'Protokoller'], ['kilavuz', 'Kılavuz'], ['yontem', 'Yöntem'], ['kaynakca', 'Kaynakça']];
-  const chevron = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
-  const menu = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
-  const selected = current === 'kaynakca' || current === 'yontem' || current === 'kilavuz' ? current : '';
+  const chevron = '<svg class="console-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const menu = '<svg class="console-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>';
+  const search = `<svg class="console-icon" aria-hidden="true" focusable="false"><use href="${asset('assets/console/site.svg#search')}"></use></svg>`;
+
   return `<a class="skip-link" href="#main">İçeriğe geç</a>
 <header class="console-header"><div class="console-header__inner">
-  <div class="console-identity"><a class="console-brand" href="${origin}/">zaryob</a><span class="console-prompt-separator">:</span>
-    <details class="console-projects" data-console-projects><summary aria-label="Proje değiştir"><span class="console-project-path">~/wire</span><span class="console-prompt-dollar">$</span>${chevron}</summary><div class="console-project-menu">
+  <div class="console-identity"><a class="console-brand" href="${origin}/" aria-label="Zaryob ana sayfa">zaryob</a><span class="console-prompt-separator" aria-hidden="true">:</span>
+    <details class="console-projects" data-console-projects><summary role="button" aria-label="Proje değiştir" aria-controls="console-project-menu"><span class="console-project-path"><span class="console-prompt-separator">~/</span>wire</span><span class="console-prompt-dollar" aria-hidden="true">$</span><span class="console-prompt-cursor" aria-hidden="true"></span>${chevron}</summary><nav class="console-project-menu" id="console-project-menu" aria-label="Zaryob projeleri">
       ${projects.map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}</small></a>`).join('\n      ')}
-    </div></details>
+    </nav></details>
   </div>
-  <div class="console-header-actions"><button type="button" class="console-menu" data-console-menu aria-label="Menüyü aç" aria-controls="console-navigation" aria-expanded="false">${menu}</button></div>
-  <nav class="console-nav" id="console-navigation" aria-label="Ana gezinme">${nav.map(([id, label]) => `<a href="${url(id)}"${selected === id ? ' aria-current="page"' : ''}>${label}</a>`).join('')}
-    <div class="console-tools"><label class="console-theme"><span>Tema</span><select data-console-theme aria-label="Renk teması"><option value="system">Sistem</option><option value="light">Açık</option><option value="dark">Koyu</option></select></label></div>
+  <div class="console-header-actions">
+    <button class="console-search-compact" type="button" data-console-search-compact aria-haspopup="dialog" aria-label="Zaryob içeriklerinde ara">${search}</button>
+    <button type="button" class="console-menu" data-console-menu aria-label="Menüyü aç" aria-controls="console-navigation" aria-expanded="false">${menu}</button>
+  </div>
+  <nav class="console-nav" id="console-navigation" aria-label="Zaryob gezinme">
+    <div class="console-tools">
+      <button class="console-search-open" type="button" data-console-search data-suite-root="${origin}/" data-wire-root="${url('')}" aria-haspopup="dialog" aria-label="Zaryob içeriklerinde ara">
+        ${search}
+        <span>Ara</span><kbd>/</kbd>
+      </button>
+      <label class="console-theme"><span>Tema</span><select data-console-theme aria-label="Renk teması"><option value="system">Sistem</option><option value="dark">Koyu</option><option value="light">Açık</option></select></label>
+      <label class="console-language"><span>Dil</span><select data-console-language aria-label="Dil"><option value="tr" lang="tr">TR</option><option value="en" lang="en">EN</option></select></label>
+    </div>
   </nav>
 </div></header>`;
 }
 
-function page({ id, title, description, body, indexable = true, className = '' }) {
-  const fullTitle = id === '' ? 'wire · Ağ protokolü başlıkları, bit bit' : `${title} · wire`;
+function topbar(current, title = '', layer = '') {
+  const gridIcon = '<svg class="button-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
+  const homeIcon = '<svg class="button-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
+  const bookIcon = '<svg class="button-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
+
+  let breadcrumbsHtml = `<a href="${url('')}" class="home-crumb">${homeIcon}<span>Ana sayfa</span></a>`;
+  if (current) {
+    if (layer) {
+      breadcrumbsHtml += `<span class="crumb-sep" aria-hidden="true">/</span><span>${e(layer)}</span>`;
+    }
+    breadcrumbsHtml += `<span class="crumb-sep" aria-hidden="true">/</span><strong>${e(title || current)}</strong>`;
+  }
+
+  return `<header class="topbar">
+  <div class="topbar-left">
+    <a href="${url('')}" class="button primary board-picker-btn" aria-label="Protokol kütüphanesi">
+      ${gridIcon}
+      <span>Protokoller</span>
+      <span class="count">${protocols.length}</span>
+    </a>
+    <div class="breadcrumbs" aria-label="Konum">
+      ${breadcrumbsHtml}
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a href="${url('kilavuz')}" class="button secondary help-btn" aria-label="Nasıl kullanılır ve RFC Kılavuzu">
+      ${bookIcon}
+      <span>Kılavuz</span>
+      <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</header>`;
+}
+
+function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '' }) {
+  const fullTitle = id === '' ? 'Wire · Ağ protokolü başlıkları, bit bit' : `${title} · Wire`;
   return `<!doctype html>
 <html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
 <body class="console-site wire-site${className ? ` ${className}` : ''}">${header(id)}
+${topbar(id, pageTitle || title, layer)}
+${hero}
 <main id="main" class="wire-main" tabindex="-1">${body}</main>
 <footer class="console-footer wire-footer"><div><a href="${url('')}">wire</a> / Ağ protokolü başlıkları, bit bit.<br><span class="footer-note">Her alan bir RFC’ye dayanır; genişlikler RFC metnindeki şemalarla karşılaştırılır.</span></div><div class="footer-links"><a href="${url('kilavuz')}">Kılavuz</a><a href="${url('kaynakca')}">Kaynakça</a><a href="${url('yontem')}">Yöntem</a><a href="${asset('lisanslar/')}">Lisanslar</a><a href="#main">Başa dön ↑</a></div></footer>
 </body></html>`;
@@ -168,8 +214,7 @@ function protocolPage(protocol) {
   const layoutRef = { rfc: protocol.layout.rfc, section: protocol.layout.section, label: protocol.layout.section ? undefined : protocol.layout.label };
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
-  return page({ id: protocol.id, title: protocol.title, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
-<nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>${e(protocol.id)}</span></nav>
+  return page({ id: protocol.id, title: protocol.title, pageTitle: protocol.title, layer: protocol.layer, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
 <header class="page-header"><p class="eyebrow"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</span> · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits)) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
 <div class="overview-grid">
   <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
@@ -184,19 +229,88 @@ ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes
 
 function home() {
   const layers = [...new Set(protocols.map(protocol => protocol.layer))];
-  return page({ id: '', title: 'wire', description: 'Ethernet, ARP, IPv4, IPv6, ICMP, UDP, TCP ve DNS başlıklarının RFC kaynaklı, bit düzeyinde Türkçe başvurusu.', body: `
-<header class="page-header"><p class="eyebrow">~/wire · ağ protokolü başlıkları</p><h1>Tel üzerindeki her bit, kaynağıyla.</h1><p class="lead">Bir protokol seçin: başlığın bit şemasını, her alanın anlamını ve örnek bir paketin sekizlilerini yan yana görün. Bütün bilgiler RFC’lerden alınmıştır ve her alan dayandığı bölüme bağlanır. Ağ ve Ethernet protokollerinin ayrıntılı mimarisi için <a href="${url('kilavuz')}">kılavuzu</a> inceleyebilirsiniz.</p></header>
-<label class="filter"><span>Protokol ara</span><input id="protocol-filter" type="search" placeholder="tcp, sağlama toplamı, 791…" autocomplete="off" spellcheck="false"></label>
-<p id="filter-status" class="small" role="status" aria-live="polite"></p>
-${layers.map(layer => `<section class="layer layer--${layerKey(layer)}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${layerKey(layer)}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
+  const totalFields = protocols.reduce((sum, p) => sum + p.fields.length, 0);
+
+  const hero = `
+<div class="home-hero console-hero console-hero--wire">
+  <div class="console-hero__inner">
+    <div class="console-hero__copy">
+      <div class="home-badge">
+        <span class="tiny-dot" aria-hidden="true"></span>
+        <span>v0.1 · RFC Doğrulamalı Protokol Atlası</span>
+      </div>
+      <h1 class="home-title console-hero__title">Wire</h1>
+      <p class="home-lead console-hero__lead">Tel üzerindeki her bit, kaynağıyla: RFC standartlarıyla doğrulanmış ağ protokolleri, başlık yerleşimleri ve etkileşimli onaltılık paket dökümleri.</p>
+
+      <div class="home-search-wrap">
+        <label class="home-search-box" for="protocol-filter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="protocol-filter" type="search" placeholder="Protokol, RFC veya alan ara (örn. IPv4, TCP, 791, Bayraklar…)" autocomplete="off" spellcheck="false" aria-label="Protokol ara">
+          <kbd aria-hidden="true">/</kbd>
+        </label>
+        <p id="filter-status" class="home-search-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <figure class="console-hero__panel">
+      <figcaption class="console-hero__panel-head">
+        <span>IPv4 Datagram · 20 sekizli</span>
+        <a href="${url('ipv4')}">protokolü incele →</a>
+      </figcaption>
+      <div class="console-hero__screen">      <span class="h-dim">Ofset</span>  <span class="h-dim">Sekizli</span>      <span class="h-dim">Alan ve Değer</span>
+      <span class="h-dim">[00]</span>   <span class="h-bus">45</span>           <span class="h-bus">Ver: 4, IHL: 5</span> <span class="h-dim">(20 bayt)</span>
+      <span class="h-dim">[01]</span>   <span class="h-dim">00</span>           <span class="h-dim">DSCP: CS0, ECN: Not-ECT</span>
+      <span class="h-dim">[02]</span>   <span class="h-ok">00 20</span>        <span class="h-ok">Toplam Uzunluk: 32 bayt</span>
+      <span class="h-dim">[04]</span>   <span class="h-dim">1c 46</span>        <span class="h-dim">Kimlik: 0x1c46</span>
+      <span class="h-dim">[06]</span>   <span class="h-hot">40 00</span>        <span class="h-hot">Bayraklar: [DF]</span> <span class="h-dim">Ofset: 0</span>
+      <span class="h-dim">[08]</span>   <span class="h-ok">40</span>           <span class="h-ok">TTL: 64</span> <span class="h-dim">(64 atlama)</span>
+      <span class="h-dim">[09]</span>   <span class="h-bus">11</span>           <span class="h-bus">Protokol: UDP (17)</span>
+      <span class="h-dim">[10]</span>   <span class="h-ok">72 c2</span>        <span class="h-ok">Sağlama: Doğru</span> <span class="h-dim">(RFC 1071)</span>
+      <span class="h-dim">[12]</span>   <span class="h-bus">c0 a8 01 64</span>  <span class="h-bus">Kaynak: 192.168.1.100</span>
+      <span class="h-dim">[16]</span>   <span class="h-hot">01 01 01 01</span>  <span class="h-hot">Hedef:  1.1.1.1</span>
+<span class="h-dim">      …                   12 sekizli yük (UDP + Veri)</span></div>
+    </figure>
+  </div>
+</div>`;
+
+  const body = `
+<div class="home-stats" aria-label="Wire istatistikleri">
+  <div class="home-stat-item">
+    <strong class="stat-number">${protocols.length}</strong>
+    <span class="stat-label">Protokol Başlığı</span>
+  </div>
+  <div class="home-stat-item">
+    <strong class="stat-number">16</strong>
+    <span class="stat-label">Doğrulanmış RFC</span>
+  </div>
+  <div class="home-stat-item">
+    <strong class="stat-number">${totalFields}</strong>
+    <span class="stat-label">Bit Düzeyinde Alan</span>
+  </div>
+  <div class="home-stat-item">
+    <strong class="stat-number">4</strong>
+    <span class="stat-label">Ağ Katmanı</span>
+  </div>
+  <div class="home-stat-item">
+    <strong class="stat-number">%100</strong>
+    <span class="stat-label">Derleme Doğrulaması</span>
+  </div>
+</div>
+<div class="home-catalog">
+  <div class="home-catalog__header">
+    <h2>Protokol Kataloğu</h2>
+    <p class="small">Katmanlara göre gruplanmış RFC başlık şemaları. Ayrıntılı bit düzeni ve örnek paket onaltılık dökümü için bir protokol seçin.</p>
+  </div>
+  ${layers.map(layer => `<section class="layer layer--${layerKey(layer)}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${layerKey(layer)}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
     const { headerLength } = example(protocol.id);
     return `<li class="protocol-card protocol-card--${layerKey(protocol.layer)}" data-layer="${layerKey(protocol.layer)}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><div class="protocol-card__header"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><span class="layer-pill layer-pill--${layerKey(protocol.layer)}">${e(protocol.layer)}</span></div><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength} sekizli · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · RFC ${protocol.layout.rfc}</p></li>`;
-  }).join('')}</ul></section>`).join('')}` });
+  }).join('')}</ul></section>`).join('')}
+</div>`;
+
+  return page({ id: '', title: 'Wire', description: 'Ethernet, ARP, IPv4, IPv6, ICMP, UDP, TCP ve DNS başlıklarının RFC kaynaklı, bit düzeyinde Türkçe başvurusu.', hero, body });
 }
 
 function guidePage() {
-  return page({ id: 'kilavuz', title: 'Kılavuz', description: 'Ethernet haberleşme protokolleri, paket mimarisi, başlık alanları ve kapsamlı RFC başvuru kılavuzu.', body: `
-<nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>kilavuz</span></nav>
+  return page({ id: 'kilavuz', title: 'Kılavuz', pageTitle: 'Kılavuz', description: 'Ethernet haberleşme protokolleri, paket mimarisi, başlık alanları ve kapsamlı RFC başvuru kılavuzu.', body: `
 <header class="page-header">
   <p class="eyebrow">kapsamlı protokol ve paket referansı</p>
   <h1>Ethernet Haberleşme Protokolleri, Paket Mimarisi ve RFC Kılavuzu</h1>
@@ -424,15 +538,13 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 function bibliographyPage() {
   const citedBy = number => protocols.filter(protocol => protocol.refs.includes(number));
   const list = values => values.length ? values.map(value => e(value.replace(/^RFC0*/, 'RFC '))).join(', ') : '—';
-  return page({ id: 'kaynakca', title: 'Kaynakça', description: 'wire sitesindeki bilgilerin dayandığı RFC’lerin künyeleri, bağlantıları ve indirilen metinlerin sha256 özetleri.', body: `
-<nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>kaynakca</span></nav>
+  return page({ id: 'kaynakca', title: 'Kaynakça', pageTitle: 'Kaynakça', description: 'wire sitesindeki bilgilerin dayandığı RFC’lerin künyeleri, bağlantıları ve indirilen metinlerin sha256 özetleri.', body: `
 <header class="page-header"><p class="eyebrow">${bibliography.entries.length} RFC · ${e(bibliography.retrieved)} tarihinde indirildi</p><h1>Kaynakça</h1><p class="lead">Sitedeki her bilgi aşağıdaki RFC’lerden birine dayanır. Metinler <a href="${e(bibliography.source)}">rfc-editor.org</a> adresinden indirilmiştir; sha256 özeti, alan genişliklerinin hangi metne karşı doğrulandığını gösterir.</p></header>
 <ol class="bibliography">${bibliography.entries.map(entry => `<li id="rfc${entry.number}"><h2>RFC ${entry.number}</h2><p class="citation">${citation(entry)} <a href="${e(entry.url)}">${e(entry.url.replace('https://', ''))}</a></p><dl><div><dt>Durum</dt><dd>${e(entry.status)}</dd></div><div><dt>DOI</dt><dd><a href="https://doi.org/${e(entry.doi)}">${e(entry.doi)}</a></dd></div><div><dt>Yerine geçtiği</dt><dd>${list(entry.obsoletes)}</dd></div><div><dt>Yerine geçen</dt><dd>${list(entry.obsoleted_by)}</dd></div><div><dt>Güncelleyen</dt><dd>${list(entry.updated_by)}</dd></div><div><dt>Burada kullanımı</dt><dd>${e(entry.use)}</dd></div><div><dt>Atıf yapan sayfalar</dt><dd>${citedBy(entry.number).map(protocol => `<a href="${url(protocol.id)}">${e(protocol.name)}</a>`).join(', ') || '—'}</dd></div><div><dt>sha256</dt><dd><code>${entry.sha256}</code> (${entry.bytes} sekizli)</dd></div></dl></li>`).join('')}</ol>` });
 }
 
 function methodPage() {
-  return page({ id: 'yontem', title: 'Yöntem', description: 'wire sitesindeki verinin RFC’lerden nasıl alındığı ve nasıl doğrulandığı.', body: `
-<nav class="breadcrumbs" aria-label="Konum"><a href="${url('')}">~/wire</a><span aria-hidden="true">/</span><span>yontem</span></nav>
+  return page({ id: 'yontem', title: 'Yöntem', pageTitle: 'Yöntem', description: 'wire sitesindeki verinin RFC’lerden nasıl alındığı ve nasıl doğrulandığı.', body: `
 <header class="page-header"><p class="eyebrow">veri nereden geliyor</p><h1>Yöntem</h1><p class="lead">Bu sitedeki alan adları, genişlikler, değerler ve açıklamalar yalnızca RFC’lere dayanır. Neyin makineyle doğrulandığı, neyin elle yazıldığı aşağıda ayrı ayrı belirtilmiştir.</p></header>
 <section><h2>Makineyle doğrulananlar</h2><p>Her protokolün alan genişlikleri, atıf yapılan RFC’nin düz metnindeki başlık şemasından okunur ve veri dosyasındaki değerlerle karşılaştırılır. Uyuşmazlıkta derleme durur. RFC metninin sha256 özeti <a href="${url('kaynakca')}">kaynakçadaki</a> özetle aynı olmalıdır.</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="Doğrulama tablosu"><table class="fields"><thead><tr><th scope="col">Protokol</th><th scope="col">Karşılaştırılan yerleşim</th><th scope="col">Okunan genişlikler</th></tr></thead><tbody>${protocols.map(protocol => `<tr><th scope="row"><a href="${url(protocol.id)}">${e(protocol.name)}</a></th><td>${refLink({ rfc: protocol.layout.rfc, section: protocol.layout.section })} — ${e(protocol.layout.label)}</td><td><code>${checks.get(protocol.id).found.join(' · ')}</code></td></tr>`).join('')}</tbody></table></div>

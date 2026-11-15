@@ -28,6 +28,11 @@ if (filter) {
   filter.addEventListener('input', () => {
     const terms = filter.value.toLocaleLowerCase('tr').split(/\s+/).filter(Boolean);
     let visible = 0;
+    if (terms.length) {
+      document.body.classList.add('is-searching');
+    } else {
+      document.body.classList.remove('is-searching');
+    }
     for (const card of cards) {
       const match = terms.every(term => card.dataset.search.includes(term));
       card.hidden = !match;
@@ -35,5 +40,12 @@ if (filter) {
     }
     document.querySelectorAll('.layer').forEach(layer => { layer.hidden = !layer.querySelector('.protocol-card:not([hidden])'); });
     status.textContent = terms.length ? `${visible} protokol eşleşti.` : '';
+  });
+
+  window.addEventListener('keydown', e => {
+    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
+      e.preventDefault();
+      filter.focus();
+    }
   });
 }
