@@ -269,6 +269,32 @@
       "use": "Örneklerde kullanılan belgeleme alan adları"
     },
     {
+      "number": 2784,
+      "title": "Generic Routing Encapsulation (GRE)",
+      "authors": [
+        "D. Farinacci",
+        "T. Li",
+        "S. Hanks",
+        "D. Meyer",
+        "P. Traina"
+      ],
+      "date": "March 2000",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC2890",
+        "RFC9601"
+      ],
+      "doi": "10.17487/RFC2784",
+      "url": "https://www.rfc-editor.org/rfc/rfc2784",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2784.txt",
+      "sha256": "dad757f9b5eb51478e768295eb39df4b54c1f299eeb6e5c7bea080eb45556d58",
+      "bytes": 16627,
+      "use": "GRE paket başlığı ve sağlama toplamı"
+    },
+    {
       "number": 3168,
       "title": "The Addition of Explicit Congestion Notification (ECN) to IP",
       "authors": [

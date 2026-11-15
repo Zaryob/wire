@@ -42,6 +42,10 @@
       "use": "Örneklerde kullanılan belgeleme alan adları"
     },
     {
+      "number": 2784,
+      "use": "GRE paket başlığı ve sağlama toplamı"
+    },
+    {
       "number": 3168,
       "use": "IP ve TCP başlıklarında ECN"
     },

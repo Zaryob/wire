@@ -1,0 +1,105 @@
+{
+  "order": 8,
+  "name": "GRE",
+  "title": "GRE başlığı",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "Genel Yönlendirme Kapsüllemesi (Generic Routing Encapsulation), çok çeşitli ağ katmanı protokollerini sanal noktadan noktaya bağlantılar (tüneller) üzerinden taşımak için kullanılan hafif bir kapsülleme protokolüdür. IP protokol numarası 47'dir.",
+  "layout": {
+    "rfc": 2784,
+    "kind": "diagram",
+    "anchor": "|C|",
+    "section": "2.1",
+    "label": "GRE Header"
+  },
+  "notes": [
+    "Temel GRE başlığı 4 sekizlidir. Checksum Present (C) biti 1 olduğunda Sağlama Toplamı (Checksum) ve Reserved1 alanları eklenir ve başlık 8 sekizliye çıkar.",
+    "Tünellenen yük IPv4 olduğunda Protokol Türü (Protocol Type) alanı 0x0800, IPv6 olduğunda 0x86dd değerini alır."
+  ],
+  "fields": [
+    {
+      "key": "c",
+      "name": "Sağlama Toplamı Var (C)",
+      "bits": 1,
+      "desc": "Sağlama Toplamı (Checksum) ve Reserved1 alanlarının başlıkta yer alıp almadığını belirtir. 1 ise sağlama toplamı doğrulanır.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.2",
+        "label": "Checksum Present"
+      },
+      "example": 1
+    },
+    {
+      "key": "res0",
+      "name": "Ayrılmış (Reserved0)",
+      "bits": 12,
+      "desc": "Gelecekteki kullanım için ayrılmıştır. Gönderimde sıfır olmalı, alımda yoksayılmalıdır.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.3",
+        "label": "Reserved0"
+      },
+      "example": 0
+    },
+    {
+      "key": "ver",
+      "name": "Sürüm (Ver)",
+      "bits": 3,
+      "desc": "GRE protokol sürüm numarası. Standart GRE için 0 olmalıdır.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.3.1",
+        "label": "Version Number"
+      },
+      "example": 0
+    },
+    {
+      "key": "proto",
+      "name": "Protokol Türü (Protocol Type)",
+      "bits": 16,
+      "desc": "Kapsüllenen yük protokolünün EtherType değeri. Örneğin IPv4 için 0x0800, IPv6 için 0x86dd.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.4",
+        "label": "Protocol Type"
+      },
+      "example": "0x0800",
+      "hex": true
+    },
+    {
+      "key": "checksum",
+      "name": "Sağlama Toplamı (Checksum)",
+      "bits": 16,
+      "checksum": "packet",
+      "desc": "C biti 1 olduğunda GRE başlığı ve yükün tamamı üzerinden RFC 1071 yöntemiyle hesaplanan 16 bitlik sağlama toplamı.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.5",
+        "label": "Checksum"
+      },
+      "example": 0
+    },
+    {
+      "key": "res1",
+      "name": "Ayrılmış (Reserved1)",
+      "bits": 16,
+      "desc": "C biti 1 olduğunda başlıkta yer alan ve gelecekteki kullanım için ayrılmış alan. Sıfır olmalıdır.",
+      "ref": {
+        "rfc": 2784,
+        "section": "2.6",
+        "label": "Reserved1"
+      },
+      "example": 0
+    }
+  ],
+  "example": {
+    "note": "Sağlama toplamı korumalı (C=1) bir GRE tüneli içinde taşınan IPv4 datagramı. Dış IP başlığında protokol numarası 47'dir (RFC 2784 §3).",
+    "payload": "450000140001000040007ce7c0000201c0000202"
+  },
+  "refs": [
+    2784,
+    1071,
+    5737
+  ],
+  "id": "gre"
+}
