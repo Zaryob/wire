@@ -290,6 +290,8 @@ ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes
 function home() {
   const layers = [...new Set(protocols.map(protocol => protocol.layer))];
   const totalFields = protocols.reduce((sum, p) => sum + p.fields.length, 0);
+  // RFCs whose header diagrams the build compares field widths against (verifyLayout).
+  const verifiedRfcs = new Set(protocols.map(protocol => protocol.layout.rfc)).size;
 
   const hero = `
 <div class="home-hero console-hero console-hero--wire">
@@ -339,7 +341,7 @@ function home() {
     <span class="stat-label">Protokol Başlığı</span>
   </div>
   <div class="home-stat-item">
-    <strong class="stat-number">16</strong>
+    <strong class="stat-number">${verifiedRfcs}</strong>
     <span class="stat-label">Doğrulanmış RFC</span>
   </div>
   <div class="home-stat-item">
@@ -347,7 +349,7 @@ function home() {
     <span class="stat-label">Bit Düzeyinde Alan</span>
   </div>
   <div class="home-stat-item">
-    <strong class="stat-number">4</strong>
+    <strong class="stat-number">${layers.length}</strong>
     <span class="stat-label">Ağ Katmanı</span>
   </div>
   <div class="home-stat-item">
