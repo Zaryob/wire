@@ -1,68 +1,113 @@
 # wire
 
-[English](README.md) · **Türkçe**
+[English](README.md) · **Türkçe** · [Kapsamlı Kılavuz (KILAVUZ.md)](KILAVUZ.md)
 
-Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türkçe bir başvuru.
-Her protokol sayfasında başlığın bit şeması, alan tablosu ve örnek bir paketin onaltılık
-dökümü bulunur; her alan dayandığı RFC bölümüne bağlanır.
+Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türkçe bir başvuru kılavuzu ve etkileşimli web platformu. Her protokol sayfasında başlığın bit şeması, alan tablosu ve örnek bir paketin onaltılık (hex) dökümü bulunur; her alan dayandığı RFC bölümüne doğrudan bağlanır ve alan genişlikleri RFC metinlerindeki özgün ASCII şemalarla derleme aşamasında doğrulanır.
 
 [Siteyi açın](https://zaryob.github.io/wire/)
 
-Bu sürümde: Ethernet, ARP, IPv4, IPv6, ICMP, ICMPv6, UDP, TCP ve DNS.
+---
 
-## Çalıştırma
+## Kapsanan Protokoller ve Katmanlar
 
-Node.js 22 veya üstü yeterlidir; npm bağımlılığı yoktur.
+Bu sürümde tel üzerindeki 9 temel protokol en ince ayrıntısına kadar incelenmektedir:
+
+1. **Bağlantı Katmanı (Data Link Layer)**
+   - **Ethernet (RFC 826, RFC 894, RFC 9542)**: 48 bitlik hedef ve kaynak MAC adresleri, EtherType alanı ve çerçeve sınırları.
+   - **ARP (RFC 826)**: IP adreslerini Ethernet donanım adreslerine dinamik eşleyen Adres Çözümleme Protokolü.
+2. **Ağ / İnternet Katmanı (Network Layer)**
+   - **IPv4 (RFC 791, RFC 2474, RFC 3168, RFC 5737)**: 20-60 sekizli başlık, DSCP/ECN hizmet kalitesi, parçalama (fragmentation) ve yaşam süresi (TTL).
+   - **IPv6 (RFC 8200, RFC 2474, RFC 3168, RFC 3849)**: Sabit 40 sekizli başlık, 128 bitlik adres uzayı, akış etiketi (flow label) ve uzantı başlıkları mimarisi.
+   - **ICMPv4 (RFC 792)**: Ağ teşhis, hata raporlama ve kontrol iletileri (Ping, Destination Unreachable vb.).
+   - **ICMPv6 (RFC 4443, RFC 8200)**: IPv6 için hata ve bilgi iletileri, NDP ve MLD mekanizmaları.
+3. **İletim Katmanı (Transport Layer)**
+   - **UDP (RFC 768)**: Minimal 8 sekizli başlık, bağlantısız ve düşük gecikmeli iletim.
+   - **TCP (RFC 9293, RFC 3168)**: Güvenilir bayt akışı, 3 aşamalı bağlantı kurulumu (3-Way Handshake), durum makinesi, kümülatif onay ve akış denetimi.
+4. **Uygulama Katmanı (Application Layer)**
+   - **DNS (RFC 1035, RFC 2606)**: 12 sekizli sabit başlık, sorgu/yanıt bayrakları (QR, Opcode, RCODE) ve kaynak kayıtları (RR).
+
+Ayrıca [KILAVUZ.md](KILAVUZ.md) belgesi; **IEEE 802.3, 802.1Q (VLAN), PPPoE (RFC 2516), RARP (RFC 903), DHCPv4 (RFC 2131), DHCPv6 (RFC 8415), SCTP (RFC 9260), NDP (RFC 4861)** ve **ACD (RFC 5227)** protokollerini ve worked-example paket dökümlerini ayrıntılarıyla içerir.
+
+---
+
+## Bütün RFC'lerin Listesi ve Kullanımı
+
+Sitedeki ve kılavuzdaki her bilgi IETF standartlarına dayanır (`sources/rfcs.json`):
+
+| RFC No | Başlık ve Kapsam | wire İçindeki Kullanımı |
+|---|---|---|
+| **RFC 768** | User Datagram Protocol | UDP başlığı (8 bayt) ve sözde başlık (pseudo-header) tanımı. |
+| **RFC 791** | Internet Protocol | IPv4 başlığı, alan genişlikleri, parçalama ve yönlendirme kuralları. |
+| **RFC 792** | Internet Control Message Protocol | ICMPv4 iletileri, tür/kod eşlemeleri ve sağlama toplamı. |
+| **RFC 826** | An Ethernet Address Resolution Protocol | ARP paket yapısı ve Ethernet iletim katmanı alanları. |
+| **RFC 894** | Transmission of IP Datagrams over Ethernet | IP datagramlarının Ethernet çerçevesinde taşınması (EtherType 0x0800). |
+| **RFC 1035** | Domain Names - Implementation and Specification | DNS ileti başlığı, bayraklar ve kaynak kayıt formatı. |
+| **RFC 1071** | Computing the Internet Checksum | 16-bit bire tümleyen internet sağlama toplamı hesaplama algoritması. |
+| **RFC 2474** | Definition of the Differentiated Services Field | IPv4 ToS ve IPv6 Traffic Class sekizlilerinin 6 bitlik DSCP olarak tanımı. |
+| **RFC 2606** | Reserved Top Level DNS Names | Örneklerde kullanılan belgeleme alan adları (`example.com`, `.test`). |
+| **RFC 3168** | The Addition of Explicit Congestion Notification to IP | IP ve TCP başlıklarında tıkanıklık uyarısı sağlayan 2 bitlik ECN. |
+| **RFC 3849** | IPv6 Address Prefix Reserved for Documentation | Örneklerde kullanılan IPv6 belgeleme öneki (`2001:db8::/32`). |
+| **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 hata ve bilgilendirme iletileri. |
+| **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | Örneklerde kullanılan IPv4 belgeleme blokları (`192.0.2.0/24` vb.). |
+| **RFC 8200** | Internet Protocol, Version 6 (IPv6) Specification | Sabit 40 sekizli IPv6 başlığı ve IPv6 sözde başlığı. |
+| **RFC 9293** | Transmission Control Protocol (TCP) | Modern TCP başlığı, bayraklar ve sıra numaralandırması (RFC 793 konsolidasyonu). |
+| **RFC 9542** | IANA Considerations for IEEE 802 Parameters | Örneklerde kullanılan belgeleme MAC adresleri (`00:00:5e:00:53:xx`). |
+
+---
+
+## Veri Doğrulama ve Matematiksel Tutarlılık
+
+- `npm run sync`: `sources/rfcs.json` dosyasındaki RFC metinlerini ve resmi bibliyografik künyelerini rfc-editor.org'dan çeker. Metinler `.cache/rfc/` altında saklanır; sha256 özetleri `sources/bibliography.json` dosyasına işlenir.
+- `data/protocols/*.json`: Her protokolün alanlarını tutar. Alan genişlikleri derleme (`npm run build`) ve test (`npm test`) aşamasında, atıf yapılan RFC metnindeki özgün ASCII şemasıyla makine tarafından karşılaştırılır (`src/rfc.mjs`, `src/sources.mjs`). Uyuşmazlık durumunda derleme durdurulur.
+- **Örnek Paket Üretimi (`src/encode.mjs`)**: Sitedeki onaltılık (hex) dökümler elle yazılmış statik metinler değildir. Alan tablosundaki değerlerden derleme sırasında dinamik olarak üretilir; sağlama toplamları RFC 1071'e göre (ve ilgili L4 protokolleri için sözde başlık eklenerek) hesaplanır.
+- **Belgeleme Adresleri**: Gerçek ağ trafiğiyle çakışmayı önlemek için yalnızca IANA tarafından belgelendirme için ayrılmış adres blokları kullanılır (RFC 5737, RFC 3849, RFC 9542, RFC 2606).
+
+---
+
+## Çalıştırma ve Test
+
+Node.js 22 veya üstü yeterlidir; harici npm bağımlılığı yoktur.
 
 ```sh
-npm start        # derler ve http://127.0.0.1:4174/wire/ adresinde sunar
-npm run build    # _site/ dizinine derler
-npm test         # veri, RFC karşılaştırması, örnek paketler ve bağlantılar
+npm start        # siteyi derler ve http://127.0.0.1:4174/wire/ adresinde sunar
+npm run build    # statik siteyi _site/ dizinine üretir
+npm test         # RFC şema karşılaştırması, sağlama toplamı, bağlantı ve veri testleri
+npm run check    # sözdizimi denetimi, derleme ve testleri art arda çalıştırır
 ```
 
-## Veri nereden geliyor
+---
 
-Bütün bilgiler RFC'lerden alınır. Kullanılan RFC'ler `sources/rfcs.json` dosyasında
-listelenir.
+## Dizin Yapısı
 
-- `npm run sync`, listedeki RFC metinlerini ve künyelerini rfc-editor.org'dan indirir.
-  Metinler `.cache/rfc/` altında tutulur (depoya girmez); künyeler ve metinlerin sha256
-  özetleri `sources/bibliography.json` dosyasına yazılır. Sitedeki Kaynakça sayfası bu
-  dosyadan üretilir.
-- `data/protocols/*.json`, her protokolün alanlarını tutar. Alan genişlikleri derleme ve
-  test sırasında, atıf yapılan RFC metnindeki başlık şemasıyla karşılaştırılır
-  (`src/rfc.mjs`, `src/sources.mjs`). Uyuşmazlıkta derleme durur.
-- Türkçe alan açıklamaları ilgili RFC bölümünden elle yazılmış özetlerdir; her birinin
-  `ref` alanı dayandığı RFC'yi ve bölümü gösterir.
-- Örnek paketler gerçek yakalama değildir: alanların örnek değerlerinden üretilir,
-  sağlama toplamları RFC 1071'e göre hesaplanır (`src/encode.mjs`). Adresler belgeleme
-  aralıklarındandır (RFC 5737, RFC 3849, RFC 9542, RFC 2606).
+```
+wire/
+├── KILAVUZ.md                 # Ayrıntılı Ethernet, paket mimarisi ve RFC kılavuzu
+├── README.tr.md               # Türkçe proje tanıtımı ve başvuru
+├── README.md                  # İngilizce proje tanıtımı
+├── NOTICE.md                  # Kaynak ve telif hakları bildirimi
+├── LICENSE                    # GPL-3.0 lisansı
+├── package.json               # Node.js betikleri ve motor tanımları
+├── data/
+│   └── protocols/             # Her protokol için alan, şema ve örnek JSON verileri
+├── sources/
+│   ├── rfcs.json              # Kullanılan RFC numaraları ve amaçları
+│   └── bibliography.json      # RFC künyeleri, DOI, özet ve sha256 sağlama toplamları
+├── src/
+│   ├── encode.mjs             # Bit/sekizli paket kodlama ve RFC 1071 sağlama toplamı
+│   ├── rfc.mjs                # RFC düz metninden ASCII şemaları ve alan genişliklerini okuma
+│   └── sources.mjs            # Önbellek, RFC indirme ve şema doğrulama
+├── scripts/
+│   ├── build.mjs              # Statik site üreticisi (_site/ dizinine derler)
+│   ├── serve.mjs              # Yerel geliştirme HTTP sunucusu
+│   └── sync-rfc.mjs           # rfc-editor.org üzerinden RFC'leri eşitleme
+├── tests/
+│   ├── data.test.mjs          # Veri tutarlılığı, RFC şema eşleşmesi ve sağlama toplamı testleri
+│   └── site.test.mjs          # HTML üretimi, kırık bağlantı ve varlık doğrulama testleri
+└── public/                    # CSS, istemci JS ve konsol teması varlıkları
+```
 
-Önbellek yoksa derleme ve testler RFC metinlerini kendiliğinden indirir ve özetleri
-kaynakçadakiyle karşılaştırır.
-
-## Yeni protokol eklemek
-
-1. Gerekli RFC'leri `sources/rfcs.json` dosyasına ekleyin ve `npm run sync` çalıştırın.
-2. `data/protocols/<ad>.json` dosyasını yazın. `layout` alanı karşılaştırılacak şemayı
-   gösterir: `kind: "diagram"` için şemadaki bir satırdan ayırt edici bir `anchor`.
-3. `npm test` çalıştırın.
-
-## Yayımlama
-
-`.github/workflows/site.yml`, her push ve pull request için `npm run check` çalıştırır.
-`main` dalına yapılan push'lar ardından GitHub Pages'e yayımlanır. Deponun Pages
-ayarlarında yayın kaynağı **GitHub Actions** olmalıdır.
-
-Varsayılan yayın öneki `/wire`'dır; alan adı köküne derlemek için `SITE_BASEURL=''` verin.
-
-## Ortak tema
-
-`public/assets/console/` dizini [console-theme](https://github.com/Zaryob/console-theme)
-deposundan kopyalanmıştır. Site henüz o deponun `scripts/sync.py` hedeflerine ve
-`_data/console_projects.json` listesine eklenmemiştir; bu yüzden diğer siteler buraya
-bağlantı vermez ve tema güncellemeleri elle kopyalanır.
+---
 
 ## Lisans
 
-Kod ve Türkçe metinler GPL-3.0-or-later. Ayrıntılar için `NOTICE.md`.
+Kaynak kod ve Türkçe metinler GPL-3.0-or-later lisansı altındadır. Ayrıntılar için `NOTICE.md` ve `LICENSE` dosyalarına bakabilirsiniz.

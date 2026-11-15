@@ -75,6 +75,17 @@ table.fields tbody tr { scroll-margin-top: 5rem; }
 .bibliography dt { color: var(--muted); }
 .bibliography dd { margin: 0; overflow-wrap: anywhere; }
 
+.guide-content section { margin-top: 40px; }
+.guide-content h2 { margin-top: 48px; }
+.guide-content h3 { margin-top: 24px; color: var(--accent); }
+.guide-content p, .guide-content li { font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.7; max-width: 80ch; }
+.guide-content pre { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.6; }
+.guide-toc { padding: 16px 20px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); margin: 24px 0 40px; }
+.guide-toc h2 { border: 0; padding: 0; margin: 0 0 12px; font-size: var(--text-base); color: var(--accent); }
+.toc-list { list-style: none; padding-left: 0; margin: 0; font-size: var(--text-sm); line-height: 1.9; }
+.toc-list a { color: var(--ink); text-decoration: none; }
+.toc-list a:hover { color: var(--accent); text-decoration: underline; }
+
 .wire-site .console-footer { width: 100%; margin-top: auto; padding-inline: var(--gutter); line-height: 1.9; }
 .footer-note { color: var(--muted); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: start; }
