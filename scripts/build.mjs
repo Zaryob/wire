@@ -23,7 +23,7 @@ const layerKey = layer => {
 
 const protocols = await loadProtocols();
 const byId = new Map(protocols.map(protocol => [protocol.id, protocol]));
-const projects = [...JSON.parse(await readFile(path.join(root, 'public/console-projects.json'), 'utf8')), { key: 'wire', title: 'Wire', path: '/wire/', prompt: '~/wire' }];
+const projects = JSON.parse(await readFile(path.join(root, 'public/console-projects.json'), 'utf8'));
 
 // Encode examples; a payload may be another protocol's whole example packet.
 const encoded = new Map();
@@ -73,8 +73,8 @@ function header(current) {
         ${search}
         <span>Ara</span><kbd>/</kbd>
       </button>
-      <label class="console-theme"><span>Tema</span><select data-console-theme aria-label="Renk teması"><option value="system">Sistem</option><option value="dark">Koyu</option><option value="light">Açık</option></select></label>
-      <label class="console-language"><span>Dil</span><select data-console-language aria-label="Dil"><option value="tr" lang="tr">TR</option><option value="en" lang="en">EN</option></select></label>
+      <label class="console-theme"><span data-i18n="Theme">Tema</span><select data-console-theme aria-label="Renk teması"><option value="system" data-i18n="System">Sistem</option><option value="dark" data-i18n="Dark">Koyu</option><option value="light" data-i18n="Light">Açık</option></select></label>
+      <span class="console-meta" lang="tr">İçerik: Türkçe</span>
     </div>
   </nav>
 </div></header>`;
@@ -114,14 +114,18 @@ function topbar(current, title = '', layer = '') {
 </header>`;
 }
 
+function suiteFooter() {
+  return `<nav class="console-suite" aria-label="Zaryob projeleri"><div class="console-suite__inner"><p class="console-suite__prompt" aria-hidden="true"><span>zaryob</span>:~ $ ls -F</p><ul class="console-suite__list">${projects.map(project => `<li><a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}/</small></a></li>`).join('')}</ul><p class="console-suite__meta"><a href="${origin}/hakkinda/" rel="author">Süleyman Poyraz</a><a href="https://github.com/Zaryob" rel="me">GitHub ↗</a><a href="${origin}/feed.xml">feed.xml</a></p></div></nav>`;
+}
+
 function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '' }) {
   const fullTitle = id === '' ? 'Wire · Ağ protokolü başlıkları, bit bit' : `${title} · Wire`;
   return `<!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/language.js')}"></script><script src="${asset('assets/console/i18n.js')}"></script><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
 <body class="console-site wire-site${className ? ` ${className}` : ''}">${header(id)}
 ${topbar(id, pageTitle || title, layer)}
-${hero}
-<main id="main" class="wire-main" tabindex="-1">${body}</main>
+<main id="main" tabindex="-1">${hero}<div class="wire-main">${body}</div></main>
+${suiteFooter()}
 <footer class="console-footer wire-footer"><div><a href="${url('')}">wire</a> / Ağ protokolü başlıkları, bit bit.<br><span class="footer-note">Her alan bir RFC’ye dayanır; genişlikler RFC metnindeki şemalarla karşılaştırılır.</span></div><div class="footer-links"><a href="${url('kilavuz')}">Kılavuz</a><a href="${url('kaynakca')}">Kaynakça</a><a href="${url('yontem')}">Yöntem</a><a href="${asset('lisanslar/')}">Lisanslar</a><a href="#main">Başa dön ↑</a></div></footer>
 </body></html>`;
 }
