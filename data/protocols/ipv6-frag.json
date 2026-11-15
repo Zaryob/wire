@@ -1,0 +1,125 @@
+{
+  "order": 6,
+  "name": "IPv6 Parçalama",
+  "title": "IPv6 Parçalama başlığı",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "IPv6 Parçalama Uzantı Başlığı (Fragment Header), kaynak düğümün yol MTU'sundan daha büyük paketleri parçalara ayırarak göndermesini sağlar. IPv4'ün aksine, IPv6'da parçalama yönlendiriciler tarafından değil, yalnızca kaynak düğüm tarafından yapılır. Başlık 8 sekizlidir.",
+  "layout": {
+    "rfc": 8200,
+    "kind": "diagram",
+    "anchor": "|  Next Header  |   Reserved    |",
+    "section": "4.5",
+    "label": "Fragment Header"
+  },
+  "notes": [
+    "IPv6 ana başlığında parçalama alanları bulunmaz; parçalama gerektiğinde Sonraki Başlık (Next Header) değeri 44 (0x2c) olan bu uzantı başlığı eklenir.",
+    "Parça Kayması (Fragment Offset), parçalanabilir verinin orijinal paketteki başlangıç konumunu 8 sekizlilik (64 bit) birimler cinsinden ifade eder."
+  ],
+  "fields": [
+    {
+      "key": "next_header",
+      "name": "Sonraki Başlık (Next Header)",
+      "bits": 8,
+      "desc": "Parçalanan yükün ilk başlık türünü tanımlar. IPv4 Protokol alanıyla aynı IANA değerlerini kullanır (örneğin UDP için 17, TCP için 6, ICMPv6 için 58).",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": 17
+    },
+    {
+      "key": "reserved",
+      "name": "Ayrılmış (Reserved)",
+      "bits": 8,
+      "desc": "Gelecekteki kullanım için ayrılmış 8 bitlik alan. İletimde sıfır olmalı, alımda yoksayılmalıdır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "fragment_offset",
+      "name": "Parça Kayması (Fragment Offset)",
+      "bits": 13,
+      "desc": "Bu başlığı izleyen verinin, orijinal paketin parçalanabilir kısmının başlangıcına göre 8 sekizlilik birimler cinsinden kayma miktarı.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "res",
+      "name": "Ayrılmış (Res)",
+      "bits": 2,
+      "desc": "Ayrılmış 2 bit. Gönderimde sıfır olmalıdır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": 0
+    },
+    {
+      "key": "m",
+      "name": "Daha Fazla Parça (M)",
+      "bits": 1,
+      "desc": "1 ise bu parçadan sonra başka parçaların da geleceğini; 0 ise bu parçanın son parça olduğunu belirtir.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": 1,
+      "values": [
+        [
+          "0",
+          "Son parça"
+        ],
+        [
+          "1",
+          "Devam eden parçalar var"
+        ]
+      ]
+    },
+    {
+      "key": "identification",
+      "name": "Tanımlayıcı (Identification)",
+      "bits": 32,
+      "desc": "Aynı kaynak ve hedef adreslerine sahip parçaları yeniden birleştirirken doğru pakete ait parçaları eşleştiren benzersiz 32 bitlik kimlik.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      },
+      "example": "0x0001a4b2",
+      "hex": true
+    },
+    {
+      "key": "payload",
+      "name": "Parçalanmış Yük Verisi",
+      "bits": "değişken",
+      "desc": "Orijinal paketin bu parçaya düşen sekizlileridir. Son parça hariç tüm parçaların veri uzunluğu 8 sekizlinin katı olmalıdır.",
+      "ref": {
+        "rfc": 8200,
+        "section": "4.5",
+        "label": "Fragment Header"
+      }
+    }
+  ],
+  "example": {
+    "note": "1500 sekizliyi aşan bir IPv6 UDP paketinin ilk parçası (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header değeri 17'dir (UDP).",
+    "payload": "1f90003504d20000"
+  },
+  "refs": [
+    8200,
+    768,
+    3849
+  ],
+  "id": "ipv6-frag"
+}
