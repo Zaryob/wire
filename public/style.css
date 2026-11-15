@@ -194,9 +194,9 @@ body.is-searching .home-stats { display: none; }
 .overview-grid__col { min-width: 0; }
 .overview-grid .hex { display: block; width: 100%; box-sizing: border-box; }
 
-@media (min-width: 1080px) {
+@media (min-width: 1280px) {
   .overview-grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-columns: minmax(704px, 1.4fr) minmax(320px, 1fr);
     align-items: start;
     gap: 36px;
   }
@@ -441,3 +441,5 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
   .topbar .help-btn { max-width: 40vw; }
   .topbar .help-btn > span:last-child { display: none; }
 }
+
+.bits-scroll-hint { margin: 8px 0 0; color: var(--muted); font-size: var(--text-sm); }

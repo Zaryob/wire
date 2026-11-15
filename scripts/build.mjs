@@ -173,7 +173,8 @@ function diagram(protocol) {
     </div>
     <span class="bits-header__order" title="Ağ Bayt Sıralaması (Network Byte Order): En anlamlı bit (MSB) daima en soldadır (Bit 0)">Ağ Sırası: En anlamlı bit (Bit 0) en solda</span>
   </div>
-  <div class="bits-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} bit şeması">
+  <p class="bits-scroll-hint" id="bits-scroll-hint" hidden>Şemanın tamamı için yatay kaydırın; klavyede sağ ve sol ok tuşlarını kullanabilirsiniz.</p>
+  <div class="bits-scroll" tabindex="0" role="region" aria-describedby="bits-scroll-hint" aria-label="${e(protocol.title)} bit şeması">
     <div class="bits" style="--cols:${cols}">
       <div class="bits-ruler bits-ruler--bytes" aria-hidden="true">${byteBands}</div>
       <div class="bits-ruler bits-ruler--bits" aria-hidden="true">${bitNumbers}</div>

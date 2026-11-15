@@ -60,3 +60,13 @@ if (filter) {
     }
   });
 }
+
+// Explain the independently scrollable diagram only when it overflows.
+for (const panel of document.querySelectorAll('.bits-scroll')) {
+  const hint = document.getElementById(panel.getAttribute('aria-describedby'));
+  if (!hint) continue;
+  const update = () => { hint.hidden = panel.scrollWidth <= panel.clientWidth + 1; };
+  const observer = new ResizeObserver(update);
+  observer.observe(panel);
+  update();
+}
