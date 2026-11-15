@@ -15,7 +15,18 @@ document.querySelectorAll('[data-field], [data-fields]').forEach(node => {
   node.addEventListener('pointerleave', () => show(pinned));
   node.addEventListener('focus', () => show(key));
   node.addEventListener('blur', () => show(pinned));
-  node.addEventListener('click', () => { pinned = pinned === key ? null : key; show(pinned); });
+  node.addEventListener('click', e => {
+    if (node.classList.contains('bit-cell')) {
+      e.preventDefault();
+    }
+    pinned = pinned === key ? null : key;
+    show(pinned);
+    if (pinned) {
+      history.replaceState(null, '', `#f-${pinned}`);
+    } else {
+      history.replaceState(null, '', location.pathname);
+    }
+  });
 });
 const fromHash = () => { const key = location.hash.startsWith('#f-') ? location.hash.slice(3) : null; if (key) { pinned = key; show(key); } };
 addEventListener('hashchange', fromHash);

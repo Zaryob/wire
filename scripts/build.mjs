@@ -173,7 +173,11 @@ function diagram(protocol) {
     <div class="bits" style="--cols:${cols}">
       <div class="bits-ruler bits-ruler--bytes" aria-hidden="true">${byteBands}</div>
       <div class="bits-ruler bits-ruler--bits" aria-hidden="true">${bitNumbers}</div>
-      ${cells.map(cell => `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`).join('')}
+      ${cells.map(cell => {
+        const fieldIdx = protocol.fields.indexOf(cell.field);
+        const cadence = fieldIdx >= 0 ? (fieldIdx % 2 === 0 ? 'bit-cell--even' : 'bit-cell--odd') : '';
+        return `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`;
+      }).join('')}
     </div>
   </div>
 </div>`;
@@ -201,21 +205,14 @@ function protocolPage(protocol) {
   protocol.fields.forEach((f, i) => fieldIndexMap.set(f.key, i));
 
   const legendItems = [];
-  legendItems.push(`<div class="hex-legend__item hex-legend__item--guide">
-    <span class="hex-legend__swatches" aria-hidden="true">
-      <span class="hex-legend__swatch hex-legend__swatch--f0"></span>
-      <span class="hex-legend__swatch hex-legend__swatch--f1"></span>
-      <span class="hex-legend__swatch hex-legend__swatch--f2"></span>
-      <span class="hex-legend__swatch hex-legend__swatch--f3"></span>
-      <span class="hex-legend__swatch hex-legend__swatch--f4"></span>
-      <span class="hex-legend__swatch hex-legend__swatch--f5"></span>
-    </span>
-    <span><strong>${e(protocol.title)}</strong> (${headerLength} sekizli başlık — alanlar farklı renklerle ayrılmıştır)</span>
+  legendItems.push(`<div class="hex-legend__item">
+    <span class="hex-legend__swatch hex-legend__swatch--proto" aria-hidden="true"></span>
+    <span><strong>${e(protocol.title)}</strong> (${headerLength} sekizli başlık — alanlar ardışık tonlarla ayrılmıştır)</span>
   </div>`);
 
   if (subProto) {
     legendItems.push(`<div class="hex-legend__item">
-      <span class="hex-legend__swatch hex-legend__swatch--sub" aria-hidden="true"></span>
+      <span class="hex-legend__swatch hex-legend__swatch--sub hex-legend__swatch--${subLayer}" aria-hidden="true"></span>
       <span>Sarmalanmış ${e(subProto.name)} başlığı (${subHeaderLen} sekizli)</span>
     </div>`);
     const remaining = bytes.length - (headerLength + subHeaderLen);
@@ -246,13 +243,14 @@ function protocolPage(protocol) {
       let colorClass = '';
       if (!isPayload) {
         const fieldIdx = fields.length ? fieldIndexMap.get(fields[0]) : 0;
-        colorClass = `hex-byte--f${fieldIdx % 6}`;
+        colorClass = fieldIdx % 2 === 0 ? 'hex-byte--even' : 'hex-byte--odd';
       } else if (subProto && index < headerLength + subHeaderLen) {
         const subIndex = index - headerLength;
         const subRanges = example(subProto.id).ranges;
         const subFields = subProto.fields.filter(field => subRanges[field.key] && subRanges[field.key].offset < (subIndex + 1) * 8 && subRanges[field.key].offset + subRanges[field.key].bits > subIndex * 8).map(f => f.key);
         const subFieldIdx = subFields.length ? subProto.fields.findIndex(f => f.key === subFields[0]) : 0;
-        colorClass = `hex-byte--sub hex-byte--f${subFieldIdx % 6}`;
+        const subEven = subFieldIdx % 2 === 0 ? 'even' : 'odd';
+        colorClass = `hex-byte--sub hex-byte--sub-${subLayer} hex-byte--sub-${subEven}`;
       } else {
         colorClass = 'hex-byte--payload-data';
       }
