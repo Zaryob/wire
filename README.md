@@ -1,55 +1,69 @@
 # wire
 
-Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türkçe bir başvuru.
-Her protokol sayfasında başlığın bit şeması, alan tablosu ve örnek bir paketin onaltılık
-dökümü bulunur; her alan dayandığı RFC bölümüne bağlanır.
+**English** · [Türkçe](README.tr.md)
 
-Bu sürümde: Ethernet, ARP, IPv4, IPv6, ICMP, ICMPv6, UDP, TCP ve DNS.
+A bit-level reference for the header fields of network protocols, written in Turkish and
+sourced from the RFCs. Each protocol page shows the header's bit diagram, a field table and
+the hex dump of an example packet; every field links to the RFC section it is based on.
 
-## Çalıştırma
+[Read the site](https://zaryob.github.io/wire/)
 
-Node.js 22 veya üstü yeterlidir; npm bağımlılığı yoktur.
+This release covers Ethernet, ARP, IPv4, IPv6, ICMP, ICMPv6, UDP, TCP and DNS.
+
+## Running it
+
+Node.js 22 or newer is enough; there are no npm dependencies.
 
 ```sh
-npm start        # derler ve http://127.0.0.1:4174/wire/ adresinde sunar
-npm run build    # _site/ dizinine derler
-npm test         # veri, RFC karşılaştırması, örnek paketler ve bağlantılar
+npm start        # builds and serves at http://127.0.0.1:4174/wire/
+npm run build    # builds into _site/
+npm test         # data, RFC comparison, example packets and links
 ```
 
-## Veri nereden geliyor
+## Where the data comes from
 
-Bütün bilgiler RFC'lerden alınır. Kullanılan RFC'ler `sources/rfcs.json` dosyasında
-listelenir.
+All information is taken from RFCs. The RFCs in use are listed in `sources/rfcs.json`.
 
-- `npm run sync`, listedeki RFC metinlerini ve künyelerini rfc-editor.org'dan indirir.
-  Metinler `.cache/rfc/` altında tutulur (depoya girmez); künyeler ve metinlerin sha256
-  özetleri `sources/bibliography.json` dosyasına yazılır. Sitedeki Kaynakça sayfası bu
-  dosyadan üretilir.
-- `data/protocols/*.json`, her protokolün alanlarını tutar. Alan genişlikleri derleme ve
-  test sırasında, atıf yapılan RFC metnindeki başlık şemasıyla karşılaştırılır
-  (`src/rfc.mjs`, `src/sources.mjs`). Uyuşmazlıkta derleme durur.
-- Türkçe alan açıklamaları ilgili RFC bölümünden elle yazılmış özetlerdir; her birinin
-  `ref` alanı dayandığı RFC'yi ve bölümü gösterir.
-- Örnek paketler gerçek yakalama değildir: alanların örnek değerlerinden üretilir,
-  sağlama toplamları RFC 1071'e göre hesaplanır (`src/encode.mjs`). Adresler belgeleme
-  aralıklarındandır (RFC 5737, RFC 3849, RFC 9542, RFC 2606).
+- `npm run sync` downloads the texts and metadata of the listed RFCs from rfc-editor.org.
+  The texts are kept under `.cache/rfc/` (not committed); the metadata and the sha256
+  digests of the texts are written to `sources/bibliography.json`. The site's Bibliography
+  page is generated from that file.
+- `data/protocols/*.json` holds the fields of each protocol. During the build and the
+  tests, field widths are compared with the header diagram in the cited RFC text
+  (`src/rfc.mjs`, `src/sources.mjs`). The build stops on a mismatch.
+- The Turkish field descriptions are hand-written summaries of the relevant RFC section;
+  the `ref` property of each one names the RFC and section it relies on.
+- The example packets are not real captures: they are generated from the example values
+  of the fields, and checksums are computed as described in RFC 1071 (`src/encode.mjs`).
+  Addresses come from the documentation ranges (RFC 5737, RFC 3849, RFC 9542, RFC 2606).
 
-Önbellek yoksa derleme ve testler RFC metinlerini kendiliğinden indirir ve özetleri
-kaynakçadakiyle karşılaştırır.
+When there is no cache, the build and the tests download the RFC texts themselves and
+compare their digests with the ones in the bibliography.
 
-## Yeni protokol eklemek
+## Adding a protocol
 
-1. Gerekli RFC'leri `sources/rfcs.json` dosyasına ekleyin ve `npm run sync` çalıştırın.
-2. `data/protocols/<ad>.json` dosyasını yazın. `layout` alanı karşılaştırılacak şemayı
-   gösterir: `kind: "diagram"` için şemadaki bir satırdan ayırt edici bir `anchor`.
-3. `npm test` çalıştırın.
+1. Add the required RFCs to `sources/rfcs.json` and run `npm run sync`.
+2. Write `data/protocols/<name>.json`. The `layout` property points at the diagram to
+   compare against: for `kind: "diagram"`, a distinctive `anchor` taken from one row of
+   the diagram.
+3. Run `npm test`.
 
-## Ortak tema
+## Publishing
 
-`public/assets/console/` dizini [console-theme](https://github.com/Zaryob/console-theme)
-deposundan kopyalanmıştır. Site henüz o deponun `scripts/sync.py` hedeflerine ve
-`_data/console_projects.json` listesine eklenmemiştir; yayımlanırken eklenmelidir.
+`.github/workflows/site.yml` runs `npm run check` on every push and pull request. Pushes
+to `main` are then deployed to GitHub Pages. In the repository's Pages settings the
+publishing source must be **GitHub Actions**.
 
-## Lisans
+The default deployment prefix is `/wire`; set `SITE_BASEURL=''` to build for a domain root.
 
-Kod ve Türkçe metinler GPL-3.0-or-later. Ayrıntılar için `NOTICE.md`.
+## Shared theme
+
+`public/assets/console/` is copied from the
+[console-theme](https://github.com/Zaryob/console-theme) repository. The site has not yet
+been added to that repository's `scripts/sync.py` targets or to its
+`_data/console_projects.json` registry, so the other sites do not link to it and theme
+updates have to be copied by hand.
+
+## License
+
+Code and Turkish text are GPL-3.0-or-later. See `NOTICE.md` for details.

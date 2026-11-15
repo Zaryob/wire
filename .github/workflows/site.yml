@@ -1,0 +1,50 @@
+name: Check and publish wire
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: wire-${{ github.ref }}
+  # A newer push supersedes a pull-request run, but a main deployment is never cancelled midway.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      # The RFC texts are not committed. The build downloads the ones listed in
+      # sources/rfcs.json and rejects any whose sha256 differs from sources/bibliography.json.
+      - name: Restore downloaded RFC texts
+        uses: actions/cache@v4
+        with:
+          path: .cache/rfc
+          key: rfc-${{ hashFiles('sources/bibliography.json') }}
+      # The project has no npm dependencies, so there is nothing to install.
+      - name: Build the site and run the data, RFC and link checks
+        run: npm run check
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: _site
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
