@@ -1,0 +1,187 @@
+{
+  "order": 23,
+  "name": "RTP",
+  "title": "RTP başlığı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Gerçek Zamanlı Taşıma Protokolü (Real-time Transport Protocol - RTP) sabit başlığı. Ses ve görüntü akışlarını taşır; her pakette bulunan sabit kısım 12 sekizlidir, ardından katkıda bulunan kaynakların (CSRC) listesi gelebilir. Genellikle UDP üzerinde taşınır.",
+  "layout": {
+    "rfc": 3550,
+    "section": "5.1",
+    "kind": "diagram",
+    "anchor": "|V=2|P|X|  CC   |M|     PT      |",
+    "label": "RTP Fixed Header Fields"
+  },
+  "notes": [
+    "RTP'nin sabit bir portu yoktur; oturumun port numaraları SIP/SDP gibi bir oturum kurma protokolüyle kararlaştırılır.",
+    "Sıra numarası her pakette bir artar ve kayıp ile sıra dışı gelişi saptamaya yarar; zaman damgası ise örnekleme saatini izler. İkisinin de başlangıç değeri rastgele seçilmelidir (RFC 3550 §5.1).",
+    "Her RTP oturumuna, alım istatistiklerini ve kaynak tanımlarını taşıyan bir RTCP denetim akışı eşlik eder (RFC 3550 §6).",
+    "Marker biti ve yük türünün anlamı profile bağlıdır; ses ve görüntü için varsayılan profil RFC 3551'dir."
+  ],
+  "fields": [
+    {
+      "key": "v",
+      "name": "V",
+      "bits": 2,
+      "desc": "Version: RTP sürümü. Bu belgede tanımlanan sürüm 2'dir.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "version (V)"
+      },
+      "example": 2
+    },
+    {
+      "key": "p",
+      "name": "P",
+      "bits": 1,
+      "desc": "Padding: 1 ise paketin sonunda yükün parçası olmayan dolgu sekizlileri vardır; son sekizli, kendisi dahil dolgu sekizlilerinin sayısını verir.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "padding (P)"
+      },
+      "example": 0
+    },
+    {
+      "key": "x",
+      "name": "X",
+      "bits": 1,
+      "desc": "Extension: 1 ise sabit başlığı tam olarak bir başlık uzantısı izler (§5.3.1).",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "extension (X)"
+      },
+      "example": 0
+    },
+    {
+      "key": "cc",
+      "name": "CC",
+      "bits": 4,
+      "desc": "CSRC count: sabit başlığı izleyen CSRC tanımlayıcılarının sayısı. Paketler bir karıştırıcıdan (mixer) geçmediyse 0'dır.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "CSRC count (CC)"
+      },
+      "example": 0
+    },
+    {
+      "key": "m",
+      "name": "M",
+      "bits": 1,
+      "desc": "Marker: anlamı profile bağlıdır; çerçeve sınırları gibi önemli olayları işaretlemeye yarar. Ses profilinde bir konuşma diliminin ilk paketini gösterir.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "marker (M)"
+      },
+      "example": 1
+    },
+    {
+      "key": "pt",
+      "name": "Payload Type (PT)",
+      "bits": 7,
+      "desc": "Yükün biçimi. RFC 3551 statik türler tanımlar: 0 PCMU (G.711 µ-law, 8000 Hz), 8 PCMA (G.711 A-law), 9 G722; 96–127 dinamik olarak (ör. SDP ile) atanır.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "payload type (PT)"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "PCMU (G.711 µ-law)"
+        ],
+        [
+          "8",
+          "PCMA (G.711 A-law)"
+        ],
+        [
+          "9",
+          "G722"
+        ],
+        [
+          "18",
+          "G729"
+        ],
+        [
+          "96–127",
+          "Dinamik"
+        ]
+      ]
+    },
+    {
+      "key": "seq",
+      "name": "Sequence Number",
+      "bits": 16,
+      "desc": "Gönderilen her RTP veri paketinde bir artar; alıcı kaybı saptamak ve sırayı düzeltmek için kullanır.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "sequence number"
+      },
+      "example": 4660
+    },
+    {
+      "key": "ts",
+      "name": "Timestamp",
+      "bits": 32,
+      "desc": "Yükteki ilk sekizlinin örnekleme anı, örnekleme saatinin birimleriyle. 8000 Hz'lik seste 20 ms'lik her paket 160 artırır.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "timestamp"
+      },
+      "example": "0x00000a00",
+      "hex": true
+    },
+    {
+      "key": "ssrc",
+      "name": "SSRC",
+      "bits": 32,
+      "desc": "Synchronization source: akışın kaynağını tanımlayan rastgele 32 bitlik kimlik. Aynı oturumdaki iki kaynağın SSRC'si aynı olmamalıdır.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "SSRC"
+      },
+      "example": "0xdeadbeef",
+      "hex": true
+    },
+    {
+      "key": "csrc",
+      "name": "CSRC listesi",
+      "bits": "değişken",
+      "desc": "Contributing sources: bir karıştırıcının birleştirdiği kaynakların 32 bitlik kimlikleri; 0–15 tane, sayısını CC verir.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "CSRC list"
+      }
+    },
+    {
+      "key": "payload",
+      "name": "Yük",
+      "bits": "değişken",
+      "desc": "Yük türünün belirlediği biçimde ses veya görüntü verisi.",
+      "ref": {
+        "rfc": 3550,
+        "section": "5.1",
+        "label": "RTP Fixed Header Fields"
+      }
+    }
+  ],
+  "example": {
+    "payload": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "note": "Bir sesli aramanın ilk paketi: PT 0 (PCMU, G.711 µ-law, 8000 Hz), 20 ms'lik 160 örnek, dolayısıyla 160 sekizli yük. Konuşma diliminin başı olduğu için Marker biti 1'dir (ikinci sekizli 0x80). Yükteki 0xff, µ-law kodlamasında sıfır genliğe (sessizliğe) karşılık gelir."
+  },
+  "refs": [
+    3550,
+    3551,
+    768
+  ],
+  "id": "rtp"
+}

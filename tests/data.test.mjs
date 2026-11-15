@@ -111,4 +111,25 @@ test('example packets are internally consistent', () => {
   assert.equal(hex(dhcp.bytes.slice(236, 240)), '63825363', 'options start with the magic cookie');
   assert.equal(dhcp.bytes.at(-1), 255, 'options end with the End option');
   assert.equal(hex(dhcp.bytes.slice(28, 34)), hex(encode('ethernet').bytes.slice(6, 12)), 'chaddr is the Ethernet example source MAC');
+  const dhcpv6 = encode('dhcpv6');
+  assert.equal(dhcpv6.headerLength, 4, 'DHCPv6 client/server header is 4 octets');
+  // Walk the options: each is code (16), length (16), value; they must tile the rest exactly.
+  const codes = [];
+  for (let at = 4; at < dhcpv6.bytes.length;) {
+    const code = (dhcpv6.bytes[at] << 8) | dhcpv6.bytes[at + 1];
+    const length = (dhcpv6.bytes[at + 2] << 8) | dhcpv6.bytes[at + 3];
+    codes.push(code);
+    at += 4 + length;
+    assert.ok(at <= dhcpv6.bytes.length, `option ${code} overruns the message`);
+  }
+  assert.deepEqual(codes, [1, 6, 8, 3], 'Client ID, ORO, Elapsed Time, IA_NA');
+  const rtp = encode('rtp');
+  assert.equal(rtp.headerLength, 12, 'RTP fixed header is 12 octets');
+  assert.equal(rtp.bytes[0], 0x80, 'V=2, no padding, extension or CSRCs');
+  assert.equal(rtp.bytes[1], 0x80, 'marker set, PT 0 (PCMU)');
+  assert.equal(rtp.bytes.length - 12, 160, '20 ms of 8000 Hz PCMU');
+  const bfd = encode('bfd');
+  assert.equal(bfd.bytes.length, 24, 'BFD mandatory section is 24 octets');
+  assert.equal(bfd.bytes[3], bfd.bytes.length, 'BFD Length field');
+  assert.equal(bfd.bytes[1] >> 6, 3, 'state Up');
 });

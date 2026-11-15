@@ -428,6 +428,67 @@
       "use": "IP ve TCP başlıklarında ECN"
     },
     {
+      "number": 3550,
+      "title": "RTP: A Transport Protocol for Real-Time Applications",
+      "authors": [
+        "H. Schulzrinne",
+        "S. Casner",
+        "R. Frederick",
+        "V. Jacobson"
+      ],
+      "date": "July 2003",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC1889"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC5506",
+        "RFC5761",
+        "RFC6051",
+        "RFC6222",
+        "RFC7022",
+        "RFC7160",
+        "RFC7164",
+        "RFC8083",
+        "RFC8108",
+        "RFC8860"
+      ],
+      "doi": "10.17487/RFC3550",
+      "url": "https://www.rfc-editor.org/rfc/rfc3550",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3550.txt",
+      "sha256": "4c210e9434b5b4c029e8536ad8991f3709bc3cbfa0999e951bcb4c2143c539e8",
+      "bytes": 259985,
+      "use": "RTP sabit başlığı"
+    },
+    {
+      "number": 3551,
+      "title": "RTP Profile for Audio and Video Conferences with Minimal Control",
+      "authors": [
+        "H. Schulzrinne",
+        "S. Casner"
+      ],
+      "date": "July 2003",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC1890"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC5761",
+        "RFC7007",
+        "RFC8860"
+      ],
+      "doi": "10.17487/RFC3551",
+      "url": "https://www.rfc-editor.org/rfc/rfc3551",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3551.txt",
+      "sha256": "0b1a7fb6582f0e7ab6493f16d897009f0898600e7a9bcc1ee0d155a1c8157e56",
+      "bytes": 106621,
+      "use": "RTP ses/görüntü profili ve statik yük türleri"
+    },
+    {
       "number": 3849,
       "title": "IPv6 Address Prefix Reserved for Documentation",
       "authors": [
@@ -548,6 +609,51 @@
       "use": "Örneklerde kullanılan IPv4 belgeleme blokları"
     },
     {
+      "number": 5880,
+      "title": "Bidirectional Forwarding Detection (BFD)",
+      "authors": [
+        "D. Katz",
+        "D. Ward"
+      ],
+      "date": "June 2010",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC7419",
+        "RFC7880",
+        "RFC8562",
+        "RFC9747"
+      ],
+      "doi": "10.17487/RFC5880",
+      "url": "https://www.rfc-editor.org/rfc/rfc5880",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5880.txt",
+      "sha256": "45a7f8fcc04991c22d9efb1419aee4d9870cf1b7aa4b16a930e66a248146c61d",
+      "bytes": 110279,
+      "use": "BFD denetim paketi"
+    },
+    {
+      "number": 5881,
+      "title": "Bidirectional Forwarding Detection (BFD) for IPv4 and IPv6 (Single Hop)",
+      "authors": [
+        "D. Katz",
+        "D. Ward"
+      ],
+      "date": "June 2010",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC5881",
+      "url": "https://www.rfc-editor.org/rfc/rfc5881",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5881.txt",
+      "sha256": "30518631501fd4607c39422653aa0eaeae8ed79d7ce7af4a21c2c6a2fc87ca3a",
+      "bytes": 14307,
+      "use": "Tek atlamalı BFD'nin IPv4/IPv6 ve UDP üzerinde taşınması"
+    },
+    {
       "number": 5905,
       "title": "Network Time Protocol Version 4: Protocol and Algorithms Specification",
       "authors": [
@@ -654,6 +760,42 @@
       "sha256": "371ae3f133d562db5d6385e6def4ca9914c4f831be228ea7779fd28799c2f490",
       "bytes": 93162,
       "use": "IPv6 başlığı ve IPv6 sözde başlığı"
+    },
+    {
+      "number": 8415,
+      "title": "Dynamic Host Configuration Protocol for IPv6 (DHCPv6)",
+      "authors": [
+        "T. Mrugalski",
+        "M. Siodelski",
+        "B. Volz",
+        "A. Yourtchenko",
+        "M. Richardson",
+        "S. Jiang",
+        "T. Lemon",
+        "T. Winters"
+      ],
+      "date": "November 2018",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC3315",
+        "RFC3633",
+        "RFC3736",
+        "RFC4242",
+        "RFC7083",
+        "RFC7283",
+        "RFC7550"
+      ],
+      "obsoleted_by": [
+        "RFC9915"
+      ],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC8415",
+      "url": "https://www.rfc-editor.org/rfc/rfc8415",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc8415.txt",
+      "sha256": "3a3540c90ef2da48caa5cba627455025ef8cff6d1f988c6d0a83305485e4aa0a",
+      "bytes": 370298,
+      "use": "DHCPv6 istemci-sunucu iletisi ve seçenekleri"
     },
     {
       "number": 9260,

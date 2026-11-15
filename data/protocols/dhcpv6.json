@@ -1,0 +1,123 @@
+{
+  "order": 21,
+  "name": "DHCPv6",
+  "title": "DHCPv6 iletisi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "IPv6 için Dinamik Konak Yapılandırma Protokolü (DHCPv6) istemci-sunucu iletisi. DHCPv4'ün aksine sabit kısım yalnızca 4 sekizlidir: ileti türü ve işlem kimliği. Bütün bilgi tür-uzunluk-değer biçimindeki seçeneklerde taşınır. UDP üzerinde istemci 546, sunucu 547 numaralı portu kullanır.",
+  "layout": {
+    "rfc": 8415,
+    "section": "8",
+    "kind": "diagram",
+    "anchor": "|    msg-type   |               transaction-id                  |",
+    "label": "Figure 2"
+  },
+  "notes": [
+    "İstemci, sunucuların adresini bilmeden ff02::1:2 (All_DHCP_Relay_Agents_and_Servers) bağlantı yerel çok noktaya yayın adresine gönderir (RFC 8415 §7.1). DHCPv4'teki gibi sınırlı yayın ya da BROADCAST bayrağı yoktur.",
+    "Adres alma dört iletiyle yürür: Solicit, Advertise, Request, Reply. Rapid Commit seçeneğiyle Solicit ve Reply'a iner.",
+    "Her seçenek 16 bitlik kod, 16 bitlik uzunluk ve değerden oluşur; seçenekler arasında dolgu yoktur ve 2 ya da 4 sekizli sınırına hizalanmaz (RFC 8415 §8).",
+    "İstemci ve sunucu, MAC adresi yerine DUID (DHCP Unique Identifier) ile tanımlanır. Röle ajanlarının kullandığı Relay-forward ve Relay-reply iletileri 34 sekizlilik farklı bir başlık taşır (RFC 8415 §9)."
+  ],
+  "fields": [
+    {
+      "key": "msg_type",
+      "name": "msg-type",
+      "bits": 8,
+      "desc": "DHCP ileti türü (§7.3).",
+      "ref": {
+        "rfc": 8415,
+        "section": "7.3",
+        "label": "DHCP Message Types"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "SOLICIT"
+        ],
+        [
+          "2",
+          "ADVERTISE"
+        ],
+        [
+          "3",
+          "REQUEST"
+        ],
+        [
+          "4",
+          "CONFIRM"
+        ],
+        [
+          "5",
+          "RENEW"
+        ],
+        [
+          "6",
+          "REBIND"
+        ],
+        [
+          "7",
+          "REPLY"
+        ],
+        [
+          "8",
+          "RELEASE"
+        ],
+        [
+          "9",
+          "DECLINE"
+        ],
+        [
+          "10",
+          "RECONFIGURE"
+        ],
+        [
+          "11",
+          "INFORMATION-REQUEST"
+        ],
+        [
+          "12",
+          "RELAY-FORW"
+        ],
+        [
+          "13",
+          "RELAY-REPL"
+        ]
+      ]
+    },
+    {
+      "key": "transaction_id",
+      "name": "transaction-id",
+      "bits": 24,
+      "desc": "Bu ileti alışverişinin işlem kimliği. İstemci rastgele seçer; sunucu yanıtta aynı değeri döndürür.",
+      "ref": {
+        "rfc": 8415,
+        "section": "8",
+        "label": "Figure 2"
+      },
+      "example": "0x0a0b0c",
+      "hex": true
+    },
+    {
+      "key": "options",
+      "name": "options",
+      "bits": "değişken",
+      "desc": "İletinin taşıdığı seçenekler (§21); iletinin boyutundan 4 sekizli eksik uzunlukta.",
+      "ref": {
+        "rfc": 8415,
+        "section": "8",
+        "label": "Figure 2"
+      }
+    }
+  ],
+  "example": {
+    "payload": "0001000a0003000100005e0053010006000200520008000200000003000c000000010000000000000000",
+    "note": "00:00:5e:00:53:01 MAC adresli bir istemcinin ff02::1:2 adresine gönderdiği Solicit iletisi. Seçenekler: Client Identifier (kod 1, DUID-LL: tür 3, donanım türü 1 Ethernet, MAC adresi; §21.2, §11.4), Option Request (kod 6; Solicit'te zorunlu SOL_MAX_RT kodu 82'yi ister; §21.7, §21.24), Elapsed Time (kod 8, 0 = ilk deneme; §21.9) ve adres isteyen IA_NA (kod 3, IAID 1, T1 ve T2 sıfır; §21.4)."
+  },
+  "refs": [
+    8415,
+    768,
+    9542
+  ],
+  "id": "dhcpv6"
+}

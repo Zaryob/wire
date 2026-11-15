@@ -1,0 +1,293 @@
+{
+  "order": 24,
+  "name": "BFD",
+  "title": "BFD denetim paketi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Çift Yönlü İletim Algılama (Bidirectional Forwarding Detection - BFD) denetim paketinin zorunlu bölümü. İki sistem arasındaki iletim yolunun koptuğunu milisaniyeler içinde saptar; zorunlu bölüm 24 sekizlidir. Tek atlamalı BFD, UDP 3784 numaralı portu üzerinde taşınır.",
+  "layout": {
+    "rfc": 5880,
+    "section": "4.1",
+    "kind": "diagram",
+    "anchor": "|Vers |  Diag   |Sta|P|F|C|A|D|M|",
+    "label": "Generic BFD Control Packet Format"
+  },
+  "notes": [
+    "Algılama süresi, karşı tarafın Detect Mult değeri ile kararlaştırılan gönderim aralığının çarpımıdır. Örnekteki 300 ms aralık ve 3 çarpanla bağlantı kopukluğu 900 ms içinde fark edilir.",
+    "Oturum Down → Init → Up durumlarıyla üç yönlü el sıkışmayla kurulur; her taraf karşısının My Discriminator değerini kendi Your Discriminator alanına yansıtır (RFC 5880 §6.2).",
+    "Tek atlamalı BFD paketleri TTL veya Hop Limit 255 ile gönderilir ve 255 ile gelmeyenler atılır; bu, uzaktan sahte paket gönderilmesini engeller (RFC 5881 §5).",
+    "A biti 1 olduğunda zorunlu bölümü Auth Type, Auth Len ve kimlik doğrulama verisinden oluşan isteğe bağlı bir bölüm izler."
+  ],
+  "fields": [
+    {
+      "key": "vers",
+      "name": "Vers",
+      "bits": 3,
+      "desc": "Protokol sürümü; bu belge sürüm 1'i tanımlar.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Version (Vers)"
+      },
+      "example": 1
+    },
+    {
+      "key": "diag",
+      "name": "Diag",
+      "bits": 5,
+      "desc": "Yerel sistemin oturum durumundaki son değişikliğin nedeni. 0 tanı yok, 1 denetim algılama süresi doldu, 3 komşu oturumu kapattı, 7 yönetici kapattı.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Diagnostic (Diag)"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "Tanı yok"
+        ],
+        [
+          "1",
+          "Denetim algılama süresi doldu"
+        ],
+        [
+          "2",
+          "Echo işlevi başarısız"
+        ],
+        [
+          "3",
+          "Komşu oturumu kapattı"
+        ],
+        [
+          "4",
+          "İletim düzlemi sıfırlandı"
+        ],
+        [
+          "5",
+          "Yol kapalı"
+        ],
+        [
+          "6",
+          "Birleşik yol kapalı"
+        ],
+        [
+          "7",
+          "Yönetici kapattı"
+        ],
+        [
+          "8",
+          "Ters birleşik yol kapalı"
+        ]
+      ]
+    },
+    {
+      "key": "sta",
+      "name": "Sta",
+      "bits": 2,
+      "desc": "Gönderen sistemin gördüğü oturum durumu.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "State (Sta)"
+      },
+      "example": 3,
+      "values": [
+        [
+          "0",
+          "AdminDown"
+        ],
+        [
+          "1",
+          "Down"
+        ],
+        [
+          "2",
+          "Init"
+        ],
+        [
+          "3",
+          "Up"
+        ]
+      ]
+    },
+    {
+      "key": "p",
+      "name": "P",
+      "bits": 1,
+      "desc": "Poll: gönderen, bağlantıyı ya da bir parametre değişikliğini doğrulamak istiyor ve F biti 1 olan bir yanıt bekliyor.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Poll (P)"
+      },
+      "example": 0
+    },
+    {
+      "key": "f",
+      "name": "F",
+      "bits": 1,
+      "desc": "Final: gönderen, P biti 1 olan bir pakete yanıt veriyor.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Final (F)"
+      },
+      "example": 0
+    },
+    {
+      "key": "c",
+      "name": "C",
+      "bits": 1,
+      "desc": "Control Plane Independent: BFD iletim düzleminde çalışıyor ve denetim düzlemindeki kesintilerden etkilenmiyor.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Control Plane Independent (C)"
+      },
+      "example": 0
+    },
+    {
+      "key": "a",
+      "name": "A",
+      "bits": 1,
+      "desc": "Authentication Present: kimlik doğrulama bölümü var ve oturum doğrulanıyor.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Authentication Present (A)"
+      },
+      "example": 0
+    },
+    {
+      "key": "d",
+      "name": "D",
+      "bits": 1,
+      "desc": "Demand: gönderen istem kipinde; karşı tarafın düzenli denetim paketi göndermeyi bırakmasını istiyor.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Demand (D)"
+      },
+      "example": 0
+    },
+    {
+      "key": "m",
+      "name": "M",
+      "bits": 1,
+      "desc": "Multipoint: noktadan çok noktaya uzantılar için ayrılmış; gönderirken ve alırken sıfır olmalıdır.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Multipoint (M)"
+      },
+      "example": 0
+    },
+    {
+      "key": "detect_mult",
+      "name": "Detect Mult",
+      "bits": 8,
+      "desc": "Algılama süresi çarpanı. Kararlaştırılan gönderim aralığıyla çarpılınca alıcının algılama süresini verir.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Detect Mult"
+      },
+      "example": 3
+    },
+    {
+      "key": "length",
+      "name": "Length",
+      "bits": 8,
+      "desc": "BFD denetim paketinin bayt cinsinden uzunluğu; kimlik doğrulama yoksa 24.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Length"
+      },
+      "example": 24
+    },
+    {
+      "key": "my_disc",
+      "name": "My Discriminator",
+      "bits": 32,
+      "desc": "Gönderenin ürettiği benzersiz, sıfır olmayan değer; aynı iki sistem arasındaki birden çok BFD oturumunu ayırır.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "My Discriminator"
+      },
+      "example": "0x00000011",
+      "hex": true
+    },
+    {
+      "key": "your_disc",
+      "name": "Your Discriminator",
+      "bits": 32,
+      "desc": "Karşı sistemden alınan My Discriminator değerinin yansıması; henüz bilinmiyorsa sıfır.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Your Discriminator"
+      },
+      "example": "0x00000022",
+      "hex": true
+    },
+    {
+      "key": "min_tx",
+      "name": "Desired Min TX Interval",
+      "bits": 32,
+      "desc": "Yerel sistemin denetim paketi göndermek istediği en kısa aralık, mikrosaniye cinsinden. Sıfır ayrılmıştır.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Desired Min TX Interval"
+      },
+      "example": 300000
+    },
+    {
+      "key": "min_rx",
+      "name": "Required Min RX Interval",
+      "bits": 32,
+      "desc": "Sistemin destekleyebildiği, alınan denetim paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, karşı tarafın düzenli paket göndermemesi demektir.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Required Min RX Interval"
+      },
+      "example": 300000
+    },
+    {
+      "key": "min_echo_rx",
+      "name": "Required Min Echo RX Interval",
+      "bits": 32,
+      "desc": "Alınan BFD Echo paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, Echo işlevinin desteklenmediğini gösterir.",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Required Min Echo RX Interval"
+      },
+      "example": 0
+    },
+    {
+      "key": "auth",
+      "name": "Kimlik doğrulama bölümü",
+      "bits": "değişken",
+      "desc": "Yalnızca A biti 1 ise bulunur: Auth Type (8), Auth Len (8) ve türüne göre değişen kimlik doğrulama verisi (basit parola, MD5 ya da SHA1).",
+      "ref": {
+        "rfc": 5880,
+        "section": "4.1",
+        "label": "Auth Type"
+      }
+    }
+  ],
+  "example": {
+    "note": "Kurulmuş (Up) bir oturumda düzenli gönderilen denetim paketi: sürüm 1, tanı yok, durum Up (ilk iki sekizli 0x20 0xc0). Her iki yönde 300 ms (300000 µs) aralık ve 3 çarpanla çalışır; Echo işlevi kullanılmaz. UDP üzerinde hedef port 3784 ile taşınır (RFC 5881 §4)."
+  },
+  "refs": [
+    5880,
+    5881,
+    768
+  ],
+  "id": "bfd"
+}

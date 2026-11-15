@@ -10,7 +10,7 @@ Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türk
 
 ## Kapsanan Protokoller ve Katmanlar
 
-Bu sürümde tel üzerindeki 21 protokol en ince ayrıntısına kadar incelenmektedir:
+Bu sürümde tel üzerindeki 24 protokol en ince ayrıntısına kadar incelenmektedir:
 
 1. **Bağlantı Katmanı (Data Link Layer)**
    - **Ethernet (RFC 826, RFC 894, RFC 9542)**: 48 bitlik hedef ve kaynak MAC adresleri, EtherType alanı ve çerçeve sınırları.
@@ -36,7 +36,10 @@ Bu sürümde tel üzerindeki 21 protokol en ince ayrıntısına kadar incelenmek
    - **DNS (RFC 1035, RFC 2606)**: 12 sekizli sabit başlık, sorgu/yanıt bayrakları (QR, Opcode, RCODE) ve kaynak kayıtları (RR).
    - **CoAP (RFC 7252)**: Kısıtlı IoT cihazları ve düşük güçlü ağlar için ikili RESTful web aktarım protokolü.
    - **DHCPv4 (RFC 2131, RFC 2132)**: BOOTP'tan devralınan 236 sekizlilik sabit kısım, BROADCAST bayrağı, sihirli çerez ve DORA adres alma akışı.
+   - **DHCPv6 (RFC 8415)**: 4 sekizlilik istemci-sunucu başlığı, DUID ile tanımlama ve tür-uzunluk-değer biçimindeki seçenekler.
    - **NTPv4 (RFC 5905)**: 48 sekizlilik temel başlık, Stratum ve kip alanları, dört adet 64 bitlik zaman damgası ve gecikme/saat farkı hesabı.
+   - **RTP (RFC 3550, RFC 3551)**: Ses ve görüntü akışlarının 12 sekizlilik sabit başlığı, sıra numarası, zaman damgası ve yük türleri.
+   - **BFD (RFC 5880, RFC 5881)**: İletim yolu kopukluğunu milisaniyeler içinde saptayan 24 sekizlilik denetim paketi ve oturum durumları.
 
 Ayrıca [KILAVUZ.md](KILAVUZ.md) belgesi; **IEEE 802.3, 802.1Q (VLAN), PPPoE (RFC 2516), RARP (RFC 903), DHCPv4 (RFC 2131), DHCPv6 (RFC 8415), SCTP (RFC 9260), NDP (RFC 4861)** ve **ACD (RFC 5227)** protokollerini ve worked-example paket dökümlerini ayrıntılarıyla içerir.
 
@@ -65,14 +68,19 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına dayanır (`sources/rfcs.
 | **RFC 2784** | Generic Routing Encapsulation (GRE) | GRE paket başlığı ve tünel sağlama toplamı. |
 | **RFC 3168** | The Addition of Explicit Congestion Notification to IP | IP ve TCP başlıklarında tıkanıklık uyarısı sağlayan 2 bitlik ECN. |
 | **RFC 3849** | IPv6 Address Prefix Reserved for Documentation | Örneklerde kullanılan IPv6 belgeleme öneki (`2001:db8::/32`). |
+| **RFC 3550** | RTP: A Transport Protocol for Real-Time Applications | RTP sabit başlığı. |
+| **RFC 3551** | RTP Profile for Audio and Video Conferences with Minimal Control | Statik yük türleri (ör. PT 0 = PCMU). |
 | **RFC 4302** | IP Authentication Header | IPsec AH başlığı, veri bütünlüğü ve kimlik doğrulama. |
 | **RFC 4340** | Datagram Congestion Control Protocol (DCCP) | DCCP paket başlığı ve çift yönlü tıkanıklık denetimi. |
 | **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 hata ve bilgilendirme iletileri. |
 | **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | Örneklerde kullanılan IPv4 belgeleme blokları (`192.0.2.0/24` vb.). |
+| **RFC 5880** | Bidirectional Forwarding Detection (BFD) | BFD denetim paketinin zorunlu bölümü. |
+| **RFC 5881** | BFD for IPv4 and IPv6 (Single Hop) | BFD'nin UDP 3784 üzerinde taşınması ve TTL 255 kuralı. |
 | **RFC 5905** | Network Time Protocol Version 4 | NTPv4 paket başlığı ve zaman damgası biçimleri. |
 | **RFC 7252** | The Constrained Application Protocol (CoAP) | CoAP IoT ileti başlığı ve ikili RESTful iletim. |
 | **RFC 7348** | Virtual eXtensible Local Area Network (VXLAN) | VXLAN katman 2 tünelleme başlığı ve sanal ağ kimliği (VNI). |
 | **RFC 8200** | Internet Protocol, Version 6 (IPv6) Specification | Sabit 40 sekizli IPv6 başlığı, uzantı başlıkları ve IPv6 sözde başlığı. |
+| **RFC 8415** | Dynamic Host Configuration Protocol for IPv6 (DHCPv6) | DHCPv6 istemci-sunucu iletisi ve seçenekleri. |
 | **RFC 9260** | Stream Control Transmission Protocol | SCTP ortak başlığı, çoklu akış ve 32-bit CRC-32c sağlama toplamı. |
 | **RFC 9293** | Transmission Control Protocol (TCP) | Modern TCP başlığı, bayraklar ve sıra numaralandırması (RFC 793 konsolidasyonu). |
 | **RFC 9542** | IANA Considerations for IEEE 802 Parameters | Örneklerde kullanılan belgeleme MAC adresleri (`00:00:5e:00:53:xx`). |

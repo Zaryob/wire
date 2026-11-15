@@ -1147,7 +1147,7 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 |---|---|---|---|
 | **DHCPv4 / BOOTP** | **RFC 2131** | §2 Table 1 — sekizli tablosu | **Eklendi**. 236 baytlık sabit kısım: op (8), htype (8), hlen (8), hops (8), xid (32), secs (16), flags (16), ciaddr, yiaddr, siaddr, giaddr (32), chaddr (16 bayt), sname (64 bayt), file (128 bayt) ve options. Figure 1 ölçekli çizilmediği için genişlikler sekizli sayılarını veren Table 1'den doğrulanır. Örnek: RFC 2132 seçenekli DHCPDISCOVER. |
 | **NTP (Network Time Protocol)** | **RFC 5905** | §7.3 (Figure 8) — 32 bit ızgara | **Eklendi**. Sabit 48 baytlık (384 bit) temel başlık: LI (2), VN (3), Mode (3), Stratum (8), Poll (8), Precision (8), Root Delay (32), Root Dispersion (32), Reference ID (32) ve dört adet 64 bitlik zaman damgası. Figure 8'in ilk satırı bit ızgarasından bir karakter kaydığı için ilk altı alan §7.3 metnindeki "N-bit" tanımlarından, kalanı şemadan doğrulanır. |
-| **DHCPv6** | **RFC 8415** | §7 — 32 bit ızgara | **Yüksek Uygunluk**. İstemci-sunucu mesajları için sabit 4 baytlık başlık: msg-type (8), transaction-id (24), ardından seçenekler. Relay mesajları için 34 baytlık başlık. |
+| **DHCPv6** | **RFC 8415** | §8 (Figure 2) — 32 bit ızgara | **Eklendi**. İstemci-sunucu iletileri için sabit 4 baytlık başlık: msg-type (8), transaction-id (24), ardından seçenekler. Örnek: Client Identifier, Option Request, Elapsed Time ve IA_NA seçenekli Solicit. Relay iletilerinin 34 baytlık başlığı ayrı ele alınmadı. |
 | **TLS 1.3 Record Layer** | **RFC 8446** | §5.1 — Bayt listesi | **Orta Uygunluk**. 5 baytlık kayıt başlığı: Content Type (8), Legacy Version (16: 0x0303), Length (16), Şifreli Yük. Şifreleme öncesi ve sonrası ayrımı gerektirir. |
 
 ---
