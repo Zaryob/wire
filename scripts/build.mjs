@@ -115,7 +115,11 @@ function topbar(current, title = '', layer = '') {
 }
 
 function suiteFooter() {
-  return `<nav class="console-suite" aria-label="Zaryob projeleri"><div class="console-suite__inner"><p class="console-suite__prompt">~/projeler/</p><ul class="console-suite__list">${projects.map(project => `<li><a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}" aria-label="${e(project.title)}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/</a></li>`).join('')}</ul><p class="console-suite__meta"><a href="${origin}/hakkinda/" rel="author">Süleyman Poyraz</a><a href="https://github.com/Zaryob" rel="me">GitHub ↗</a><a href="${origin}/feed.xml">feed.xml</a></p></div></nav>`;
+  const column = (title, label, links, listClass = '') => `<nav class="suite-footer__col" aria-label="${e(label)}"><p class="suite-footer__title">${title}</p><ul${listClass ? ` class="${listClass}"` : ''}>${links.map(link => `<li>${link}</li>`).join('')}</ul></nav>`;
+  const site = column('~/wire/', 'Wire', [`<a href="${url('kilavuz')}">Kılavuz</a>`, `<a href="${url('kaynakca')}">Kaynakça</a>`, `<a href="${url('yontem')}">Yöntem</a>`, `<a href="${asset('lisanslar/')}">Lisanslar</a>`]);
+  const suite = column('~/projeler/', 'Zaryob projeleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}" aria-label="${e(project.title)}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/</a>`), 'console-suite__list');
+  const contact = column('~/iletişim', 'Sosyal bağlantılar', ['<a href="https://github.com/Zaryob" rel="me">GitHub <span aria-hidden="true">↗</span></a>', '<a href="https://linkedin.com/in/suleyman_poyraz" rel="me">LinkedIn <span aria-hidden="true">↗</span></a>', '<a href="https://medium.com/@zaryob" rel="me">Medium <span aria-hidden="true">↗</span></a>', '<a href="mailto:zaryob.dev@gmail.com">E-posta</a>']);
+  return `<footer class="suite-footer" id="site-footer"><div class="suite-footer__inner"><p class="suite-footer__prompt" aria-hidden="true"><span class="suite-footer__host">zaryob</span>:~/wire $ <span class="suite-footer__cmd">ls -F</span></p><div class="suite-footer__cols">${site}${suite}${contact}</div><div class="suite-footer__legal"><span><span aria-hidden="true"># </span>© Süleyman Poyraz · Ağ protokolü başlıkları, bit bit.</span><span>Her alan bir RFC’ye dayanır.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a></span></div></div></footer>`;
 }
 
 function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '' }) {
@@ -126,7 +130,6 @@ function page({ id, title, description, body, hero = '', indexable = true, class
 ${topbar(id, pageTitle || title, layer)}
 <main id="main" tabindex="-1">${hero}<div class="wire-main">${body}</div></main>
 ${suiteFooter()}
-<footer class="console-footer wire-footer"><div><a href="${url('')}">wire</a> / Ağ protokolü başlıkları, bit bit.<br><span class="footer-note">Her alan bir RFC’ye dayanır; genişlikler RFC metnindeki şemalarla karşılaştırılır.</span></div><div class="footer-links"><a href="${url('kilavuz')}">Kılavuz</a><a href="${url('kaynakca')}">Kaynakça</a><a href="${url('yontem')}">Yöntem</a><a href="${asset('lisanslar/')}">Lisanslar</a><a href="#main">Başa dön ↑</a></div></footer>
 </body></html>`;
 }
 

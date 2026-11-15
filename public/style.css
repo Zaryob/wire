@@ -408,24 +408,19 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 .toc-list a { color: var(--ink); text-decoration: none; }
 .toc-list a:hover { color: var(--accent); text-decoration: underline; }
 
-.wire-site .console-footer { width: 100%; margin-top: auto; padding-inline: var(--gutter); line-height: 1.9; }
-.footer-note { color: var(--muted); }
-.footer-links { display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: start; }
-.footer-links a { display: inline-flex; align-items: center; min-height: 32px; }
+.wire-site .suite-footer { width: 100%; margin-top: auto; }
 
 @media (max-width: 960px) { .protocol-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) {
   .wire-main { padding-top: 24px; }
   .protocol-list { grid-template-columns: 1fr; }
   .bibliography dl div { grid-template-columns: 1fr; gap: 0; margin-bottom: 6px; }
-  .footer-links a { min-height: 44px; }
   .hex { font-size: var(--text-xs); padding: 12px; }
   .hex-offset { margin-right: 8px; }
   .hex-byte { padding: 0 3px; }
 }
 
 .wire-site > main { flex: 1 0 auto; min-width: 0; }
-.wire-site .console-suite { margin-top: 0; }
 @media (max-width: 640px) {
   .topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 12px; }
   .topbar-left, .topbar-right { display: contents; }
