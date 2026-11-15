@@ -1,0 +1,99 @@
+{
+  "order": 9,
+  "name": "IGMP",
+  "title": "IGMPv2 başlığı",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "İnternet Grup Yönetim Protokolü (Internet Group Management Protocol - IGMPv2), IPv4 ana bilgisayarlarının ve bitişik yönlendiricilerin çok noktaya yayın (multicast) grup üyeliklerini kurmasını ve yönetmesini sağlar. Doğrudan IPv4 içinde protokol numarası 2 ile taşınır ve 8 sekizlidir.",
+  "layout": {
+    "rfc": 2236,
+    "kind": "diagram",
+    "anchor": "|      Type     | Max Resp Time |",
+    "section": "2",
+    "label": "Introduction"
+  },
+  "notes": [
+    "IGMP iletileri doğrudan IPv4 datagramları içinde taşınır; IP başlığındaki Protokol alanı 2, TTL alanı ise 1 olarak ayarlanır.",
+    "Tüm IGMP sorguları ve raporları, yerel alt ağdaki çok noktaya yayın yönlendiricileri ve ana bilgisayarlar arasında RFC 1071 sağlama toplamı ile korunur."
+  ],
+  "fields": [
+    {
+      "key": "type",
+      "name": "İleti Türü (Type)",
+      "bits": 8,
+      "desc": "IGMP iletisinin türünü belirtir: 0x11 Üyelik Sorgusu (Membership Query), 0x16 Sürüm 2 Üyelik Raporu (Membership Report), 0x17 Gruptan Ayrılma (Leave Group).",
+      "ref": {
+        "rfc": 2236,
+        "section": "2.1",
+        "label": "Type"
+      },
+      "example": "0x16",
+      "hex": true,
+      "values": [
+        [
+          "0x11",
+          "Üyelik Sorgusu (Membership Query)"
+        ],
+        [
+          "0x12",
+          "Sürüm 1 Üyelik Raporu (v1 Report)"
+        ],
+        [
+          "0x16",
+          "Sürüm 2 Üyelik Raporu (v2 Report)"
+        ],
+        [
+          "0x17",
+          "Gruptan Ayrılma (Leave Group)"
+        ]
+      ]
+    },
+    {
+      "key": "max_resp_time",
+      "name": "Azami Yanıt Süresi (Max Resp Time)",
+      "bits": 8,
+      "desc": "Yalnızca Üyelik Sorgusu iletilerinde anlamlıdır; 1/10 saniye cinsinden azami yanıt süresini belirtir. Rapor iletilerinde gönderici tarafından sıfırlanır.",
+      "ref": {
+        "rfc": 2236,
+        "section": "2.2",
+        "label": "Max Response Time"
+      },
+      "example": 0
+    },
+    {
+      "key": "checksum",
+      "name": "Sağlama Toplamı (Checksum)",
+      "bits": 16,
+      "checksum": "header",
+      "desc": "8 sekizlilik IGMP iletisinin tamamı üzerinden RFC 1071 yöntemine göre hesaplanan 16 bitlik sağlama toplamı.",
+      "ref": {
+        "rfc": 2236,
+        "section": "2.3",
+        "label": "Checksum"
+      },
+      "example": 0
+    },
+    {
+      "key": "group_address",
+      "name": "Grup Adresi (Group Address)",
+      "bits": 32,
+      "type": "ipv4",
+      "desc": "Raporlanan veya ayrılınan çok noktaya yayın (multicast) IPv4 adresi (224.0.0.0/4). Genel sorgularda 0.0.0.0 olur.",
+      "ref": {
+        "rfc": 2236,
+        "section": "2.4",
+        "label": "Group Address"
+      },
+      "example": "224.0.0.1"
+    }
+  ],
+  "example": {
+    "note": "Bir ana bilgisayarın 'Tüm Sistemler' çok noktaya yayın grubuna (224.0.0.1) katıldığını bildiren IGMPv2 Üyelik Raporu (Tür 0x16). Doğrudan IPv4 içinde taşınır."
+  },
+  "refs": [
+    2236,
+    1071,
+    791
+  ],
+  "id": "igmp"
+}

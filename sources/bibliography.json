@@ -192,6 +192,30 @@
       "use": "İnternet sağlama toplamının hesaplanması"
     },
     {
+      "number": 2236,
+      "title": "Internet Group Management Protocol, Version 2",
+      "authors": [
+        "W. Fenner"
+      ],
+      "date": "November 1997",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC1112"
+      ],
+      "updated_by": [
+        "RFC3376",
+        "RFC9776"
+      ],
+      "doi": "10.17487/RFC2236",
+      "url": "https://www.rfc-editor.org/rfc/rfc2236",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2236.txt",
+      "sha256": "0c8fc75ffb7251cad7452b31b43333ccbc3a53e0541069c47c571933fca46862",
+      "bytes": 51048,
+      "use": "IGMPv2 ileti başlığı ve çok noktaya yayın üyelik raporları"
+    },
+    {
       "number": 2474,
       "title": "Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers",
       "authors": [

@@ -30,6 +30,10 @@
       "use": "İnternet sağlama toplamının hesaplanması"
     },
     {
+      "number": 2236,
+      "use": "IGMPv2 ileti başlığı ve çok noktaya yayın üyelik raporları"
+    },
+    {
       "number": 2474,
       "use": "IPv4 TOS ve IPv6 Traffic Class sekizlisinin DS alanı olarak yeniden tanımı"
     },
