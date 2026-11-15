@@ -34,6 +34,10 @@
       "use": "IPv4 TOS ve IPv6 Traffic Class sekizlisinin DS alanı olarak yeniden tanımı"
     },
     {
+      "number": 2516,
+      "use": "PPPoE paket başlığı ve keşif/oturum aşamaları"
+    },
+    {
       "number": 2606,
       "use": "Örneklerde kullanılan belgeleme alan adları"
     },

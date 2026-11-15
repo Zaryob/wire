@@ -1,0 +1,128 @@
+{
+  "order": 3,
+  "name": "PPPoE",
+  "title": "PPPoE başlığı",
+  "layer": "Bağlantı",
+  "rowBits": 32,
+  "summary": "Ethernet Üzerinden Noktadan Noktaya Protokol (PPPoE), genişbant erişim sağlayıcılarının Ethernet altyapısı üzerinde kullanıcı kimlik doğrulama ve oturum yönetimi yapmasını sağlar. Başlık 6 sekizlidir.",
+  "layout": {
+    "rfc": 2516,
+    "kind": "diagram",
+    "anchor": "|  VER  | TYPE  |",
+    "section": "4",
+    "label": "Payloads"
+  },
+  "notes": [
+    "PPPoE iki aşamada çalışır: Keşif (Discovery Stage - EtherType 0x8863) ve Oturum (PPP Session Stage - EtherType 0x8864).",
+    "Maksimum iletim birimi (MTU), PPPoE başlığı (6 sekizli) ve PPP protokol alanı (2 sekizli) nedeniyle standart Ethernet MTU'su olan 1500 sekizliden en fazla 1492 sekizliye düşer."
+  ],
+  "fields": [
+    {
+      "key": "ver",
+      "name": "Sürüm (VER)",
+      "bits": 4,
+      "desc": "PPPoE belirtim sürümü. Bu sürüm için değeri 1 (0x1) olmalıdır.",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      },
+      "example": 1
+    },
+    {
+      "key": "type",
+      "name": "Tür (TYPE)",
+      "bits": 4,
+      "desc": "PPPoE belirtim türü. Bu sürüm için değeri 1 (0x1) olmalıdır.",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      },
+      "example": 1
+    },
+    {
+      "key": "code",
+      "name": "İşlem Kodu (CODE)",
+      "bits": 8,
+      "desc": "Paketin Keşif (Discovery) veya Oturum (Session) aşamasındaki işlevini belirtir.",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0x00",
+          "Oturum Verisi (Session Data)"
+        ],
+        [
+          "0x09",
+          "PADI (Active Discovery Initiation)"
+        ],
+        [
+          "0x07",
+          "PADO (Active Discovery Offer)"
+        ],
+        [
+          "0x19",
+          "PADR (Active Discovery Request)"
+        ],
+        [
+          "0x65",
+          "PADS (Active Discovery Session-confirmation)"
+        ],
+        [
+          "0xa7",
+          "PADT (Active Discovery Terminate)"
+        ]
+      ]
+    },
+    {
+      "key": "session_id",
+      "name": "Oturum Kimliği (SESSION_ID)",
+      "bits": 16,
+      "desc": "Kurulan PPPoE oturumunu benzersiz olarak tanımlayan 16 bitlik kimlik. Keşif paketlerinde 0x0000 olarak başlar, PADS aşamasında Erişim Yoğunlaştırıcı (Access Concentrator) tarafından atanır.",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      },
+      "example": "0x002a",
+      "hex": true
+    },
+    {
+      "key": "length",
+      "name": "Yük Uzunluğu (LENGTH)",
+      "bits": 16,
+      "desc": "PPPoE başlığından sonra gelen yükün sekizli cinsinden uzunluğu. Ethernet veya PPPoE başlıklarının boyutunu içermez.",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      },
+      "example": 22
+    },
+    {
+      "key": "payload",
+      "name": "Yük ve Etiketler",
+      "bits": "değişken",
+      "desc": "Keşif aşamasında PPPoE etiketleri (TAG_TYPE, TAG_LENGTH, TAG_VALUE); oturum aşamasında ise 2 sekizlilik PPP protokol kimliği ve taşınan ağ katmanı paketidir (örneğin IPv4 veya IPv6).",
+      "ref": {
+        "rfc": 2516,
+        "section": "4",
+        "label": "Payloads"
+      }
+    }
+  ],
+  "example": {
+    "note": "Aktif bir PPPoE oturumunda (SESSION_ID: 0x002a) taşınan IPv4 paket yükü. Ethernet çerçevesindeki EtherType alanı 0x8864'tür (PPPoE Session Stage).",
+    "payload": "0021450000140001000040007ce7c0000201c0000202"
+  },
+  "refs": [
+    2516,
+    9542
+  ],
+  "id": "pppoe"
+}

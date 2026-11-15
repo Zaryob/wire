@@ -223,6 +223,30 @@
       "use": "IPv4 TOS ve IPv6 Traffic Class sekizlisinin DS alanı olarak yeniden tanımı"
     },
     {
+      "number": 2516,
+      "title": "A Method for Transmitting PPP Over Ethernet (PPPoE)",
+      "authors": [
+        "L. Mamakos",
+        "K. Lidl",
+        "J. Evarts",
+        "D. Carrel",
+        "D. Simone",
+        "R. Wheeler"
+      ],
+      "date": "February 1999",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC2516",
+      "url": "https://www.rfc-editor.org/rfc/rfc2516",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2516.txt",
+      "sha256": "e20efb2fd445e50a076e3873daa7fb1b698bc1fc387902bd690c7a38afe77b95",
+      "bytes": 32537,
+      "use": "PPPoE paket başlığı ve keşif/oturum aşamaları"
+    },
+    {
       "number": 2606,
       "title": "Reserved Top Level DNS Names",
       "authors": [
