@@ -106,3 +106,12 @@ test('16-bit diagrams can switch to the narrower half-row column width', async (
     assert.equal(html.includes('bits-diagram-wrap--16'), protocol.rowBits === 16, protocol.id);
   }
 });
+
+test('every page has exactly one breadcrumb navigation landmark', async () => {
+  for (const file of await htmlFiles(site)) {
+    const html = await readFile(file, 'utf8');
+    if (!html.includes('class="topbar"')) continue;
+    assert.equal([...html.matchAll(/aria-label="Konum"/g)].length, 1, path.relative(site, file));
+    assert.match(html, /<nav class="breadcrumbs" aria-label="Konum">/, path.relative(site, file));
+  }
+});

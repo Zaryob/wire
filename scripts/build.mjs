@@ -101,9 +101,9 @@ function topbar(current, title = '', layer = '') {
       <span class="count">${protocols.length}</span>
       <span class="console-sr-only"> — protokol kütüphanesi</span>
     </a>
-    <div class="breadcrumbs" aria-label="Konum">
+    <nav class="breadcrumbs" aria-label="Konum">
       ${breadcrumbsHtml}
-    </div>
+    </nav>
   </div>
   <div class="topbar-right">
     <a href="${url('kilavuz')}" class="button secondary help-btn">
