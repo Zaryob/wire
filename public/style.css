@@ -233,6 +233,19 @@ body.is-searching .home-stats { display: none; }
 .bit-cell--narrow { padding: 6px 0; }
 .bit-cell--narrow span { writing-mode: vertical-rl; transform: rotate(180deg); }
 .bit-cell--variable { background: transparent; color: var(--muted); border-bottom-style: dashed; }
+
+/* Narrow screens: 32-bit rows drawn as two 16-bit half rows, each under its own ruler (built in scripts/build.mjs). */
+.bits--split, .bits-header__title--split { display: none; }
+.bits-diagram-wrap--splittable { container: bits-diagram / inline-size; }
+@container bits-diagram (width < 704px) or (width < 44rem) {
+  .bits-diagram-wrap--splittable .bits:not(.bits--split), .bits-diagram-wrap--splittable .bits-header__title:not(.bits-header__title--split) { display: none; }
+  .bits-diagram-wrap--splittable .bits--split { display: grid; }
+  .bits-diagram-wrap--splittable .bits-header__title--split { display: inline; }
+}
+.bits--split { min-width: calc(var(--cols) * max(18px, 1rem)); }
+.bits--split .bit-cell--narrow { line-height: 1.15; }
+.bits--split .bit-cell--narrow span { white-space: nowrap; }
+.bits-ruler--half .bits-col-num { background: color-mix(in srgb, var(--surface) 80%, var(--paper)); }
 .verified { margin-top: 12px; }
 
 /* Protocol Layer Context Variables */
