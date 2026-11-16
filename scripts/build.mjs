@@ -71,7 +71,7 @@ function header(current) {
     <div class="console-tools">
       <button class="console-search-open" type="button" data-console-search data-suite-root="${origin}/" data-wire-root="${url('')}" aria-haspopup="dialog" aria-label="Zaryob içeriklerinde ara">
         ${search}
-        <span>Ara</span><kbd>/</kbd>
+        <span>Ara</span>${current === '' ? '' : '<kbd>/</kbd>'}
       </button>
       <label class="console-theme"><span data-i18n="Theme">Tema</span><select data-console-theme aria-label="Renk teması"><option value="system" data-i18n="System">Sistem</option><option value="dark" data-i18n="Dark">Koyu</option><option value="light" data-i18n="Light">Açık</option></select></label>
       <span class="console-meta" lang="tr">İçerik: Türkçe</span>
@@ -95,19 +95,21 @@ function topbar(current, title = '', layer = '') {
 
   return `<header class="topbar">
   <div class="topbar-left">
-    <a href="${url('')}" class="button primary board-picker-btn" aria-label="Protokol kütüphanesi">
+    <a href="${url('')}" class="button primary board-picker-btn">
       ${gridIcon}
       <span>Protokoller</span>
       <span class="count">${protocols.length}</span>
+      <span class="console-sr-only"> — protokol kütüphanesi</span>
     </a>
     <div class="breadcrumbs" aria-label="Konum">
       ${breadcrumbsHtml}
     </div>
   </div>
   <div class="topbar-right">
-    <a href="${url('kilavuz')}" class="button secondary help-btn" aria-label="Nasıl kullanılır ve RFC Kılavuzu">
+    <a href="${url('kilavuz')}" class="button secondary help-btn">
       ${bookIcon}
       <span>Kılavuz</span>
+      <span class="console-sr-only"> — nasıl kullanılır ve RFC kılavuzu</span>
     </a>
   </div>
 </header>`;

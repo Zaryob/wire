@@ -89,6 +89,7 @@ body.wire-site { display: flex; flex-direction: column; min-height: 100vh; }
 .home-search-box input { width: 100%; min-width: 0; border: 0; background: transparent; font: var(--text-base)/1.5 var(--font-mono); flex: 1; outline: none; color: var(--ink); }
 .home-search-box input::placeholder { color: var(--muted); }
 .home-search-box kbd { font-size: var(--text-xs); font-family: var(--font-mono); border: 1px solid var(--line); padding: 2px 7px; border-radius: 3px; background: var(--paper); color: var(--muted); }
+@media (hover: none) { .home-search-box kbd { display: none; } }
 .home-search-status { min-height: 18px; margin: 10px 0 0; color: var(--muted); font-size: var(--text-xs); font-family: var(--font-mono); }
 .home-search-status:empty { display: none; }
 
@@ -453,3 +454,6 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 .protocol-card { min-width: 0; }
 .protocol-card__header, .bits-header, .bits-header__info { min-width: 0; flex-wrap: wrap; }
 .protocol-card__header > *, .bits-header > * { min-width: 0; overflow-wrap: anywhere; }
+
+/* The home page has no "/" hint on the header search; keep its label beside the icon. */
+.wire-site .console-search-open:not(:has(kbd)) { justify-content: flex-start; }

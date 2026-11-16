@@ -47,3 +47,22 @@ test('in-page anchors on the bibliography exist', async () => {
   const bibliography = await readFile(path.join(site, 'kaynakca/index.html'), 'utf8');
   for (const protocol of protocols) for (const number of protocol.refs) assert.ok(bibliography.includes(`id="rfc${number}"`), `RFC ${number}`);
 });
+
+test('top bar links are named by their visible text first', async () => {
+  for (const file of ['index.html', 'tcp/index.html']) {
+    const html = await readFile(path.join(site, file), 'utf8');
+    const topbar = html.slice(html.indexOf('<header class="topbar">'), html.indexOf('</header>', html.indexOf('<header class="topbar">')));
+    assert.doesNotMatch(topbar, /aria-label="(?!Konum)/, file);
+    assert.match(topbar, /<span>Protokoller<\/span>\s*<span class="count">\d+<\/span>\s*<span class="console-sr-only">/);
+    assert.match(topbar, /<span>Kılavuz<\/span>\s*<span class="console-sr-only">/);
+  }
+});
+
+test('the "/" hint points at the search it opens', async () => {
+  const home = await readFile(path.join(site, 'index.html'), 'utf8');
+  const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
+  const headerSearch = html => html.match(/<button class="console-search-open"[\s\S]*?<\/button>/)[0];
+  assert.doesNotMatch(headerSearch(home), /<kbd>/, 'on the home page "/" focuses the protocol filter');
+  assert.match(home, /id="protocol-filter"[^>]*>\s*<kbd aria-hidden="true">\/<\/kbd>/);
+  assert.match(headerSearch(tcp), /<kbd>\/<\/kbd>/);
+});
