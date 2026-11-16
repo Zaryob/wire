@@ -245,6 +245,13 @@ body.is-searching .home-stats { display: none; }
 .bits--split { min-width: calc(var(--cols) * max(18px, 1rem)); }
 .bits--split .bit-cell--narrow { line-height: 1.15; }
 .bits--split .bit-cell--narrow span { white-space: nowrap; }
+/* Narrow screens: 16-bit rows use the same narrower columns as the half rows above, so they fit without sideways scrolling. */
+.bits-diagram-wrap--16 { container: bits-diagram / inline-size; }
+@container bits-diagram (width < 352px) or (width < 22rem) {
+  .bits-diagram-wrap--16 .bits { min-width: calc(var(--cols) * max(18px, 1rem)); }
+  .bits-diagram-wrap--16 .bit-cell--narrow { line-height: 1.15; }
+  .bits-diagram-wrap--16 .bit-cell--narrow span { white-space: nowrap; }
+}
 .bits-ruler--half .bits-col-num { background: color-mix(in srgb, var(--surface) 80%, var(--paper)); }
 .verified { margin-top: 12px; }
 

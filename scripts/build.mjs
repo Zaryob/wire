@@ -176,7 +176,7 @@ function diagram(protocol) {
   };
   const split = cols === 32 ? splitDiagram(protocol, cadenceOf) : '';
 
-  return `<div class="bits-diagram-wrap${split ? ' bits-diagram-wrap--splittable' : ''}">
+  return `<div class="bits-diagram-wrap${split ? ' bits-diagram-wrap--splittable' : ''}${cols === 16 ? ' bits-diagram-wrap--16' : ''}">
   <div class="bits-header">
     <div class="bits-header__info">
       <span class="bits-header__badge">Bit Cetveli</span>

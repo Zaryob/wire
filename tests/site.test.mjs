@@ -96,3 +96,13 @@ test('field table cells carry their column header for the phone card layout', as
     for (const [row] of rows) assert.deepEqual([...row.matchAll(/<td[^>]* role="cell" data-label="([^"]+)"/g)].map(match => match[1]), headers.slice(1), protocol.id);
   }
 });
+
+test('16-bit diagrams can switch to the narrower half-row column width', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.match(style, /\.bits-diagram-wrap--16 \.bits \{ min-width: calc\(var\(--cols\) \* max\(18px, 1rem\)\); \}/);
+  assert.match(style, /\.bits--split \{ min-width: calc\(var\(--cols\) \* max\(18px, 1rem\)\); \}/);
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    assert.equal(html.includes('bits-diagram-wrap--16'), protocol.rowBits === 16, protocol.id);
+  }
+});
