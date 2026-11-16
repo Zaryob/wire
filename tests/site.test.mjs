@@ -132,3 +132,17 @@ test('anchor targets rely on the shared scroll padding and keep their highlight'
   assert.match(style, /table\.fields tbody tr:target \{/);
   assert.match(style, /\.bibliography > li:target \{/);
 });
+
+test('sideways-scrolling tables get the edge fade used by code blocks', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  const app = await readFile(path.join(site, 'app.js'), 'utf8');
+  assert.match(style, /\.table-scroll-fade--end \{[^}]*linear-gradient\(to left, var\(--surface\)[^}]*inset -2px 0 0 color-mix\(in srgb, var\(--accent\)/);
+  assert.match(style, /\.table-scroll-fade--start \{[^}]*linear-gradient\(to right, var\(--surface\)[^}]*inset 2px 0 0 color-mix\(in srgb, var\(--accent\)/);
+  assert.match(app, /document\.querySelectorAll\('\.table-scroll'\)/);
+  assert.match(app, /table-scroll-frame--fade-end', overflow && box\.scrollLeft < hidden - 1/);
+  for (const file of ['kilavuz/index.html', 'yontem/index.html']) {
+    const html = await readFile(path.join(site, file), 'utf8');
+    assert.ok(html.includes('<div class="table-scroll"'), file);
+    assert.doesNotMatch(html, /fields--cards/, file);
+  }
+});

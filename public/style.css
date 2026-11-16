@@ -217,6 +217,14 @@ body.is-searching .home-stats { display: none; }
 .bits-header__order { color: var(--muted); font-size: var(--text-xs); }
 
 .bits-scroll, .table-scroll { overflow-x: auto; }
+/* Sideways-scrolling tables: an edge fade where columns are hidden (app.js adds the frame and toggles the classes). */
+.table-scroll-frame { position: relative; }
+.table-scroll-fade { position: absolute; top: 0; bottom: var(--table-scrollbar, 0px); width: clamp(16px, 8%, 40px); opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+.table-scroll-fade--end { right: 0; background: linear-gradient(to left, var(--surface) 15%, color-mix(in srgb, var(--surface) 0%, transparent)); box-shadow: inset -2px 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+.table-scroll-fade--start { left: 0; background: linear-gradient(to right, var(--surface) 15%, color-mix(in srgb, var(--surface) 0%, transparent)); box-shadow: inset 2px 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+.table-scroll-frame--fade-end > .table-scroll-fade--end, .table-scroll-frame--fade-start > .table-scroll-fade--start { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .table-scroll-fade { transition: none; } }
+@media print { .table-scroll-fade { display: none; } }
 .bits { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); min-width: calc(var(--cols) * max(22px, 1.375rem)); border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 3px 3px 0 0; }
 .bits-ruler { display: contents; }
 
