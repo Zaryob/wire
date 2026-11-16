@@ -59,7 +59,7 @@ function header(current) {
   return `<a class="skip-link" href="#main">İçeriğe geç</a>
 <header class="console-header"><div class="console-header__inner">
   <div class="console-identity"><a class="console-brand" href="${origin}/" aria-label="Zaryob ana sayfa">zaryob</a><span class="console-prompt-separator" aria-hidden="true">:</span>
-    <details class="console-projects" data-console-projects><summary role="button" aria-label="Proje değiştir" aria-controls="console-project-menu"><span class="console-project-path"><span class="console-prompt-separator">~/</span>wire</span><span class="console-prompt-dollar" aria-hidden="true">$</span><span class="console-prompt-cursor" aria-hidden="true"></span>${chevron}</summary><nav class="console-project-menu" id="console-project-menu" aria-label="Zaryob projeleri">
+    <details class="console-projects" data-console-projects><summary role="button" aria-controls="console-project-menu"><span class="console-project-path"><span class="console-prompt-separator">~/</span>wire</span><span class="console-sr-only"> — Proje değiştir</span><span class="console-prompt-dollar" aria-hidden="true">$</span><span class="console-prompt-cursor" aria-hidden="true"></span>${chevron}</summary><nav class="console-project-menu" id="console-project-menu" aria-label="Zaryob projeleri">
       ${projects.map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}</small></a>`).join('\n      ')}
     </nav></details>
   </div>
@@ -69,9 +69,9 @@ function header(current) {
   </div>
   <nav class="console-nav" id="console-navigation" aria-label="Zaryob gezinme">
     <div class="console-tools">
-      <button class="console-search-open" type="button" data-console-search data-suite-root="${origin}/" data-wire-root="${url('')}" aria-haspopup="dialog" aria-label="Zaryob içeriklerinde ara">
+      <button class="console-search-open" type="button" data-console-search data-suite-root="${origin}/" data-wire-root="${url('')}" aria-haspopup="dialog">
         ${search}
-        <span>Ara</span><kbd>/</kbd>
+        <span>Ara<span class="console-sr-only"> — Zaryob içerikleri</span></span><kbd>/</kbd>
       </button>
       <label class="console-theme"><span data-i18n="Theme">Tema</span><select data-console-theme aria-label="Renk teması"><option value="system" data-i18n="System">Sistem</option><option value="dark" data-i18n="Dark">Koyu</option><option value="light" data-i18n="Light">Açık</option></select></label>
       <span class="console-meta" lang="tr">İçerik: Türkçe</span>
@@ -117,7 +117,7 @@ function topbar(current, title = '', layer = '') {
 function suiteFooter() {
   const column = (title, label, links, listClass = '') => `<nav class="suite-footer__col" aria-label="${e(label)}"><p class="suite-footer__title">${title}</p><ul${listClass ? ` class="${listClass}"` : ''}>${links.map(link => `<li>${link}</li>`).join('')}</ul></nav>`;
   const site = column('~/wire/', 'Wire', [`<a href="${url('kilavuz')}">Kılavuz</a>`, `<a href="${url('kaynakca')}">Kaynakça</a>`, `<a href="${url('yontem')}">Yöntem</a>`, `<a href="${asset('lisanslar/')}">Lisanslar</a>`]);
-  const suite = column('~/projeler/', 'Zaryob projeleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}" aria-label="${e(project.title)}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/</a>`), 'console-suite__list');
+  const suite = column('~/projeler/', 'Zaryob projeleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/<span class="console-sr-only"> — ${e(project.title)}</span></a>`), 'console-suite__list');
   const contact = column('~/iletişim', 'Sosyal bağlantılar', ['<a href="https://github.com/Zaryob" rel="me">GitHub <span aria-hidden="true">↗</span></a>', '<a href="https://linkedin.com/in/suleyman_poyraz" rel="me">LinkedIn <span aria-hidden="true">↗</span></a>', '<a href="https://medium.com/@zaryob" rel="me">Medium <span aria-hidden="true">↗</span></a>', '<a href="mailto:zaryob.dev@gmail.com">E-posta</a>']);
   return `<footer class="suite-footer" id="site-footer"><div class="suite-footer__inner"><p class="suite-footer__prompt" aria-hidden="true"><span class="suite-footer__host">zaryob</span>:~/wire $ <span class="suite-footer__cmd">ls -F</span></p><div class="suite-footer__cols">${site}${suite}${contact}</div><div class="suite-footer__legal"><span><span aria-hidden="true"># </span>© Süleyman Poyraz · Ağ protokolü başlıkları, bit bit.</span><span>Her alan bir RFC’ye dayanır.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a></span></div></div></footer>`;
 }
