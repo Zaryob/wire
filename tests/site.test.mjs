@@ -57,3 +57,12 @@ test('top bar links are named by their visible text first', async () => {
     assert.match(topbar, /<span>Kılavuz<\/span>\s*<span class="console-sr-only">/);
   }
 });
+
+test('the "/" hint points at the search it opens', async () => {
+  const home = await readFile(path.join(site, 'index.html'), 'utf8');
+  const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
+  const headerSearch = html => html.match(/<button class="console-search-open"[\s\S]*?<\/button>/)[0];
+  assert.doesNotMatch(headerSearch(home), /<kbd>/, 'on the home page "/" focuses the protocol filter');
+  assert.match(home, /id="protocol-filter"[^>]*>\s*<kbd aria-hidden="true">\/<\/kbd>/);
+  assert.match(headerSearch(tcp), /<kbd>\/<\/kbd>/);
+});

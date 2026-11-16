@@ -53,12 +53,15 @@ if (filter) {
     status.textContent = terms.length ? `${visible} protokol eşleşti.` : '';
   });
 
+  // On this page "/" jumps to the protocol filter. The capture phase runs before the shared header's
+  // document listener, which skips events that are already handled; Ctrl/Cmd+K still opens the header search.
   window.addEventListener('keydown', e => {
-    if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
-      e.preventDefault();
-      filter.focus();
-    }
-  });
+    const target = e.target;
+    const editing = target instanceof HTMLElement && (target.matches('input, textarea, select') || target.isContentEditable);
+    if (e.key !== '/' || editing || e.ctrlKey || e.metaKey || e.altKey || document.querySelector('dialog[open]')) return;
+    e.preventDefault();
+    filter.focus();
+  }, true);
 }
 
 // Explain the independently scrollable diagram only when it overflows.
