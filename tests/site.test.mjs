@@ -84,3 +84,15 @@ test('32-bit diagrams also carry a 16-bit half-row layout with one focusable lin
     }
   }
 });
+
+test('field table cells carry their column header for the phone card layout', async () => {
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    const table = html.slice(html.indexOf('<table class="fields fields--cards" role="table">'), html.indexOf('</table>', html.indexOf('fields--cards')));
+    const headers = [...table.matchAll(/<th scope="col" role="columnheader">([^<]+)<\/th>/g)].map(match => match[1]);
+    assert.deepEqual(headers, ['Alan', 'Bit', 'Genişlik', 'Örnek', 'Açıklama ve kaynak'], protocol.id);
+    const rows = [...table.matchAll(/<tr id="f-([^"]+)" data-field="\1" tabindex="0" role="row"><th scope="row" role="rowheader">[\s\S]*?<\/tr>/g)];
+    assert.equal(rows.length, protocol.fields.length, protocol.id);
+    for (const [row] of rows) assert.deepEqual([...row.matchAll(/<td[^>]* role="cell" data-label="([^"]+)"/g)].map(match => match[1]), headers.slice(1), protocol.id);
+  }
+});

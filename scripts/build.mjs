@@ -256,6 +256,9 @@ function exampleValue(field, range, bytes) {
   return String(field.example);
 }
 
+/** Column headers of the field table; on phones each row becomes a card whose lines repeat these as labels. */
+const fieldColumns = ['Alan', 'Bit', 'Genişlik', 'Örnek', 'Açıklama ve kaynak'];
+
 function protocolPage(protocol) {
   const { bytes, headerLength, ranges } = example(protocol.id);
   const myLayer = layerKey(protocol.layer);
@@ -325,7 +328,7 @@ function protocolPage(protocol) {
     const range = ranges[field.key];
     const position = range ? (range.bits === 1 ? `${range.offset}` : `${range.offset}–${range.offset + range.bits - 1}`) : '—';
     const values = field.values ? `<dl class="field-values">${field.values.map(([value, label]) => `<div><dt>${e(value)}</dt><dd>${e(label)}</dd></div>`).join('')}</dl>` : '';
-    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0"><th scope="row">${e(field.name)}</th><td class="num">${position}</td><td class="num">${Number.isInteger(field.bits) ? field.bits : 'değişken'}</td><td class="num"><code>${e(exampleValue(field, range, bytes))}</code></td><td><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
+    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0" role="row"><th scope="row" role="rowheader">${e(field.name)}</th><td class="num" role="cell" data-label="${fieldColumns[1]}">${position}</td><td class="num" role="cell" data-label="${fieldColumns[2]}">${Number.isInteger(field.bits) ? field.bits : 'değişken'}</td><td class="num" role="cell" data-label="${fieldColumns[3]}"><code>${e(exampleValue(field, range, bytes))}</code></td><td role="cell" data-label="${fieldColumns[4]}"><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
   }).join('');
   const layoutRef = { rfc: protocol.layout.rfc, section: protocol.layout.section, label: protocol.layout.section ? undefined : protocol.layout.label };
   const index = protocols.indexOf(protocol);
@@ -337,7 +340,7 @@ function protocolPage(protocol) {
 <p class="verified">Alan genişlikleri ${refLink(layoutRef)}${protocol.layout.section ? ` (${e(protocol.layout.label)})` : ''} ile derleme sırasında karşılaştırıldı: <code>${checks.get(protocol.id).found.join(' · ')}</code>${protocol.layout.kind === 'rfc826' && protocol.layout.part === 'arp' ? ' (n ve m: ar$hln ve ar$pln sekizli)' : ' bit'}.</p></section>
   <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex-legend" aria-label="Paket katmanları">${legendItems.join('')}</div><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
 </div>
-<section aria-labelledby="fields-title"><h2 id="fields-title">Alanlar</h2><div class="table-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} alanları"><table class="fields"><thead><tr><th scope="col">Alan</th><th scope="col">Bit</th><th scope="col">Genişlik</th><th scope="col">Örnek</th><th scope="col">Açıklama ve kaynak</th></tr></thead><tbody>${table}</tbody></table></div></section>
+<section aria-labelledby="fields-title"><h2 id="fields-title">Alanlar</h2><div class="table-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} alanları"><table class="fields fields--cards" role="table"><thead role="rowgroup"><tr role="row">${fieldColumns.map(label => `<th scope="col" role="columnheader">${label}</th>`).join('')}</tr></thead><tbody role="rowgroup">${table}</tbody></table></div></section>
 ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes-title">Notlar</h2><ul class="notes">${protocol.notes.map(note => `<li>${e(note)}</li>`).join('')}</ul></section>` : ''}
 <section aria-labelledby="refs-title"><h2 id="refs-title">Kaynaklar</h2><ol class="references">${protocol.refs.map(number => { const entry = rfcEntry(number); return `<li><a href="${url('kaynakca')}#rfc${number}">[RFC ${number}]</a> ${citation(entry)}</li>`; }).join('')}</ol></section>
 <nav class="page-neighbors" aria-label="Önceki ve sonraki protokol">${neighbor(protocols[index - 1], '← Önceki')}${neighbor(protocols[index + 1], 'Sonraki →')}</nav>` });
