@@ -90,7 +90,7 @@ function topbar(current, title = '', layer = '') {
     if (layer) {
       breadcrumbsHtml += `<span class="crumb-sep" aria-hidden="true">/</span><span>${e(layer)}</span>`;
     }
-    breadcrumbsHtml += `<span class="crumb-sep" aria-hidden="true">/</span><strong>${e(title || current)}</strong>`;
+    breadcrumbsHtml += `<span class="crumb-sep" aria-hidden="true">/</span><strong aria-current="page">${e(title || current)}</strong>`;
   }
 
   return `<header class="topbar">
@@ -462,7 +462,7 @@ function guidePage() {
 <section id="bolum-1">
   <h2>1. Ağ Mimarisi ve Kapsülleme (Encapsulation) Prensipleri</h2>
   <p>Bilgisayar ağlarında veri iletimi katmanlı bir mimari üzerinden yürütülür. En temel iki referans model 7 katmanlı <strong>OSI Modeli</strong> ve pratik internet standardı olan 4 katmanlı <strong>TCP/IP Modeli</strong>dir:</p>
-  <div class="table-scroll"><table class="fields">
+  <div class="table-scroll" tabindex="0" role="region" aria-label="OSI ve TCP/IP katmanları tablosu"><table class="fields">
     <thead><tr><th>Katman (OSI)</th><th>TCP/IP Katmanı</th><th>PDU Adı</th><th>Protokol Örnekleri</th><th>İşlevi</th></tr></thead>
     <tbody>
       <tr><td>7. Uygulama, 6. Sunum, 5. Oturum</td><td>Uygulama (Application)</td><td>Veri (Data)</td><td><a href="${url('dns')}">DNS</a>, HTTP, DHCP, NTP</td><td>Kullanıcı ve süreç düzeyinde veri üretimi ve sunumu.</td></tr>
@@ -505,7 +505,7 @@ function guidePage() {
   <h2>3. Adres Çözümleme Protokolleri (ARP, RARP, NDP)</h2>
   <h3>ARP (Address Resolution Protocol - <a href="${url('arp')}">RFC 826</a>)</h3>
   <p>Bir ana bilgisayar yerel ağdaki bir cihazın IP adresini bildiğinde ancak hedef MAC adresini bilmediğinde ARP devreye girer. Ethernet üzerinde 28 sekizli uzunluğundadır:</p>
-  <div class="table-scroll"><table class="fields">
+  <div class="table-scroll" tabindex="0" role="region" aria-label="ARP alanları tablosu"><table class="fields">
     <thead><tr><th>Alan</th><th>Genişlik</th><th>Örnek</th><th>Açıklama</th></tr></thead>
     <tbody>
       <tr><td>Donanım Türü (ar$hrd)</td><td>16 bit</td><td><code>1</code></td><td>Ethernet donanımı.</td></tr>
@@ -565,7 +565,7 @@ function guidePage() {
 
 <section id="bolum-8">
   <h2>8. Bütün Temel Ağ RFC’lerinin Kapsamlı Kataloğu</h2>
-  <div class="table-scroll"><table class="fields">
+  <div class="table-scroll" tabindex="0" role="region" aria-label="RFC kataloğu tablosu"><table class="fields">
     <thead><tr><th>RFC No</th><th>Başlık</th><th>Durum</th><th>Kapsam ve Kullanım</th></tr></thead>
     <tbody>
       <tr><td><a href="${url('kaynakca')}#rfc768">RFC 768</a></td><td>User Datagram Protocol</td><td>Standart</td><td>8 baytlık minimal UDP başlığı ve sözde başlık.</td></tr>
@@ -633,7 +633,7 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
   <p>wire sistemine yeni bir protokolün eklenebilmesi için resmi bir IETF RFC'sinde yayımlanmış olması, <code>src/rfc.mjs</code> tarafından doğrulanabilir bir ASCII başlık şemasına sahip olması ve deterministik olarak örnek bayt dizisi üretilebilmesi gerekir.</p>
 
   <h3>Katman Katman Aday Protokoller</h3>
-  <div class="table-scroll"><table class="fields">
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Aday protokoller tablosu"><table class="fields">
     <thead><tr><th>Katman</th><th>Aday Protokol</th><th>RFC</th><th>Başlık Boyutu</th><th>Değerlendirme ve Fizibilite</th></tr></thead>
     <tbody>
       <tr><td>Bağlantı</td><td><strong>PPPoE</strong></td><td>RFC 2516 §4</td><td>6 sekizli</td><td><strong>Çok Yüksek</strong>. Version, Type, Code, Session_ID, Length alanları. DSL ve fiber optik genişbant erişiminde evrenseldir.</td></tr>
