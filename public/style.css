@@ -386,7 +386,8 @@ table.fields thead th { color: var(--muted); font-size: var(--text-xs); font-wei
 table.fields tbody th { font-weight: 500; white-space: nowrap; }
 table.fields td.num { white-space: nowrap; }
 table.fields td p { margin: 0 0 6px; max-width: 70ch; font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.65; }
-table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .15s ease; }
+/* No scroll-margin of its own: the shared theme's scroll-padding already stops anchors just below the sticky header. */
+table.fields tbody tr { transition: background-color .15s ease; }
 
 /* Phones: one card per field. The real table stays in the markup with explicit roles, because changing the
    display of table elements drops their table semantics in some browsers. The column headers are kept for
@@ -427,7 +428,7 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 .page-neighbors small { color: var(--muted); font-size: var(--text-xs); }
 
 .bibliography { margin: 32px 0 0; padding: 0; list-style: none; }
-.bibliography > li { padding: 20px 0; border-top: 1px solid var(--line); scroll-margin-top: 5rem; }
+.bibliography > li { padding: 20px 0; border-top: 1px solid var(--line); }
 .bibliography > li:target { background: var(--wash); }
 .bibliography h2 { border: 0; padding: 0; margin: 0 0 6px; color: var(--accent); font-size: var(--text-h4); }
 .citation { max-width: 80ch; margin: 0 0 12px; font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.65; }

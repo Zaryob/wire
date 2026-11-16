@@ -125,3 +125,10 @@ test('the field table region is focusable without script and drops its Tab stop 
     assert.match(html, /<div class="table-scroll" tabindex="0" role="region" aria-label="[^"]+"><table class="fields fields--cards"/, protocol.id);
   }
 });
+
+test('anchor targets rely on the shared scroll padding and keep their highlight', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.doesNotMatch(style, /scroll-margin-top\s*:/);
+  assert.match(style, /table\.fields tbody tr:target \{/);
+  assert.match(style, /\.bibliography > li:target \{/);
+});
