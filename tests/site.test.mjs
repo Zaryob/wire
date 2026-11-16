@@ -62,9 +62,9 @@ test('the "/" hint points at the search it opens', async () => {
   const home = await readFile(path.join(site, 'index.html'), 'utf8');
   const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
   const headerSearch = html => html.match(/<button class="console-search-open"[\s\S]*?<\/button>/)[0];
-  assert.doesNotMatch(headerSearch(home), /<kbd>/, 'on the home page "/" focuses the protocol filter');
+  assert.doesNotMatch(headerSearch(home), /<kbd[\s>]/, 'on the home page "/" focuses the protocol filter');
   assert.match(home, /id="protocol-filter"[^>]*>\s*<kbd aria-hidden="true">\/<\/kbd>/);
-  assert.match(headerSearch(tcp), /<kbd>\/<\/kbd>/);
+  assert.match(headerSearch(tcp), /<kbd aria-hidden="true">\/<\/kbd>/);
 });
 
 test('32-bit diagrams also carry a 16-bit half-row layout with one focusable link per field', async () => {
