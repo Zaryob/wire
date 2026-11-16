@@ -175,6 +175,8 @@ function diagram(protocol) {
     return fieldIdx >= 0 ? (fieldIdx % 2 === 0 ? 'bit-cell--even' : 'bit-cell--odd') : '';
   };
   const split = cols === 32 ? splitDiagram(protocol, cadenceOf) : '';
+  const quarter = splitDiagram(protocol, cadenceOf, 8);
+  const quarterTitle = cols === 32 ? 'dört 8 bitlik parçada (bit 0–7, 8–15, 16–23, 24–31)' : 'iki 8 bitlik parçada (bit 0–7, sonra 8–15)';
 
   return `<div class="bits-diagram-wrap${split ? ' bits-diagram-wrap--splittable' : ''}${cols === 16 ? ' bits-diagram-wrap--16' : ''}">
   <div class="bits-header">
@@ -182,6 +184,7 @@ function diagram(protocol) {
       <span class="bits-header__badge">Bit Cetveli</span>
       <span class="bits-header__title">${cols} bitlik satır (${byteCount} sekizli / bayt)</span>${split ? `
       <span class="bits-header__title bits-header__title--split">${cols} bitlik satır, iki 16 bitlik yarıda (bit 0–15, sonra 16–31)</span>` : ''}
+      <span class="bits-header__title bits-header__title--quarter">${cols} bitlik satır, ${quarterTitle}</span>
     </div>
     <span class="bits-header__order" title="Ağ Bayt Sıralaması (Network Byte Order): En anlamlı bit (MSB) daima en soldadır (Bit 0)">Ağ Sırası: En anlamlı bit (Bit 0) en solda</span>
   </div>
@@ -195,27 +198,28 @@ function diagram(protocol) {
         const cadence = fieldIdx >= 0 ? (fieldIdx % 2 === 0 ? 'bit-cell--even' : 'bit-cell--odd') : '';
         return `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`;
       }).join('')}
-    </div>${split}
+    </div>${quarter}${split}
   </div>
 </div>`;
 }
 
 /**
- * The same 32-bit layout drawn as 16-bit half rows for narrow screens (CSS shows one of the two grids).
- * Every half row has its own bit ruler (0–15 or 16–31). A field that crosses a half-row boundary is drawn
- * in pieces; only the first piece is a link in the accessibility tree and the tab order, the others are
- * hidden from assistive technology but share data-field, so hover, tap and highlighting treat them as one field.
- * Fields that fill whole 32-bit rows collapse to one full-width row, as they do in the wide grid.
+ * The same layout drawn as shorter rows for narrow screens (CSS shows one of the grids): 32-bit rows as
+ * 16-bit half rows, and, when even those do not fit (large text), any row as 8-bit quarter rows.
+ * Every short row has its own bit ruler (0–15 or 16–31; 0–7, 8–15, …). A field that crosses a short-row
+ * boundary is drawn in pieces; only the first piece is a link in the accessibility tree and the tab order,
+ * the others are hidden from assistive technology but share data-field, so hover, tap and highlighting treat
+ * them as one field. Fields that fill whole rows collapse to one full-width row, as they do in the wide grid.
  */
-function splitDiagram(protocol, cadenceOf) {
-  const half = 16;
+function splitDiagram(protocol, cadenceOf, half = 16) {
+  const rowBits = protocol.rowBits;
   const lines = [];
   let line = null;
   let offset = 0;
   const cell = (field, span, label, extra = {}) => ({ field, span, label, ...extra });
   for (const field of protocol.fields) {
     if (!Number.isInteger(field.bits)) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken)`, { variable: true })] }); line = null; continue; }
-    if (field.bits > 32 && offset % 32 === 0 && field.bits % 32 === 0) {
+    if (field.bits > rowBits && offset % rowBits === 0 && field.bits % rowBits === 0) {
       lines.push({ start: null, cells: [cell(field, half, `${field.name} (${field.bits} bit)`)] });
       line = null; offset += field.bits; continue;
     }
@@ -232,7 +236,7 @@ function splitDiagram(protocol, cadenceOf) {
   }
 
   const ruler = start => `<div class="bits-ruler bits-ruler--bits bits-ruler--half" aria-hidden="true">${Array.from({ length: half }, (_, i) => {
-    const bit = (start % 32) + i;
+    const bit = (start % rowBits) + i;
     return `<span class="bits-col-num${bit % 8 === 0 ? ' bits-col-num--boundary' : ''}" title="Bit ${bit} (${Math.floor(bit / 8)}. Sekizli, ${bit % 8}. bit)">${bit}</span>`;
   }).join('')}</div>`;
   const piece = item => {
@@ -241,7 +245,7 @@ function splitDiagram(protocol, cadenceOf) {
     return `<a class="bit-cell${item.span === 1 ? ' bit-cell--narrow' : ''}${item.variable ? ' bit-cell--variable' : ''}${item.continued ? ' bit-cell--continued' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${item.span}" href="#f-${item.field.key}" data-field="${item.field.key}"${hidden}><span>${e(item.label)}</span></a>`;
   };
   return `
-    <div class="bits bits--split" style="--cols:${half}">
+    <div class="bits ${half === 8 ? 'bits--quarter' : 'bits--split'}" style="--cols:${half}">
       ${lines.map(item => `${item.start === null ? '' : ruler(item.start)}${item.cells.map(piece).join('')}`).join('\n      ')}
     </div>`;
 }

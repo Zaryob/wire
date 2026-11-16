@@ -260,6 +260,16 @@ body.is-searching .home-stats { display: none; }
   .bits-diagram-wrap--16 .bit-cell--narrow { line-height: 1.15; }
   .bits-diagram-wrap--16 .bit-cell--narrow span { white-space: nowrap; }
 }
+/* Large text: when even 16 columns at that width do not fit, every row is drawn as 8-bit quarter rows. */
+.bits--quarter, .bits-header__title--quarter { display: none; }
+.bits--quarter { min-width: calc(var(--cols) * max(18px, 1rem)); }
+.bits--quarter .bit-cell--narrow { line-height: 1.15; }
+.bits--quarter .bit-cell--narrow span { white-space: nowrap; }
+@container bits-diagram (width < 288px) or (width < 18rem) {
+  .bits-diagram-wrap .bits:not(.bits--quarter), .bits-diagram-wrap .bits-header__title:not(.bits-header__title--quarter) { display: none; }
+  .bits-diagram-wrap .bits.bits--quarter { display: grid; }
+  .bits-diagram-wrap .bits-header__title.bits-header__title--quarter { display: inline; }
+}
 .bits-ruler--half .bits-col-num { background: color-mix(in srgb, var(--surface) 80%, var(--paper)); }
 .verified { margin-top: 12px; }
 

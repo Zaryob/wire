@@ -146,3 +146,28 @@ test('sideways-scrolling tables get the edge fade used by code blocks', async ()
     assert.doesNotMatch(html, /fields--cards/, file);
   }
 });
+
+test('every diagram also carries an 8-bit quarter-row layout with one focusable link per field', async () => {
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    const start = html.indexOf('<div class="bits bits--quarter" style="--cols:8">');
+    assert.ok(start > 0, protocol.id);
+    const block = html.slice(start, html.indexOf('\n    </div>', start));
+    const cells = [...block.matchAll(/<a class="bit-cell([^"]*)"[^>]*data-field="([^"]+)"([^>]*)>(?:<span>([^<]*)<\/span>)/g)];
+    const focusable = cells.filter(([, , , rest]) => !rest.includes('tabindex="-1"')).map(([, , key]) => key);
+    assert.deepEqual(focusable, protocol.fields.map(field => field.key), protocol.id);
+    for (const [, classes, , rest, label] of cells) if (classes.includes('bit-cell--continued')) {
+      assert.match(rest, /aria-hidden="true" tabindex="-1"/, protocol.id);
+      assert.match(label, / \(devam\)$/, protocol.id);
+    }
+    for (const [, span] of block.matchAll(/grid-column:span (\d+)/g)) assert.ok(Number(span) <= 8, `${protocol.id}: span ${span}`);
+    const rulers = [...block.matchAll(/bits-ruler--half" aria-hidden="true">((?:<span[^>]*>\d+<\/span>){8})<\/div>/g)];
+    assert.ok(rulers.length > 0, protocol.id);
+    for (const [, ruler] of rulers) {
+      const bits = [...ruler.matchAll(/>(\d+)</g)].map(match => Number(match[1]));
+      assert.ok(bits[0] % 8 === 0 && bits[0] < protocol.rowBits && bits.every((bit, i) => bit === bits[0] + i), `${protocol.id}: ${bits}`);
+    }
+  }
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.match(style, /@container bits-diagram \(width < 288px\) or \(width < 18rem\) \{/);
+});
