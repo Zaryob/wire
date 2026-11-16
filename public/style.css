@@ -215,7 +215,7 @@ body.is-searching .home-stats { display: none; }
 .bits-header__order { color: var(--muted); font-size: var(--text-xs); }
 
 .bits-scroll, .table-scroll { overflow-x: auto; }
-.bits { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); min-width: calc(var(--cols) * 22px); border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 3px 3px 0 0; }
+.bits { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); min-width: calc(var(--cols) * max(22px, 1.375rem)); border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 3px 3px 0 0; }
 .bits-ruler { display: contents; }
 
 /* Byte Bands (Tier 1 of ruler) */
