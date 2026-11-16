@@ -108,7 +108,6 @@ function topbar(current, title = '', layer = '') {
     <a href="${url('kilavuz')}" class="button secondary help-btn" aria-label="Nasıl kullanılır ve RFC Kılavuzu">
       ${bookIcon}
       <span>Kılavuz</span>
-      <span aria-hidden="true">↗</span>
     </a>
   </div>
 </header>`;
@@ -291,6 +290,8 @@ ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes
 function home() {
   const layers = [...new Set(protocols.map(protocol => protocol.layer))];
   const totalFields = protocols.reduce((sum, p) => sum + p.fields.length, 0);
+  // RFCs whose header diagrams the build compares field widths against (verifyLayout).
+  const verifiedRfcs = new Set(protocols.map(protocol => protocol.layout.rfc)).size;
 
   const hero = `
 <div class="home-hero console-hero console-hero--wire">
@@ -340,7 +341,7 @@ function home() {
     <span class="stat-label">Protokol Başlığı</span>
   </div>
   <div class="home-stat-item">
-    <strong class="stat-number">16</strong>
+    <strong class="stat-number">${verifiedRfcs}</strong>
     <span class="stat-label">Doğrulanmış RFC</span>
   </div>
   <div class="home-stat-item">
@@ -348,7 +349,7 @@ function home() {
     <span class="stat-label">Bit Düzeyinde Alan</span>
   </div>
   <div class="home-stat-item">
-    <strong class="stat-number">4</strong>
+    <strong class="stat-number">${layers.length}</strong>
     <span class="stat-label">Ağ Katmanı</span>
   </div>
   <div class="home-stat-item">
@@ -368,6 +369,16 @@ function home() {
 </div>`;
 
   return page({ id: '', title: 'Wire', description: 'Ethernet, ARP, IPv4, IPv6, ICMP, UDP, TCP ve DNS başlıklarının RFC kaynaklı, bit düzeyinde Türkçe başvurusu.', hero, body });
+}
+
+/** Roadmap status comes from the protocol data, so the table stays correct as protocols are added. */
+function roadmapStatus(id) {
+  const protocol = byId.get(id);
+  return protocol ? `<a href="${url(id)}">Yayında</a>` : 'Aday';
+}
+
+function roadmapNote(id) {
+  return byId.has(id) ? ` (<a href="${url(id)}">yayında</a>)` : '';
 }
 
 function guidePage() {
@@ -572,25 +583,25 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 
   <h3>Katman Katman Aday Protokoller</h3>
   <div class="table-scroll"><table class="fields">
-    <thead><tr><th>Katman</th><th>Aday Protokol</th><th>RFC</th><th>Başlık Boyutu</th><th>Değerlendirme ve Fizibilite</th></tr></thead>
+    <thead><tr><th>Katman</th><th>Aday Protokol</th><th>RFC</th><th>Başlık Boyutu</th><th>Durum</th><th>Değerlendirme ve Fizibilite</th></tr></thead>
     <tbody>
-      <tr><td>Bağlantı</td><td><strong>PPPoE</strong></td><td>RFC 2516 §4</td><td>6 sekizli</td><td><strong>Çok Yüksek</strong>. Version, Type, Code, Session_ID, Length alanları. DSL ve fiber optik genişbant erişiminde evrenseldir.</td></tr>
-      <tr><td>Bağlantı</td><td><strong>IEEE 802.1Q (VLAN)</strong></td><td>RFC 3069 / IEEE</td><td>4 sekizli</td><td><strong>Yüksek</strong>. TPID (0x8100), PCP (3 bit), DEI (1 bit), VID (12 bit). Ethernet çerçevesine ek başlık olarak entegre edilebilir.</td></tr>
-      <tr><td>Bağlantı</td><td><strong>RARP</strong></td><td>RFC 903</td><td>28 sekizli</td><td><strong>Yüksek</strong>. RFC 826 ARP ile birebir aynı yerleşimi paylaşır (op=3/4).</td></tr>
-      <tr><td>Ağ</td><td><strong>IGMPv2</strong></td><td>RFC 2236 §2</td><td>8 sekizli</td><td><strong>Çok Yüksek</strong>. Type (8), Max Resp Time (8), Checksum (16), Group Address (32). IP multicast ve IPTV için kritik; RFC 1071 sağlama toplamı kullanır.</td></tr>
-      <tr><td>Ağ</td><td><strong>IPv6 Fragment</strong></td><td>RFC 8200 §4.5</td><td>8 sekizli</td><td><strong>Çok Yüksek</strong>. Next Header (8), Reserved (8), Fragment Offset (13), M Flag (1), Identification (32). Sabit 32 bit ızgaraya oturur.</td></tr>
-      <tr><td>Ağ</td><td><strong>GRE</strong></td><td>RFC 2784 §2.1</td><td>4 sekizli</td><td><strong>Yüksek</strong>. Temel tünelleme başlığı (Flags/Reserved 16, Protocol Type 16).</td></tr>
-      <tr><td>Taşıma</td><td><strong>SCTP</strong></td><td>RFC 9260 §3</td><td>12 sekizli + chunk</td><td><strong>Çok Yüksek</strong>. Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32). Telekom altyapısı ve WebRTC için standarttır.</td></tr>
-      <tr><td>Uygulama</td><td><strong>DHCPv4 / BOOTP</strong></td><td>RFC 2131 §2</td><td>236 sekizli + seçenekler</td><td><strong>Çok Yüksek</strong>. 32-bit ASCII şeması tamdır. Paket yakalamalarında en çok aranan ve incelenen protokoldür.</td></tr>
-      <tr><td>Uygulama</td><td><strong>NTP</strong></td><td>RFC 5905 §7.3</td><td>48 sekizli</td><td><strong>Çok Yüksek</strong>. Sabit 384 bitlik şeması vardır; zaman senkronizasyonunun küresel standardıdır.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>PPPoE</strong></td><td>RFC 2516 §4</td><td>6 sekizli</td><td class="roadmap-status">${roadmapStatus('pppoe')}</td><td><strong>Çok Yüksek</strong>. Version, Type, Code, Session_ID, Length alanları. DSL ve fiber optik genişbant erişiminde evrenseldir.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>IEEE 802.1Q (VLAN)</strong></td><td>RFC 3069 / IEEE</td><td>4 sekizli</td><td class="roadmap-status">${roadmapStatus('vlan')}</td><td><strong>Yüksek</strong>. TPID (0x8100), PCP (3 bit), DEI (1 bit), VID (12 bit). Ethernet çerçevesine ek başlık olarak entegre edilebilir.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>RARP</strong></td><td>RFC 903</td><td>28 sekizli</td><td class="roadmap-status">${roadmapStatus('rarp')}</td><td><strong>Yüksek</strong>. RFC 826 ARP ile birebir aynı yerleşimi paylaşır (op=3/4).</td></tr>
+      <tr><td>Ağ</td><td><strong>IGMPv2</strong></td><td>RFC 2236 §2</td><td>8 sekizli</td><td class="roadmap-status">${roadmapStatus('igmp')}</td><td><strong>Çok Yüksek</strong>. Type (8), Max Resp Time (8), Checksum (16), Group Address (32). IP multicast ve IPTV için kritik; RFC 1071 sağlama toplamı kullanır.</td></tr>
+      <tr><td>Ağ</td><td><strong>IPv6 Fragment</strong></td><td>RFC 8200 §4.5</td><td>8 sekizli</td><td class="roadmap-status">${roadmapStatus('ipv6-frag')}</td><td><strong>Çok Yüksek</strong>. Next Header (8), Reserved (8), Fragment Offset (13), M Flag (1), Identification (32). Sabit 32 bit ızgaraya oturur.</td></tr>
+      <tr><td>Ağ</td><td><strong>GRE</strong></td><td>RFC 2784 §2.1</td><td>4 sekizli</td><td class="roadmap-status">${roadmapStatus('gre')}</td><td><strong>Yüksek</strong>. Temel tünelleme başlığı (Flags/Reserved 16, Protocol Type 16).</td></tr>
+      <tr><td>Taşıma</td><td><strong>SCTP</strong></td><td>RFC 9260 §3</td><td>12 sekizli + chunk</td><td class="roadmap-status">${roadmapStatus('sctp')}</td><td><strong>Çok Yüksek</strong>. Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32). Telekom altyapısı ve WebRTC için standarttır.</td></tr>
+      <tr><td>Uygulama</td><td><strong>DHCPv4 / BOOTP</strong></td><td>RFC 2131 §2</td><td>236 sekizli + seçenekler</td><td class="roadmap-status">${roadmapStatus('dhcp')}</td><td><strong>Çok Yüksek</strong>. 32-bit ASCII şeması tamdır. Paket yakalamalarında en çok aranan ve incelenen protokoldür.</td></tr>
+      <tr><td>Uygulama</td><td><strong>NTP</strong></td><td>RFC 5905 §7.3</td><td>48 sekizli</td><td class="roadmap-status">${roadmapStatus('ntp')}</td><td><strong>Çok Yüksek</strong>. Sabit 384 bitlik şeması vardır; zaman senkronizasyonunun küresel standardıdır.</td></tr>
     </tbody>
   </table></div>
 
   <h3>Önerilen Uygulama Sıralaması</h3>
   <ul class="notes">
-    <li><strong>1. Faz (Hızlı Entegrasyon)</strong>: <code>PPPoE (RFC 2516)</code>, <code>IGMPv2 (RFC 2236)</code> ve <code>NTP (RFC 5905)</code> &mdash; Sabit boyutlu şemalar ve standart sağlama toplamları sayesinde altyapıya anında uyum sağlar.</li>
-    <li><strong>2. Faz (Temel Altyapı)</strong>: <code>DHCPv4 (RFC 2131)</code>, <code>SCTP (RFC 9260)</code> ve <code>IPv6 Fragment Header (RFC 8200)</code> &mdash; Eğitsel değeri yüksek, genişletilmiş başlıklar.</li>
-    <li><strong>3. Faz (Tünelleme ve Güvenlik)</strong>: <code>GRE (RFC 2784)</code>, <code>IPsec AH (RFC 4302)</code> ve <code>DHCPv6 (RFC 8415)</code>.</li>
+    <li><strong>1. Faz (Hızlı Entegrasyon)</strong>: <code>PPPoE (RFC 2516)</code>${roadmapNote('pppoe')}, <code>IGMPv2 (RFC 2236)</code>${roadmapNote('igmp')} ve <code>NTP (RFC 5905)</code>${roadmapNote('ntp')} &mdash; Sabit boyutlu şemalar ve standart sağlama toplamları sayesinde altyapıya anında uyum sağlar.</li>
+    <li><strong>2. Faz (Temel Altyapı)</strong>: <code>DHCPv4 (RFC 2131)</code>${roadmapNote('dhcp')}, <code>SCTP (RFC 9260)</code>${roadmapNote('sctp')} ve <code>IPv6 Fragment Header (RFC 8200)</code>${roadmapNote('ipv6-frag')} &mdash; Eğitsel değeri yüksek, genişletilmiş başlıklar.</li>
+    <li><strong>3. Faz (Tünelleme ve Güvenlik)</strong>: <code>GRE (RFC 2784)</code>${roadmapNote('gre')}, <code>IPsec AH (RFC 4302)</code>${roadmapNote('ah')} ve <code>DHCPv6 (RFC 8415)</code>${roadmapNote('dhcpv6')}.</li>
   </ul>
 </section>
 </article>` });
