@@ -115,3 +115,13 @@ test('every page has exactly one breadcrumb navigation landmark', async () => {
     assert.match(html, /<nav class="breadcrumbs" aria-label="Konum">/, path.relative(site, file));
   }
 });
+
+test('the field table region is focusable without script and drops its Tab stop only when it does not scroll', async () => {
+  const app = await readFile(path.join(site, 'app.js'), 'utf8');
+  assert.match(app, /region\.scrollWidth > region\.clientWidth \+ 1\) region\.setAttribute\('tabindex', '0'\)/);
+  assert.match(app, /else if \(document\.activeElement !== region\) region\.removeAttribute\('tabindex'\)/);
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    assert.match(html, /<div class="table-scroll" tabindex="0" role="region" aria-label="[^"]+"><table class="fields fields--cards"/, protocol.id);
+  }
+});

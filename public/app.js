@@ -73,3 +73,17 @@ for (const panel of document.querySelectorAll('.bits-scroll')) {
   observer.observe(panel);
   update();
 }
+
+// The field table's scroll region is a Tab stop only while it actually scrolls sideways; on phones the rows
+// become cards that fit, and a stop that scrolls nothing only lengthens the tab order. Without script it stays focusable.
+for (const region of document.querySelectorAll('.table-scroll[tabindex="0"]')) {
+  if (!region.querySelector(':scope > table.fields--cards')) continue;
+  const update = () => {
+    if (region.scrollWidth > region.clientWidth + 1) region.setAttribute('tabindex', '0');
+    else if (document.activeElement !== region) region.removeAttribute('tabindex');
+  };
+  const observer = new ResizeObserver(update);
+  observer.observe(region);
+  observer.observe(region.firstElementChild);
+  update();
+}
