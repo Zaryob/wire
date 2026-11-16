@@ -73,3 +73,43 @@ for (const panel of document.querySelectorAll('.bits-scroll')) {
   observer.observe(panel);
   update();
 }
+
+// A table's scroll region is a Tab stop only while it actually scrolls sideways (on phones the field rows become
+// cards that fit); a stop that scrolls nothing only lengthens the tab order. Without script it stays focusable.
+for (const region of document.querySelectorAll('.table-scroll[tabindex="0"]')) {
+  const update = () => {
+    if (region.scrollWidth > region.clientWidth + 1) region.setAttribute('tabindex', '0');
+    else if (document.activeElement !== region) region.removeAttribute('tabindex');
+  };
+  const observer = new ResizeObserver(update);
+  observer.observe(region);
+  observer.observe(region.firstElementChild);
+  update();
+}
+
+// A table that scrolls sideways shows a fade at each edge that hides columns, like the shared code blocks.
+for (const box of document.querySelectorAll('.table-scroll')) {
+  const frame = document.createElement('div');
+  frame.className = 'table-scroll-frame';
+  box.before(frame);
+  frame.append(box, ...['start', 'end'].map(side => {
+    const fade = document.createElement('span');
+    fade.className = `table-scroll-fade table-scroll-fade--${side}`;
+    fade.setAttribute('aria-hidden', 'true');
+    return fade;
+  }));
+  const update = () => {
+    const hidden = box.scrollWidth - box.clientWidth;
+    // A few pixels are rounding, not hidden columns.
+    const overflow = hidden > 4;
+    frame.classList.toggle('table-scroll-frame--fade-start', overflow && box.scrollLeft > 1);
+    frame.classList.toggle('table-scroll-frame--fade-end', overflow && box.scrollLeft < hidden - 1);
+    // Keep a classic horizontal scrollbar clear of the fade.
+    frame.style.setProperty('--table-scrollbar', `${box.offsetHeight - box.clientHeight}px`);
+  };
+  box.addEventListener('scroll', update, { passive: true });
+  const observer = new ResizeObserver(update);
+  observer.observe(box);
+  if (box.firstElementChild) observer.observe(box.firstElementChild);
+  update();
+}

@@ -96,3 +96,78 @@ test('field table cells carry their column header for the phone card layout', as
     for (const [row] of rows) assert.deepEqual([...row.matchAll(/<td[^>]* role="cell" data-label="([^"]+)"/g)].map(match => match[1]), headers.slice(1), protocol.id);
   }
 });
+
+test('16-bit diagrams can switch to the narrower half-row column width', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.match(style, /\.bits-diagram-wrap--16 \.bits \{ min-width: calc\(var\(--cols\) \* max\(18px, 1rem\)\); \}/);
+  assert.match(style, /\.bits--split \{ min-width: calc\(var\(--cols\) \* max\(18px, 1rem\)\); \}/);
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    assert.equal(html.includes('bits-diagram-wrap--16'), protocol.rowBits === 16, protocol.id);
+  }
+});
+
+test('every page has exactly one breadcrumb navigation landmark', async () => {
+  for (const file of await htmlFiles(site)) {
+    const html = await readFile(file, 'utf8');
+    if (!html.includes('class="topbar"')) continue;
+    assert.equal([...html.matchAll(/aria-label="Konum"/g)].length, 1, path.relative(site, file));
+    assert.match(html, /<nav class="breadcrumbs" aria-label="Konum">/, path.relative(site, file));
+  }
+});
+
+test('the field table region is focusable without script and drops its Tab stop only when it does not scroll', async () => {
+  const app = await readFile(path.join(site, 'app.js'), 'utf8');
+  assert.match(app, /region\.scrollWidth > region\.clientWidth \+ 1\) region\.setAttribute\('tabindex', '0'\)/);
+  assert.match(app, /else if \(document\.activeElement !== region\) region\.removeAttribute\('tabindex'\)/);
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    assert.match(html, /<div class="table-scroll" tabindex="0" role="region" aria-label="[^"]+"><table class="fields fields--cards"/, protocol.id);
+  }
+});
+
+test('anchor targets rely on the shared scroll padding and keep their highlight', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.doesNotMatch(style, /scroll-margin-top\s*:/);
+  assert.match(style, /table\.fields tbody tr:target \{/);
+  assert.match(style, /\.bibliography > li:target \{/);
+});
+
+test('sideways-scrolling tables get the edge fade used by code blocks', async () => {
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  const app = await readFile(path.join(site, 'app.js'), 'utf8');
+  assert.match(style, /\.table-scroll-fade--end \{[^}]*linear-gradient\(to left, var\(--surface\)[^}]*inset -2px 0 0 color-mix\(in srgb, var\(--accent\)/);
+  assert.match(style, /\.table-scroll-fade--start \{[^}]*linear-gradient\(to right, var\(--surface\)[^}]*inset 2px 0 0 color-mix\(in srgb, var\(--accent\)/);
+  assert.match(app, /document\.querySelectorAll\('\.table-scroll'\)/);
+  assert.match(app, /table-scroll-frame--fade-end', overflow && box\.scrollLeft < hidden - 1/);
+  for (const file of ['kilavuz/index.html', 'yontem/index.html']) {
+    const html = await readFile(path.join(site, file), 'utf8');
+    assert.ok(html.includes('<div class="table-scroll"'), file);
+    assert.doesNotMatch(html, /fields--cards/, file);
+  }
+});
+
+test('every diagram also carries an 8-bit quarter-row layout with one focusable link per field', async () => {
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    const start = html.indexOf('<div class="bits bits--quarter" style="--cols:8">');
+    assert.ok(start > 0, protocol.id);
+    const block = html.slice(start, html.indexOf('\n    </div>', start));
+    const cells = [...block.matchAll(/<a class="bit-cell([^"]*)"[^>]*data-field="([^"]+)"([^>]*)>(?:<span>([^<]*)<\/span>)/g)];
+    const focusable = cells.filter(([, , , rest]) => !rest.includes('tabindex="-1"')).map(([, , key]) => key);
+    assert.deepEqual(focusable, protocol.fields.map(field => field.key), protocol.id);
+    for (const [, classes, , rest, label] of cells) if (classes.includes('bit-cell--continued')) {
+      assert.match(rest, /aria-hidden="true" tabindex="-1"/, protocol.id);
+      assert.match(label, / \(devam\)$/, protocol.id);
+    }
+    for (const [, span] of block.matchAll(/grid-column:span (\d+)/g)) assert.ok(Number(span) <= 8, `${protocol.id}: span ${span}`);
+    const rulers = [...block.matchAll(/bits-ruler--half" aria-hidden="true">((?:<span[^>]*>\d+<\/span>){8})<\/div>/g)];
+    assert.ok(rulers.length > 0, protocol.id);
+    for (const [, ruler] of rulers) {
+      const bits = [...ruler.matchAll(/>(\d+)</g)].map(match => Number(match[1]));
+      assert.ok(bits[0] % 8 === 0 && bits[0] < protocol.rowBits && bits.every((bit, i) => bit === bits[0] + i), `${protocol.id}: ${bits}`);
+    }
+  }
+  const style = await readFile(path.join(site, 'style.css'), 'utf8');
+  assert.match(style, /@container bits-diagram \(width < 288px\) or \(width < 18rem\) \{/);
+});

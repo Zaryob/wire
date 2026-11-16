@@ -217,6 +217,14 @@ body.is-searching .home-stats { display: none; }
 .bits-header__order { color: var(--muted); font-size: var(--text-xs); }
 
 .bits-scroll, .table-scroll { overflow-x: auto; }
+/* Sideways-scrolling tables: an edge fade where columns are hidden (app.js adds the frame and toggles the classes). */
+.table-scroll-frame { position: relative; }
+.table-scroll-fade { position: absolute; top: 0; bottom: var(--table-scrollbar, 0px); width: clamp(16px, 8%, 40px); opacity: 0; pointer-events: none; transition: opacity .15s ease; }
+.table-scroll-fade--end { right: 0; background: linear-gradient(to left, var(--surface) 15%, color-mix(in srgb, var(--surface) 0%, transparent)); box-shadow: inset -2px 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+.table-scroll-fade--start { left: 0; background: linear-gradient(to right, var(--surface) 15%, color-mix(in srgb, var(--surface) 0%, transparent)); box-shadow: inset 2px 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+.table-scroll-frame--fade-end > .table-scroll-fade--end, .table-scroll-frame--fade-start > .table-scroll-fade--start { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .table-scroll-fade { transition: none; } }
+@media print { .table-scroll-fade { display: none; } }
 .bits { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); min-width: calc(var(--cols) * max(22px, 1.375rem)); border-left: 1px solid var(--line); border-top: 1px solid var(--line); border-radius: 3px 3px 0 0; }
 .bits-ruler { display: contents; }
 
@@ -245,6 +253,23 @@ body.is-searching .home-stats { display: none; }
 .bits--split { min-width: calc(var(--cols) * max(18px, 1rem)); }
 .bits--split .bit-cell--narrow { line-height: 1.15; }
 .bits--split .bit-cell--narrow span { white-space: nowrap; }
+/* Narrow screens: 16-bit rows use the same narrower columns as the half rows above, so they fit without sideways scrolling. */
+.bits-diagram-wrap--16 { container: bits-diagram / inline-size; }
+@container bits-diagram (width < 352px) or (width < 22rem) {
+  .bits-diagram-wrap--16 .bits { min-width: calc(var(--cols) * max(18px, 1rem)); }
+  .bits-diagram-wrap--16 .bit-cell--narrow { line-height: 1.15; }
+  .bits-diagram-wrap--16 .bit-cell--narrow span { white-space: nowrap; }
+}
+/* Large text: when even 16 columns at that width do not fit, every row is drawn as 8-bit quarter rows. */
+.bits--quarter, .bits-header__title--quarter { display: none; }
+.bits--quarter { min-width: calc(var(--cols) * max(18px, 1rem)); }
+.bits--quarter .bit-cell--narrow { line-height: 1.15; }
+.bits--quarter .bit-cell--narrow span { white-space: nowrap; }
+@container bits-diagram (width < 288px) or (width < 18rem) {
+  .bits-diagram-wrap .bits:not(.bits--quarter), .bits-diagram-wrap .bits-header__title:not(.bits-header__title--quarter) { display: none; }
+  .bits-diagram-wrap .bits.bits--quarter { display: grid; }
+  .bits-diagram-wrap .bits-header__title.bits-header__title--quarter { display: inline; }
+}
 .bits-ruler--half .bits-col-num { background: color-mix(in srgb, var(--surface) 80%, var(--paper)); }
 .verified { margin-top: 12px; }
 
@@ -380,7 +405,8 @@ table.fields td.roadmap-status { white-space: nowrap; }
 table.fields tbody th { font-weight: 500; white-space: nowrap; }
 table.fields td.num { white-space: nowrap; }
 table.fields td p { margin: 0 0 6px; max-width: 70ch; font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.65; }
-table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .15s ease; }
+/* No scroll-margin of its own: the shared theme's scroll-padding already stops anchors just below the sticky header. */
+table.fields tbody tr { transition: background-color .15s ease; }
 
 /* Phones: one card per field. The real table stays in the markup with explicit roles, because changing the
    display of table elements drops their table semantics in some browsers. The column headers are kept for
@@ -421,7 +447,7 @@ table.fields tbody tr { scroll-margin-top: 5rem; transition: background-color .1
 .page-neighbors small { color: var(--muted); font-size: var(--text-xs); }
 
 .bibliography { margin: 32px 0 0; padding: 0; list-style: none; }
-.bibliography > li { padding: 20px 0; border-top: 1px solid var(--line); scroll-margin-top: 5rem; }
+.bibliography > li { padding: 20px 0; border-top: 1px solid var(--line); }
 .bibliography > li:target { background: var(--wash); }
 .bibliography h2 { border: 0; padding: 0; margin: 0 0 6px; color: var(--accent); font-size: var(--text-h4); }
 .citation { max-width: 80ch; margin: 0 0 12px; font-family: var(--font-prose); font-size: var(--text-base); line-height: 1.65; }
