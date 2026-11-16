@@ -47,3 +47,13 @@ test('in-page anchors on the bibliography exist', async () => {
   const bibliography = await readFile(path.join(site, 'kaynakca/index.html'), 'utf8');
   for (const protocol of protocols) for (const number of protocol.refs) assert.ok(bibliography.includes(`id="rfc${number}"`), `RFC ${number}`);
 });
+
+test('top bar links are named by their visible text first', async () => {
+  for (const file of ['index.html', 'tcp/index.html']) {
+    const html = await readFile(path.join(site, file), 'utf8');
+    const topbar = html.slice(html.indexOf('<header class="topbar">'), html.indexOf('</header>', html.indexOf('<header class="topbar">')));
+    assert.doesNotMatch(topbar, /aria-label="(?!Konum)/, file);
+    assert.match(topbar, /<span>Protokoller<\/span>\s*<span class="count">\d+<\/span>\s*<span class="console-sr-only">/);
+    assert.match(topbar, /<span>Kılavuz<\/span>\s*<span class="console-sr-only">/);
+  }
+});

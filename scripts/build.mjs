@@ -95,19 +95,21 @@ function topbar(current, title = '', layer = '') {
 
   return `<header class="topbar">
   <div class="topbar-left">
-    <a href="${url('')}" class="button primary board-picker-btn" aria-label="Protokol kütüphanesi">
+    <a href="${url('')}" class="button primary board-picker-btn">
       ${gridIcon}
       <span>Protokoller</span>
       <span class="count">${protocols.length}</span>
+      <span class="console-sr-only"> — protokol kütüphanesi</span>
     </a>
     <div class="breadcrumbs" aria-label="Konum">
       ${breadcrumbsHtml}
     </div>
   </div>
   <div class="topbar-right">
-    <a href="${url('kilavuz')}" class="button secondary help-btn" aria-label="Nasıl kullanılır ve RFC Kılavuzu">
+    <a href="${url('kilavuz')}" class="button secondary help-btn">
       ${bookIcon}
       <span>Kılavuz</span>
+      <span class="console-sr-only"> — nasıl kullanılır ve RFC kılavuzu</span>
       <span aria-hidden="true">↗</span>
     </a>
   </div>
