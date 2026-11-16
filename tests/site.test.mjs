@@ -66,3 +66,21 @@ test('the "/" hint points at the search it opens', async () => {
   assert.match(home, /id="protocol-filter"[^>]*>\s*<kbd aria-hidden="true">\/<\/kbd>/);
   assert.match(headerSearch(tcp), /<kbd>\/<\/kbd>/);
 });
+
+test('32-bit diagrams also carry a 16-bit half-row layout with one focusable link per field', async () => {
+  for (const protocol of protocols) {
+    const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
+    const start = html.indexOf('<div class="bits bits--split"');
+    if (protocol.rowBits !== 32) { assert.equal(start, -1, protocol.id); continue; }
+    assert.ok(start > 0, protocol.id);
+    const split = html.slice(start, html.indexOf('</div>\n  </div>', start));
+    const cells = [...split.matchAll(/<a class="bit-cell([^"]*)"[^>]*data-field="([^"]+)"([^>]*)>/g)];
+    const focusable = cells.filter(([, , , rest]) => !rest.includes('tabindex="-1"')).map(([, , key]) => key);
+    assert.deepEqual(focusable, protocol.fields.map(field => field.key), protocol.id);
+    for (const [, classes, , rest] of cells) if (classes.includes('bit-cell--continued')) assert.match(rest, /aria-hidden="true" tabindex="-1"/, protocol.id);
+    for (const [, ruler] of split.matchAll(/bits-ruler--half" aria-hidden="true">((?:<span[^>]*>\d+<\/span>){16})/g)) {
+      const bits = [...ruler.matchAll(/>(\d+)</g)].map(match => Number(match[1]));
+      assert.ok([0, 16].includes(bits[0]) && bits.every((bit, i) => bit === bits[0] + i), `${protocol.id}: ${bits}`);
+    }
+  }
+});
