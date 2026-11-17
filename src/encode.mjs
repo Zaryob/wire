@@ -26,6 +26,13 @@ export function fieldValue(field) {
     return bytes.reduce((sum, byte) => (sum << 8n) | BigInt(byte), 0n);
   }
   const value = BigInt(example);
+  if (type === 'varint') {
+    // RFC 9000 §16: the two most significant bits give the length (1, 2, 4 or 8 octets).
+    const prefix = { 8: 0n, 16: 1n, 32: 2n, 64: 3n }[bits];
+    if (prefix === undefined) throw new Error(`${field.key}: a variable-length integer is 8, 16, 32 or 64 bits`);
+    if (value < 0n || value >= (1n << BigInt(bits - 2))) throw new Error(`${field.key}: example does not fit in a ${bits / 8}-octet variable-length integer`);
+    return (prefix << BigInt(bits - 2)) | value;
+  }
   if (value < 0n || value >= (1n << BigInt(bits))) throw new Error(`${field.key}: example does not fit in ${bits} bits`);
   return value;
 }
@@ -47,8 +54,11 @@ function pseudoHeader(kind, pseudo, length) {
 
 /**
  * Encode a protocol's fixed fields plus its example payload.
- * Returns { bytes, ranges } where ranges maps a field key to its bit offset
- * and width. Checksum fields are computed, never taken from the data file.
+ * Returns { bytes, headerLength, fieldsLength, ranges } where ranges maps a
+ * field key to its bit offset and width. fieldsLength counts every encoded
+ * field; headerLength stops at the first field that is variable in the
+ * standard (`range`) and only sized for the example. Checksum fields are
+ * computed, never taken from the data file.
  */
 export function encodeExample(protocol) {
   const fixed = protocol.fields.filter(field => Number.isInteger(field.bits));
@@ -74,5 +84,7 @@ export function encodeExample(protocol) {
     packet[at] = value >> 8;
     packet[at + 1] = value & 255;
   }
-  return { bytes: packet, headerLength: bytes.length, ranges };
+  const firstSized = fixed.find(field => field.range);
+  const headerLength = firstSized ? ranges[firstSized.key].offset / 8 : bytes.length;
+  return { bytes: packet, headerLength, fieldsLength: bytes.length, ranges };
 }
