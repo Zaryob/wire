@@ -6,19 +6,21 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { root, standardEntry, ieeeText, ieeeFields, mibText } from '../src/sources.mjs';
-import { lldpMibFacts, lldpTextFacts } from '../src/ieee.mjs';
+import { lldpMibFacts, lldpTextFacts, vlanTextFacts } from '../src/ieee.mjs';
+
+const textFacts = { lldp: lldpTextFacts, vlan: vlanTextFacts };
 
 const directory = path.join(root, 'data/protocols');
 const today = new Date().toISOString().slice(0, 10);
 for (const name of (await readdir(directory)).filter(file => file.endsWith('.json'))) {
   const file = path.join(directory, name);
   const protocol = JSON.parse(await readFile(file, 'utf8'));
-  if (protocol.layout.kind === 'ieee' && protocol.layout.method === 'lldp') {
+  if (protocol.layout.kind === 'ieee' && textFacts[protocol.layout.method]) {
     const text = await ieeeText(protocol.layout.std);
-    const mib = await mibText(protocol.layout.std);
+    const mib = protocol.layout.mib ? await mibText(protocol.layout.std) : null;
     const entry = standardEntry(protocol.layout.std);
     if (text) {
-      const facts = lldpTextFacts(text);
+      const facts = textFacts[protocol.layout.method](text);
       const sha256 = createHash('sha256').update(await readFile(path.join(root, entry.copy.file))).digest('hex');
       const same = JSON.stringify(protocol.layout.checked?.facts) === JSON.stringify(facts);
       protocol.layout.checked = { date: same ? protocol.layout.checked.date : today, sha256, facts };

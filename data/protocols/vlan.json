@@ -4,97 +4,216 @@
   "title": "IEEE 802.1Q VLAN etiketi",
   "layer": "Bağlantı",
   "rowBits": 32,
-  "summary": "IEEE 802.1Q, bir Ethernet çerçevesine kaynak MAC adresi ile EtherType arasına giren 4 sekizlilik bir etiket ekleyerek tek bir fiziksel ağı birbirinden yalıtılmış sanal yerel ağlara (VLAN) böler. Etiket, 16 bitlik bir EtherType (0x8100) ile öncelik, C biti ve 12 bitlik VLAN kimliğini taşıyan 16 bitlik bilgiden oluşur. IEEE 802.1Q metni okunmadı; alanlar ve değerler onu aktaran RFC 6325 ve RFC 7348'den alınmıştır.",
+  "summary": "IEEE 802.1Q, bir Ethernet çerçevesine kaynak MAC adresi ile EtherType arasına giren 4 sekizlilik bir etiket ekleyerek tek bir fiziksel ağı birbirinden yalıtılmış sanal yerel ağlara (VLAN) böler. Etiket, 2 sekizlilik Tag Protocol Identifier (TPID) ile önceliği (PCP), atılabilirlik bitini (DEI) ve 12 bitlik VLAN kimliğini (VID) taşıyan 2 sekizlilik Tag Control Information'dan (TCI) oluşur. Bu sayfa IEEE 802.1Q-2022 metnine dayanır.",
   "layout": {
-    "rfc": 6325,
-    "section": "4.1.1",
-    "kind": "diagram",
-    "label": "VLAN Tag Information",
-    "note": "Alanları tanımlayan IEEE 802.1Q metni okunmadığı için karşılaştırma, aynı alanları yeniden çizen RFC 7348 ve RFC 6325 şemalarıyla yapılır.",
-    "parts": [
+    "kind": "ieee",
+    "method": "vlan",
+    "std": "ieee-802.1q-2022",
+    "section": "9.6",
+    "label": "VLAN Tag Control Information (TCI)",
+    "refs": [
       {
-        "rfc": 7348,
-        "section": "5",
-        "anchor": "|OptnlEthtype = C-Tag 802.1Q    | Inner.VLAN Tag Information    |",
-        "fromAnchor": true,
-        "slice": [
-          0,
-          1
-        ]
+        "std": "ieee-802.1q-2022",
+        "section": "9.4",
+        "label": "TPID formats",
+        "page": 268
       },
       {
-        "rfc": 6325,
-        "section": "4.1.1",
-        "anchor": "| Priority  | C |",
-        "rowBits": 16
+        "std": "ieee-802.1q-2022",
+        "section": "9.5",
+        "label": "Tag Protocol identification",
+        "page": 268
       },
       {
-        "rfc": 7348,
-        "section": "5",
-        "anchor": "| Ethertype of Original Payload |",
-        "fromAnchor": true,
-        "slice": [
-          0,
-          1
-        ]
+        "std": "ieee-802.1q-2022",
+        "section": "9.6",
+        "label": "VLAN Tag Control Information (TCI)",
+        "page": 269
+      },
+      {
+        "std": "ieee-802.1q-2022",
+        "section": "6.9.3",
+        "label": "Priority Code Point encoding",
+        "page": 158
+      },
+      {
+        "std": "ieee-802.1q-2022",
+        "section": "I.4",
+        "label": "Traffic types and priority values",
+        "page": 2078
       }
-    ]
+    ],
+    "checked": {
+      "date": "2026-11-17",
+      "sha256": "d6450d5841eb29007d950fb313ceda1a7b934f0906a03907d0f51e90db9ade18",
+      "facts": {
+        "tpidOctets": 2,
+        "tciOctets": 2,
+        "vidBits": 12,
+        "pcpBits": 3,
+        "figureBits": [
+          8,
+          6,
+          5,
+          4,
+          1,
+          8,
+          1
+        ],
+        "tagTypes": {
+          "802.1QTagType": "81-00",
+          "802.1QSTagType": "88-A8"
+        },
+        "reservedVids": [
+          [
+            "0",
+            "The null VID"
+          ],
+          [
+            "1",
+            "The default PVID"
+          ],
+          [
+            "2",
+            "The default SR_PVID"
+          ],
+          [
+            "FFF",
+            "Reserved for implementation use"
+          ]
+        ],
+        "trafficTypes": [
+          [
+            1,
+            "BK"
+          ],
+          [
+            0,
+            "BE"
+          ],
+          [
+            2,
+            "EE"
+          ],
+          [
+            3,
+            "CA"
+          ],
+          [
+            4,
+            "VI"
+          ],
+          [
+            5,
+            "VO"
+          ],
+          [
+            6,
+            "IC"
+          ],
+          [
+            7,
+            "NC"
+          ]
+        ],
+        "defaultPriority": 0,
+        "dropEligibleName": true
+      }
+    }
   },
   "notes": [
-    "Etiket çerçeveyi 4 sekizli uzatır: 0x8100 ve ardından 16 bitlik etiket bilgisi, özgün EtherType'tan önce gelir.",
-    "12 bitlik VLAN kimliği 4096 değer alır. 0 ve 0xFFF ayrık olduğundan 0x001–0xFFE arası 4094 VLAN kullanılabilir (RFC 6325 §4.1.1). Daha büyük ağlar için VXLAN ve Geneve 24 bitlik kimlik kullanır.",
-    "IEEE 802.1ad servis etiketleri (S-tag) ve üst üste etiketler RFC 6325'in kapsamı dışındadır; bu sayfa yalnızca müşteri etiketini (C-tag) ele alır.",
-    "Alanları tanımlayan IEEE 802.1Q metni okunmadı. Genişlikler, aynı alanları çizen RFC 7348 ve RFC 6325 şemalarına karşı doğrulanır; değerler RFC 6325 §4.1.1'den alınmıştır."
+    "Etiketin türü TPID'deki EtherType'tan anlaşılır: müşteri etiketi (C-TAG) 81-00, servis etiketi (S-TAG) 88-A8, omurga servis örneği etiketi (I-TAG) 88-E7'dir (Table 9-1). Servis sağlayıcı ağlarında S-TAG ile C-TAG üst üste kullanılabilir; bu sayfa C-TAG'i ele alır.",
+    "Varsayılan kodlamada (8P0D) PCP değeri önceliğin kendisidir ve atılabilirlik PCP'de taşınmaz. Port Use_DEI ile yapılandırıldığında drop_eligible parametresi DEI bitinde taşınır (§6.9.3).",
+    "Uç istasyonların varsayılan önceliği 0'dır ve Best Effort trafiğe karşılık gelir; Background için 1 kullanıldığından 1, 0'dan daha düşük bir önceliktir (§I.4).",
+    "Bir köprü 0'dan en çok 4094'e kadar VID'leri desteklemek zorundadır; 0 yalnızca öncelik taşıyan etiketi, FFF uygulamaya ayrılmış değeri gösterir ve etikette gönderilmez (§9.6, Table 9-2). Daha büyük ağlar için VXLAN ve Geneve 24 bitlik kimlik kullanır.",
+    "IEEE 802.1Q-2022 metni lisanslıdır ve depoda bulunmaz. Figure 9-1'in yalnızca bit etiketleri metin olarak okunabildiği için alan genişlikleri, onları yazıyla veren §9.4, §9.6 ve §6.9.3'ten de denetlenir. RFC 6325 §4.1.1 ve RFC 7348 §5 aynı alanları kendi şemalarında yeniden çizer."
   ],
   "fields": [
     {
       "key": "tpid",
       "name": "Tag Protocol Identifier (TPID)",
       "bits": 16,
-      "desc": "Etiketsiz çerçevede EtherType'ın bulunduğu yerde durur ve çerçevenin etiketli olduğunu gösterir. Müşteri VLAN etiketinin (C-tag) EtherType değeri 0x8100'dür.",
+      "desc": "Çerçevenin etiketli olduğunu ve etiketin türünü gösteren EtherType; iki sekizlidir. Müşteri VLAN etiketi (C-TAG) için 81-00.",
       "ref": {
-        "rfc": 6325,
-        "section": "4.1.1",
-        "label": "VLAN Tag Information"
+        "std": "ieee-802.1q-2022",
+        "section": "9.4",
+        "label": "TPID formats",
+        "page": 268
       },
       "example": 33024,
-      "hex": true
+      "hex": true,
+      "values": [
+        [
+          "0x8100",
+          "C-TAG (Customer VLAN Tag)"
+        ],
+        [
+          "0x88a8",
+          "S-TAG (Service VLAN Tag) ya da B-TAG"
+        ],
+        [
+          "0x88e7",
+          "I-TAG (Backbone Service Instance Tag)"
+        ]
+      ]
     },
     {
       "key": "pcp",
-      "name": "Priority (PCP)",
+      "name": "Priority Code Point (PCP)",
       "bits": 3,
-      "desc": "Çerçevenin önceliği, 0–7. 1 en düşük, 7 en yüksek önceliktir; varsayılan değer olan 0, 1'den yüksek, 2'den düşük sayılır.",
+      "desc": "Çerçevenin önceliği ve, seçilen kodlamaya göre, atılabilirliği. Varsayılan 8P0D kodlamasında PCP önceliğe eşittir. Öncelik değerlerinin önerilen trafik türleri Table I-2'dedir; 1 en düşük, 7 en yüksek önceliktir.",
       "ref": {
-        "rfc": 6325,
-        "section": "4.1.1",
-        "label": "VLAN Tag Information"
+        "std": "ieee-802.1q-2022",
+        "section": "6.9.3",
+        "label": "Priority Code Point encoding",
+        "page": 158
       },
       "example": 5,
       "values": [
         [
           "1",
-          "En düşük öncelik"
+          "Background (BK)"
         ],
         [
           "0",
-          "Varsayılan; 1'den yüksek, 2'den düşük"
+          "Best Effort, varsayılan (BE)"
         ],
         [
-          "2–7",
-          "Artan öncelik; 7 en yüksek"
+          "2",
+          "Excellent Effort (EE)"
+        ],
+        [
+          "3",
+          "Critical Applications (CA)"
+        ],
+        [
+          "4",
+          "Video, < 100 ms (VI)"
+        ],
+        [
+          "5",
+          "Voice, < 10 ms (VO)"
+        ],
+        [
+          "6",
+          "Internetwork Control (IC)"
+        ],
+        [
+          "7",
+          "Network Control (NC)"
         ]
       ]
     },
     {
-      "key": "c",
-      "name": "C",
+      "key": "dei",
+      "name": "Drop Eligible Indicator (DEI)",
       "bits": 1,
-      "desc": "RFC 6325 bu biti C olarak çizer. Anlamını IEEE 802.1Q tanımlar; o metin okunmadığı için burada verilmez.",
+      "desc": "Port Use_DEI ile yapılandırıldığında çerçevenin drop_eligible parametresini taşır: 1, tıkanıklıkta öncelikle atılabilecek çerçeveyi gösterir.",
       "ref": {
-        "rfc": 6325,
-        "section": "4.1.1",
-        "label": "VLAN Tag Information"
+        "std": "ieee-802.1q-2022",
+        "section": "6.9.3",
+        "label": "Priority Code Point encoding",
+        "page": 158
       },
       "example": 0
     },
@@ -102,13 +221,32 @@
       "key": "vid",
       "name": "VLAN Identifier (VID)",
       "bits": 12,
-      "desc": "Çerçevenin ait olduğu VLAN. 0 VLAN belirtmez, yalnızca öncelik taşır (priority-tagged); 0xFFF kullanılmamalıdır. Geçerli aralık 0x001–0xFFE'dir.",
+      "desc": "Çerçevenin ait olduğu VLAN; 12 bitlik işaretsiz sayı. Bazı değerlerin özel anlamı vardır (Table 9-2).",
       "ref": {
-        "rfc": 6325,
-        "section": "4.1.1",
-        "label": "VLAN Tag Information"
+        "std": "ieee-802.1q-2022",
+        "section": "9.6",
+        "label": "VLAN Tag Control Information (TCI)",
+        "page": 269
       },
-      "example": 100
+      "example": 100,
+      "values": [
+        [
+          "0",
+          "Null VID: etiket yalnızca öncelik taşır"
+        ],
+        [
+          "1",
+          "Varsayılan PVID"
+        ],
+        [
+          "2",
+          "Varsayılan SR_PVID (SRP akış trafiği)"
+        ],
+        [
+          "0xFFF",
+          "Uygulamaya ayrılmış; etikette gönderilmez"
+        ]
+      ]
     },
     {
       "key": "type",
@@ -125,13 +263,13 @@
   ],
   "example": {
     "payloadFrom": "ipv4",
-    "note": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: EtherType 0x8100, öncelik 5, C biti 0, VLAN 100, dolayısıyla etiket bilgisi 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır."
+    "note": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: TPID 0x8100 (C-TAG), PCP 5 (Voice), DEI 0, VID 100, dolayısıyla TCI 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır."
   },
   "refs": [
     "ieee-802.1q-2022",
+    894,
     6325,
-    7348,
-    894
+    7348
   ],
   "id": "vlan"
 }

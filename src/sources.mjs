@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { diagramWidths, rfc826Layout, proseWidths, octetTable, figureFields } from './rfc.mjs';
-import { messageFields, lldpMibFacts, lldpTextFacts } from './ieee.mjs';
+import { messageFields, lldpMibFacts, lldpTextFacts, vlanTextFacts } from './ieee.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const bibliography = JSON.parse(await readFile(path.join(root, 'sources/bibliography.json'), 'utf8'));
@@ -98,6 +98,33 @@ export function lldpTextChecks(protocol, facts, mibFacts) {
   return checks.map(([what, ok]) => ({ what, ok }));
 }
 
+/** What the 802.1Q VLAN tag data must agree with in IEEE 802.1Q-2022. */
+export function vlanTextChecks(protocol, facts) {
+  const by = new Map(protocol.fields.map(field => [field.key, field]));
+  const [pcpHigh, pcpLow, dei, vidHigh, vidLow, vid2High, vid2Low] = facts.figureBits;
+  const figure = { pcp: pcpHigh - pcpLow + 1, dei: dei === pcpLow - 1 ? 1 : 0, vid: (vidHigh - vidLow + 1) + (vid2High - vid2Low + 1) };
+  const hex = value => Number(BigInt(value)).toString(16).padStart(4, '0').replace(/^(..)(..)$/, '$1-$2').toUpperCase();
+  const values = field => field.values.map(([value, label]) => [value, label.match(/\(([A-Z]{2})\)$/)?.[1]]);
+  const tagBits = facts.tpidOctets * 8;
+  return [
+    ['TPID 2 sekizli (§9.4)', by.get('tpid').bits === tagBits],
+    ['C-TAG TPID 81-00 (Table 9-1)', hex(by.get('tpid').example) === facts.tagTypes['802.1QTagType']],
+    ['TCI 2 sekizli: PCP + DEI + VID (§9.6)', by.get('pcp').bits + by.get('dei').bits + by.get('vid').bits === facts.tciOctets * 8],
+    ['PCP 3 bit (§9.6, §6.9.3)', by.get('pcp').bits === facts.pcpBits && figure.pcp === facts.pcpBits],
+    ['DEI 1 bit (Figure 9-1)', by.get('dei').bits === figure.dei && facts.dropEligibleName],
+    ['VID 12 bit (§9.6, Figure 9-1)', by.get('vid').bits === facts.vidBits && figure.vid === facts.vidBits],
+    ['öncelik değerleri ve trafik türleri (Table I-2)', JSON.stringify(values(by.get('pcp')).map(([value, acronym]) => [Number(value), acronym])) === JSON.stringify(facts.trafficTypes)],
+    ['ayrılmış VID değerleri (Table 9-2)', JSON.stringify(by.get('vid').values.filter(([value]) => /^(0|1|2|0xFFF)$/i.test(value)).map(([value]) => value.replace(/^0x/i, '').toUpperCase())) === JSON.stringify(facts.reservedVids.map(([vid]) => vid))],
+    ['iç EtherType 2 sekizli (§9.4)', by.get('type').bits === tagBits],
+  ].map(([what, ok]) => ({ what, ok }));
+}
+
+/** Readers and checks of IEEE layouts stated in words rather than message tables. */
+const textMethods = {
+  lldp: { facts: lldpTextFacts, checks: lldpTextChecks },
+  vlan: { facts: vlanTextFacts, checks: vlanTextChecks },
+};
+
 /** Fields of an IEEE layout read from the standard's text: [{ name, bits }]. */
 export const ieeeFields = (text, layout) => messageFields(text, layout);
 
@@ -160,17 +187,18 @@ export async function verifyLayout(protocol) {
   const fixed = protocol.fields.filter(field => Number.isInteger(field.bits) && !field.range);
   let expected;
   let found;
-  if (kind === 'ieee' && protocol.layout.method === 'lldp') {
+  if (kind === 'ieee' && textMethods[protocol.layout.method]) {
     // Facts from the standard's text, then from its MIB modules; each from the files
     // when present, otherwise from the record of the last check.
     const { layout } = protocol;
     const text = await ieeeText(layout.std);
-    const facts = text ? lldpTextFacts(text) : layout.checked?.facts;
-    const mib = await mibText(layout.std);
-    const mibFacts = mib ? lldpMibFacts(mib, layout.mib.objects) : layout.mib.checked?.facts;
+    const method = textMethods[layout.method];
+    const facts = text ? method.facts(text) : layout.checked?.facts;
+    const mib = layout.mib ? await mibText(layout.std) : null;
+    const mibFacts = !layout.mib ? null : mib ? lldpMibFacts(mib, layout.mib.objects) : layout.mib.checked?.facts;
     const stale = (Boolean(text) && JSON.stringify(facts) !== JSON.stringify(layout.checked?.facts))
-      || (Boolean(mib) && JSON.stringify(mibFacts) !== JSON.stringify(layout.mib.checked?.facts));
-    const items = facts ? lldpTextChecks(protocol, facts, mibFacts) : [];
+      || (Boolean(mib) && JSON.stringify(mibFacts) !== JSON.stringify(layout.mib?.checked?.facts));
+    const items = facts ? method.checks(protocol, facts, mibFacts) : [];
     const mibItems = mibFacts ? lldpMibChecks(protocol, mibFacts) : [];
     const widths = fixed.map(field => field.bits);
     return {

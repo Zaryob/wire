@@ -1,5 +1,5 @@
 {
-  "note": "RFC olarak yayımlanmamış standartlar. IEEE metinleri lisanslıdır; depoya konmaz ve yeniden dağıtılmaz. `copy` alanı olan bir standardın lisanslı kopyası .cache/ altına konursa `npm run sync:ieee` metnini çıkarır ve yerleşimi o metne karşı doğrular; `mib` alanı olan standardın MIB modülleri de aynı yolla okunur. Sonuç sayfanın `layout.checked` kaydına yazılır; kopyası olmayan derlemeler (CI) bu kaydı denetler. Ne kopyası ne MIB'i olan standart (802.1Q) okunmamıştır; ona dayanan bölüm numarası ya da değer verilmez.",
+  "note": "RFC olarak yayımlanmamış standartlar. IEEE metinleri lisanslıdır; depoya konmaz ve yeniden dağıtılmaz. `copy` alanı olan bir standardın lisanslı kopyası .cache/ altına konursa `npm run sync:ieee` metnini çıkarır ve yerleşimi o metne karşı doğrular; `mib` alanı olan standardın MIB modülleri de aynı yolla okunur. Sonuç sayfanın `layout.checked` kaydına yazılır; kopyası olmayan derlemeler (CI) bu kaydı denetler. Ne kopyası ne MIB'i olan bir standart okunmamış sayılır; ona dayanan bölüm numarası ya da değer verilmez.",
   "entries": [
     {
       "id": "ieee-802.1q-2022",
@@ -10,7 +10,13 @@
       "isbn": "9781504491884",
       "doi": "10.1109/IEEESTD.2022.10004498",
       "url": "https://doi.org/10.1109/IEEESTD.2022.10004498",
-      "use": "VLAN etiketini tanımlayan standart. Metni okunmadı; alan genişlikleri RFC 6325 ve RFC 7348'e karşı doğrulanır."
+      "use": "VLAN etiketi: TPID (§9.4, Table 9-1), TCI (§9.6, Figure 9-1, Table 9-2), PCP ve DEI kodlaması (§6.9.3) ve öncelik değerlerinin trafik türleri (§I.4, Table I-2). Metin lisanslı bir kopyadan okunur.",
+      "copy": {
+        "file": ".cache/ieee/ieee-802.1q-2022.pdf",
+        "pages": 2163,
+        "sha256": "d6450d5841eb29007d950fb313ceda1a7b934f0906a03907d0f51e90db9ade18"
+      },
+      "pageOffset": 1
     },
     {
       "id": "ieee-802.1ab-2016",
