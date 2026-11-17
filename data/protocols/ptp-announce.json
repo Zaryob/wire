@@ -1,0 +1,735 @@
+{
+  "order": 38,
+  "name": "PTP Announce",
+  "title": "PTP Announce iletisi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Ana saat olmaya aday her saat, kendi niteliklerini Announce iletisiyle duyurur. Saatler bu iletilerdeki öncelik, sınıf ve doğruluk bilgilerini en iyi ana saat algoritmasında (BMC) karşılaştırır ve alanın ana saatini seçer. Bu sayfa IEEE 1588-2008 metnine dayanır.",
+  "layout": {
+    "kind": "ieee",
+    "std": "ieee-1588-2008",
+    "section": "13.5.1",
+    "label": "Announce message fields",
+    "tables": [
+      {
+        "caption": "Table 18 ⎯Common message header"
+      },
+      {
+        "caption": "Table 25 ⎯Announce message fields",
+        "skip": [
+          "header (see 13.3)"
+        ]
+      }
+    ],
+    "structs": {
+      "sourcePortIdentity": "PortIdentity",
+      "originTimestamp": "Timestamp",
+      "grandmasterClockQuality": "ClockQuality"
+    },
+    "refs": [
+      {
+        "std": "ieee-1588-2008",
+        "section": "13.3.1",
+        "label": "Table 18 ⎯Common message header",
+        "page": 124
+      },
+      {
+        "std": "ieee-1588-2008",
+        "section": "13.5.1",
+        "label": "Table 25 ⎯Announce message fields",
+        "page": 128
+      },
+      {
+        "std": "ieee-1588-2008",
+        "section": "5.3.7",
+        "label": "ClockQuality",
+        "page": 14
+      }
+    ],
+    "checked": {
+      "date": "2026-11-17",
+      "sha256": "25288fd3a4e5da1be961bfdb4bece11ee0b63bcdecec0042d61c5e2f23041c2a",
+      "fields": [
+        [
+          "transportSpecific",
+          4
+        ],
+        [
+          "messageType",
+          4
+        ],
+        [
+          "reserved",
+          4
+        ],
+        [
+          "versionPTP",
+          4
+        ],
+        [
+          "messageLength",
+          16
+        ],
+        [
+          "domainNumber",
+          8
+        ],
+        [
+          "reserved",
+          8
+        ],
+        [
+          "flagField",
+          16
+        ],
+        [
+          "correctionField",
+          64
+        ],
+        [
+          "reserved",
+          32
+        ],
+        [
+          "sourcePortIdentity.clockIdentity",
+          64
+        ],
+        [
+          "sourcePortIdentity.portNumber",
+          16
+        ],
+        [
+          "sequenceId",
+          16
+        ],
+        [
+          "controlField",
+          8
+        ],
+        [
+          "logMessageInterval",
+          8
+        ],
+        [
+          "originTimestamp.secondsField",
+          48
+        ],
+        [
+          "originTimestamp.nanosecondsField",
+          32
+        ],
+        [
+          "currentUtcOffset",
+          16
+        ],
+        [
+          "reserved",
+          8
+        ],
+        [
+          "grandmasterPriority1",
+          8
+        ],
+        [
+          "grandmasterClockQuality.clockClass",
+          8
+        ],
+        [
+          "grandmasterClockQuality.clockAccuracy",
+          8
+        ],
+        [
+          "grandmasterClockQuality.offsetScaledLogVariance",
+          16
+        ],
+        [
+          "grandmasterPriority2",
+          8
+        ],
+        [
+          "grandmasterIdentity",
+          64
+        ],
+        [
+          "stepsRemoved",
+          16
+        ],
+        [
+          "timeSource",
+          8
+        ]
+      ]
+    }
+  },
+  "notes": [
+    "Announce, zaman özelliklerini taşıyan tek iletidir: flagField'daki leap61, leap59, currentUtcOffsetValid, ptpTimescale, timeTraceable ve frequencyTraceable bayrakları yalnızca Announce'ta tanımlıdır (Table 20).",
+    "En iyi ana saat (BMC) algoritması Announce'taki grandmasterPriority1, grandmasterClockQuality, grandmasterPriority2, grandmasterIdentity ve stepsRemoved alanlarını karşılaştırır (§9.3.4, Table 12). Karşılaştırmanın sırası Figure 27 ve 28'de verilir; priority1 için küçük değer önce gelir (§7.6.2.2).",
+    "Announce'ın controlField değeri 5'tir (\"All others\", Table 23); logMessageInterval portDS.logAnnounceInterval değeridir (Table 24).",
+    "currentUtcOffset değeri örnek içindir; güncel fark IERS tarafından duyurulur ve bu standardın kapsamı dışındadır."
+  ],
+  "fields": [
+    {
+      "key": "transport_specific",
+      "name": "transportSpecific",
+      "bits": 4,
+      "desc": "Alt katmandaki taşıma protokolünün kullanabileceği alan; anlamı taşıma eklerinde (Annex D–I) tanımlanır. Ethernet eşlemesinde 0 DEFAULT değeridir (Table F.2); UDP/IPv4 eşlemesinde bit 0, sürüm 1 donanımı için 124 sekizlilik dolgu ister (Table D.2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.1",
+        "label": "transportSpecific (Nibble)",
+        "page": 125
+      },
+      "example": 0
+    },
+    {
+      "key": "message_type",
+      "name": "messageType",
+      "bits": 4,
+      "desc": "İletinin türü. 0–3 olay iletileridir ve gönderim ile alım anları zaman damgasıyla ölçülür; 8–D genel iletilerdir. En anlamlı bit iki sınıfı ayırır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.2",
+        "label": "messageType (Enumeration4)",
+        "page": 125
+      },
+      "example": 11,
+      "values": [
+        [
+          "0x0",
+          "Sync (olay)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (olay)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (olay)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (olay)"
+        ],
+        [
+          "0x4–0x7",
+          "Ayrılmış"
+        ],
+        [
+          "0x8",
+          "Follow_Up (genel)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (genel)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (genel)"
+        ],
+        [
+          "0xB",
+          "Announce (genel)"
+        ],
+        [
+          "0xC",
+          "Signaling (genel)"
+        ],
+        [
+          "0xD",
+          "Management (genel)"
+        ],
+        [
+          "0xE–0xF",
+          "Ayrılmış"
+        ]
+      ]
+    },
+    {
+      "key": "reserved_version",
+      "name": "reserved",
+      "bits": 4,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2). §13.3.2.2'deki nota göre messageType'ın ileride genişletilmesi için ayrılmıştır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "version",
+      "name": "versionPTP",
+      "bits": 4,
+      "desc": "Gönderen portun portDS.versionNumber değeri. Standardın bu sürümü için 2'dir (§7.5.5).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.3",
+        "label": "versionPTP (UInteger4)",
+        "page": 125
+      },
+      "example": 2
+    },
+    {
+      "key": "message_length",
+      "name": "messageLength",
+      "bits": 16,
+      "desc": "İletinin başlığın ilk sekizlisinden son sekizlisine kadar toplam uzunluğu. Annex D'deki dolgu dahil değildir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.4",
+        "label": "messageLength (UInteger16)",
+        "page": 125
+      },
+      "example": 64
+    },
+    {
+      "key": "domain",
+      "name": "domainNumber",
+      "bits": 8,
+      "desc": "Sıradan ya da sınır saatlerde, gönderen saatin defaultDS.domainNumber değeri. Aynı ağdaki bağımsız zaman alanları bu numarayla ayrılır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.5",
+        "label": "domainNumber (UInteger8)",
+        "page": 125
+      },
+      "example": 0
+    },
+    {
+      "key": "reserved_domain",
+      "name": "reserved",
+      "bits": 8,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "flags",
+      "name": "flagField",
+      "bits": 16,
+      "desc": "İki sekizlilik bayrak dizisi; anlamları Table 20'dedir. Bir ileti türü için tanımlanmamış bayraklar 0 olur. Onaltılık değer, sekizli 0'ın bitlerini üst, sekizli 1'in bitlerini alt baytta gösterir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.6",
+        "label": "flagField (Octet[2])",
+        "page": 126
+      },
+      "example": 12,
+      "hex": true,
+      "values": [
+        [
+          "0x0100",
+          "alternateMasterFlag (Announce, Sync, Follow_Up, Delay_Resp)"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag (Sync, Pdelay_Resp)"
+        ],
+        [
+          "0x0400",
+          "unicastFlag (tümü)"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61 (Announce)"
+        ],
+        [
+          "0x0002",
+          "leap59 (Announce)"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid (Announce)"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale (Announce)"
+        ],
+        [
+          "0x0010",
+          "timeTraceable (Announce)"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable (Announce)"
+        ]
+      ]
+    },
+    {
+      "key": "correction",
+      "name": "correctionField",
+      "bits": 64,
+      "desc": "Düzeltme değeri, nanosaniyenin 2^16 katı biriminde işaretli sayı olarak; örneğin 2,5 ns 0x0000000000028000'dir. Sync'te kesirli nanosaniyeleri, saydam saatlerdeki bekleme süresini, eşler arası saatlerde yol gecikmesini ve asimetri düzeltmesini taşır (Table 21).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.7",
+        "label": "correctionField (Integer64)",
+        "page": 126
+      },
+      "example": 0,
+      "hex": true
+    },
+    {
+      "key": "reserved_body",
+      "name": "reserved",
+      "bits": 32,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "clock_identity",
+      "name": "sourcePortIdentity.clockIdentity",
+      "bits": 64,
+      "desc": "İletiyi gönderen portun portDS.portIdentity değerinin saat kısmı: 8 sekizlilik bir EUI-64. EUI-48'den türetildiğinde OUI'nin üç sekizlisi başa, 3. ve 4. sekizlilere FF ile FE, kalan üç sekizli sona yazılır (§7.5.2.2.2, NOTE 2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.8",
+        "label": "sourcePortIdentity (PortIdentity)",
+        "page": 127
+      },
+      "example": "00005efffe005301",
+      "type": "bytes"
+    },
+    {
+      "key": "port_number",
+      "name": "sourcePortIdentity.portNumber",
+      "bits": 16,
+      "desc": "Saatin iletiyi gönderen PTP portunun numarası. N portlu bir düğümde portlar 1, 2, …, N numaralanır; 0 ve 0xFFFF ayrılmıştır (§7.5.2.3).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "5.3.5",
+        "label": "PortIdentity",
+        "page": 13
+      },
+      "example": 1
+    },
+    {
+      "key": "sequence_id",
+      "name": "sequenceId",
+      "bits": 16,
+      "desc": "Gönderenin her ileti türü için ayrı tuttuğu sıra numarası (§7.3.7). Follow_Up, Delay_Resp gibi yanıtlar ait oldukları iletinin değerini taşır (Table 22).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.9",
+        "label": "sequenceId (UInteger16)",
+        "page": 127
+      },
+      "example": 300
+    },
+    {
+      "key": "control",
+      "name": "controlField",
+      "bits": 8,
+      "desc": "Sürüm 1 donanımıyla uyumluluk için korunan alan; alıcının kullanması önerilmez. Değeri ileti türüne göre Table 23'te verilir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.10",
+        "label": "controlField (UInteger8)",
+        "page": 127
+      },
+      "example": 5,
+      "values": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Diğerleri"
+        ]
+      ]
+    },
+    {
+      "key": "log_interval",
+      "name": "logMessageInterval",
+      "bits": 8,
+      "desc": "İletilerin gönderim aralığının 2 tabanında logaritması, işaretli sayı olarak. Çok noktaya yayınlanan Sync'te portDS.logSyncInterval değeridir, tek noktaya gönderilende 0x7F (Table 24). 0 saniyede bir ileti demektir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.11",
+        "label": "logMessageInterval (Integer8)",
+        "page": 128
+      },
+      "example": 1,
+      "hex": true
+    },
+    {
+      "key": "origin_seconds",
+      "name": "originTimestamp.secondsField",
+      "bits": 48,
+      "desc": "0 ya da gönderim anının ±1 s'den kötü olmayan bir tahmini (§13.5.2.1).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.1",
+        "label": "originTimestamp (Timestamp)",
+        "page": 129
+      },
+      "example": 0
+    },
+    {
+      "key": "origin_ns",
+      "name": "originTimestamp.nanosecondsField",
+      "bits": 32,
+      "desc": "Aynı anın nanosaniye kısmı.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "5.3.3",
+        "label": "Timestamp",
+        "page": 13
+      },
+      "example": 0
+    },
+    {
+      "key": "utc_offset",
+      "name": "currentUtcOffset",
+      "bits": 16,
+      "desc": "TAI ile UTC arasındaki fark, saniye olarak; timePropertiesDS.currentUtcOffset değeri. flagField'daki currentUtcOffsetValid 1 ise geçerlidir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.2",
+        "label": "currentUtcOffset (Integer16)",
+        "page": 129
+      },
+      "example": 37
+    },
+    {
+      "key": "reserved_announce",
+      "name": "reserved",
+      "bits": 8,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "priority1",
+      "name": "grandmasterPriority1",
+      "bits": 8,
+      "desc": "Ana saatin birinci önceliği; BMC algoritmasında küçük değer önce gelir. Başlangıç değeri PTP profilinde belirlenir, 0–255 arasında yapılandırılabilir (§7.6.2.2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.3",
+        "label": "grandmasterPriority1 (UInteger8)",
+        "page": 129
+      },
+      "example": 128
+    },
+    {
+      "key": "clock_class",
+      "name": "grandmasterClockQuality.clockClass",
+      "bits": 8,
+      "desc": "Ana saatin dağıttığı zamanın izlenebilirliği (Table 5). 6, birincil bir zaman kaynağına eşitlenmiş ve PTP zaman ölçeği dağıtan bir saattir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "7.6.2.4",
+        "label": "clockClass",
+        "page": 54
+      },
+      "example": 6,
+      "values": [
+        [
+          "6",
+          "Birincil zaman kaynağına eşitli, PTP zaman ölçeği"
+        ],
+        [
+          "7",
+          "Eskiden 6; kaynağını kaybetmiş, tutma (holdover) kipinde"
+        ],
+        [
+          "13",
+          "Uygulamaya özgü kaynağa eşitli, ARB zaman ölçeği"
+        ],
+        [
+          "14",
+          "Eskiden 13; tutma kipinde"
+        ]
+      ]
+    },
+    {
+      "key": "clock_accuracy",
+      "name": "grandmasterClockQuality.clockAccuracy",
+      "bits": 8,
+      "desc": "Ana saatin zaman doğruluğu (Table 6). 0x21, 100 ns içinde doğru demektir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "7.6.2.5",
+        "label": "clockAccuracy",
+        "page": 55
+      },
+      "example": 33,
+      "hex": true,
+      "values": [
+        [
+          "0x20",
+          "25 ns içinde"
+        ],
+        [
+          "0x21",
+          "100 ns içinde"
+        ],
+        [
+          "0x23",
+          "1 µs içinde"
+        ],
+        [
+          "0x29",
+          "1 ms içinde"
+        ],
+        [
+          "0x2F",
+          "1 s içinde"
+        ],
+        [
+          "0xFE",
+          "Bilinmiyor"
+        ]
+      ]
+    },
+    {
+      "key": "variance",
+      "name": "grandmasterClockQuality.offsetScaledLogVariance",
+      "bits": 16,
+      "desc": "Ana saatin kararlılığının, ölçeklenmiş logaritmik varyans olarak tahmini (§7.6.3); BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "5.3.7",
+        "label": "ClockQuality",
+        "page": 14
+      },
+      "example": 20061,
+      "hex": true
+    },
+    {
+      "key": "priority2",
+      "name": "grandmasterPriority2",
+      "bits": 8,
+      "desc": "Ana saatin ikinci önceliği; parentDS.grandmasterPriority2 değeri (§7.6.2.3). BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.5",
+        "label": "grandmasterPriority2 (UInteger8)",
+        "page": 129
+      },
+      "example": 128
+    },
+    {
+      "key": "grandmaster_identity",
+      "name": "grandmasterIdentity",
+      "bits": 64,
+      "desc": "Ana saatin kimliği; parentDS.grandmasterIdentity değeri.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.6",
+        "label": "grandmasterIdentity (ClockIdentity)",
+        "page": 129
+      },
+      "example": "00005efffe005301",
+      "type": "bytes"
+    },
+    {
+      "key": "steps_removed",
+      "name": "stepsRemoved",
+      "bits": 16,
+      "desc": "Gönderen saat ile ana saat arasındaki iletişim yolu sayısı; ana saatin kendisi için 0.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.5.2.7",
+        "label": "stepsRemoved (UInteger16)",
+        "page": 129
+      },
+      "example": 0
+    },
+    {
+      "key": "time_source",
+      "name": "timeSource",
+      "bits": 8,
+      "desc": "Ana saatin zaman kaynağının türü; yalnızca bilgi içindir, ana saat seçiminde kullanılmaz (Table 7).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "7.6.2.6",
+        "label": "timeSource",
+        "page": 56
+      },
+      "example": 32,
+      "hex": true,
+      "values": [
+        [
+          "0x10",
+          "ATOMIC_CLOCK"
+        ],
+        [
+          "0x20",
+          "GPS (uydu sistemleri)"
+        ],
+        [
+          "0x30",
+          "TERRESTRIAL_RADIO"
+        ],
+        [
+          "0x40",
+          "PTP (alan dışı kaynak)"
+        ],
+        [
+          "0x50",
+          "NTP ya da SNTP"
+        ],
+        [
+          "0x60",
+          "HAND_SET"
+        ],
+        [
+          "0x90",
+          "OTHER"
+        ]
+      ]
+    }
+  ],
+  "example": {
+    "note": "GPS'e eşitlenmiş (timeSource 0x20, clockClass 6, 100 ns doğruluk) bir ana saatin iki saniyede bir gönderdiği Announce (logMessageInterval 1). flagField 0x000c: ptpTimescale ve currentUtcOffsetValid 1'dir. Ana saatin kendisi olduğu için stepsRemoved 0'dır. İleti 64 sekizlidir (Table 25)."
+  },
+  "refs": [
+    "ieee-1588-2008",
+    9542
+  ],
+  "id": "ptp-announce"
+}
