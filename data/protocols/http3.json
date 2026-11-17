@@ -1,0 +1,101 @@
+{
+  "order": 45,
+  "name": "HTTP/3",
+  "title": "HTTP/3 çerçevesi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "HTTP/3, HTTP'yi QUIC üzerinde taşır. HTTP/2'deki gibi istekler ve yanıtlar çerçevelerle taşınır, ancak akışları QUIC yönettiği için çerçeve başlığında akış kimliği ya da bayrak yoktur: yalnızca değişken uzunluklu tamsayı olarak tür ve uzunluk bulunur.",
+  "layout": {
+    "rfc": 9114,
+    "section": "7.1",
+    "kind": "figure",
+    "anchor": "HTTP/3 Frame Format",
+    "label": "Figure 3: HTTP/3 Frame Format"
+  },
+  "notes": [
+    "Tür ve uzunluk, QUIC'teki değişken uzunluklu tamsayılardır (RFC 9000 §16); küçük değerler tek sekizliye sığar.",
+    "SETTINGS çerçevesi iki tarafın denetim akışının ilk çerçevesi olarak gönderilir ve sonradan yeniden gönderilmez (RFC 9114 §7.2.4).",
+    "HTTP/3 bağlantıları QUIC el sıkışmasında ALPN ile \"h3\" adıyla seçilir (RFC 9114 §3.1)."
+  ],
+  "fields": [
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "Çerçeve türü, değişken uzunluklu tamsayı olarak.",
+      "ref": {
+        "rfc": 9114,
+        "section": "7.1",
+        "label": "Frame Layout"
+      },
+      "example": 4,
+      "type": "varint",
+      "range": "i",
+      "values": [
+        [
+          "0x00",
+          "DATA"
+        ],
+        [
+          "0x01",
+          "HEADERS"
+        ],
+        [
+          "0x03",
+          "CANCEL_PUSH"
+        ],
+        [
+          "0x04",
+          "SETTINGS"
+        ],
+        [
+          "0x05",
+          "PUSH_PROMISE"
+        ],
+        [
+          "0x07",
+          "GOAWAY"
+        ],
+        [
+          "0x0d",
+          "MAX_PUSH_ID"
+        ]
+      ]
+    },
+    {
+      "key": "length",
+      "name": "Length",
+      "bits": 8,
+      "desc": "Frame Payload'un uzunluğu, sekizli olarak, değişken uzunluklu tamsayı olarak.",
+      "ref": {
+        "rfc": 9114,
+        "section": "7.1",
+        "label": "Frame Layout"
+      },
+      "example": 3,
+      "type": "varint",
+      "range": "i"
+    },
+    {
+      "key": "payload",
+      "name": "Frame Payload",
+      "bits": "değişken",
+      "desc": "Türe özgü yük. SETTINGS'te tanımlayıcı ve değer çiftleri, her biri değişken uzunluklu tamsayı.",
+      "ref": {
+        "rfc": 9114,
+        "section": "7.2.4",
+        "label": "SETTINGS"
+      },
+      "range": ".."
+    }
+  ],
+  "example": {
+    "payload": "066000",
+    "note": "İstemcinin denetim akışında gönderdiği SETTINGS çerçevesi: tek ayar SETTINGS_MAX_FIELD_SECTION_SIZE (0x06) = 8192. Tanımlayıcı tek sekizlik (06), değer iki sekizlik değişken uzunluklu tamsayıdır (0x6000 = 01 öneki + 8192). Çerçeve 5 sekizlidir."
+  },
+  "refs": [
+    9114,
+    9000
+  ],
+  "id": "http3"
+}

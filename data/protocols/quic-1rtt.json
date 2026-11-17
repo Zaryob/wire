@@ -1,0 +1,144 @@
+{
+  "order": 26,
+  "name": "QUIC 1-RTT",
+  "title": "QUIC 1-RTT paketi (kısa başlık)",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "El sıkışma bittikten sonra QUIC verisi 1-RTT paketlerinde taşınır. Bu paketler kısa başlık kullanır: sürüm, kaynak bağlantı kimliği ya da uzunluk alanı yoktur; yalnızca hedef bağlantı kimliği ve paket numarası bulunur. Başlığın kısa olması her pakette sekizli kazandırır.",
+  "layout": {
+    "rfc": 9000,
+    "section": "17.3.1",
+    "kind": "figure",
+    "anchor": "1-RTT Packet",
+    "label": "Figure 19: 1-RTT Packet"
+  },
+  "notes": [
+    "Kısa başlıkta uzunluk alanı olmadığı için 1-RTT paketi UDP datagramının sonuna kadar uzanır; bir datagramdaki son paket olmalıdır (RFC 9000 §12.2).",
+    "Hedef bağlantı kimliğinin uzunluğu pakette yazmaz; alıcı onu kendisi seçtiği için bilir. Bu yüzden kimlik uzunluğu başlıkta 0..160 bit aralığındadır.",
+    "Key Phase biti, paketi korumak için kullanılan anahtar kuşağını gösterir; anahtar güncellemesinde değişir (RFC 9001 §6). Spin Bit, gecikmeyi ağdan pasif olarak ölçmeye yarayabilir (RFC 9000 §17.4).",
+    "Döküm, başlık koruması uygulanmadan önceki başlığı gösterir; korumada ilk sekizlinin alt 5 biti ve paket numarası maskelenir (RFC 9001 §5.4)."
+  ],
+  "fields": [
+    {
+      "key": "header_form",
+      "name": "Header Form",
+      "bits": 1,
+      "desc": "Kısa başlık için 0.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 0
+    },
+    {
+      "key": "fixed_bit",
+      "name": "Fixed Bit",
+      "bits": 1,
+      "desc": "Her zaman 1.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 1
+    },
+    {
+      "key": "spin_bit",
+      "name": "Spin Bit",
+      "bits": 1,
+      "desc": "Gecikme ölçümü için kullanılabilen bit; kullanılmıyorsa uç nokta rastgele değer gönderebilir (RFC 9000 §17.4).",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 0
+    },
+    {
+      "key": "reserved_bits",
+      "name": "Reserved Bits",
+      "bits": 2,
+      "desc": "Ayrılmış; başlık koruması kaldırıldıktan sonra 0 olmalıdır.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 0
+    },
+    {
+      "key": "key_phase",
+      "name": "Key Phase",
+      "bits": 1,
+      "desc": "Paketi korumak için kullanılan anahtar kuşağı.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 0
+    },
+    {
+      "key": "pn_length",
+      "name": "Packet Number Length",
+      "bits": 2,
+      "desc": "Packet Number alanının uzunluğu eksi bir, sekizli olarak; 1, iki sekizli demektir.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 1
+    },
+    {
+      "key": "dcid",
+      "name": "Destination Connection ID",
+      "bits": 64,
+      "desc": "Alıcının bağlantıyı tanıdığı kimlik. Uzunluğu pakette yazmaz; alıcı onu kendisi seçtiği için bilir.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": "c3a7b1e0d24f5590",
+      "type": "bytes",
+      "range": "0..160"
+    },
+    {
+      "key": "packet_number",
+      "name": "Packet Number",
+      "bits": 16,
+      "desc": "Paket numarası; uzunluğu ilk sekizlideki Packet Number Length'ten gelir.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "example": 1234,
+      "range": "8..32"
+    },
+    {
+      "key": "payload",
+      "name": "Packet Payload",
+      "bits": "değişken",
+      "desc": "Şifreli çerçeveler (STREAM, ACK vb.) ve AEAD doğrulama etiketi.",
+      "ref": {
+        "rfc": 9000,
+        "section": "17.3.1",
+        "label": "1-RTT Packet"
+      },
+      "range": "8.."
+    }
+  ],
+  "example": {
+    "payload": "5d2e9c1f04b6a8733e10c47d92ab65f0811ce4d7",
+    "note": "QUIC Initial sayfasındaki istemcinin, sunucudan aldığı 1-RTT paketi: hedef bağlantı kimliği istemcinin kendi seçtiği c3a7b1e0d24f5590'dır. İlk sekizli 0x41: kısa başlık, Fixed Bit 1, iki sekizlilik paket numarası. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir."
+  },
+  "refs": [
+    9000,
+    9001,
+    768
+  ],
+  "id": "quic-1rtt"
+}
