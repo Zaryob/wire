@@ -30,7 +30,7 @@ test('every protocol has a page whose fields link to an RFC', async () => {
       assert.match(html, new RegExp(`<p class="verified verified--manual"><strong>${note}</strong>`), protocol.id);
       assert.ok(html.includes('https://doi.org/10.1109/'), protocol.id);
     } else if (protocol.layout.kind === 'ieee') {
-      assert.match(html, /<p class="verified">Alan (adları ve genişlikleri|genişlikleri \(<code>[^<]+<\/code> bit\), tür numaraları ve değerler) <a class="rfc-ref" href="https:\/\/doi\.org\/10\.1109\/[^"]+">IEEE /, protocol.id);
+      assert.match(html, /<p class="verified">Alan (adları ve genişlikleri|genişlikleri \(<code>[^<]+<\/code> bit\), (?:tür numaraları ve )?değerler) <a class="rfc-ref" href="https:\/\/doi\.org\/10\.1109\/[^"]+">IEEE /, protocol.id);
       assert.match(html, /metni lisanslı olduğu için depoda bulunmaz/, protocol.id);
       assert.doesNotMatch(html, /verified--manual/, protocol.id);
     } else {

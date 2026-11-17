@@ -332,3 +332,84 @@ test('example packets of the web transport pages are internally consistent', asy
   assert.equal((http2.bytes.length - 9) % 6, 0, 'SETTINGS carries 6-octet settings');
   assert.equal(((http2.bytes[5] & 0x7f) << 24) | (http2.bytes[6] << 16) | (http2.bytes[7] << 8) | http2.bytes[8], 0, 'stream 0');
 });
+
+test('the 802.1Q page agrees with IEEE 802.1Q-2022', async () => {
+  const vlan = byId.get('vlan');
+  const check = await verifyLayout(vlan);
+  assert.equal(check.stale, false, 'record differs from the text; run npm run sync:ieee');
+  assert.deepEqual(check.items.filter(item => !item.ok), [], 'every fact holds');
+  const facts = vlan.layout.checked.facts;
+  assert.deepEqual([facts.tpidOctets, facts.pcpBits, facts.vidBits, facts.tagTypes['802.1QTagType'], facts.tagTypes['802.1QSTagType']], [2, 3, 12, '81-00', '88-A8']);
+  assert.deepEqual(facts.trafficTypes.map(([priority]) => priority), [1, 0, 2, 3, 4, 5, 6, 7], 'Table I-2 lists 1 below the default 0');
+  const swapped = structuredClone(vlan);
+  swapped.fields.find(field => field.key === 'pcp').values[0][1] = 'Background (BE)';
+  assert.equal((await verifyLayout(swapped)).ok, false, 'a traffic type that differs from Table I-2 is rejected');
+});
+
+test('example packets of the PTP message pages are internally consistent', () => {
+  const header = bytes => ({ type: bytes[0] & 0x0f, version: bytes[1] & 0x0f, length: (bytes[2] << 8) | bytes[3], flags: (bytes[6] << 8) | bytes[7], sequence: (bytes[30] << 8) | bytes[31], control: bytes[32], interval: bytes[33] });
+  const sync = header(encode('ptp').bytes);
+  const followUp = header(encode('ptp-follow-up').bytes);
+  const delayReq = encode('ptp-delay-req').bytes;
+  const delayResp = encode('ptp-delay-resp').bytes;
+  const announce = header(encode('ptp-announce').bytes);
+  // Table 19 message types and Table 23 controlField values.
+  assert.deepEqual([sync.type, followUp.type, header(delayReq).type, header(delayResp).type, announce.type], [0x0, 0x8, 0x1, 0x9, 0xb]);
+  assert.deepEqual([sync.control, followUp.control, header(delayReq).control, header(delayResp).control, announce.control], [0, 2, 1, 3, 5]);
+  for (const id of ['ptp', 'ptp-follow-up', 'ptp-delay-req', 'ptp-delay-resp', 'ptp-announce']) {
+    const bytes = encode(id).bytes;
+    assert.equal(header(bytes).length, bytes.length, `${id}: messageLength`);
+    assert.equal(header(bytes).version, 2, `${id}: versionPTP`);
+  }
+  assert.deepEqual([followUp.length, header(delayReq).length, header(delayResp).length, announce.length], [44, 44, 54, 64], 'Tables 26 to 28 and 25');
+  assert.equal(header(delayReq).interval, 0x7f, 'Delay_Req logMessageInterval is 7F (Table 24)');
+  assert.equal(header(delayResp).sequence, header(delayReq).sequence, 'Delay_Resp answers the Delay_Req sequenceId');
+  assert.equal(hex(delayResp.slice(44, 54)), hex(delayReq.slice(20, 30)), 'requestingPortIdentity is the Delay_Req sourcePortIdentity');
+  assert.equal(announce.flags, 0x000c, 'currentUtcOffsetValid and ptpTimescale, defined for Announce only');
+  assert.equal(followUp.flags, 0, 'twoStepFlag is defined for Sync and Pdelay_Resp, not Follow_Up');
+});
+
+test('example packets of the routing and multicast pages are internally consistent', () => {
+  const bgp = encode('bgp').bytes;
+  assert.equal(hex(bgp.slice(0, 16)), 'ff'.repeat(16), 'Marker is all ones');
+  assert.equal((bgp[16] << 8) | bgp[17], bgp.length, 'BGP Length counts the whole message');
+  assert.deepEqual([bgp[18], bgp[19]], [1, 4], 'OPEN, version 4');
+  const as = (bgp[20] << 8) | bgp[21];
+  assert.ok(as >= 64496 && as <= 64511, 'documentation AS number (RFC 5398)');
+
+  const ospf = encode('ospf').bytes;
+  assert.equal((ospf[2] << 8) | ospf[3], ospf.length, 'OSPF Packet length');
+  const withoutAuth = [...ospf.slice(0, 16), ...ospf.slice(24)];
+  assert.equal(internetChecksum(withoutAuth), 0, 'checksum over the packet without the authentication field (RFC 2328 D.4.1)');
+  assert.equal((ospf.length - 44) % 4, 0, 'the neighbor list is whole Router IDs');
+
+  const vrrp = encode('vrrp').bytes;
+  assert.equal(vrrp[0], 0x31, 'version 3, type 1');
+  assert.equal(internetChecksum(vrrp), 0, 'IPv4 VRRP checksum covers only the VRRP message (RFC 9568 §5.2.8)');
+  assert.equal(vrrp.length, 8 + 4 * vrrp[3], 'IPvX Addr Count IPv4 addresses follow the header');
+
+  const igmp = encode('igmpv3').bytes;
+  assert.equal(igmp[0], 0x11);
+  assert.equal(internetChecksum(igmp), 0, 'IGMPv3 checksum covers the whole message');
+  assert.equal(igmp.length, 12 + 4 * ((igmp[10] << 8) | igmp[11]), 'Number of Sources');
+
+  const srh = encode('srh').bytes;
+  assert.equal(srh[2], 4, 'Routing Type 4');
+  assert.equal(srh.length, 8 + 8 * srh[1], 'Hdr Ext Len counts 8-octet units after the first 8');
+  assert.equal(srh[4], (srh.length - 8) / 16 - 1, 'Last Entry indexes the last segment');
+  assert.ok(srh[3] <= srh[4], 'Segments Left within the list');
+});
+
+test('example packets of the QUIC 1-RTT and HTTP/3 pages are internally consistent', () => {
+  const short = encode('quic-1rtt').bytes;
+  assert.equal(short[0] & 0x80, 0, 'short header');
+  assert.equal(short[0] & 0x40, 0x40, 'Fixed Bit');
+  const pnLength = (short[0] & 0x03) + 1;
+  assert.equal(pnLength, 2);
+  assert.equal(hex(short.slice(1, 9)), byId.get('quic').fields.find(field => field.key === 'scid').example, 'the client receives on the connection ID it chose in its Initial');
+  const http3 = encode('http3').bytes;
+  assert.equal(http3[0], 0x04, 'SETTINGS');
+  assert.equal(http3[1], http3.length - 2, 'Length counts the payload');
+  assert.equal(http3[2], 0x06, 'SETTINGS_MAX_FIELD_SECTION_SIZE');
+  assert.equal(((http3[3] & 0x3f) << 8) | http3[4], 8192, 'a two-octet variable-length integer');
+});
