@@ -1,5 +1,5 @@
 {
-  "retrieved": "2026-11-15",
+  "retrieved": "2026-11-17",
   "source": "https://www.rfc-editor.org/",
   "entries": [
     {
@@ -395,6 +395,41 @@
       "use": "GRE paket başlığı ve sağlama toplamı"
     },
     {
+      "number": 3032,
+      "title": "MPLS Label Stack Encoding",
+      "authors": [
+        "E. Rosen",
+        "D. Tappan",
+        "G. Fedorkow",
+        "Y. Rekhter",
+        "D. Farinacci",
+        "T. Li",
+        "A. Conta"
+      ],
+      "date": "January 2001",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC3270",
+        "RFC3443",
+        "RFC4182",
+        "RFC5129",
+        "RFC5332",
+        "RFC5462",
+        "RFC5586",
+        "RFC7274",
+        "RFC9017"
+      ],
+      "doi": "10.17487/RFC3032",
+      "url": "https://www.rfc-editor.org/rfc/rfc3032",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3032.txt",
+      "sha256": "c611103bf720c643a40e128159aabb1607eab97977d0f3483d468a620cd86180",
+      "bytes": 48314,
+      "use": "MPLS etiket yığını girdisinin kodlanması"
+    },
+    {
       "number": 3168,
       "title": "The Addition of Explicit Congestion Notification (ECN) to IP",
       "authors": [
@@ -533,6 +568,27 @@
       "use": "IPsec AH başlığı ve veri bütünlüğü"
     },
     {
+      "number": 4303,
+      "title": "IP Encapsulating Security Payload (ESP)",
+      "authors": [
+        "S. Kent"
+      ],
+      "date": "December 2005",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC2406"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC4303",
+      "url": "https://www.rfc-editor.org/rfc/rfc4303",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4303.txt",
+      "sha256": "d22f9d4120e5645525b63ac7bbf8ef78c334fe003a2c48bf1e25ac25f6e7dc58",
+      "bytes": 114315,
+      "use": "IPsec ESP başlığı ve kuyruğu"
+    },
+    {
       "number": 4340,
       "title": "Datagram Congestion Control Protocol (DCCP)",
       "authors": [
@@ -584,6 +640,40 @@
       "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf",
       "bytes": 48969,
       "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 5462,
+      "title": "Multiprotocol Label Switching (MPLS) Label Stack Entry: \"EXP\" Field Renamed to \"Traffic Class\" Field",
+      "authors": [
+        "L. Andersson",
+        "R. Asati"
+      ],
+      "date": "February 2009",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC3032",
+        "RFC3270",
+        "RFC3272",
+        "RFC3443",
+        "RFC3469",
+        "RFC3564",
+        "RFC3985",
+        "RFC4182",
+        "RFC4364",
+        "RFC4379",
+        "RFC4448",
+        "RFC4761",
+        "RFC5129"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC5462",
+      "url": "https://www.rfc-editor.org/rfc/rfc5462",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5462.txt",
+      "sha256": "4e6154ec58f83fa5a7c1a14584ad87804fecc69092ea8e87b57027bf9246cc58",
+      "bytes": 19372,
+      "use": "MPLS Exp alanının Traffic Class (TC) olarak yeniden adlandırılması"
     },
     {
       "number": 5737,
@@ -685,6 +775,68 @@
       "use": "NTPv4 paket başlığı ve zaman damgası biçimleri"
     },
     {
+      "number": 6325,
+      "title": "Routing Bridges (RBridges): Base Protocol Specification",
+      "authors": [
+        "R. Perlman",
+        "D. Eastlake 3rd",
+        "D. Dutt",
+        "S. Gai",
+        "A. Ghanwani"
+      ],
+      "date": "July 2011",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC6327",
+        "RFC6439",
+        "RFC7172",
+        "RFC7177",
+        "RFC7179",
+        "RFC7180",
+        "RFC7357",
+        "RFC7455",
+        "RFC7780",
+        "RFC7783",
+        "RFC8139",
+        "RFC8249",
+        "RFC8361",
+        "RFC8377"
+      ],
+      "doi": "10.17487/RFC6325",
+      "url": "https://www.rfc-editor.org/rfc/rfc6325",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc6325.txt",
+      "sha256": "1b5c66cc4504d19fa8d20e133f3ea5dd2aeedafb4e1a90feb111fc98d5360eb4",
+      "bytes": 243158,
+      "use": "802.1Q VLAN etiketinin öncelik, C (DEI) ve VLAN ID alanları"
+    },
+    {
+      "number": 6455,
+      "title": "The WebSocket Protocol",
+      "authors": [
+        "I. Fette",
+        "A. Melnikov"
+      ],
+      "date": "December 2011",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC7936",
+        "RFC8307",
+        "RFC8441"
+      ],
+      "doi": "10.17487/RFC6455",
+      "url": "https://www.rfc-editor.org/rfc/rfc6455",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc6455.txt",
+      "sha256": "765775326aee0ecca9b04bde3fd1f52932d498e33e34e428bd61b8a24da0fa3b",
+      "bytes": 162067,
+      "use": "WebSocket çerçeve biçimi"
+    },
+    {
       "number": 7252,
       "title": "The Constrained Application Protocol (CoAP)",
       "authors": [
@@ -735,7 +887,7 @@
       "text_url": "https://www.rfc-editor.org/rfc/rfc7348.txt",
       "sha256": "731475429b30bf4b29a102a0c9217cb0d3522c34fd546ba7b134fec931e83574",
       "bytes": 49406,
-      "use": "VXLAN paket başlığı ve katman 2 tünelleme formatı"
+      "use": "VXLAN paket başlığı ve katman 2 tünelleme formatı; iç çerçeve şemasındaki 802.1Q TPID ve EtherType alanları"
     },
     {
       "number": 8200,
@@ -796,6 +948,116 @@
       "sha256": "3a3540c90ef2da48caa5cba627455025ef8cff6d1f988c6d0a83305485e4aa0a",
       "bytes": 370298,
       "use": "DHCPv6 istemci-sunucu iletisi ve seçenekleri"
+    },
+    {
+      "number": 8489,
+      "title": "Session Traversal Utilities for NAT (STUN)",
+      "authors": [
+        "M. Petit-Huguenin",
+        "G. Salgueiro",
+        "J. Rosenberg",
+        "D. Wing",
+        "R. Mahy",
+        "P. Matthews"
+      ],
+      "date": "February 2020",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC5389"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC8489",
+      "url": "https://www.rfc-editor.org/rfc/rfc8489",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc8489.txt",
+      "sha256": "3a1c97ec36576fda83b5f39fbe1d033c6c0b934e2209a29bb21b9ace57ef4289",
+      "bytes": 166237,
+      "use": "STUN ileti başlığı ve XOR-MAPPED-ADDRESS özniteliği"
+    },
+    {
+      "number": 8926,
+      "title": "Geneve: Generic Network Virtualization Encapsulation",
+      "authors": [
+        "J. Gross, Ed.",
+        "I. Ganga, Ed.",
+        "T. Sridhar, Ed."
+      ],
+      "date": "November 2020",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC8926",
+      "url": "https://www.rfc-editor.org/rfc/rfc8926",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc8926.txt",
+      "sha256": "23a9fcd3c23b93a103c0228128b2dce808323a7a9d15ea9cbb395fdb9f67e37d",
+      "bytes": 84312,
+      "use": "Geneve tünel başlığı"
+    },
+    {
+      "number": 9000,
+      "title": "QUIC: A UDP-Based Multiplexed and Secure Transport",
+      "authors": [
+        "J. Iyengar, Ed.",
+        "M. Thomson, Ed."
+      ],
+      "date": "May 2021",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9000",
+      "url": "https://www.rfc-editor.org/rfc/rfc9000",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9000.txt",
+      "sha256": "f88aae47f8b18e102024916e975e919201d8dde689cba79b01079eaedd402e22",
+      "bytes": 403442,
+      "use": "QUIC Initial paketi ve değişken uzunluklu tamsayılar"
+    },
+    {
+      "number": 9001,
+      "title": "Using TLS to Secure QUIC",
+      "authors": [
+        "M. Thomson, Ed.",
+        "S. Turner, Ed."
+      ],
+      "date": "May 2021",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9001",
+      "url": "https://www.rfc-editor.org/rfc/rfc9001",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9001.txt",
+      "sha256": "3bbaecdf5afd278052a2c48348ce118c4ff8d0cf6b9915549858171b3f98a591",
+      "bytes": 126175,
+      "use": "QUIC başlık koruması ve Initial anahtarları"
+    },
+    {
+      "number": 9113,
+      "title": "HTTP/2",
+      "authors": [
+        "M. Thomson, Ed.",
+        "C. Benfield, Ed."
+      ],
+      "date": "June 2022",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC7540",
+        "RFC8740"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9113",
+      "url": "https://www.rfc-editor.org/rfc/rfc9113",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9113.txt",
+      "sha256": "a00ef91b64e111a282e77ec66980f5242e77c0bb5e33e0927e3b6757080506de",
+      "bytes": 191811,
+      "use": "HTTP/2 çerçeve başlığı ve SETTINGS çerçevesi"
     },
     {
       "number": 9260,

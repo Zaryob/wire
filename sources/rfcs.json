@@ -62,6 +62,10 @@
       "use": "GRE paket başlığı ve sağlama toplamı"
     },
     {
+      "number": 3032,
+      "use": "MPLS etiket yığını girdisinin kodlanması"
+    },
+    {
       "number": 3168,
       "use": "IP ve TCP başlıklarında ECN"
     },
@@ -82,12 +86,20 @@
       "use": "IPsec AH başlığı ve veri bütünlüğü"
     },
     {
+      "number": 4303,
+      "use": "IPsec ESP başlığı ve kuyruğu"
+    },
+    {
       "number": 4340,
       "use": "DCCP paket başlığı ve tıkanıklık denetimi"
     },
     {
       "number": 4443,
       "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 5462,
+      "use": "MPLS Exp alanının Traffic Class (TC) olarak yeniden adlandırılması"
     },
     {
       "number": 5737,
@@ -106,12 +118,20 @@
       "use": "NTPv4 paket başlığı ve zaman damgası biçimleri"
     },
     {
+      "number": 6325,
+      "use": "802.1Q VLAN etiketinin öncelik, C (DEI) ve VLAN ID alanları"
+    },
+    {
+      "number": 6455,
+      "use": "WebSocket çerçeve biçimi"
+    },
+    {
       "number": 7252,
       "use": "CoAP ileti başlığı ve IoT istek/yanıt formatı"
     },
     {
       "number": 7348,
-      "use": "VXLAN paket başlığı ve katman 2 tünelleme formatı"
+      "use": "VXLAN paket başlığı ve katman 2 tünelleme formatı; iç çerçeve şemasındaki 802.1Q TPID ve EtherType alanları"
     },
     {
       "number": 8200,
@@ -120,6 +140,26 @@
     {
       "number": 8415,
       "use": "DHCPv6 istemci-sunucu iletisi ve seçenekleri"
+    },
+    {
+      "number": 8489,
+      "use": "STUN ileti başlığı ve XOR-MAPPED-ADDRESS özniteliği"
+    },
+    {
+      "number": 8926,
+      "use": "Geneve tünel başlığı"
+    },
+    {
+      "number": 9000,
+      "use": "QUIC Initial paketi ve değişken uzunluklu tamsayılar"
+    },
+    {
+      "number": 9001,
+      "use": "QUIC başlık koruması ve Initial anahtarları"
+    },
+    {
+      "number": 9113,
+      "use": "HTTP/2 çerçeve başlığı ve SETTINGS çerçevesi"
     },
     {
       "number": 9260,
