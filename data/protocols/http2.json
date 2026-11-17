@@ -1,0 +1,135 @@
+{
+  "order": 35,
+  "name": "HTTP/2",
+  "title": "HTTP/2 çerçevesi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "HTTP/2 istekleri ve yanıtları metin satırları yerine ikili çerçevelerle taşır; aynı TCP bağlantısında birçok akış çerçeve çerçeve iç içe ilerler. Her çerçeve, uzunluğu, türü, bayrakları ve ait olduğu akışı belirten 9 sekizlilik bir başlıkla başlar.",
+  "layout": {
+    "rfc": 9113,
+    "section": "4.1",
+    "kind": "figure",
+    "anchor": "HTTP Frame",
+    "label": "Figure 1: Frame Layout"
+  },
+  "notes": [
+    "RFC 9113, QUIC ile aynı şekil biçimini kullanır; wire alan genişliklerini bu şekilden okur.",
+    "Bağlantı, istemcinin gönderdiği \"PRI * HTTP/2.0\" ile başlayan 24 sekizlilik giriş dizisiyle (connection preface) açılır; hemen ardından iki taraf da birer SETTINGS çerçevesi gönderir (RFC 9113 §3.4).",
+    "Varsayılan en büyük çerçeve yükü 16 384 sekizlidir; daha büyüğü yalnızca karşı taraf SETTINGS_MAX_FRAME_SIZE ile izin verirse gönderilebilir.",
+    "TLS üzerinde HTTP/2, ALPN ile \"h2\" adıyla seçilir. HTTP/3 ise aynı çerçeve fikrini QUIC akışları üzerine taşır."
+  ],
+  "fields": [
+    {
+      "key": "length",
+      "name": "Length",
+      "bits": 24,
+      "desc": "Yükün uzunluğu, sekizli olarak; 9 sekizlilik başlık dahil değildir.",
+      "ref": {
+        "rfc": 9113,
+        "section": "4.1",
+        "label": "Frame Format"
+      },
+      "example": 12
+    },
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "Çerçeve türü; yükün biçimini ve anlamını belirler. Bilinmeyen türler yok sayılır.",
+      "ref": {
+        "rfc": 9113,
+        "section": "4.1",
+        "label": "Frame Format"
+      },
+      "example": 4,
+      "hex": true,
+      "values": [
+        [
+          "0x00",
+          "DATA"
+        ],
+        [
+          "0x01",
+          "HEADERS"
+        ],
+        [
+          "0x03",
+          "RST_STREAM"
+        ],
+        [
+          "0x04",
+          "SETTINGS"
+        ],
+        [
+          "0x06",
+          "PING"
+        ],
+        [
+          "0x07",
+          "GOAWAY"
+        ],
+        [
+          "0x08",
+          "WINDOW_UPDATE"
+        ]
+      ]
+    },
+    {
+      "key": "flags",
+      "name": "Flags",
+      "bits": 8,
+      "desc": "Türe özgü bayraklar. SETTINGS için 0x01 ACK, karşı tarafın ayarlarının alındığını bildirir.",
+      "ref": {
+        "rfc": 9113,
+        "section": "4.1",
+        "label": "Frame Format"
+      },
+      "example": 0,
+      "hex": true
+    },
+    {
+      "key": "reserved",
+      "name": "Reserved",
+      "bits": 1,
+      "desc": "Anlamı olmayan ayrılmış bit; gönderimde 0, alımda yok sayılır.",
+      "ref": {
+        "rfc": 9113,
+        "section": "4.1",
+        "label": "Frame Format"
+      },
+      "example": 0
+    },
+    {
+      "key": "stream_id",
+      "name": "Stream Identifier",
+      "bits": 31,
+      "desc": "Çerçevenin ait olduğu akış. 0, bağlantının tamamını ilgilendiren çerçeveler içindir; istemcinin açtığı akışlar tek, sunucununkiler çift numaralıdır.",
+      "ref": {
+        "rfc": 9113,
+        "section": "4.1",
+        "label": "Frame Format"
+      },
+      "example": 0
+    },
+    {
+      "key": "payload",
+      "name": "Frame Payload",
+      "bits": "değişken",
+      "desc": "Türe özgü yük. SETTINGS'te her biri 16 bitlik tanımlayıcı ve 32 bitlik değerden oluşan 6 sekizlilik ayarlar.",
+      "ref": {
+        "rfc": 9113,
+        "section": "6.5.1",
+        "label": "SETTINGS Format"
+      },
+      "range": ".."
+    }
+  ],
+  "example": {
+    "payload": "000300000064000400010000",
+    "note": "Bağlantının başında istemcinin gönderdiği SETTINGS çerçevesi. Akış 0'dadır, çünkü ayarlar bağlantının tamamına uygulanır. İki ayar taşır: SETTINGS_MAX_CONCURRENT_STREAMS (0x3) = 100 ve SETTINGS_INITIAL_WINDOW_SIZE (0x4) = 65 536. Her ayar 6 sekizli olduğundan yük 12 sekizlidir."
+  },
+  "refs": [
+    9113
+  ],
+  "id": "http2"
+}
