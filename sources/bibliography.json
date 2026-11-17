@@ -292,6 +292,36 @@
       "use": "IGMPv2 ileti başlığı ve çok noktaya yayın üyelik raporları"
     },
     {
+      "number": 2328,
+      "title": "OSPF Version 2",
+      "authors": [
+        "J. Moy"
+      ],
+      "date": "April 1998",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC2178"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC5709",
+        "RFC6549",
+        "RFC6845",
+        "RFC6860",
+        "RFC7474",
+        "RFC8042",
+        "RFC9355",
+        "RFC9454"
+      ],
+      "doi": "10.17487/RFC2328",
+      "url": "https://www.rfc-editor.org/rfc/rfc2328",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc2328.txt",
+      "sha256": "981690e297fbba9e8ef655802552b5529cb17f1ffe790ad2d55706cc522ff50c",
+      "bytes": 524985,
+      "use": "OSPFv2 paket başlığı"
+    },
+    {
       "number": 2474,
       "title": "Definition of the Differentiated Services Field (DS Field) in the IPv4 and IPv6 Headers",
       "authors": [
@@ -547,6 +577,42 @@
       "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
     },
     {
+      "number": 4271,
+      "title": "A Border Gateway Protocol 4 (BGP-4)",
+      "authors": [
+        "Y. Rekhter, Ed.",
+        "T. Li, Ed.",
+        "S. Hares, Ed."
+      ],
+      "date": "January 2006",
+      "status": "DRAFT STANDARD",
+      "obsoletes": [
+        "RFC1771"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC4724",
+        "RFC6286",
+        "RFC6608",
+        "RFC6793",
+        "RFC7606",
+        "RFC7607",
+        "RFC7705",
+        "RFC8212",
+        "RFC8654",
+        "RFC9072",
+        "RFC9687",
+        "RFC9774"
+      ],
+      "doi": "10.17487/RFC4271",
+      "url": "https://www.rfc-editor.org/rfc/rfc4271",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4271.txt",
+      "sha256": "98b851146abcd56ecbb398dd1a818bcde2dcac6fde3d901c423d988f86eaab76",
+      "bytes": 222702,
+      "use": "BGP-4 mesaj başlığı ve OPEN mesajı"
+    },
+    {
       "number": 4302,
       "title": "IP Authentication Header",
       "authors": [
@@ -640,6 +706,25 @@
       "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf",
       "bytes": 48969,
       "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 5398,
+      "title": "Autonomous System (AS) Number Reservation for Documentation Use",
+      "authors": [
+        "G. Huston"
+      ],
+      "date": "December 2008",
+      "status": "INFORMATIONAL",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC5398",
+      "url": "https://www.rfc-editor.org/rfc/rfc5398",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5398.txt",
+      "sha256": "e43a36634b92ab2299da2502d5d9a9250c50d4ac3ffc079c8a085429a0d7fa7f",
+      "bytes": 5433,
+      "use": "Belgeleme için ayrılmış AS numaraları (64496–64511)"
     },
     {
       "number": 5462,
@@ -976,6 +1061,32 @@
       "use": "STUN ileti başlığı ve XOR-MAPPED-ADDRESS özniteliği"
     },
     {
+      "number": 8754,
+      "title": "IPv6 Segment Routing Header (SRH)",
+      "authors": [
+        "C. Filsfils, Ed.",
+        "D. Dukes, Ed.",
+        "S. Previdi",
+        "J. Leddy",
+        "S. Matsushima",
+        "D. Voyer"
+      ],
+      "date": "March 2020",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC9800"
+      ],
+      "doi": "10.17487/RFC8754",
+      "url": "https://www.rfc-editor.org/rfc/rfc8754",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc8754.txt",
+      "sha256": "d1ec8524dbaaf7ef41875aa67d9d658c3cb1c5fae6a4d8119e7e1b82b49b2308",
+      "bytes": 56913,
+      "use": "IPv6 Segment Routing Header"
+    },
+    {
       "number": 8926,
       "title": "Geneve: Generic Network Virtualization Encapsulation",
       "authors": [
@@ -1060,6 +1171,25 @@
       "use": "HTTP/2 çerçeve başlığı ve SETTINGS çerçevesi"
     },
     {
+      "number": 9114,
+      "title": "HTTP/3",
+      "authors": [
+        "M. Bishop, Ed."
+      ],
+      "date": "June 2022",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9114",
+      "url": "https://www.rfc-editor.org/rfc/rfc9114",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9114.txt",
+      "sha256": "6b84555c88eeebcf5d2b2e1d9d7b58630abc97ab877b2cf62dee4cd635db34e4",
+      "bytes": 155206,
+      "use": "HTTP/3 çerçeve biçimi"
+    },
+    {
       "number": 9260,
       "title": "Stream Control Transmission Protocol",
       "authors": [
@@ -1139,6 +1269,51 @@
       "sha256": "5c52f6cb6aacb1dea947a206bc8775ec8aaed52d74b92c600f1b1166d5c3c0f1",
       "bytes": 79284,
       "use": "Örneklerde kullanılan belgeleme MAC adresleri"
+    },
+    {
+      "number": 9568,
+      "title": "Virtual Router Redundancy Protocol (VRRP) Version 3 for IPv4 and IPv6",
+      "authors": [
+        "A. Lindem",
+        "A. Dogra"
+      ],
+      "date": "May 2024",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC5798"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9568",
+      "url": "https://www.rfc-editor.org/rfc/rfc9568",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9568.txt",
+      "sha256": "c67e38b76eb5993be562b200facbf7ef23eebc9c8c785829d5db65e8b6785830",
+      "bytes": 87381,
+      "use": "VRRP sürüm 3 paket biçimi"
+    },
+    {
+      "number": 9776,
+      "title": "Internet Group Management Protocol, Version 3",
+      "authors": [
+        "B. Haberman, Ed."
+      ],
+      "date": "March 2025",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC3376"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC2236"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC9776",
+      "url": "https://www.rfc-editor.org/rfc/rfc9776",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9776.txt",
+      "sha256": "87ea3971431648a3a9acb662bc4254798de8fefa1e62f5fbf075ddd8b47dc207",
+      "bytes": 125649,
+      "use": "IGMPv3 Membership Query iletisi"
     }
   ]
 }
