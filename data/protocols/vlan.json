@@ -1,0 +1,137 @@
+{
+  "order": 2,
+  "name": "802.1Q",
+  "title": "IEEE 802.1Q VLAN etiketi",
+  "layer": "Bağlantı",
+  "rowBits": 32,
+  "summary": "IEEE 802.1Q, bir Ethernet çerçevesine kaynak MAC adresi ile EtherType arasına giren 4 sekizlilik bir etiket ekleyerek tek bir fiziksel ağı birbirinden yalıtılmış sanal yerel ağlara (VLAN) böler. Etiket, 16 bitlik bir EtherType (0x8100) ile öncelik, C biti ve 12 bitlik VLAN kimliğini taşıyan 16 bitlik bilgiden oluşur. IEEE 802.1Q metni okunmadı; alanlar ve değerler onu aktaran RFC 6325 ve RFC 7348'den alınmıştır.",
+  "layout": {
+    "rfc": 6325,
+    "section": "4.1.1",
+    "kind": "diagram",
+    "label": "VLAN Tag Information",
+    "note": "Alanları tanımlayan IEEE 802.1Q metni okunmadığı için karşılaştırma, aynı alanları yeniden çizen RFC 7348 ve RFC 6325 şemalarıyla yapılır.",
+    "parts": [
+      {
+        "rfc": 7348,
+        "section": "5",
+        "anchor": "|OptnlEthtype = C-Tag 802.1Q    | Inner.VLAN Tag Information    |",
+        "fromAnchor": true,
+        "slice": [
+          0,
+          1
+        ]
+      },
+      {
+        "rfc": 6325,
+        "section": "4.1.1",
+        "anchor": "| Priority  | C |",
+        "rowBits": 16
+      },
+      {
+        "rfc": 7348,
+        "section": "5",
+        "anchor": "| Ethertype of Original Payload |",
+        "fromAnchor": true,
+        "slice": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Etiket çerçeveyi 4 sekizli uzatır: 0x8100 ve ardından 16 bitlik etiket bilgisi, özgün EtherType'tan önce gelir.",
+    "12 bitlik VLAN kimliği 4096 değer alır. 0 ve 0xFFF ayrık olduğundan 0x001–0xFFE arası 4094 VLAN kullanılabilir (RFC 6325 §4.1.1). Daha büyük ağlar için VXLAN ve Geneve 24 bitlik kimlik kullanır.",
+    "IEEE 802.1ad servis etiketleri (S-tag) ve üst üste etiketler RFC 6325'in kapsamı dışındadır; bu sayfa yalnızca müşteri etiketini (C-tag) ele alır.",
+    "Alanları tanımlayan IEEE 802.1Q metni okunmadı. Genişlikler, aynı alanları çizen RFC 7348 ve RFC 6325 şemalarına karşı doğrulanır; değerler RFC 6325 §4.1.1'den alınmıştır."
+  ],
+  "fields": [
+    {
+      "key": "tpid",
+      "name": "Tag Protocol Identifier (TPID)",
+      "bits": 16,
+      "desc": "Etiketsiz çerçevede EtherType'ın bulunduğu yerde durur ve çerçevenin etiketli olduğunu gösterir. Müşteri VLAN etiketinin (C-tag) EtherType değeri 0x8100'dür.",
+      "ref": {
+        "rfc": 6325,
+        "section": "4.1.1",
+        "label": "VLAN Tag Information"
+      },
+      "example": 33024,
+      "hex": true
+    },
+    {
+      "key": "pcp",
+      "name": "Priority (PCP)",
+      "bits": 3,
+      "desc": "Çerçevenin önceliği, 0–7. 1 en düşük, 7 en yüksek önceliktir; varsayılan değer olan 0, 1'den yüksek, 2'den düşük sayılır.",
+      "ref": {
+        "rfc": 6325,
+        "section": "4.1.1",
+        "label": "VLAN Tag Information"
+      },
+      "example": 5,
+      "values": [
+        [
+          "1",
+          "En düşük öncelik"
+        ],
+        [
+          "0",
+          "Varsayılan; 1'den yüksek, 2'den düşük"
+        ],
+        [
+          "2–7",
+          "Artan öncelik; 7 en yüksek"
+        ]
+      ]
+    },
+    {
+      "key": "c",
+      "name": "C",
+      "bits": 1,
+      "desc": "RFC 6325 bu biti C olarak çizer. Anlamını IEEE 802.1Q tanımlar; o metin okunmadığı için burada verilmez.",
+      "ref": {
+        "rfc": 6325,
+        "section": "4.1.1",
+        "label": "VLAN Tag Information"
+      },
+      "example": 0
+    },
+    {
+      "key": "vid",
+      "name": "VLAN Identifier (VID)",
+      "bits": 12,
+      "desc": "Çerçevenin ait olduğu VLAN. 0 VLAN belirtmez, yalnızca öncelik taşır (priority-tagged); 0xFFF kullanılmamalıdır. Geçerli aralık 0x001–0xFFE'dir.",
+      "ref": {
+        "rfc": 6325,
+        "section": "4.1.1",
+        "label": "VLAN Tag Information"
+      },
+      "example": 100
+    },
+    {
+      "key": "type",
+      "name": "EtherType",
+      "bits": 16,
+      "desc": "Etiketin ardından gelen yükün türü; etiketsiz çerçevedeki EtherType ile aynıdır. 0x0800 IPv4 datagramıdır.",
+      "ref": {
+        "rfc": 894,
+        "label": "Frame Format"
+      },
+      "example": 2048,
+      "hex": true
+    }
+  ],
+  "example": {
+    "payloadFrom": "ipv4",
+    "note": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: EtherType 0x8100, öncelik 5, C biti 0, VLAN 100, dolayısıyla etiket bilgisi 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır."
+  },
+  "refs": [
+    "ieee-802.1q-2022",
+    6325,
+    7348,
+    894
+  ],
+  "id": "vlan"
+}

@@ -1,0 +1,529 @@
+{
+  "order": 6,
+  "name": "LLDP",
+  "title": "LLDP veri birimi",
+  "layer": "Bağlantı",
+  "rowBits": 32,
+  "summary": "Bağlantı Katmanı Keşif Protokolü (Link Layer Discovery Protocol - LLDP), bir cihazın kimliğini ve port bilgisini doğrudan bağlı komşularına duyurmasını sağlar. Veri birimi (LLDPDU), 7 bitlik tür ve 9 bitlik uzunluk başlığı taşıyan TLV'lerden oluşur ve sırasıyla Chassis ID, Port ID ve Time To Live TLV'leriyle başlamak zorundadır. Bu sayfa IEEE 802.1AB-2016 metnine dayanır.",
+  "layout": {
+    "kind": "ieee",
+    "method": "lldp",
+    "std": "ieee-802.1ab-2016",
+    "section": "8.2",
+    "label": "LLDPDU format",
+    "refs": [
+      {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.2",
+        "label": "LLDPDU format",
+        "page": 23
+      },
+      {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.4",
+        "label": "Basic TLV format",
+        "page": 24
+      },
+      {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.1",
+        "label": "End Of LLDPDU TLV",
+        "page": 26
+      },
+      {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.4.1",
+        "label": "time to live (TTL)",
+        "page": 29
+      }
+    ],
+    "mib": {
+      "objects": [
+        "lldpV2LocChassisIdSubtype",
+        "lldpV2LocChassisId",
+        "lldpV2LocPortIdSubtype",
+        "lldpV2LocPortId",
+        "lldpV2MessageTxHoldMultiplier",
+        "lldpV2MessageTxInterval"
+      ],
+      "checked": {
+        "date": "2026-11-17",
+        "facts": {
+          "chassisIdSubtypes": [
+            [
+              1,
+              "chassisComponent"
+            ],
+            [
+              2,
+              "interfaceAlias"
+            ],
+            [
+              3,
+              "portComponent"
+            ],
+            [
+              4,
+              "macAddress"
+            ],
+            [
+              5,
+              "networkAddress"
+            ],
+            [
+              6,
+              "interfaceName"
+            ],
+            [
+              7,
+              "local"
+            ]
+          ],
+          "portIdSubtypes": [
+            [
+              1,
+              "interfaceAlias"
+            ],
+            [
+              2,
+              "portComponent"
+            ],
+            [
+              3,
+              "macAddress"
+            ],
+            [
+              4,
+              "networkAddress"
+            ],
+            [
+              5,
+              "interfaceName"
+            ],
+            [
+              6,
+              "agentCircuitId"
+            ],
+            [
+              7,
+              "local"
+            ]
+          ],
+          "chassisIdSize": [
+            1,
+            255
+          ],
+          "portIdSize": [
+            1,
+            255
+          ],
+          "txInterval": 30,
+          "holdMultiplier": 4,
+          "ttlMax": 65535,
+          "ttlBits": 16,
+          "typeBits": 7,
+          "reservedTypes": [
+            9,
+            126
+          ],
+          "unknownTypeRange": [
+            9,
+            126
+          ],
+          "lengthBits": 9,
+          "infoMax": 511,
+          "references": {
+            "lldpV2LocChassisIdSubtype": "8.5.2.2",
+            "lldpV2LocChassisId": "8.5.2.3",
+            "lldpV2LocPortIdSubtype": "8.5.3.2",
+            "lldpV2LocPortId": "8.5.3.3",
+            "lldpV2MessageTxHoldMultiplier": "9.2.5.6",
+            "lldpV2MessageTxInterval": "9.2.5.7"
+          }
+        }
+      }
+    },
+    "checked": {
+      "date": "2026-11-17",
+      "sha256": "29a0de711e6db1ed7e09acec776ecbbd5e781638e24ec580cef8b5ff8c5ba05a",
+      "facts": {
+        "typeBits": 7,
+        "endOctets": 2,
+        "lengthFollowsType": true,
+        "tlvTypes": {
+          "End Of LLDPDU": {
+            "type": 0,
+            "usage": "Optional",
+            "clause": "8.5.1"
+          },
+          "Chassis ID": {
+            "type": 1,
+            "usage": "Mandatory",
+            "clause": "8.5.2"
+          },
+          "Port ID": {
+            "type": 2,
+            "usage": "Mandatory",
+            "clause": "8.5.3"
+          },
+          "Time To Live": {
+            "type": 3,
+            "usage": "Mandatory",
+            "clause": "8.5.4"
+          },
+          "Port Description": {
+            "type": 4,
+            "usage": "Optional",
+            "clause": "8.5.5"
+          },
+          "System Name": {
+            "type": 5,
+            "usage": "Optional",
+            "clause": "8.5.6"
+          },
+          "System Description": {
+            "type": 6,
+            "usage": "Optional",
+            "clause": "8.5.7"
+          },
+          "System Capabilities": {
+            "type": 7,
+            "usage": "Optional",
+            "clause": "8.5.8"
+          },
+          "Management Address": {
+            "type": 8,
+            "usage": "Optional",
+            "clause": "8.5.9"
+          }
+        },
+        "organizationallySpecific": 127,
+        "mandatoryOrder": [
+          "Chassis ID",
+          "Port ID",
+          "Time To Live"
+        ],
+        "endOptional": true,
+        "chassisIdSubtypes": [
+          [
+            1,
+            "Chassis component"
+          ],
+          [
+            2,
+            "Interface alias"
+          ],
+          [
+            3,
+            "Port component"
+          ],
+          [
+            4,
+            "MAC address"
+          ],
+          [
+            5,
+            "Network address"
+          ],
+          [
+            6,
+            "Interface name"
+          ],
+          [
+            7,
+            "Locally assigned"
+          ]
+        ],
+        "portIdSubtypes": [
+          [
+            1,
+            "Interface alias"
+          ],
+          [
+            2,
+            "Port component"
+          ],
+          [
+            3,
+            "MAC address"
+          ],
+          [
+            4,
+            "Network address"
+          ],
+          [
+            5,
+            "Interface name"
+          ],
+          [
+            6,
+            "Agent circuit ID"
+          ],
+          [
+            7,
+            "Locally assigned"
+          ]
+        ],
+        "subtypeMax": 255,
+        "ttlMax": 65535,
+        "txTTLPlusOne": true,
+        "etherType": "88-CC",
+        "nearestBridge": "01-80-C2-00-00-0E",
+        "maxLLDPDU8023": 1500
+      }
+    }
+  },
+  "notes": [
+    "LLDP çerçeveleri EtherType 88-CC ile gönderilir (Table 7-3). Hedef adres genellikle 01-80-C2-00-00-0E'dir: \"nearest bridge\" adresini hiçbir köprü iletmez, bu yüzden LLDPDU yalnızca aynı fiziksel bağlantıdaki komşuya ulaşır (Table 7-1).",
+    "TLV başlığının 7 bitlik türü ve 9 bitlik uzunluğu sekizli sınırına oturmaz: tür, ilk sekizlinin en anlamlı yedi bitidir; o sekizlinin son biti uzunluğun en anlamlı bitidir (§8.4).",
+    "Tür 127, kurumlara özgü TLV'lerin ortak türüdür; değerin başında kurumun OUI'si ve bir alt tür bulunur (§8.6.1). 4–8 isteğe bağlı temel TLV'ler, 9–126 ayrılmıştır (Table 8-1).",
+    "IEEE 802.3'te LLDPDU en çok 1500 sekizli olabilir (§8.2). En küçük uzunluk tanımlı değildir; bitiş TLV'si, 802.3'ün kısa çerçevelere eklediği dolgu baytlarının yeni bir TLV sanılmasını önler (§8.5.1, NOTE).",
+    "IEEE 802.1AB-2016 metni lisanslıdır ve depoda bulunmaz; TLV figürleri PDF'te görüntü olduğu için yerleşim, aynı bilgiyi yazıyla ve tablolarla veren maddelerden okunur. Standardın MIB modülleri de ayrıca okunur.",
+    "Örnekteki MAC adresi RFC 9542 §2.1.4'te belgeleme için ayrılmış aralıktandır."
+  ],
+  "fields": [
+    {
+      "key": "chassis_type",
+      "name": "Chassis ID TLV: Type",
+      "bits": 7,
+      "desc": "TLV türü; Chassis ID için 1 (Table 8-1). Her LLDPDU'nun ilk TLV'sidir. Tür alanı, TLV'nin ilk sekizlisinin en anlamlı yedi bitidir; 9–126 ileride kullanılmak üzere ayrılmıştır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.4.1",
+        "label": "TLV type",
+        "page": 24
+      },
+      "example": 1
+    },
+    {
+      "key": "chassis_len",
+      "name": "Chassis ID TLV: Length",
+      "bits": 9,
+      "desc": "Bilgi dizisinin sekizli cinsinden uzunluğu: alt tür sekizlisi ile kimliğin toplamı (§8.5.2.1). Alan, ilk sekizlinin en az anlamlı bitiyle başlar ve 9 bittir.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.2.1",
+        "label": "TLV information string length",
+        "page": 26
+      },
+      "example": 7
+    },
+    {
+      "key": "chassis_subtype",
+      "name": "Chassis ID subtype",
+      "bits": 8,
+      "desc": "Kimliğin neye dayandığı (Table 8-2). 4, kasadaki bir portun MAC adresidir. 0 ve 8–255 ayrılmıştır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.2.2",
+        "label": "chassis ID subtype",
+        "page": 26,
+        "mib": "lldpV2LocChassisIdSubtype"
+      },
+      "example": 4,
+      "values": [
+        [
+          "1",
+          "Kasa bileşeni (chassisComponent)"
+        ],
+        [
+          "2",
+          "Arayüz takma adı (interfaceAlias)"
+        ],
+        [
+          "3",
+          "Port bileşeni (portComponent)"
+        ],
+        [
+          "4",
+          "MAC adresi (macAddress)"
+        ],
+        [
+          "5",
+          "Ağ adresi (networkAddress)"
+        ],
+        [
+          "6",
+          "Arayüz adı (interfaceName)"
+        ],
+        [
+          "7",
+          "Yerel olarak atanmış (local)"
+        ]
+      ]
+    },
+    {
+      "key": "chassis_id",
+      "name": "Chassis ID",
+      "bits": 48,
+      "desc": "Kasayı tanımlayan değer; boş olamaz. Bu örnekte bir portunun MAC adresi.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.2.3",
+        "label": "chassis ID",
+        "page": 27,
+        "mib": "lldpV2LocChassisId"
+      },
+      "example": "00:00:5e:00:53:01",
+      "type": "mac"
+    },
+    {
+      "key": "port_type",
+      "name": "Port ID TLV: Type",
+      "bits": 7,
+      "desc": "TLV türü; Port ID için 2 (Table 8-1). LLDPDU'nun ikinci TLV'si olmalıdır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.3",
+        "label": "Port ID TLV",
+        "page": 27
+      },
+      "example": 2
+    },
+    {
+      "key": "port_len",
+      "name": "Port ID TLV: Length",
+      "bits": 9,
+      "desc": "Alt tür sekizlisi ile port kimliğinin toplam uzunluğu, sekizli olarak (§8.5.3.1).",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.3.1",
+        "label": "TLV information string length",
+        "page": 28
+      },
+      "example": 5
+    },
+    {
+      "key": "port_subtype",
+      "name": "Port ID subtype",
+      "bits": 8,
+      "desc": "Port kimliğinin neye dayandığı (Table 8-3). 5, arayüzün ifName değeridir. 0 ve 8–255 ayrılmıştır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.3.2",
+        "label": "port ID subtype",
+        "page": 28,
+        "mib": "lldpV2LocPortIdSubtype"
+      },
+      "example": 5,
+      "values": [
+        [
+          "1",
+          "Arayüz takma adı (interfaceAlias)"
+        ],
+        [
+          "2",
+          "Port bileşeni (portComponent)"
+        ],
+        [
+          "3",
+          "MAC adresi (macAddress)"
+        ],
+        [
+          "4",
+          "Ağ adresi (networkAddress)"
+        ],
+        [
+          "5",
+          "Arayüz adı (interfaceName)"
+        ],
+        [
+          "6",
+          "Agent circuit ID (agentCircuitId)"
+        ],
+        [
+          "7",
+          "Yerel olarak atanmış (local)"
+        ]
+      ]
+    },
+    {
+      "key": "port_id",
+      "name": "Port ID",
+      "bits": 32,
+      "desc": "Çerçeveyi gönderen portun kimliği; boş olamaz. Bu örnekte ASCII \"eth0\".",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.3.3",
+        "label": "port ID",
+        "page": 28,
+        "mib": "lldpV2LocPortId"
+      },
+      "example": "65746830",
+      "type": "bytes"
+    },
+    {
+      "key": "ttl_type",
+      "name": "Time To Live TLV: Type",
+      "bits": 7,
+      "desc": "TLV türü; Time To Live için 3 (Table 8-1). LLDPDU'nun üçüncü TLV'si olmalıdır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.4",
+        "label": "Time To Live TLV",
+        "page": 29
+      },
+      "example": 3
+    },
+    {
+      "key": "ttl_len",
+      "name": "Time To Live TLV: Length",
+      "bits": 9,
+      "desc": "TTL alanının uzunluğu: 2 sekizli.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.4.2",
+        "label": "TLV information string length",
+        "page": 25
+      },
+      "example": 2
+    },
+    {
+      "key": "ttl",
+      "name": "Time To Live",
+      "bits": 16,
+      "desc": "Alıcının bu bilgileri kaç saniye geçerli sayacağı; 0–65535. Değeri txTTL'dir: min(msgTxInterval × msgTxHold + 1, 65535) (§9.2.5.22). Varsayılan değerlerle (30 s, 4) 121'dir. 0, alıcının bu porta ait bütün bilgileri silmesini ister.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.4.1",
+        "label": "time to live (TTL)",
+        "page": 29
+      },
+      "example": 121
+    },
+    {
+      "key": "end_type",
+      "name": "End Of LLDPDU TLV: Type",
+      "bits": 7,
+      "desc": "Bitiş TLV'sinin türü, 0. Bitiş TLV'si isteğe bağlıdır; varsa son TLV olmalıdır (§8.2).",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.1",
+        "label": "End Of LLDPDU TLV",
+        "page": 26
+      },
+      "example": 0
+    },
+    {
+      "key": "end_len",
+      "name": "End Of LLDPDU TLV: Length",
+      "bits": 9,
+      "desc": "Bitiş TLV'si 2 sekizlilik, tamamı sıfır bir TLV'dir; uzunluğu 0'dır.",
+      "ref": {
+        "std": "ieee-802.1ab-2016",
+        "section": "8.5.1",
+        "label": "End Of LLDPDU TLV",
+        "page": 26
+      },
+      "example": 0
+    }
+  ],
+  "example": {
+    "note": "Zorunlu üç TLV ile isteğe bağlı bitiş TLV'sini taşıyan kısa bir LLDPDU: kasa kimliği MAC adresi 00:00:5e:00:53:01, port kimliği \"eth0\", 121 saniyelik geçerlilik. İlk iki sekizli 02 07, tür 1 ile uzunluk 7'nin 16 bite sığdırılmış halidir (1 << 9 | 7). Toplam 22 sekizlidir."
+  },
+  "refs": [
+    "ieee-802.1ab-2016",
+    9542
+  ],
+  "id": "lldp"
+}

@@ -1,0 +1,493 @@
+{
+  "order": 29,
+  "name": "PTP",
+  "title": "PTP Sync iletisi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Hassas Zaman Protokolü (Precision Time Protocol - PTP), ağdaki saatleri bir ana saate eşitler. Her PTP iletisi 34 sekizlilik ortak bir başlıkla başlar. Ana saatin düzenli gönderdiği Sync iletisi, başlığa iletinin çıkış anını taşıyan 10 sekizlilik bir zaman damgası ekler. Bu sayfa IEEE 1588-2008 metnine dayanır.",
+  "layout": {
+    "kind": "ieee",
+    "std": "ieee-1588-2008",
+    "section": "13.3",
+    "label": "Table 18 ⎯Common message header",
+    "tables": [
+      {
+        "caption": "Table 18 ⎯Common message header"
+      },
+      {
+        "caption": "Table 26 ⎯Sync and Delay_Req message fields",
+        "skip": [
+          "header (see 13.3)"
+        ]
+      }
+    ],
+    "structs": {
+      "sourcePortIdentity": "PortIdentity",
+      "originTimestamp": "Timestamp"
+    },
+    "refs": [
+      {
+        "std": "ieee-1588-2008",
+        "section": "13.3.1",
+        "label": "Table 18 ⎯Common message header",
+        "page": 124
+      },
+      {
+        "std": "ieee-1588-2008",
+        "section": "13.6.1",
+        "label": "Table 26 ⎯Sync and Delay_Req message fields",
+        "page": 130
+      },
+      {
+        "std": "ieee-1588-2008",
+        "section": "5.3.3",
+        "label": "Timestamp",
+        "page": 13
+      },
+      {
+        "std": "ieee-1588-2008",
+        "section": "5.3.5",
+        "label": "PortIdentity",
+        "page": 13
+      }
+    ],
+    "checked": {
+      "date": "2026-11-17",
+      "sha256": "25288fd3a4e5da1be961bfdb4bece11ee0b63bcdecec0042d61c5e2f23041c2a",
+      "fields": [
+        [
+          "transportSpecific",
+          4
+        ],
+        [
+          "messageType",
+          4
+        ],
+        [
+          "reserved",
+          4
+        ],
+        [
+          "versionPTP",
+          4
+        ],
+        [
+          "messageLength",
+          16
+        ],
+        [
+          "domainNumber",
+          8
+        ],
+        [
+          "reserved",
+          8
+        ],
+        [
+          "flagField",
+          16
+        ],
+        [
+          "correctionField",
+          64
+        ],
+        [
+          "reserved",
+          32
+        ],
+        [
+          "sourcePortIdentity.clockIdentity",
+          64
+        ],
+        [
+          "sourcePortIdentity.portNumber",
+          16
+        ],
+        [
+          "sequenceId",
+          16
+        ],
+        [
+          "controlField",
+          8
+        ],
+        [
+          "logMessageInterval",
+          8
+        ],
+        [
+          "originTimestamp.secondsField",
+          48
+        ],
+        [
+          "originTimestamp.nanosecondsField",
+          32
+        ]
+      ]
+    }
+  },
+  "notes": [
+    "UDP/IPv4 üzerinde olay iletileri (Sync, Delay_Req) 319, çok noktaya yayınlanan genel iletiler 320 numaralı hedef portuna gönderilir (Annex D.2). Doğrudan Ethernet üzerinde EtherType 0x88F7 kullanılır (Annex F.2).",
+    "Tek adımlı bir saat Sync iletisinin kesin çıkış anını originTimestamp alanına yazar ve twoStepFlag 0 olur. İki adımlı saatte twoStepFlag 1'dir; kesin an, aynı sequenceId ile gönderilen Follow_Up iletisinin preciseOriginTimestamp alanında gelir (Table 20, §13.7).",
+    "PTP zaman ölçeğinin çağı 1 Ocak 1970 00:00:00 TAI'dir (§7.2.2). UTC'ye geçiş için gereken fark Announce iletisindeki currentUtcOffset ile bildirilir (§7.2.3).",
+    "Table 20'de bir ileti türü için tanımlanmamış bayraklar 0 gönderilir. currentUtcOffsetValid, ptpTimescale gibi zaman özelliği bayrakları yalnızca Announce iletisinde tanımlıdır; Sync'te 0'dır.",
+    "Bu sayfa IEEE 1588-2008'e dayanır. Standart 2019'da yenilenmiştir; o revizyonun alan adlarındaki ya da anlamlarındaki değişiklikler bu sayfada yoktur."
+  ],
+  "fields": [
+    {
+      "key": "transport_specific",
+      "name": "transportSpecific",
+      "bits": 4,
+      "desc": "Alt katmandaki taşıma protokolünün kullanabileceği alan; anlamı taşıma eklerinde (Annex D–I) tanımlanır. Ethernet eşlemesinde 0 DEFAULT değeridir (Table F.2); UDP/IPv4 eşlemesinde bit 0, sürüm 1 donanımı için 124 sekizlilik dolgu ister (Table D.2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.1",
+        "label": "transportSpecific (Nibble)",
+        "page": 125
+      },
+      "example": 0
+    },
+    {
+      "key": "message_type",
+      "name": "messageType",
+      "bits": 4,
+      "desc": "İletinin türü. 0–3 olay iletileridir ve gönderim ile alım anları zaman damgasıyla ölçülür; 8–D genel iletilerdir. En anlamlı bit iki sınıfı ayırır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.2",
+        "label": "messageType (Enumeration4)",
+        "page": 125
+      },
+      "example": 0,
+      "values": [
+        [
+          "0x0",
+          "Sync (olay)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (olay)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (olay)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (olay)"
+        ],
+        [
+          "0x4–0x7",
+          "Ayrılmış"
+        ],
+        [
+          "0x8",
+          "Follow_Up (genel)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (genel)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (genel)"
+        ],
+        [
+          "0xB",
+          "Announce (genel)"
+        ],
+        [
+          "0xC",
+          "Signaling (genel)"
+        ],
+        [
+          "0xD",
+          "Management (genel)"
+        ],
+        [
+          "0xE–0xF",
+          "Ayrılmış"
+        ]
+      ]
+    },
+    {
+      "key": "reserved_version",
+      "name": "reserved",
+      "bits": 4,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2). §13.3.2.2'deki nota göre messageType'ın ileride genişletilmesi için ayrılmıştır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "version",
+      "name": "versionPTP",
+      "bits": 4,
+      "desc": "Gönderen portun portDS.versionNumber değeri. Standardın bu sürümü için 2'dir (§7.5.5).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.3",
+        "label": "versionPTP (UInteger4)",
+        "page": 125
+      },
+      "example": 2
+    },
+    {
+      "key": "message_length",
+      "name": "messageLength",
+      "bits": 16,
+      "desc": "İletinin başlığın ilk sekizlisinden son sekizlisine kadar toplam uzunluğu. Annex D'deki dolgu dahil değildir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.4",
+        "label": "messageLength (UInteger16)",
+        "page": 125
+      },
+      "example": 44
+    },
+    {
+      "key": "domain",
+      "name": "domainNumber",
+      "bits": 8,
+      "desc": "Sıradan ya da sınır saatlerde, gönderen saatin defaultDS.domainNumber değeri. Aynı ağdaki bağımsız zaman alanları bu numarayla ayrılır.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.5",
+        "label": "domainNumber (UInteger8)",
+        "page": 125
+      },
+      "example": 0
+    },
+    {
+      "key": "reserved_domain",
+      "name": "reserved",
+      "bits": 8,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "flags",
+      "name": "flagField",
+      "bits": 16,
+      "desc": "İki sekizlilik bayrak dizisi; anlamları Table 20'dedir. Bir ileti türü için tanımlanmamış bayraklar 0 olur. Onaltılık değer, sekizli 0'ın bitlerini üst, sekizli 1'in bitlerini alt baytta gösterir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.6",
+        "label": "flagField (Octet[2])",
+        "page": 126
+      },
+      "example": 0,
+      "hex": true,
+      "values": [
+        [
+          "0x0100",
+          "alternateMasterFlag (Announce, Sync, Follow_Up, Delay_Resp)"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag (Sync, Pdelay_Resp)"
+        ],
+        [
+          "0x0400",
+          "unicastFlag (tümü)"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61 (Announce)"
+        ],
+        [
+          "0x0002",
+          "leap59 (Announce)"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid (Announce)"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale (Announce)"
+        ],
+        [
+          "0x0010",
+          "timeTraceable (Announce)"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable (Announce)"
+        ]
+      ]
+    },
+    {
+      "key": "correction",
+      "name": "correctionField",
+      "bits": 64,
+      "desc": "Düzeltme değeri, nanosaniyenin 2^16 katı biriminde işaretli sayı olarak; örneğin 2,5 ns 0x0000000000028000'dir. Sync'te kesirli nanosaniyeleri, saydam saatlerdeki bekleme süresini, eşler arası saatlerde yol gecikmesini ve asimetri düzeltmesini taşır (Table 21).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.7",
+        "label": "correctionField (Integer64)",
+        "page": 126
+      },
+      "example": 0,
+      "hex": true
+    },
+    {
+      "key": "reserved_body",
+      "name": "reserved",
+      "bits": 32,
+      "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.2",
+        "label": "General message format requirements",
+        "page": 124
+      },
+      "example": 0
+    },
+    {
+      "key": "clock_identity",
+      "name": "sourcePortIdentity.clockIdentity",
+      "bits": 64,
+      "desc": "İletiyi gönderen portun portDS.portIdentity değerinin saat kısmı: 8 sekizlilik bir EUI-64. EUI-48'den türetildiğinde OUI'nin üç sekizlisi başa, 3. ve 4. sekizlilere FF ile FE, kalan üç sekizli sona yazılır (§7.5.2.2.2, NOTE 2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.8",
+        "label": "sourcePortIdentity (PortIdentity)",
+        "page": 127
+      },
+      "example": "00005efffe005301",
+      "type": "bytes"
+    },
+    {
+      "key": "port_number",
+      "name": "sourcePortIdentity.portNumber",
+      "bits": 16,
+      "desc": "Saatin iletiyi gönderen PTP portunun numarası. N portlu bir düğümde portlar 1, 2, …, N numaralanır; 0 ve 0xFFFF ayrılmıştır (§7.5.2.3).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "5.3.5",
+        "label": "PortIdentity",
+        "page": 13
+      },
+      "example": 1
+    },
+    {
+      "key": "sequence_id",
+      "name": "sequenceId",
+      "bits": 16,
+      "desc": "Gönderenin her ileti türü için ayrı tuttuğu sıra numarası (§7.3.7). Follow_Up, Delay_Resp gibi yanıtlar ait oldukları iletinin değerini taşır (Table 22).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.9",
+        "label": "sequenceId (UInteger16)",
+        "page": 127
+      },
+      "example": 4660
+    },
+    {
+      "key": "control",
+      "name": "controlField",
+      "bits": 8,
+      "desc": "Sürüm 1 donanımıyla uyumluluk için korunan alan; alıcının kullanması önerilmez. Değeri ileti türüne göre Table 23'te verilir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.10",
+        "label": "controlField (UInteger8)",
+        "page": 127
+      },
+      "example": 0,
+      "values": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Diğerleri"
+        ]
+      ]
+    },
+    {
+      "key": "log_interval",
+      "name": "logMessageInterval",
+      "bits": 8,
+      "desc": "İletilerin gönderim aralığının 2 tabanında logaritması, işaretli sayı olarak. Çok noktaya yayınlanan Sync'te portDS.logSyncInterval değeridir, tek noktaya gönderilende 0x7F (Table 24). 0 saniyede bir ileti demektir.",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.3.2.11",
+        "label": "logMessageInterval (Integer8)",
+        "page": 128
+      },
+      "example": 0,
+      "hex": true
+    },
+    {
+      "key": "origin_seconds",
+      "name": "originTimestamp.secondsField",
+      "bits": 48,
+      "desc": "Sync'in çıkış anının saniye kısmı, PTP çağından bu yana (§5.3.3, §7.2.2).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "13.6.2.1",
+        "label": "originTimestamp (Timestamp)",
+        "page": 130
+      },
+      "example": 1767225637
+    },
+    {
+      "key": "origin_ns",
+      "name": "originTimestamp.nanosecondsField",
+      "bits": 32,
+      "desc": "Aynı anın nanosaniye kısmı; her zaman 10^9'dan küçüktür (§5.3.3).",
+      "ref": {
+        "std": "ieee-1588-2008",
+        "section": "5.3.3",
+        "label": "Timestamp",
+        "page": 13
+      },
+      "example": 500000000
+    }
+  ],
+  "example": {
+    "note": "Tek adımlı bir ana saatin 0 numaralı alanda, çok noktaya yayınla gönderdiği Sync iletisi. flagField 0'dır: tek adımlı saatte twoStepFlag 0'dır ve zaman özelliği bayrakları Sync'te tanımlı değildir. Saat kimliği, belgeleme MAC adresi 00:00:5e:00:53:01'in ortasına FF FE eklenerek türetilmiştir. originTimestamp, PTP çağından bu yana 1 767 225 637,5 saniyeyi gösterir. İleti 44 sekizlidir: 34 sekizli başlık ve 10 sekizli zaman damgası (Table 26)."
+  },
+  "refs": [
+    "ieee-1588-2008",
+    9542
+  ],
+  "id": "ptp"
+}
