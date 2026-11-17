@@ -1,0 +1,292 @@
+{
+  "order": 19,
+  "name": "OSPFv2",
+  "title": "OSPFv2 Hello paketi",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "Önce En Kısa Yolu Aç (Open Shortest Path First - OSPF), bir özerk sistemin içinde bağlantı durumu yönlendirmesi yapar. Her OSPF paketi 24 sekizlilik ortak bir başlıkla başlar. Hello paketleri komşuları bulur ve aynı ağdaki yönlendiricilerin ağ maskesi ile zaman aralıkları üzerinde anlaştığını denetler.",
+  "layout": {
+    "rfc": 2328,
+    "section": "A.3.2",
+    "kind": "diagram",
+    "label": "The Hello packet",
+    "parts": [
+      {
+        "anchor": "|                        Network Mask                           |",
+        "slice": [
+          0,
+          7
+        ]
+      },
+      {
+        "prose": [
+          "A 64-bit field for use by the authentication scheme"
+        ]
+      },
+      {
+        "anchor": "|                        Network Mask                           |",
+        "slice": [
+          9,
+          16
+        ]
+      }
+    ],
+    "note": "Authentication alanı şemada iki ayrı 32 bitlik satır olarak çizildiği için genişliği A.3.1'deki \"64-bit field\" tanımından okunur."
+  },
+  "notes": [
+    "OSPF doğrudan IP üzerinde, 89 numaralı protokolle çalışır. Hello paketleri yayın ağlarında AllSPFRouters adresine (224.0.0.5) gönderilir (RFC 2328 §4, A.1).",
+    "Sağlama toplamı, 64 bitlik kimlik doğrulama alanı dışında bütün OSPF paketi üzerinden hesaplanan IP sağlama toplamıdır (RFC 2328 D.4.1). Bu örnekte kimlik doğrulama alanı sıfır olduğundan sonuç aynıdır.",
+    "Aynı ağdaki yönlendiricilerin Network Mask, HelloInterval ve RouterDeadInterval değerleri aynı olmalıdır; aksi halde komşuluk kurulmaz (RFC 2328 A.3.2).",
+    "Neighbor listesi, son RouterDeadInterval süresi içinde Hello paketi alınan yönlendiricilerin kimliklerini taşır; uzunluğu paket uzunluğundan anlaşılır."
+  ],
+  "fields": [
+    {
+      "key": "version",
+      "name": "Version #",
+      "bits": 8,
+      "desc": "OSPF sürümü; bu belge sürüm 2'yi tanımlar.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": 2
+    },
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "OSPF paket türü.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "Hello"
+        ],
+        [
+          "2",
+          "Database Description"
+        ],
+        [
+          "3",
+          "Link State Request"
+        ],
+        [
+          "4",
+          "Link State Update"
+        ],
+        [
+          "5",
+          "Link State Acknowledgment"
+        ]
+      ]
+    },
+    {
+      "key": "length",
+      "name": "Packet length",
+      "bits": 16,
+      "desc": "Başlık dahil OSPF paketinin uzunluğu, sekizli olarak.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": 48
+    },
+    {
+      "key": "router_id",
+      "name": "Router ID",
+      "bits": 32,
+      "desc": "Paketi gönderen yönlendiricinin kimliği.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": "192.0.2.1",
+      "type": "ipv4"
+    },
+    {
+      "key": "area_id",
+      "name": "Area ID",
+      "bits": 32,
+      "desc": "Paketin ait olduğu alan; omurga alanı 0.0.0.0'dır.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": "0.0.0.0",
+      "type": "ipv4"
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "Kimlik doğrulama alanı hariç bütün paketin IP sağlama toplamı.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": 0,
+      "checksum": "packet",
+      "hex": true
+    },
+    {
+      "key": "autype",
+      "name": "AuType",
+      "bits": 16,
+      "desc": "Kullanılan kimlik doğrulama yöntemi.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": 0,
+      "values": [
+        [
+          "0",
+          "Null authentication"
+        ],
+        [
+          "1",
+          "Simple password"
+        ],
+        [
+          "2",
+          "Cryptographic authentication"
+        ]
+      ]
+    },
+    {
+      "key": "authentication",
+      "name": "Authentication",
+      "bits": 64,
+      "desc": "Kimlik doğrulama yönteminin kullandığı 64 bitlik alan; AuType 0 iken anlamı yoktur.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.1",
+        "label": "The OSPF packet header"
+      },
+      "example": "0000000000000000",
+      "type": "bytes"
+    },
+    {
+      "key": "network_mask",
+      "name": "Network Mask",
+      "bits": 32,
+      "desc": "Paketin gönderildiği arayüzün ağ maskesi.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": "255.255.255.0",
+      "type": "ipv4"
+    },
+    {
+      "key": "hello_interval",
+      "name": "HelloInterval",
+      "bits": 16,
+      "desc": "Yönlendiricinin Hello paketleri arasındaki süre, saniye olarak. Yerel ağ için örnek değer 10 s'dir (RFC 2328 C.3).",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": 10
+    },
+    {
+      "key": "options",
+      "name": "Options",
+      "bits": 8,
+      "desc": "Yönlendiricinin desteklediği isteğe bağlı yetenekler (RFC 2328 A.2). 0x02, E bitidir: AS dışı LSA'ların alana taşınabildiğini gösterir.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": 2,
+      "hex": true
+    },
+    {
+      "key": "rtr_pri",
+      "name": "Rtr Pri",
+      "bits": 8,
+      "desc": "Yönlendiricinin Designated Router seçimindeki önceliği; 0, yönlendiricinin DR ya da BDR olamayacağını gösterir.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": 1
+    },
+    {
+      "key": "dead_interval",
+      "name": "RouterDeadInterval",
+      "bits": 32,
+      "desc": "Bir komşudan Hello alınmayınca onun kapandığına karar verilene kadar geçen süre, saniye olarak. HelloInterval'ın bir katı olmalıdır (örneğin 4) (RFC 2328 C.3).",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": 40
+    },
+    {
+      "key": "dr",
+      "name": "Designated Router",
+      "bits": 32,
+      "desc": "Gönderenin bu ağ için bildiği Designated Router'ın arayüz adresi; yoksa 0.0.0.0.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": "192.0.2.1",
+      "type": "ipv4"
+    },
+    {
+      "key": "bdr",
+      "name": "Backup Designated Router",
+      "bits": 32,
+      "desc": "Backup Designated Router'ın arayüz adresi; yoksa 0.0.0.0.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": "0.0.0.0",
+      "type": "ipv4"
+    },
+    {
+      "key": "neighbor",
+      "name": "Neighbor",
+      "bits": 32,
+      "desc": "Son RouterDeadInterval içinde Hello paketi alınan bir komşunun Router ID'si. Liste uzunluğu değişkendir; bu örnekte bir komşu vardır.",
+      "ref": {
+        "rfc": 2328,
+        "section": "A.3.2",
+        "label": "The Hello packet"
+      },
+      "example": "192.0.2.2",
+      "type": "ipv4",
+      "range": "değişken"
+    }
+  ],
+  "example": {
+    "note": "Omurga alanındaki 192.0.2.1 yönlendiricisinin gönderdiği Hello: kendisi DR'dir, yedek DR yoktur ve 192.0.2.2'yi komşu olarak görmüştür. HelloInterval 10 s, RouterDeadInterval 40 s. Paket 48 sekizlidir: 24 sekizli başlık, 20 sekizli Hello gövdesi ve bir komşu. Sağlama toplamı derleme sırasında hesaplanır."
+  },
+  "refs": [
+    2328,
+    1071,
+    5737
+  ],
+  "id": "ospf"
+}

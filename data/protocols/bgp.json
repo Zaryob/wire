@@ -1,0 +1,173 @@
+{
+  "order": 46,
+  "name": "BGP",
+  "title": "BGP OPEN mesajı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Sınır Ağ Geçidi Protokolü (Border Gateway Protocol - BGP), özerk sistemler arasında yönlendirme bilgisi alışverişi yapar ve internetin yönlendirme protokolüdür. Her BGP mesajı 19 sekizlilik bir başlıkla başlar. TCP bağlantısı kurulduktan sonra iki taraf da önce, sürümü, AS numarasını, tutma süresini ve BGP kimliğini bildiren bir OPEN mesajı gönderir.",
+  "layout": {
+    "rfc": 4271,
+    "section": "4.1",
+    "kind": "diagram",
+    "label": "Message Header Format",
+    "parts": [
+      {
+        "anchor": "|                           Marker                              |",
+        "section": "4.1"
+      },
+      {
+        "anchor": "|    Version    |",
+        "section": "4.2",
+        "slice": [
+          0,
+          5
+        ]
+      }
+    ],
+    "note": "OPEN mesajının şeması 8 bitlik kısa bir satırla başladığı için okuyucu, şemanın en geniş ayırıcı çizgisini cetvel olarak kullanır."
+  },
+  "notes": [
+    "BGP, TCP üzerinde çalışır ve 179 numaralı portu dinler (RFC 4271 §3, §8.2.1).",
+    "Bir BGP mesajı en az 19 (yalnızca başlık), en çok 4096 sekizlidir. Başlıktan sonraki kısım mesaj türüne göre değişir; KEEPALIVE yalnızca başlıktan oluşur (RFC 4271 §4.1, §4.4).",
+    "Tutma süresi içinde KEEPALIVE ya da UPDATE alınmazsa oturum kapatılır. Tutma süresi 0 ya da en az 3 saniye olmalıdır (RFC 4271 §4.2).",
+    "Örnekteki AS numarası 64496, RFC 5398'de belgeleme için ayrılmış 64496–64511 aralığındandır; BGP kimliği 192.0.2.1 de RFC 5737'deki belgeleme bloğundandır."
+  ],
+  "fields": [
+    {
+      "key": "marker",
+      "name": "Marker",
+      "bits": 128,
+      "desc": "Uyumluluk için korunan 16 sekizlilik alan; bütün bitleri 1 olmalıdır.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.1",
+        "label": "Message Header Format"
+      },
+      "example": "ffffffffffffffffffffffffffffffff",
+      "type": "bytes"
+    },
+    {
+      "key": "length",
+      "name": "Length",
+      "bits": 16,
+      "desc": "Başlık dahil mesajın toplam uzunluğu, sekizli olarak; 19 ile 4096 arasında.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.1",
+        "label": "Message Header Format"
+      },
+      "example": 29
+    },
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 8,
+      "desc": "Mesaj türü.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.1",
+        "label": "Message Header Format"
+      },
+      "example": 1,
+      "values": [
+        [
+          "1",
+          "OPEN"
+        ],
+        [
+          "2",
+          "UPDATE"
+        ],
+        [
+          "3",
+          "NOTIFICATION"
+        ],
+        [
+          "4",
+          "KEEPALIVE"
+        ]
+      ]
+    },
+    {
+      "key": "version",
+      "name": "Version",
+      "bits": 8,
+      "desc": "BGP sürümü; güncel sürüm 4'tür.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      },
+      "example": 4
+    },
+    {
+      "key": "my_as",
+      "name": "My Autonomous System",
+      "bits": 16,
+      "desc": "Gönderenin özerk sistem (AS) numarası.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      },
+      "example": 64496
+    },
+    {
+      "key": "hold_time",
+      "name": "Hold Time",
+      "bits": 16,
+      "desc": "Önerilen tutma süresi, saniye olarak. İki tarafın önerisinden küçük olanı kullanılır; 0 ya da en az 3 olmalıdır.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      },
+      "example": 90
+    },
+    {
+      "key": "bgp_id",
+      "name": "BGP Identifier",
+      "bits": 32,
+      "desc": "Gönderenin BGP kimliği; yönlendiricinin IP adreslerinden birine eşittir ve bütün oturumlarında aynıdır.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      },
+      "example": "192.0.2.1",
+      "type": "ipv4"
+    },
+    {
+      "key": "opt_len",
+      "name": "Opt Parm Len",
+      "bits": 8,
+      "desc": "İsteğe bağlı parametrelerin toplam uzunluğu, sekizli olarak; parametre yoksa 0.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      },
+      "example": 0
+    },
+    {
+      "key": "opt_params",
+      "name": "Optional Parameters",
+      "bits": "değişken",
+      "desc": "Parametre türü, uzunluğu ve değerinden oluşan isteğe bağlı parametreler.",
+      "ref": {
+        "rfc": 4271,
+        "section": "4.2",
+        "label": "OPEN Message Format"
+      }
+    }
+  ],
+  "example": {
+    "note": "AS 64496'daki bir yönlendiricinin, TCP bağlantısı kurulur kurulmaz gönderdiği OPEN mesajı: BGP-4, 90 saniyelik tutma süresi, BGP kimliği 192.0.2.1 ve isteğe bağlı parametre yok. Mesaj 29 sekizlidir: 19 sekizli başlık ve 10 sekizli OPEN gövdesi."
+  },
+  "refs": [
+    4271,
+    5398,
+    5737
+  ],
+  "id": "bgp"
+}

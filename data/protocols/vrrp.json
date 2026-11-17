@@ -1,0 +1,167 @@
+{
+  "order": 20,
+  "name": "VRRPv3",
+  "title": "VRRPv3 duyuru paketi",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "Sanal Yönlendirici Yedeklilik Protokolü (Virtual Router Redundancy Protocol - VRRP), bir ağdaki birkaç yönlendiricinin tek bir sanal yönlendiriciyi paylaşmasını sağlar. Etkin yönlendirici düzenli duyurular gönderir; duyurular kesilirse en yüksek öncelikli yedek, sanal IP adresini devralır. Sürüm 3 hem IPv4 hem IPv6 için aynı paketi kullanır.",
+  "layout": {
+    "rfc": 9568,
+    "section": "5.1",
+    "kind": "diagram",
+    "anchor": "|Version| Type  | Virtual Rtr ID|   Priority    |IPvX Addr Count|",
+    "label": "IPv4/IPv6 VRRP Advertisement Packet Format",
+    "parts": [
+      {
+        "anchor": "|Version| Type  | Virtual Rtr ID|   Priority    |IPvX Addr Count|",
+        "fromAnchor": true,
+        "slice": [
+          0,
+          8
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "IPv4'te VRRP paketleri 112 numaralı protokolle, 224.0.0.18 adresine, TTL 255 ile gönderilir; TTL'si 255 olmayan paket atılır (RFC 9568 §5.1.1).",
+    "IPv4 sağlama toplamı yalnızca Version alanından son IPv4 adresine kadar olan VRRP mesajını kapsar. IPv6'da RFC 8200'deki sözde başlık da eklenir (RFC 9568 §5.2.8).",
+    "Öncelik 255, sanal adreslerin sahibi olan yönlendiricidir; 0, etkin yönlendiricinin görevi bıraktığını bildirir ve yedeğin hemen devralmasını sağlar (RFC 9568 §5.2.4)."
+  ],
+  "fields": [
+    {
+      "key": "version",
+      "name": "Version",
+      "bits": 4,
+      "desc": "VRRP sürümü; bu belge için 3.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.1",
+        "label": "Version"
+      },
+      "example": 3
+    },
+    {
+      "key": "type",
+      "name": "Type",
+      "bits": 4,
+      "desc": "Paket türü; tanımlı tek tür 1, ADVERTISEMENT'tır.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.2",
+        "label": "Type"
+      },
+      "example": 1
+    },
+    {
+      "key": "vrid",
+      "name": "Virtual Rtr ID (VRID)",
+      "bits": 8,
+      "desc": "Paketin ait olduğu sanal yönlendirici, 1–255.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.3",
+        "label": "Virtual Rtr ID (VRID)"
+      },
+      "example": 1
+    },
+    {
+      "key": "priority",
+      "name": "Priority",
+      "bits": 8,
+      "desc": "Gönderen yönlendiricinin bu sanal yönlendirici için önceliği. Yedekler için varsayılan 100'dür.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.4",
+        "label": "Priority"
+      },
+      "example": 100,
+      "values": [
+        [
+          "255",
+          "Sanal adreslerin sahibi"
+        ],
+        [
+          "1–254",
+          "Yedek yönlendiriciler; varsayılan 100"
+        ],
+        [
+          "0",
+          "Etkin yönlendirici görevi bırakıyor"
+        ]
+      ]
+    },
+    {
+      "key": "count",
+      "name": "IPvX Addr Count",
+      "bits": 8,
+      "desc": "Pakette bulunan IPv4 ya da IPv6 adreslerinin sayısı; en az 1.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.5",
+        "label": "IPvX Addr Count"
+      },
+      "example": 1
+    },
+    {
+      "key": "rsvd",
+      "name": "Reserve",
+      "bits": 4,
+      "desc": "0 gönderilir, alıcı yok sayar.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.6",
+        "label": "Reserve"
+      },
+      "example": 0
+    },
+    {
+      "key": "max_adv",
+      "name": "Max Advertise Interval",
+      "bits": 12,
+      "desc": "Duyurular arasındaki süre, santisaniye olarak; varsayılan 100 (1 saniye).",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.7",
+        "label": "Maximum Advertisement Interval (Max Advertise Interval)"
+      },
+      "example": 100
+    },
+    {
+      "key": "checksum",
+      "name": "Checksum",
+      "bits": 16,
+      "desc": "IPv4'te VRRP mesajının, Checksum alanı 0 alınarak hesaplanan RFC 1071 sağlama toplamı.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.8",
+        "label": "Checksum"
+      },
+      "example": 0,
+      "checksum": "packet",
+      "hex": true
+    },
+    {
+      "key": "address",
+      "name": "IPv4 Address",
+      "bits": 32,
+      "desc": "Sanal yönlendiriciyle ilişkili IPv4 adresi. Adres sayısı IPvX Addr Count'tan gelir; bu örnekte bir adres vardır.",
+      "ref": {
+        "rfc": 9568,
+        "section": "5.2.9",
+        "label": "IPvX Address(es)"
+      },
+      "example": "192.0.2.254",
+      "type": "ipv4",
+      "range": "değişken"
+    }
+  ],
+  "example": {
+    "note": "VRID 1 için öncelik 100 ile çalışan etkin yönlendiricinin saniyede bir gönderdiği IPv4 duyurusu. Sanal adres 192.0.2.254'tür. Paket 12 sekizlidir: 8 sekizli başlık ve bir IPv4 adresi. Sağlama toplamı derleme sırasında hesaplanır."
+  },
+  "refs": [
+    9568,
+    1071,
+    5737
+  ],
+  "id": "vrrp"
+}
