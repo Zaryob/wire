@@ -50,7 +50,7 @@ export function messageTable(text, caption) {
 }
 
 const primitiveBits = type => {
-  const integer = type.match(/^U?Integer(\d+)$/);
+  const integer = type.match(/^(?:U?Integer|Enumeration)(\d+)$/);
   if (integer) return Number(integer[1]);
   return { Octet: 8, Nibble: 4, Boolean: 1 }[type];
 };
@@ -216,5 +216,38 @@ export function lldpTextFacts(text) {
     etherType: need(all, /LLDP EtherType ([0-9A-F]{2}-[0-9A-F]{2})/, 'LLDP EtherType')[1],
     nearestBridge: need(all, /Nearest bridge (01-80-C2-00-00-[0-9A-F]{2})/, 'nearest bridge address')[1],
     maxLLDPDU8023: Number(need(all, /maximum data field length for the basic, untagged MAC frame \((\d+) octets\)/, 'maximum LLDPDU length')[1]),
+  };
+}
+
+// IEEE 802.1Q-2022 states the tag layout in words (9.4, 9.6, 6.9.3); Figure 9-1
+// survives text extraction only as its bit labels ("Bits: 8 6 5 4 1 8 1").
+
+const between = (text, from, to) => {
+  const start = text.search(from);
+  if (start < 0) throw new Error(`802.1Q text: ${from} not found`);
+  const end = text.slice(start + 1).search(to);
+  return text.slice(start, end < 0 ? undefined : start + 1 + end);
+};
+
+/** What 802.1Q-2022 states about the VLAN tag (C-TAG). */
+export function vlanTextFacts(text) {
+  const all = flat(text);
+  const octets = { one: 1, two: 2, four: 4 };
+  const figure = need(all, /Figure 9-1—VLAN TCI format PCP VID .*? Octets: 1 2 Bits: ((?:\d )+\d) Figure 9-1—VLAN TCI format/, 'Figure 9-1 bit labels')[1].split(' ').map(Number);
+  // Bit labels run 8→1 across octet 1 then octet 2: field boundaries are where they restart or step by more than one.
+  const tags = between(text, /^Table 9-1—IEEE 802\.1Q™ EtherType allocations/m, /^9\.6 VLAN Tag Control Information/m);
+  const reserved = between(text, /^Table 9-2—Reserved VID values/m, /^NOTE 1—There is a distinction/m);
+  const types = between(text, /^Table I-2—Traffic type acronyms/m, /^TableI-3 summarizes/m);
+  return {
+    tpidOctets: octets[need(all, /The TPID is EtherType encoded, i\.e\., is (\w+) octets in length/, 'TPID length')[1]],
+    tciOctets: octets[need(all, /The VLAN TCI field \(Figure ?9-1\) is (\w+) octets in length/, 'TCI length')[1]],
+    vidBits: Number(need(all, /The VID is encoded in a (\d+)-bit field/, 'VID width')[1]),
+    pcpBits: Number(need(all, /conveyed in the (\d+)-bit PCP field and the DEI field/, 'PCP width')[1]),
+    figureBits: figure,
+    tagTypes: Object.fromEntries([...tags.matchAll(/\((802\.1Q\w*TagType)\) ([0-9A-F]{2}-[0-9A-F]{2})|(802\.1QITagType)\)/g)].filter(m => m[1]).map(m => [m[1], m[2]])),
+    reservedVids: [...reserved.matchAll(/^(0|1|2|FFF) (The null VID|The default PVID|The default SR_PVID|Reserved for implementation use)/gm)].map(([, vid, meaning]) => [vid, meaning]),
+    trafficTypes: [...types.matchAll(/^(\d)(?: \(Default\))? ([A-Z]{2}) /gm)].map(([, priority, acronym]) => [Number(priority), acronym]),
+    defaultPriority: Number(need(all, /The default priority used for transmission by end stations is (\d)/, 'default priority')[1]),
+    dropEligibleName: /the Drop Eligible Indicator \(DEI\) in the VLAN tag/.test(all),
   };
 }
