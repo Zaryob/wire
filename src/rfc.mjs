@@ -31,7 +31,13 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
   if (fromAnchor) start = at - 1;
   else while (start > 0 && (isSeparator(lines[start - 1]) || isContent(lines[start - 1]) || isContinuation(lines[start - 1]))) start -= 1;
   if (!isSeparator(lines[start])) throw new Error(`no diagram ruler above anchor: ${anchor}`);
-  const ruler = lines[start].match(/^\+[-+= ]*\+/)[0].replace(/[ ]+$/, '');
+  // The ruler is the widest separator of the diagram: a diagram may open with a
+  // short one (RFC 4271 OPEN starts with an 8-bit "Version" row).
+  let ruler = '';
+  for (let i = start; i < lines.length && (isSeparator(lines[i]) || isContent(lines[i]) || isContinuation(lines[i])); i += 1) {
+    const edge = isSeparator(lines[i]) ? (lines[i].match(/^\s*\+[-+= ]*\+/)?.[0].replace(/[ ]+$/, '') ?? '') : '';
+    if (edge.length > ruler.length) ruler = edge;
+  }
   // Anything right of the ruler's last column is a margin note.
   lines = lines.map(line => line.slice(0, ruler.length).trimEnd());
   const rowChars = ruler.length - 1;
@@ -46,8 +52,9 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
     } else {
       const first = content[0];
       const cells = first.split(/[|:]/).slice(1, -1);
-      // A row cut short ("| Data ...") is trailing payload, not a fixed field.
-      if (first.length === ruler.length) {
+      // A row cut short ("| Data ...") is trailing payload, not a fixed field; a row
+      // that is short but closed ("| Length | Type |", RFC 4271) is a partial row.
+      if (first.length === ruler.length || /[|:]$/.test(first)) {
         for (const cell of cells) widths.push((cell.length + 1) * rowBits / rowChars);
       }
     }
@@ -55,7 +62,7 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
   };
   for (let i = start + 1; i < lines.length; i += 1) {
     const line = lines[i];
-    if (isSeparator(line)) { flush(); if (line.length < ruler.length) break; continue; }
+    if (isSeparator(line)) { flush(); continue; }
     if (!isContent(line) && !isContinuation(line)) break;
     block.push(line);
   }
