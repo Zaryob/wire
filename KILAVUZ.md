@@ -1104,7 +1104,7 @@ Bu bölümde, bilgisayar ağlarının tüm katmanlarındaki protokoller `wire` p
 ### Protokol Uygunluk ve Kabul Kriterleri
 
 Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aranır:
-1. **Otoriter IETF RFC Metni**: Protokol bir IETF RFC'si olarak yayımlanmış olmalıdır. Hiçbir RFC'nin tanımlamadığı protokollerde (LLDP, PTP) IEEE standardı kaynak olabilir. Sayfa, standardın lisanslı bir kopyasının metnine karşı doğrulanır ve sonuç kaydedilir (PTP için IEEE 1588-2008, LLDP için IEEE 802.1AB-2016); metnin kendisi depoya girmez. IEEE'nin tanımladığı ama bir RFC'nin yeniden çizdiği alanlar (802.1Q için RFC 6325 ve RFC 7348) o RFC'ye karşı doğrulanır.
+1. **Otoriter IETF RFC Metni**: Protokol bir IETF RFC'si olarak yayımlanmış olmalıdır. Hiçbir RFC'nin tanımlamadığı protokollerde (LLDP, PTP) IEEE standardı kaynak olabilir. Sayfa, standardın lisanslı bir kopyasının metnine karşı doğrulanır ve sonuç kaydedilir (802.1Q için IEEE 802.1Q-2022, PTP için IEEE 1588-2008, LLDP için IEEE 802.1AB-2016); metnin kendisi depoya girmez.
 2. **Okunabilir Başlık Şeması**: RFC düz metni içinde `src/rfc.mjs` ayrıştırıcısının okuyabileceği standart bir ASCII şeması (`+---+` sınırları ve `|Alan|` hücreleri), RFC 9000 biçiminde bir şekil (`Header Form (1) = 1,`) veya RFC 826 benzeri yapılandırılmış bir alan listesi bulunmalıdır.
 3. **Deterministik Kodlama ve Ayrıştırma**: Alan genişlikleri bit düzeyinde kesin olmalı, değişken kısımlar açıkça sınırlandırılabilmelidir.
 4. **Doğrulanabilir Örnek Paket**: Alan örnek değerlerinden deterministik olarak bir bayt dizisi üretilebilmeli ve gerekiyorsa sağlama toplamı (RFC 1071 veya CRC-32) matematiksel olarak doğrulanabilmelidir.
@@ -1118,7 +1118,7 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 | Protokol | RFC | Bölüm / Şema Durumu | Değerlendirme ve Fizibilite |
 |---|---|---|---|
 | **PPPoE (PPP over Ethernet)** | **RFC 2516** | §4 (Figure) — 32 bit ızgara | **Eklendi**. 6 baytlık sabit başlık: Version (4), Type (4), Code (8), Session_ID (16), Length (16). Doğrulanmış IPv4/ICMP yükü ile çalışır. |
-| **IEEE 802.1Q (VLAN Tagging)** | IEEE 802.1Q / **RFC 6325**, **RFC 7348** | RFC 6325 §4.1.1 — 16 bit ızgara; RFC 7348 §5 | **Eklendi**. TPID (16: 0x8100), PCP (3), DEI (1), VID (12), EtherType (16). IEEE metni indirilemediği için TPID ve EtherType RFC 7348'in VXLAN iç çerçeve şemasından, TCI bitleri RFC 6325'teki VLAN Tag Information şemasından doğrulanır. |
+| **IEEE 802.1Q (VLAN Tagging)** | IEEE 802.1Q-2022 | §9.4, §9.6, §6.9.3; Figure 9-1, Table 9-1, 9-2, I-2 | **Eklendi**. TPID (16: 0x8100), PCP (3), DEI (1), VID (12), EtherType (16). Figure 9-1 metin olarak yalnızca bit etiketleriyle okunduğu için genişlikler, onları yazıyla veren maddelerden de denetlenir; öncelik değerlerinin trafik türleri Table I-2'den gelir. |
 | **LLDP (Link Layer Discovery)** | IEEE 802.1AB | RFC yok | **Eklendi**. 7 bit tür ve 9 bit uzunluklu TLV'ler: Chassis ID, Port ID, TTL, End. TLV figürleri PDF'te görüntü olduğu için yerleşim, aynı bilgiyi yazıyla veren maddelerden (§8.4.1, §8.5.1), Table 8-1, 8-2, 8-3 ve §8.2'deki zorunlu sıradan okunur; TTL hesabı (aralık × çarpan + 1) §9.2.5.22'den. Standardın MIB modülleri de ayrıca denetlenir. |
 | **MPLS etiket yığını** | **RFC 3032**, **RFC 5462** | RFC 5462 §2.1 — 32 bit ızgara | **Eklendi**. Label (20), TC (3), S (1), TTL (8). Şemanın sağındaki "Label Stack Entry" yazısı okuyucu tarafından kenar notu olarak ayıklanır. |
 | **RARP (Reverse ARP)** | **RFC 903** | RFC 826 şablonu | **Eklendi**. RFC 826 ile aynı 28 baytlık yerleşim (`ar$op = 3/4`), disksiz önyükleme için tam doğrulanmıştır. |
@@ -1133,6 +1133,10 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 | **GRE (Generic Routing Encapsulation)** | **RFC 2784** | §2.1 — 32 bit ızgara | **Eklendi**. C (1), Reserved0 (12), Version (3), Protocol Type (16), Checksum (16), Reserved1 (16). Doğrulanmış IPv4 yükü taşır. |
 | **IPsec AH (Authentication Header)** | **RFC 4302** | §2 — 32 bit ızgara | **Eklendi**. Next Header (8), Payload Len (8), Reserved (16), SPI (32), Sequence Number (32), ICV (değişken). TCP segmentlerini korur. |
 | **IPsec ESP** | **RFC 4303** | §2 — 32 bit ızgara | **Eklendi**. SPI (32), Sequence Number (32), Payload (değişken), Padding, Pad Length (8), Next Header (8), ICV (değişken). Başlık ve kuyruk aynı şemanın iki ayrı satırından doğrulanır; değişken alanlar örnek için boyutlandırılır. |
+| **IGMPv3 Membership Query** | **RFC 9776** | §4.1 — 32 bit ızgara | **Eklendi**. Type, Max Resp Code, Checksum, Group Address, Flags, S, QRV, QQIC, Number of Sources. |
+| **OSPFv2 Hello** | **RFC 2328** | A.3.1, A.3.2 — 32 bit ızgara | **Eklendi**. 24 sekizlilik ortak başlık ve Hello gövdesi; 64 bitlik Authentication alanı iki satırda çizildiği için genişliği metinden okunur. |
+| **VRRPv3** | **RFC 9568** | §5.1 — 32 bit ızgara | **Eklendi**. IPv4 sağlama toplamı sözde başlıksız hesaplanır (§5.2.8). |
+| **IPv6 Segment Routing Header** | **RFC 8754** | §2 — 32 bit ızgara | **Eklendi**. Routing Type 4; segment listesi ters sıradadır. |
 
 #### 3. İletim Katmanı (Transport Layer) Adayları
 
@@ -1142,6 +1146,7 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 | **DCCP (Datagram Congestion Control)** | **RFC 4340** | §5.1 — 32 bit ızgara | **Eklendi**. Source Port (16), Dest Port (16), Data Offset (8), CCVal (4), CsCov (4), Checksum (16), Res (3), Type (4), X (1), Sequence Number (24). RFC 1071 sağlama toplamı. |
 | **VXLAN (Virtual eXtensible LAN)** | **RFC 7348** | §5 — 32 bit ızgara | **Eklendi**. Flags (8), Reserved (24), VNI (24), Reserved (8). İç Ethernet çerçevesini L4 üzerinden tüneller. |
 | **QUIC Initial paketi** | **RFC 9000** | §17.2.2 (Figure 15) — şekil gösterimi | **Eklendi**. RFC 9000 ASCII ızgara yerine `Header Form (1) = 1,` biçiminde şekiller kullandığı için `src/rfc.mjs` bu biçimi ayrıca okur. Aralıklar (0..160) ve değişken uzunluklu tamsayılar (i) da karşılaştırılır; örnekteki genişlikler aralığın içinde olmalıdır. |
+| **QUIC 1-RTT (kısa başlık)** | **RFC 9000** | §17.3.1 (Figure 19) — şekil gösterimi | **Eklendi**. Header Form 0, Spin Bit, Key Phase, hedef bağlantı kimliği ve paket numarası. |
 | **Geneve** | **RFC 8926** | §3.1 — 32 bit ızgara | **Eklendi**. Ver (2), Opt Len (6), O (1), C (1), Rsvd (6), Protocol Type (16), VNI (24), Reserved (8), seçenekler. |
 
 #### 4. Uygulama ve Ağ Yönetimi Katmanı (Application / Management Layer) Adayları
@@ -1157,6 +1162,9 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 | **WebSocket** | **RFC 6455** | §5.2 — 32 bit ızgara ve ABNF | **Eklendi**. FIN, RSV1-3, Opcode, MASK, Payload len; Masking-key genişliği ABNF'deki "32 bits in length" yorumundan doğrulanır. Örnek RFC 6455 §5.7'deki maskelenmiş "Hello" çerçevesidir. |
 | **HTTP/2 çerçevesi** | **RFC 9113** | §4.1 (Figure 1) — şekil gösterimi | **Eklendi**. Length (24), Type (8), Flags (8), Reserved (1), Stream Identifier (31), Frame Payload. Örnek: SETTINGS çerçevesi. |
 | **PTP (Precision Time Protocol)** | IEEE 1588-2008 | RFC yok; Table 18 ve Table 26 | **Eklendi**. 34 sekizlilik ortak başlık ve Sync iletisinin originTimestamp alanı. Alan adları ve genişlikleri lisanslı bir kopyanın metnindeki ileti tablolarından ve `struct PortIdentity`, `struct Timestamp` tanımlarından okunur; sonuç kaydedilir, metin depoya girmez. |
+| **PTP Follow_Up, Delay_Req, Delay_Resp, Announce** | IEEE 1588-2008 | Table 25–28 | **Eklendi**. Gecikme istek-yanıt mekanizması ve ana saat seçimi için kullanılan iletiler; Announce'taki `ClockQuality` yapısı da metindeki `struct` tanımından okunur. |
+| **HTTP/3 çerçevesi** | **RFC 9114** | §7.1 (Figure 3) — şekil gösterimi | **Eklendi**. Type (i), Length (i), Frame Payload. Örnek: SETTINGS çerçevesi. |
+| **BGP OPEN** | **RFC 4271** | §4.1, §4.2 — 32 bit ızgara | **Eklendi**. 16 sekizlilik Marker, Length, Type; OPEN gövdesi. OPEN şeması kısa bir cetvelle başladığı için okuyucu şemanın en geniş ayırıcısını cetvel sayar. |
 
 ---
 
