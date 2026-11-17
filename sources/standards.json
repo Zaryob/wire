@@ -1,0 +1,66 @@
+{
+  "note": "RFC olarak yayımlanmamış standartlar. IEEE metinleri lisanslıdır; depoya konmaz ve yeniden dağıtılmaz. `copy` alanı olan bir standardın lisanslı kopyası .cache/ altına konursa `npm run sync:ieee` metnini çıkarır ve yerleşimi o metne karşı doğrular; `mib` alanı olan standardın MIB modülleri de aynı yolla okunur. Sonuç sayfanın `layout.checked` kaydına yazılır; kopyası olmayan derlemeler (CI) bu kaydı denetler. Ne kopyası ne MIB'i olan standart (802.1Q) okunmamıştır; ona dayanan bölüm numarası ya da değer verilmez.",
+  "entries": [
+    {
+      "id": "ieee-802.1q-2022",
+      "short": "IEEE 802.1Q-2022",
+      "title": "IEEE Standard for Local and Metropolitan Area Networks--Bridges and Bridged Networks",
+      "publisher": "IEEE",
+      "designation": "IEEE Std 802.1Q-2022",
+      "isbn": "9781504491884",
+      "doi": "10.1109/IEEESTD.2022.10004498",
+      "url": "https://doi.org/10.1109/IEEESTD.2022.10004498",
+      "use": "VLAN etiketini tanımlayan standart. Metni okunmadı; alan genişlikleri RFC 6325 ve RFC 7348'e karşı doğrulanır."
+    },
+    {
+      "id": "ieee-802.1ab-2016",
+      "short": "IEEE 802.1AB-2016",
+      "title": "IEEE Standard for Local and metropolitan area networks - Station and Media Access Control Connectivity Discovery",
+      "publisher": "IEEE",
+      "designation": "IEEE Std 802.1AB-2016",
+      "isbn": "9781504406321",
+      "doi": "10.1109/IEEESTD.2016.7433915",
+      "url": "https://doi.org/10.1109/IEEESTD.2016.7433915",
+      "use": "LLDP: LLDPDU biçimi (§8.2), temel TLV biçimi (§8.4, Table 8-1), zorunlu TLV'ler (§8.5.1–8.5.4), alt tür tabloları (Table 8-2, 8-3) ve txTTL (§9.2.5.22). Metin lisanslı bir kopyadan okunur; 11.5.1'deki MIB modülleri de ayrıca okunur.",
+      "mib": {
+        "url": "https://standards.ieee.org/wp-content/uploads/import/download/802.1AB-2016_downloads.zip",
+        "clause": "11.5.1",
+        "files": [
+          {
+            "file": ".cache/ieee/ieee-802.1ab-2016/2016TC_MIB.txt",
+            "module": "LLDP-V2-TC-MIB",
+            "sha256": "a37ea0a3025f13fe94ec8c157ec304c34891f57d8bcb7582780a343893441c62"
+          },
+          {
+            "file": ".cache/ieee/ieee-802.1ab-2016/LLDPV2_MIB.txt",
+            "module": "LLDP-V2-MIB",
+            "sha256": "9d37374c4b6b2767f3f02cf6a6b715bf47340ad17edd6d9322cfcba3f92b324e"
+          }
+        ]
+      },
+      "copy": {
+        "file": ".cache/ieee/ieee-802.1ab-2016.pdf",
+        "pages": 146,
+        "sha256": "29a0de711e6db1ed7e09acec776ecbbd5e781638e24ec580cef8b5ff8c5ba05a"
+      },
+      "pageOffset": 16
+    },
+    {
+      "id": "ieee-1588-2008",
+      "short": "IEEE 1588-2008",
+      "title": "IEEE Standard for a Precision Clock Synchronization Protocol for Networked Measurement and Control Systems",
+      "publisher": "IEEE",
+      "designation": "IEEE Std 1588-2008",
+      "isbn": "9780738154008",
+      "doi": "10.1109/IEEESTD.2008.4579760",
+      "url": "https://doi.org/10.1109/IEEESTD.2008.4579760",
+      "use": "PTP ortak ileti başlığı (Table 18) ve Sync iletisi (Table 26)",
+      "pageOffset": 20,
+      "copy": {
+        "file": ".cache/ieee/ieee-1588-2008.pdf",
+        "pages": 289,
+        "sha256": "25288fd3a4e5da1be961bfdb4bece11ee0b63bcdecec0042d61c5e2f23041c2a"
+      }
+    }
+  ]
+}
