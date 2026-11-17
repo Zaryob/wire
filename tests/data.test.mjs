@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { root, bibliography, rfcEntry, rfcText, verifyLayout, loadProtocols } from '../src/sources.mjs';
-import { diagramWidths, rfc826Layout, proseWidths, octetTable } from '../src/rfc.mjs';
+import { root, bibliography, standards, rfcEntry, standardEntry, isRfc, refKey, rfcText, ieeeText, verifyLayout, loadProtocols } from '../src/sources.mjs';
+import { messageTable, structMembers, pageOf, pdfPage } from '../src/ieee.mjs';
+import { diagramWidths, rfc826Layout, proseWidths, octetTable, figureFields } from '../src/rfc.mjs';
 import { encodeExample, internetChecksum, ipv6Bytes } from '../src/encode.mjs';
 
 const protocols = await loadProtocols();
@@ -38,26 +39,134 @@ test('diagram reader handles the RFC diagram styles in use', async () => {
   const table = octetTable(await rfcText(2131), 'FIELD      OCTETS       DESCRIPTION');
   assert.deepEqual(table.map(row => row.name), ['op', 'htype', 'hlen', 'hops', 'xid', 'secs', 'flags', 'ciaddr', 'yiaddr', 'siaddr', 'giaddr', 'chaddr', 'sname', 'file', 'options']);
   assert.equal(table.at(-1).size, 'var');
+  // Labels left of the diagram (RFC 3550) and notes right of it (RFC 4303, RFC 5462) are not cells.
+  assert.deepEqual(diagramWidths(await rfcText(3550), '|V=2|P|    RC   |   PT=SR=200   |').slice(0, 7), [2, 1, 5, 8, 16, 32, 32]);
+  assert.deepEqual(diagramWidths(await rfcText(4303), 'Security Parameters Index (SPI)                 |').slice(0, 2), [32, 32]);
+  assert.deepEqual(diagramWidths(await rfcText(5462), '| TC  |S|       TTL     |'), [20, 3, 1, 8]);
+  // Rows of one cell with no ruler between them are one field (RFC 8489 Transaction ID).
+  assert.deepEqual(diagramWidths(await rfcText(8489), '|0 0|     STUN Message Type     |'), [2, 14, 16, 32, 96]);
+  // Rulers of "+---+" per bit (RFC 6325) divide the same way.
+  assert.deepEqual(diagramWidths(await rfcText(6325), '| Priority  | C |', 16), [3, 1, 12]);
+  assert.deepEqual(proseWidths(await rfcText(6455), ['[ frame-masking-key ] ; 32 bits in length']), [32]);
+  const initial = figureFields(await rfcText(9000), 'Initial Packet');
+  assert.deepEqual(initial.map(item => item.size), ['1', '1', '2', '2', '2', '32', '8', '0..160', '8', '0..160', 'i', '..', 'i', '8..32', '8..']);
+  assert.equal(initial[7].name, 'Destination Connection ID');
+  // Blank lines inside a figure are skipped (RFC 9113 Figure 1).
+  assert.deepEqual(figureFields(await rfcText(9113), 'HTTP Frame').map(item => item.size), ['24', '8', '8', '1', '31', '..']);
+  assert.throws(() => figureFields(initial.toString(), 'Initial Packet'));
 });
+
+test('a figure layout rejects widths outside the stated range', async () => {
+  const quic = byId.get('quic');
+  const widen = (key, change) => ({ ...quic, fields: quic.fields.map(field => (field.key === key ? { ...field, ...change } : field)) });
+  assert.equal((await verifyLayout(quic)).ok, true);
+  assert.equal((await verifyLayout(widen('dcid', { bits: 168 }))).ok, false, 'a connection ID is at most 160 bits');
+  assert.equal((await verifyLayout(widen('dcid', { range: undefined }))).ok, false, 'a ranged field must repeat the range');
+  assert.equal((await verifyLayout(widen('length', { type: 'uint' }))).ok, false, '(i) needs a variable-length integer');
+  assert.equal((await verifyLayout(widen('version', { bits: 24 }))).ok, false);
+});
+
+test('pages without a citable RFC layout are marked as unverified', async () => {
+  for (const protocol of protocols.filter(item => item.layout.kind === 'standard')) {
+    const check = await verifyLayout(protocol);
+    assert.equal(check.unverified, true, protocol.id);
+    standardEntry(protocol.layout.std);
+    assert.ok(protocol.refs.includes(protocol.layout.std), protocol.id);
+  }
+  assert.deepEqual(protocols.filter(item => item.layout.kind === 'standard').map(item => item.id), [], 'every IEEE page is now checked against its text');
+  // A standard whose text nobody has read is cited without clause numbers, except
+  // where its published MIB states the clause (checked below).
+  for (const protocol of protocols.filter(item => item.layout.kind === 'standard')) {
+    for (const field of protocol.fields) {
+      if (field.ref.mib) assert.deepEqual(Object.keys(field.ref).sort(), ['label', 'mib', 'section', 'std'], `${protocol.id}.${field.key}`);
+      else assert.deepEqual(Object.keys(field.ref), ['std'], `${protocol.id}.${field.key}`);
+    }
+  }
+});
+
+test('the LLDP page agrees with IEEE 802.1AB-2016 and its MIB modules', async () => {
+  const lldp = byId.get('lldp');
+  const check = await verifyLayout(lldp);
+  assert.equal(check.stale, false, 'record differs from the text or the MIB files; run npm run sync:ieee');
+  assert.deepEqual([...check.items, ...check.mibItems].filter(item => !item.ok), [], 'every fact holds');
+  assert.ok(check.items.length >= 9 && check.mibItems.length >= 8);
+  const text = lldp.layout.checked.facts;
+  assert.deepEqual(text.mandatoryOrder, ['Chassis ID', 'Port ID', 'Time To Live']);
+  assert.deepEqual([text.typeBits, text.endOctets * 8 - text.typeBits, text.etherType, text.nearestBridge], [7, 9, '88-CC', '01-80-C2-00-00-0E']);
+  const renumbered = structuredClone(lldp);
+  renumbered.fields.find(field => field.key === 'ttl_type').example = 4;
+  assert.equal((await verifyLayout(renumbered)).ok, false, 'a TLV type that differs from Table 8-1 is rejected');
+  const facts = lldp.layout.mib.checked.facts;
+  assert.deepEqual([facts.typeBits, facts.lengthBits, facts.ttlBits], [7, 9, 16]);
+  assert.equal(facts.txInterval * facts.holdMultiplier + 1, 121, 'TTL with the default interval and multiplier');
+  const changed = structuredClone(lldp);
+  changed.fields.find(field => field.key === 'port_subtype').values[4][1] = 'Arayüz adı (ifName)';
+  assert.equal((await verifyLayout(changed)).ok, false, 'a subtype name that differs from the MIB is rejected');
+});
+
+test('IEEE layouts match the record of their last check against the licensed text', async () => {
+  for (const protocol of protocols.filter(item => item.layout.kind === 'ieee')) {
+    const check = await verifyLayout(protocol);
+    assert.equal(check.stale, false, `${protocol.id}: record differs from the text; run npm run sync:ieee`);
+    assert.deepEqual(check.found, check.expected, protocol.id);
+    assert.match(protocol.layout.checked.sha256, /^[0-9a-f]{64}$/);
+    assert.ok(standardEntry(protocol.layout.std).copy, `${protocol.layout.std} names no licensed copy`);
+  }
+  const ptp = byId.get('ptp');
+  const changed = structuredClone(ptp);
+  changed.fields.find(field => field.key === 'message_length').bits = 8;
+  assert.equal((await verifyLayout(changed)).ok, false, 'a field width that differs from the record is rejected');
+});
+
+const ieee1588 = await ieeeText('ieee-1588-2008');
+test('IEEE 1588-2008 tables read from the licensed text', { skip: ieee1588 ? false : 'no licensed copy in .cache/ieee/' }, () => {
+  const header = messageTable(ieee1588, 'Table 18 ⎯Common message header');
+  assert.equal(header.at(-1).offset + header.at(-1).bits / 8, 34, 'the common header is 34 octets');
+  assert.deepEqual(header.slice(0, 2), [{ name: 'transportSpecific', bits: 4, offset: 0 }, { name: 'messageType', bits: 4, offset: 0 }]);
+  assert.deepEqual(structMembers(ieee1588, 'Timestamp'), [{ name: 'secondsField', bits: 48 }, { name: 'nanosecondsField', bits: 32 }]);
+  assert.deepEqual(structMembers(ieee1588, 'PortIdentity'), [{ name: 'clockIdentity', bits: 64 }, { name: 'portNumber', bits: 16 }]);
+  assert.throws(() => messageTable(ieee1588, 'Table 999 ⎯No such table'));
+});
+
+for (const entry of standards.entries.filter(item => item.copy)) {
+  const text = await ieeeText(entry.id);
+  test(`clauses cited from ${entry.short} start on the printed page given`, { skip: text ? false : 'no licensed copy in .cache/ieee/' }, () => {
+    let count = 0;
+    for (const protocol of protocols.filter(item => item.layout.std === entry.id)) {
+      for (const ref of [...protocol.layout.refs, ...protocol.fields.map(field => field.ref)].filter(item => item.std === entry.id)) {
+        // The heading itself, not its table-of-contents line (which ends in a dot leader).
+        const pdf = pageOf(text, new RegExp(`^${ref.section.replace(/\./g, '\\.')} (?!.*\\.{4})\\S`, 'm'));
+        assert.ok(pdf, `${protocol.id}: §${ref.section} not found`);
+        assert.equal(pdf - entry.pageOffset, ref.page, `${protocol.id}: §${ref.section} is on printed page ${pdf - entry.pageOffset}`);
+        assert.match(pdfPage(text, pdf), new RegExp(`^${ref.page}$`, 'm'), `printed page ${ref.page} is PDF page ${pdf}`);
+        count += 1;
+      }
+    }
+    assert.ok(count > 0, `no clause of ${entry.short} is cited`);
+  });
+}
 
 test('every citation resolves to the bibliography and every listed RFC is used', async () => {
   const listed = JSON.parse(await readFile(path.join(root, 'sources/rfcs.json'), 'utf8')).rfcs.map(item => item.number);
   assert.deepEqual(bibliography.entries.map(entry => entry.number), listed);
   const cited = new Set();
   for (const protocol of protocols) {
-    for (const number of protocol.refs) { rfcEntry(number); cited.add(number); }
+    for (const ref of protocol.refs) { if (isRfc(ref)) rfcEntry(ref); else standardEntry(ref); cited.add(ref); }
     for (const field of protocol.fields) {
-      assert.ok(protocol.refs.includes(field.ref.rfc), `${protocol.id}.${field.key} cites RFC ${field.ref.rfc} outside its page references`);
+      assert.ok(protocol.refs.includes(refKey(field.ref)), `${protocol.id}.${field.key} cites ${refKey(field.ref)} outside its page references`);
       assert.ok(field.desc && field.name, `${protocol.id}.${field.key} needs a name and description`);
     }
   }
   assert.deepEqual(listed.filter(number => !cited.has(number)), [], 'RFCs in sources/rfcs.json that no page cites');
+  assert.deepEqual(standards.entries.map(entry => entry.id).filter(id => !cited.has(id)), [], 'standards in sources/standards.json that no page cites');
 });
 
 test('cited section numbers exist in the RFC text', async () => {
   for (const protocol of protocols) {
-    for (const ref of [protocol.layout, ...protocol.fields.map(field => field.ref)]) {
-      if (!ref.section) continue;
+    const parts = (protocol.layout.parts ?? []).filter(part => part.rfc && part.section);
+    for (const ref of [protocol.layout, ...parts, ...protocol.fields.map(field => field.ref)]) {
+      // IEEE texts cannot be downloaded, so their section numbers are not checked.
+      if (!ref.section || ref.std || !ref.rfc) continue;
       const text = await rfcText(ref.rfc);
       const pattern = new RegExp(`^\\s{0,3}${ref.section.replace(/\./g, '\\.')}\\.?\\s+\\S`, 'm');
       assert.match(text, pattern, `RFC ${ref.rfc} has no section ${ref.section} (${protocol.id})`);
@@ -132,4 +241,94 @@ test('example packets are internally consistent', () => {
   assert.equal(bfd.bytes.length, 24, 'BFD mandatory section is 24 octets');
   assert.equal(bfd.bytes[3], bfd.bytes.length, 'BFD Length field');
   assert.equal(bfd.bytes[1] >> 6, 3, 'state Up');
+});
+
+test('example packets of the tunnelling, security and session pages are internally consistent', async () => {
+  const esp = encode('esp');
+  const espField = key => { const range = esp.ranges[key]; return esp.bytes.slice(range.offset / 8, (range.offset + range.bits) / 8); };
+  assert.equal(esp.headerLength, 8, 'ESP header is SPI and sequence number');
+  assert.equal(hex(espField('payload_data')), hex(encode('udp').bytes), 'ESP carries the UDP example');
+  const padLength = espField('pad_length')[0];
+  assert.deepEqual(espField('padding'), Array.from({ length: padLength }, (_, i) => i + 1), 'default padding counts 1, 2, …');
+  assert.equal((espField('payload_data').length + padLength + 2) % 4, 0, 'ciphertext ends on a 4-octet boundary');
+  assert.equal(espField('next_header')[0], 17);
+
+  const mpls = encode('mpls');
+  assert.equal(hex(mpls.bytes.slice(0, 4)), '00010140', 'label 16, TC 0, S 1, TTL 64');
+  assert.equal(hex(mpls.bytes.slice(4)), hex(encode('ipv4').bytes));
+
+  const geneve = encode('geneve');
+  assert.equal(geneve.headerLength, 8 + 4 * (geneve.bytes[0] & 0x3f), 'Opt Len counts 4-octet words');
+  assert.equal(hex(geneve.bytes.slice(2, 4)), '6558');
+
+  const vlan = encode('vlan');
+  assert.equal(hex(vlan.bytes.slice(0, 2)), '8100');
+  const tci = (vlan.bytes[2] << 8) | vlan.bytes[3];
+  assert.deepEqual([tci >> 13, (tci >> 12) & 1, tci & 0xfff], [5, 0, 100]);
+  assert.equal(hex(vlan.bytes.slice(4, 6)), '0800');
+  assert.equal(hex(vlan.bytes.slice(6)), hex(encode('ipv4').bytes));
+
+  const lldp = encode('lldp');
+  const tlvs = [];
+  for (let at = 0; at < lldp.bytes.length;) {
+    const head = (lldp.bytes[at] << 8) | lldp.bytes[at + 1];
+    tlvs.push(head >> 9);
+    at += 2 + (head & 0x1ff);
+    assert.ok(at <= lldp.bytes.length, 'TLV overruns the LLDPDU');
+    if (head >> 9 === 0) assert.equal(at, lldp.bytes.length, 'End TLV closes the LLDPDU');
+  }
+  assert.deepEqual(tlvs, [1, 2, 3, 0], 'Chassis ID, Port ID, TTL, End');
+
+  const ptp = encode('ptp');
+  assert.equal((ptp.bytes[2] << 8) | ptp.bytes[3], ptp.bytes.length, 'messageLength');
+  assert.equal(ptp.bytes.length, 44, '34-octet header and 10-octet originTimestamp (Table 26)');
+  assert.equal(ptp.bytes[0] & 0x0f, 0, 'messageType Sync');
+  assert.equal(ptp.bytes[1], 0x02, 'reserved nibble 0, versionPTP 2');
+  assert.equal(hex(ptp.bytes.slice(6, 8)), '0000', 'one-step Sync: no twoStepFlag, no Announce-only flags');
+  assert.equal(ptp.bytes[32], 0x00, 'controlField 0 for Sync (Table 23)');
+  assert.equal(hex(ptp.bytes.slice(20, 28)), '00005efffe005301', 'clockIdentity is the EUI-48 with FF FE in octets 3 and 4');
+
+  const rtcp = encode('rtcp');
+  assert.equal((((rtcp.bytes[2] << 8) | rtcp.bytes[3]) + 1) * 4, rtcp.bytes.length, 'RTCP length is in 32-bit words minus one');
+  assert.equal(rtcp.bytes[0] & 0x1f, 1, 'one report block');
+  assert.equal(rtcp.bytes.length, 28 + 24, 'sender info plus one report block');
+  assert.equal(hex(rtcp.bytes.slice(4, 8)), hex(encode('rtp').bytes.slice(8, 12)), 'reports on the RTP example SSRC');
+});
+
+test('example packets of the web transport pages are internally consistent', async () => {
+  // RFC 6455 §5.7 gives this frame byte for byte.
+  const websocket = encode('websocket');
+  assert.equal(hex(websocket.bytes), '818537fa213d7f9f4d5158');
+  assert.ok((await rfcText(6455)).includes('0x81 0x85 0x37 0xfa 0x21 0x3d 0x7f 0x9f 0x4d 0x51 0x58'));
+  const key = websocket.bytes.slice(2, 6);
+  assert.equal(Buffer.from(websocket.bytes.slice(6).map((byte, i) => byte ^ key[i % 4])).toString(), 'Hello');
+
+  const stun = encode('stun');
+  assert.equal(stun.headerLength, 20);
+  assert.equal((stun.bytes[2] << 8) | stun.bytes[3], stun.bytes.length - 20, 'Message Length excludes the header');
+  assert.equal(hex(stun.bytes.slice(4, 8)), '2112a442');
+  const port = ((stun.bytes[26] << 8) | stun.bytes[27]) ^ 0x2112;
+  const address = stun.bytes.slice(28, 32).map((byte, i) => byte ^ stun.bytes[4 + i]).join('.');
+  assert.equal(`${address}:${port}`, '192.0.2.1:32853', 'XOR-MAPPED-ADDRESS decodes with the magic cookie');
+
+  const quic = encode('quic');
+  const b = quic.bytes;
+  assert.equal(b[0], 0xc0, 'long header, Initial, 1-octet packet number');
+  assert.equal(hex(b.slice(1, 5)), '00000001', 'QUIC version 1');
+  let at = 5;
+  const dcid = b[at]; at += 1 + dcid;
+  const scid = b[at]; at += 1 + scid;
+  assert.deepEqual([dcid, scid], [8, 8]);
+  const varint = () => { const length = 1 << (b[at] >> 6); let value = b[at] & 0x3f; for (let i = 1; i < length; i += 1) value = value * 256 + b[at + i]; at += length; return value; };
+  const token = varint(); at += token;
+  assert.equal(token, 16);
+  const length = varint();
+  assert.equal(length, b.length - at, 'Length covers the packet number and the payload');
+
+  const http2 = encode('http2');
+  assert.equal(http2.headerLength, 9);
+  assert.equal((http2.bytes[0] << 16) | (http2.bytes[1] << 8) | http2.bytes[2], http2.bytes.length - 9, 'Length excludes the 9-octet header');
+  assert.equal(http2.bytes[3], 4, 'SETTINGS');
+  assert.equal((http2.bytes.length - 9) % 6, 0, 'SETTINGS carries 6-octet settings');
+  assert.equal(((http2.bytes[5] & 0x7f) << 24) | (http2.bytes[6] << 16) | (http2.bytes[7] << 8) | http2.bytes[8], 0, 'stream 0');
 });

@@ -25,7 +25,18 @@ test('every protocol has a page whose fields link to an RFC', async () => {
   for (const protocol of protocols) {
     const html = await readFile(path.join(site, protocol.id, 'index.html'), 'utf8');
     for (const field of protocol.fields) assert.ok(html.includes(`id="f-${field.key}"`), `${protocol.id}: ${field.key}`);
-    assert.ok(html.includes(`https://www.rfc-editor.org/rfc/rfc${protocol.layout.rfc}`));
+    if (protocol.layout.kind === 'standard') {
+      const note = protocol.layout.mib ? 'Kısmen doğrulandı\\.' : 'Makineyle doğrulanmadı, kaynağı okunmadı\\.';
+      assert.match(html, new RegExp(`<p class="verified verified--manual"><strong>${note}</strong>`), protocol.id);
+      assert.ok(html.includes('https://doi.org/10.1109/'), protocol.id);
+    } else if (protocol.layout.kind === 'ieee') {
+      assert.match(html, /<p class="verified">Alan (adları ve genişlikleri|genişlikleri \(<code>[^<]+<\/code> bit\), tür numaraları ve değerler) <a class="rfc-ref" href="https:\/\/doi\.org\/10\.1109\/[^"]+">IEEE /, protocol.id);
+      assert.match(html, /metni lisanslı olduğu için depoda bulunmaz/, protocol.id);
+      assert.doesNotMatch(html, /verified--manual/, protocol.id);
+    } else {
+      assert.ok(html.includes(`https://www.rfc-editor.org/rfc/rfc${protocol.layout.rfc}`), protocol.id);
+      assert.doesNotMatch(html, /verified--manual/, protocol.id);
+    }
     assert.match(html, /<html lang="tr">/);
   }
 });
@@ -45,7 +56,16 @@ test('local links and assets resolve', async () => {
 
 test('in-page anchors on the bibliography exist', async () => {
   const bibliography = await readFile(path.join(site, 'kaynakca/index.html'), 'utf8');
-  for (const protocol of protocols) for (const number of protocol.refs) assert.ok(bibliography.includes(`id="rfc${number}"`), `RFC ${number}`);
+  for (const protocol of protocols) for (const ref of protocol.refs) {
+    const anchor = Number.isInteger(ref) ? `rfc${ref}` : ref;
+    assert.ok(bibliography.includes(`id="${anchor}"`), anchor);
+  }
+});
+
+test('the home page states the share of machine-verified pages', async () => {
+  const home = await readFile(path.join(site, 'index.html'), 'utf8');
+  const share = Math.round(100 * protocols.filter(protocol => protocol.layout.kind !== 'standard').length / protocols.length);
+  assert.match(home, new RegExp(`<strong class="stat-number">%${share}</strong>\\s*<span class="stat-label">Derleme Doğrulaması</span>`));
 });
 
 test('top bar links are named by their visible text first', async () => {
