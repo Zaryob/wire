@@ -1,6 +1,6 @@
 import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import path from 'node:path';
-import { root, bibliography, rfcEntry, verifyLayout, loadProtocols } from '../src/sources.mjs';
+import { root, bibliography, standards, rfcEntry, standardEntry, isRfc, refKey, verifyLayout, loadProtocols } from '../src/sources.mjs';
 import { encodeExample } from '../src/encode.mjs';
 
 const out = path.join(root, '_site');
@@ -40,16 +40,89 @@ function example(id) {
 const checks = new Map();
 for (const protocol of protocols) {
   const check = await verifyLayout(protocol);
-  if (!check.ok) throw new Error(`${protocol.id}: field sizes ${check.expected} do not match RFC ${protocol.layout.rfc} (${check.found})`);
+  if (check.stale) throw new Error(`${protocol.id}: the ${protocol.layout.std} text or MIB no longer matches the recorded check; run npm run sync:ieee and review the change`);
+  const failed = [...(check.partial ?? []), ...(check.items ?? []), ...(check.mibItems ?? [])].filter(item => !item.ok);
+  if (failed.length) throw new Error(`${protocol.id}: data disagrees with ${protocol.layout.std}: ${failed.map(item => item.what).join('; ')}`);
+  const against = protocol.layout.kind === 'ieee' ? protocol.layout.std : `RFC ${protocol.layout.rfc}`;
+  if (!check.ok) throw new Error(`${protocol.id}: fields ${check.expected} do not match ${against} (${check.found})`);
   checks.set(protocol.id, check);
-  for (const number of protocol.refs) rfcEntry(number);
-  for (const field of protocol.fields) if (!protocol.refs.includes(field.ref.rfc)) throw new Error(`${protocol.id}.${field.key}: RFC ${field.ref.rfc} is not in the page's references`);
+  for (const ref of protocol.refs) if (isRfc(ref)) rfcEntry(ref); else standardEntry(ref);
+  for (const field of protocol.fields) if (!protocol.refs.includes(refKey(field.ref))) throw new Error(`${protocol.id}.${field.key}: ${refKey(field.ref)} is not in the page's references`);
 }
 
-const refText = ref => `RFC ${ref.rfc}${ref.section ? ` §${ref.section}` : ref.label ? `, “${ref.label}”` : ''}`;
-const refUrl = ref => `${rfcEntry(ref.rfc).url}${ref.section ? `#section-${ref.section}` : ''}`;
+const refText = ref => `${ref.std ? standardEntry(ref.std).short : `RFC ${ref.rfc}`}${ref.section ? ` §${ref.section}` : ref.label ? `, “${ref.label}”` : ''}${ref.page ? `, s. ${ref.page}` : ''}`;
+// IEEE standards have no public per-section anchors; their link is the DOI.
+const refUrl = ref => (ref.std ? standardEntry(ref.std).url : `${rfcEntry(ref.rfc).url}${ref.section ? `#section-${ref.section}` : ''}`);
 const refLink = ref => `<a class="rfc-ref" href="${refUrl(ref)}">${e(refText(ref))}</a>`;
 const citation = entry => `${e(entry.authors.join(', '))}, “${e(entry.title)}”, RFC ${entry.number}, ${e(entry.date)}.`;
+const standardCitation = entry => `${e(entry.publisher)}, “${e(entry.title)}”, ${e(entry.designation)}, DOI ${e(entry.doi)}.`;
+/** A page reference (RFC number or standard id) as its label, bibliography anchor and citation. */
+const source = ref => isRfc(ref)
+  ? { label: `RFC ${ref}`, anchor: `rfc${ref}`, citation: citation(rfcEntry(ref)) }
+  : { label: standardEntry(ref).short, anchor: ref, citation: standardCitation(standardEntry(ref)) };
+/** Where a protocol's field widths were checked: one RFC part per entry, or none for an unverified standard. */
+const layoutRefs = protocol => {
+  const { layout } = protocol;
+  if (layout.kind === 'standard' || layout.kind === 'ieee') return [];
+  if (!layout.parts) return [{ rfc: layout.rfc, section: layout.section, label: layout.section ? undefined : layout.label }];
+  const seen = new Map();
+  for (const part of layout.parts) {
+    const ref = { rfc: part.rfc ?? layout.rfc, section: part.section ?? (part.rfc ? undefined : layout.section) };
+    seen.set(`${ref.rfc} ${ref.section}`, ref);
+  }
+  return [...seen.values()];
+};
+const isVerified = protocol => protocol.layout.kind !== 'standard';
+const rangeText = range => {
+  if (range === 'i') return 'değişken uzunluklu tamsayı';
+  if (range === '..') return 'herhangi bir uzunluk';
+  const bounds = range.match(/^(\d*)\.\.(\d*)$/);
+  if (!bounds) return range;
+  if (bounds[1] && bounds[2]) return `${bounds[1]}–${bounds[2]} bit`;
+  return bounds[1] ? `en az ${bounds[1]} bit` : `en çok ${bounds[2]} bit`;
+};
+const widthText = field => `${Number.isInteger(field.bits) ? field.bits : 'değişken'}${field.range ? ` (${rangeText(field.range)})` : ''}`;
+const joinTr = items => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} ve ${items.at(-1)}`);
+
+/** The sentence under each diagram: what the widths were compared with, or that they were not. */
+function verifiedNote(protocol) {
+  const { layout } = protocol;
+  const check = checks.get(protocol.id);
+  const found = (check.widths ?? check.found).join(' · ');
+  if (layout.kind === 'ieee' && layout.method === 'lldp') {
+    const entry = standardEntry(layout.std);
+    const refs = joinTr(layout.refs.map(ref => `${refLink(ref)} (${e(ref.label)})`));
+    const how = check.source === 'text'
+      ? 'Bu derleme standardın metnini lisanslı kopyadan, MIB modüllerini de kendi dosyalarından okudu.'
+      : `Bu derlemede metin yoktu; karşılaştırma ${e(layout.checked.date)} tarihinde lisanslı bir kopya üzerinde yapıldı ve sonucu veri dosyasına kaydedildi. Derleme veriyi bu kayda karşı denetler.`;
+    return `<p class="verified">Alan genişlikleri (<code>${found}</code> bit), tür numaraları ve değerler ${refs} ile karşılaştırıldı. Standardın TLV figürleri PDF'te görüntü olduğu için yerleşim, aynı bilgiyi yazıyla ve tablolarla veren maddelerden okunur: ${e(check.items.map(item => item.what).join('; '))}. Ayrıca ${e(entry.mib.clause)} maddesindeki MIB modülleriyle (${entry.mib.files.map(item => e(item.module)).join(', ')}) ${check.mibItems.length} denetim yapılır. ${e(entry.short)} metni lisanslı olduğu için depoda bulunmaz. ${how} Kullanılan kopyanın sha256 özeti <code>${e(layout.checked.sha256.slice(0, 16))}…</code>.</p>`;
+  }
+  if (layout.kind === 'ieee') {
+    const entry = standardEntry(layout.std);
+    const refs = joinTr(layout.refs.map(ref => `${refLink(ref)} (${e(ref.label)})`));
+    const how = check.source === 'text'
+      ? 'Bu derleme metni lisanslı kopyadan okudu.'
+      : `Bu derlemede metin yoktu; karşılaştırma ${e(layout.checked.date)} tarihinde lisanslı bir kopya üzerinde yapıldı ve sonucu veri dosyasına kaydedildi. Derleme alanları bu kayda karşı denetler.`;
+    return `<p class="verified">Alan adları ve genişlikleri ${refs} ile karşılaştırıldı: <code>${found}</code> bit. ${e(entry.short)} metni lisanslı olduğu için depoda bulunmaz. ${how} Kullanılan kopyanın sha256 özeti <code>${e(layout.checked.sha256.slice(0, 16))}…</code>; IEEE her indirmeye kendi filigranını eklediği için başka kopyaların özeti farklıdır.</p>`;
+  }
+  if (layout.kind === 'standard') {
+    const ref = refLink({ std: layout.std });
+    if (check.partial) {
+      const entry = standardEntry(layout.std);
+      const how = check.source === 'text'
+        ? 'Bu derleme MIB dosyalarını okudu.'
+        : `Bu derlemede MIB dosyaları yoktu; karşılaştırma ${e(layout.mib.checked.date)} tarihinde yapıldı ve sonucu veri dosyasına kaydedildi. Derleme veriyi bu kayda karşı denetler.`;
+      return `<p class="verified verified--manual"><strong>Kısmen doğrulandı.</strong> Bu protokolü ${ref} tanımlar; standardın gövde metni okunmadı, bu yüzden TLV'lerin sırası ve tür numaraları gibi yerleşim bilgileri doğrulanmamıştır. Standardın ${e(entry.mib.clause)} maddesinde yayımlanan MIB modülleri (${entry.mib.files.map(item => e(item.module)).join(', ')}) ise okundu ve şunlar onlara karşı karşılaştırıldı: ${e(check.partial.map(item => item.what).join('; '))}. ${how}</p>`;
+    }
+    return `<p class="verified verified--manual"><strong>Makineyle doğrulanmadı, kaynağı okunmadı.</strong> Bu protokolü ${ref} tanımlar, ancak o standardın metni okunmadı ve alanları çizen bir RFC yok. Alan adları, genişlikler (<code>${found}</code> bit) ve değer tabloları genel bilgiden yazıldı; hiçbir kaynak metne karşı karşılaştırılmadı.</p>`;
+  }
+  const refs = joinTr(layoutRefs(protocol).map(refLink));
+  const label = !layout.parts && layout.section ? ` (${e(layout.label)})` : '';
+  const unit = layout.kind === 'rfc826' && layout.part === 'arp' ? ' (n ve m: ar$hln ve ar$pln sekizli)'
+    : layout.kind === 'figure' ? ' (sayılar bit; i: değişken uzunluklu tamsayı, a..b: bit cinsinden aralık). Aralığı olan alanlar bu örnek için boyutlandırılmıştır ve genişlikleri o aralıkta olmalıdır'
+    : ' bit';
+  return `<p class="verified">Alan genişlikleri ${refs}${label} ile derleme sırasında karşılaştırıldı: <code>${found}</code>${unit}.${layout.note ? ` ${e(layout.note)}` : ''}</p>`;
+}
 
 function header(current) {
   const chevron = '<svg class="console-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -140,7 +213,11 @@ function diagram(protocol) {
   const cells = [];
   let offset = 0;
   for (const field of protocol.fields) {
-    if (!Number.isInteger(field.bits)) { cells.push({ field, span: cols, label: `${field.name} (değişken)`, variable: true }); continue; }
+    // A variable field fills a row of its own; the field after it starts a new row.
+    if (!Number.isInteger(field.bits)) { cells.push({ field, span: cols, label: `${field.name} (değişken)`, variable: true }); offset = 0; continue; }
+    // A field the standard leaves variable, sized here for the example, is drawn the same way when it
+    // would fill a row or more; cutting it at the example's width would suggest a fixed layout.
+    if (field.range && field.bits >= cols) { cells.push({ field, span: cols, label: `${field.name} (değişken, örnekte ${field.bits} bit)`, variable: true }); offset = 0; continue; }
     if (field.bits > cols && offset % cols === 0 && field.bits % cols === 0) {
       cells.push({ field, span: cols, label: `${field.name} (${field.bits} bit)` });
     } else {
@@ -217,7 +294,8 @@ function splitDiagram(protocol, cadenceOf, half = 16) {
   let offset = 0;
   const cell = (field, span, label, extra = {}) => ({ field, span, label, ...extra });
   for (const field of protocol.fields) {
-    if (!Number.isInteger(field.bits)) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken)`, { variable: true })] }); line = null; continue; }
+    if (!Number.isInteger(field.bits)) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken)`, { variable: true })] }); line = null; offset = 0; continue; }
+    if (field.range && field.bits >= rowBits) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken, örnekte ${field.bits} bit)`, { variable: true })] }); line = null; offset = 0; continue; }
     if (field.bits > rowBits && offset % rowBits === 0 && field.bits % rowBits === 0) {
       lines.push({ start: null, cells: [cell(field, half, `${field.name} (${field.bits} bit)`)] });
       line = null; offset += field.bits; continue;
@@ -252,9 +330,13 @@ function splitDiagram(protocol, cadenceOf, half = 16) {
 function exampleValue(field, range, bytes) {
   if (!range) return '—';
   if (field.checksum || field.hex) {
+    // Read the field's bits from the encoded packet; fields need not start or end on an octet.
+    const first = Math.floor(range.offset / 8);
+    const last = Math.ceil((range.offset + range.bits) / 8);
     let value = 0n;
-    for (let i = 0; i < range.bits / 8; i += 1) value = (value << 8n) | BigInt(bytes[range.offset / 8 + i]);
-    return `0x${value.toString(16).padStart(range.bits / 4, '0')}`;
+    for (let i = first; i < last; i += 1) value = (value << 8n) | BigInt(bytes[i]);
+    value = (value >> BigInt(last * 8 - range.offset - range.bits)) & ((1n << BigInt(range.bits)) - 1n);
+    return `0x${value.toString(16).padStart(Math.ceil(range.bits / 4), '0')}`;
   }
   return String(field.example);
 }
@@ -263,11 +345,11 @@ function exampleValue(field, range, bytes) {
 const fieldColumns = ['Alan', 'Bit', 'Genişlik', 'Örnek', 'Açıklama ve kaynak'];
 
 function protocolPage(protocol) {
-  const { bytes, headerLength, ranges } = example(protocol.id);
+  const { bytes, headerLength, fieldsLength, ranges } = example(protocol.id);
   const myLayer = layerKey(protocol.layer);
   const fromId = protocol.example?.payloadFrom;
   const subProto = fromId ? byId.get(fromId) : null;
-  const subHeaderLen = subProto ? example(subProto.id).headerLength : 0;
+  const subHeaderLen = subProto ? example(subProto.id).fieldsLength : 0;
   const subLayer = subProto ? layerKey(subProto.layer) : null;
 
   const fieldIndexMap = new Map();
@@ -276,7 +358,7 @@ function protocolPage(protocol) {
   const legendItems = [];
   legendItems.push(`<div class="hex-legend__item">
     <span class="hex-legend__swatch hex-legend__swatch--proto" aria-hidden="true"></span>
-    <span><strong>${e(protocol.title)}</strong> (${headerLength} sekizli başlık — alanlar ardışık tonlarla ayrılmıştır)</span>
+    <span><strong>${e(protocol.title)}</strong> (${fieldsLength === headerLength ? `${headerLength} sekizli başlık` : `${fieldsLength} sekizli alan, ${headerLength} sekizlisi sabit başlık`} — alanlar ardışık tonlarla ayrılmıştır)</span>
   </div>`);
 
   if (subProto) {
@@ -284,15 +366,15 @@ function protocolPage(protocol) {
       <span class="hex-legend__swatch hex-legend__swatch--sub hex-legend__swatch--${subLayer}" aria-hidden="true"></span>
       <span>Sarmalanmış ${e(subProto.name)} başlığı (${subHeaderLen} sekizli)</span>
     </div>`);
-    const remaining = bytes.length - (headerLength + subHeaderLen);
+    const remaining = bytes.length - (fieldsLength + subHeaderLen);
     if (remaining > 0) {
       legendItems.push(`<div class="hex-legend__item">
         <span class="hex-legend__swatch hex-legend__swatch--data" aria-hidden="true"></span>
         <span>Uygulama yükü (${remaining} sekizli veri)</span>
       </div>`);
     }
-  } else if (bytes.length > headerLength) {
-    const remaining = bytes.length - headerLength;
+  } else if (bytes.length > fieldsLength) {
+    const remaining = bytes.length - fieldsLength;
     const label = protocol.id === 'dns' ? 'Soru ve yanıt kayıtları' : (protocol.id === 'icmp' || protocol.id === 'icmpv6') ? 'Hata / yankı verisi' : 'Yük verisi';
     legendItems.push(`<div class="hex-legend__item">
       <span class="hex-legend__swatch hex-legend__swatch--data" aria-hidden="true"></span>
@@ -305,7 +387,7 @@ function protocolPage(protocol) {
   for (let start = 0; start < bytes.length; start += 8) {
     rows.push(`<div class="hex-row"><span class="hex-offset">${hex(start, 4)}</span>${bytes.slice(start, start + 8).map((byte, i) => {
       const index = start + i;
-      const isPayload = index >= headerLength;
+      const isPayload = index >= fieldsLength;
       const fields = fieldsAt(index);
       const dataAttr = fields.length ? ` data-fields="${fields.join(' ')}"` : '';
 
@@ -313,8 +395,8 @@ function protocolPage(protocol) {
       if (!isPayload) {
         const fieldIdx = fields.length ? fieldIndexMap.get(fields[0]) : 0;
         colorClass = fieldIdx % 2 === 0 ? 'hex-byte--even' : 'hex-byte--odd';
-      } else if (subProto && index < headerLength + subHeaderLen) {
-        const subIndex = index - headerLength;
+      } else if (subProto && index < fieldsLength + subHeaderLen) {
+        const subIndex = index - fieldsLength;
         const subRanges = example(subProto.id).ranges;
         const subFields = subProto.fields.filter(field => subRanges[field.key] && subRanges[field.key].offset < (subIndex + 1) * 8 && subRanges[field.key].offset + subRanges[field.key].bits > subIndex * 8).map(f => f.key);
         const subFieldIdx = subFields.length ? subProto.fields.findIndex(f => f.key === subFields[0]) : 0;
@@ -331,21 +413,20 @@ function protocolPage(protocol) {
     const range = ranges[field.key];
     const position = range ? (range.bits === 1 ? `${range.offset}` : `${range.offset}–${range.offset + range.bits - 1}`) : '—';
     const values = field.values ? `<dl class="field-values">${field.values.map(([value, label]) => `<div><dt>${e(value)}</dt><dd>${e(label)}</dd></div>`).join('')}</dl>` : '';
-    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0" role="row"><th scope="row" role="rowheader">${e(field.name)}</th><td class="num" role="cell" data-label="${fieldColumns[1]}">${position}</td><td class="num" role="cell" data-label="${fieldColumns[2]}">${Number.isInteger(field.bits) ? field.bits : 'değişken'}</td><td class="num" role="cell" data-label="${fieldColumns[3]}"><code>${e(exampleValue(field, range, bytes))}</code></td><td role="cell" data-label="${fieldColumns[4]}"><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
+    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0" role="row"><th scope="row" role="rowheader">${e(field.name)}</th><td class="num" role="cell" data-label="${fieldColumns[1]}">${position}</td><td class="num" role="cell" data-label="${fieldColumns[2]}">${e(widthText(field))}</td><td class="num" role="cell" data-label="${fieldColumns[3]}"><code>${e(exampleValue(field, range, bytes))}</code></td><td role="cell" data-label="${fieldColumns[4]}"><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
   }).join('');
-  const layoutRef = { rfc: protocol.layout.rfc, section: protocol.layout.section, label: protocol.layout.section ? undefined : protocol.layout.label };
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
   return page({ id: protocol.id, title: protocol.title, pageTitle: protocol.title, layer: protocol.layer, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
-<header class="page-header"><p class="eyebrow"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</span> · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits)) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
+<header class="page-header"><p class="eyebrow"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</span> · ${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits) || field.range) ? ' + değişken kısım' : ''}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
 <div class="overview-grid">
   <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
-<p class="verified">Alan genişlikleri ${refLink(layoutRef)}${protocol.layout.section ? ` (${e(protocol.layout.label)})` : ''} ile derleme sırasında karşılaştırıldı: <code>${checks.get(protocol.id).found.join(' · ')}</code>${protocol.layout.kind === 'rfc826' && protocol.layout.part === 'arp' ? ' (n ve m: ar$hln ve ar$pln sekizli)' : ' bit'}.</p></section>
-  <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex-legend" aria-label="Paket katmanları">${legendItems.join('')}</div><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > headerLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
+${verifiedNote(protocol)}</section>
+  <section class="overview-grid__col" aria-labelledby="example-title"><h2 id="example-title">Örnek paket</h2><p>${e(protocol.example.note)}</p><div class="hex-legend" aria-label="Paket katmanları">${legendItems.join('')}</div><div class="hex" role="group" aria-label="Örnek paketin onaltılık dökümü">${rows.join('')}</div><p class="small">Bu paket gerçek bir yakalama değildir: aşağıdaki tablodaki örnek değerlerden derleme sırasında üretilir, sağlama toplamları RFC 1071’deki yöntemle hesaplanır. Bir alanın üzerine gelin ya da alana tıklayın; karşılık gelen sekizliler vurgulanır.${bytes.length > fieldsLength ? ' Soluk sekizliler başlıktan sonraki yüktür.' : ''}</p></section>
 </div>
 <section aria-labelledby="fields-title"><h2 id="fields-title">Alanlar</h2><div class="table-scroll" tabindex="0" role="region" aria-label="${e(protocol.title)} alanları"><table class="fields fields--cards" role="table"><thead role="rowgroup"><tr role="row">${fieldColumns.map(label => `<th scope="col" role="columnheader">${label}</th>`).join('')}</tr></thead><tbody role="rowgroup">${table}</tbody></table></div></section>
 ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes-title">Notlar</h2><ul class="notes">${protocol.notes.map(note => `<li>${e(note)}</li>`).join('')}</ul></section>` : ''}
-<section aria-labelledby="refs-title"><h2 id="refs-title">Kaynaklar</h2><ol class="references">${protocol.refs.map(number => { const entry = rfcEntry(number); return `<li><a href="${url('kaynakca')}#rfc${number}">[RFC ${number}]</a> ${citation(entry)}</li>`; }).join('')}</ol></section>
+<section aria-labelledby="refs-title"><h2 id="refs-title">Kaynaklar</h2><ol class="references">${protocol.refs.map(ref => { const item = source(ref); return `<li><a href="${url('kaynakca')}#${item.anchor}">[${e(item.label)}]</a> ${item.citation}</li>`; }).join('')}</ol></section>
 <nav class="page-neighbors" aria-label="Önceki ve sonraki protokol">${neighbor(protocols[index - 1], '← Önceki')}${neighbor(protocols[index + 1], 'Sonraki →')}</nav>` });
 }
 
@@ -353,7 +434,8 @@ function home() {
   const layers = [...new Set(protocols.map(protocol => protocol.layer))];
   const totalFields = protocols.reduce((sum, p) => sum + p.fields.length, 0);
   // RFCs whose header diagrams the build compares field widths against (verifyLayout).
-  const verifiedRfcs = new Set(protocols.map(protocol => protocol.layout.rfc)).size;
+  const verifiedRfcs = new Set(protocols.flatMap(protocol => layoutRefs(protocol).map(ref => ref.rfc))).size;
+  const verifiedShare = Math.round(100 * protocols.filter(isVerified).length / protocols.length);
 
   const hero = `
 <div class="home-hero console-hero console-hero--wire">
@@ -415,7 +497,7 @@ function home() {
     <span class="stat-label">Ağ Katmanı</span>
   </div>
   <div class="home-stat-item">
-    <strong class="stat-number">%100</strong>
+    <strong class="stat-number">%${verifiedShare}</strong>
     <span class="stat-label">Derleme Doğrulaması</span>
   </div>
 </div>
@@ -426,7 +508,7 @@ function home() {
   </div>
   ${layers.map(layer => `<section class="layer layer--${layerKey(layer)}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${layerKey(layer)}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
     const { headerLength } = example(protocol.id);
-    return `<li class="protocol-card protocol-card--${layerKey(protocol.layer)}" data-layer="${layerKey(protocol.layer)}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><div class="protocol-card__header"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><span class="layer-pill layer-pill--${layerKey(protocol.layer)}">${e(protocol.layer)}</span></div><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength} sekizli · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · RFC ${protocol.layout.rfc}</p></li>`;
+    return `<li class="protocol-card protocol-card--${layerKey(protocol.layer)}" data-layer="${layerKey(protocol.layer)}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><div class="protocol-card__header"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><span class="layer-pill layer-pill--${layerKey(protocol.layer)}">${e(protocol.layer)}</span></div><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength} sekizli · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · ${e(protocol.layout.kind === 'standard' ? `${standardEntry(protocol.layout.std).short} (doğrulanmadı)` : protocol.layout.kind === 'ieee' ? standardEntry(protocol.layout.std).short : `RFC ${protocol.layout.rfc}`)}</p></li>`;
   }).join('')}</ul></section>`).join('')}
 </div>`;
 
@@ -641,21 +723,31 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 
 <section id="bolum-11">
   <h2>11. Tüm Katmanlardaki Protokollerin Araştırması ve wire Genişleme Yol Haritası</h2>
-  <p>wire sistemine yeni bir protokolün eklenebilmesi için resmi bir IETF RFC'sinde yayımlanmış olması, <code>src/rfc.mjs</code> tarafından doğrulanabilir bir ASCII başlık şemasına sahip olması ve deterministik olarak örnek bayt dizisi üretilebilmesi gerekir.</p>
+  <p>wire sistemine yeni bir protokolün eklenebilmesi için resmi bir IETF RFC'sinde yayımlanmış olması, <code>src/rfc.mjs</code> tarafından doğrulanabilir bir ASCII başlık şemasına ya da RFC 9000 biçiminde bir şekle sahip olması ve deterministik olarak örnek bayt dizisi üretilebilmesi gerekir. Hiçbir RFC'nin tanımlamadığı protokoller (LLDP, PTP) IEEE standardına dayanabilir; bu sayfalar makineyle doğrulanmadıklarını belirtir.</p>
 
   <h3>Katman Katman Aday Protokoller</h3>
   <div class="table-scroll" tabindex="0" role="region" aria-label="Aday protokoller tablosu"><table class="fields">
     <thead><tr><th>Katman</th><th>Aday Protokol</th><th>RFC</th><th>Başlık Boyutu</th><th>Durum</th><th>Değerlendirme ve Fizibilite</th></tr></thead>
     <tbody>
       <tr><td>Bağlantı</td><td><strong>PPPoE</strong></td><td>RFC 2516 §4</td><td>6 sekizli</td><td class="roadmap-status">${roadmapStatus('pppoe')}</td><td><strong>Çok Yüksek</strong>. Version, Type, Code, Session_ID, Length alanları. DSL ve fiber optik genişbant erişiminde evrenseldir.</td></tr>
-      <tr><td>Bağlantı</td><td><strong>IEEE 802.1Q (VLAN)</strong></td><td>RFC 3069 / IEEE</td><td>4 sekizli</td><td class="roadmap-status">${roadmapStatus('vlan')}</td><td><strong>Yüksek</strong>. TPID (0x8100), PCP (3 bit), DEI (1 bit), VID (12 bit). Ethernet çerçevesine ek başlık olarak entegre edilebilir.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>IEEE 802.1Q (VLAN)</strong></td><td>IEEE 802.1Q / RFC 6325 §4.1.1, RFC 7348 §5</td><td>4 sekizli</td><td class="roadmap-status">${roadmapStatus('vlan')}</td><td><strong>Yüksek</strong>. TPID (0x8100), PCP (3 bit), DEI (1 bit), VID (12 bit). IEEE metni indirilemediği için genişlikler aynı alanları çizen RFC 6325 ve RFC 7348 şemalarından doğrulanır.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>LLDP</strong></td><td>IEEE 802.1AB</td><td>TLV dizisi</td><td class="roadmap-status">${roadmapStatus('lldp')}</td><td><strong>Orta</strong>. 7 bit tür, 9 bit uzunluk. IEEE 802.1AB-2016’nın lisanslı bir kopyasına ve MIB modüllerine karşı doğrulanır.</td></tr>
+      <tr><td>Bağlantı</td><td><strong>MPLS</strong></td><td>RFC 3032 §2.1, RFC 5462</td><td>4 sekizli / etiket</td><td class="roadmap-status">${roadmapStatus('mpls')}</td><td><strong>Yüksek</strong>. Label (20), TC (3), S (1), TTL (8).</td></tr>
       <tr><td>Bağlantı</td><td><strong>RARP</strong></td><td>RFC 903</td><td>28 sekizli</td><td class="roadmap-status">${roadmapStatus('rarp')}</td><td><strong>Yüksek</strong>. RFC 826 ARP ile birebir aynı yerleşimi paylaşır (op=3/4).</td></tr>
       <tr><td>Ağ</td><td><strong>IGMPv2</strong></td><td>RFC 2236 §2</td><td>8 sekizli</td><td class="roadmap-status">${roadmapStatus('igmp')}</td><td><strong>Çok Yüksek</strong>. Type (8), Max Resp Time (8), Checksum (16), Group Address (32). IP multicast ve IPTV için kritik; RFC 1071 sağlama toplamı kullanır.</td></tr>
       <tr><td>Ağ</td><td><strong>IPv6 Fragment</strong></td><td>RFC 8200 §4.5</td><td>8 sekizli</td><td class="roadmap-status">${roadmapStatus('ipv6-frag')}</td><td><strong>Çok Yüksek</strong>. Next Header (8), Reserved (8), Fragment Offset (13), M Flag (1), Identification (32). Sabit 32 bit ızgaraya oturur.</td></tr>
+      <tr><td>Ağ</td><td><strong>IPsec ESP</strong></td><td>RFC 4303 §2</td><td>8 sekizli + kuyruk</td><td class="roadmap-status">${roadmapStatus('esp')}</td><td><strong>Yüksek</strong>. SPI (32), Sequence Number (32); kuyrukta Pad Length (8) ve Next Header (8).</td></tr>
       <tr><td>Ağ</td><td><strong>GRE</strong></td><td>RFC 2784 §2.1</td><td>4 sekizli</td><td class="roadmap-status">${roadmapStatus('gre')}</td><td><strong>Yüksek</strong>. Temel tünelleme başlığı (Flags/Reserved 16, Protocol Type 16).</td></tr>
       <tr><td>Taşıma</td><td><strong>SCTP</strong></td><td>RFC 9260 §3</td><td>12 sekizli + chunk</td><td class="roadmap-status">${roadmapStatus('sctp')}</td><td><strong>Çok Yüksek</strong>. Source Port (16), Destination Port (16), Verification Tag (32), Checksum (32). Telekom altyapısı ve WebRTC için standarttır.</td></tr>
+      <tr><td>Taşıma</td><td><strong>QUIC</strong></td><td>RFC 9000 §17.2.2</td><td>değişken</td><td class="roadmap-status">${roadmapStatus('quic')}</td><td><strong>Orta</strong>. RFC 9000’in şekil gösterimi ayrıca okunur; aralıklar ve değişken uzunluklu tamsayılar da karşılaştırılır.</td></tr>
+      <tr><td>Taşıma</td><td><strong>Geneve</strong></td><td>RFC 8926 §3.1</td><td>8 sekizli + seçenekler</td><td class="roadmap-status">${roadmapStatus('geneve')}</td><td><strong>Yüksek</strong>. VXLAN’ın seçenek taşıyabilen halefi.</td></tr>
       <tr><td>Uygulama</td><td><strong>DHCPv4 / BOOTP</strong></td><td>RFC 2131 §2</td><td>236 sekizli + seçenekler</td><td class="roadmap-status">${roadmapStatus('dhcp')}</td><td><strong>Çok Yüksek</strong>. 32-bit ASCII şeması tamdır. Paket yakalamalarında en çok aranan ve incelenen protokoldür.</td></tr>
       <tr><td>Uygulama</td><td><strong>NTP</strong></td><td>RFC 5905 §7.3</td><td>48 sekizli</td><td class="roadmap-status">${roadmapStatus('ntp')}</td><td><strong>Çok Yüksek</strong>. Sabit 384 bitlik şeması vardır; zaman senkronizasyonunun küresel standardıdır.</td></tr>
+      <tr><td>Uygulama</td><td><strong>PTP</strong></td><td>IEEE 1588-2008 Table 18, Table 26</td><td>34 sekizli + gövde</td><td class="roadmap-status">${roadmapStatus('ptp')}</td><td><strong>Orta</strong>. Alanı çizen bir RFC yok; alanlar IEEE 1588-2008’in lisanslı bir kopyasındaki ileti tablolarına karşı doğrulanır.</td></tr>
+      <tr><td>Uygulama</td><td><strong>RTCP SR</strong></td><td>RFC 3550 §6.4.1</td><td>28 sekizli + raporlar</td><td class="roadmap-status">${roadmapStatus('rtcp')}</td><td><strong>Yüksek</strong>. RTP sayfasının denetim akışı.</td></tr>
+      <tr><td>Uygulama</td><td><strong>STUN</strong></td><td>RFC 8489 §5</td><td>20 sekizli + öznitelikler</td><td class="roadmap-status">${roadmapStatus('stun')}</td><td><strong>Yüksek</strong>. NAT geçişi ve WebRTC için temel.</td></tr>
+      <tr><td>Uygulama</td><td><strong>WebSocket</strong></td><td>RFC 6455 §5.2</td><td>2–14 sekizli</td><td class="roadmap-status">${roadmapStatus('websocket')}</td><td><strong>Yüksek</strong>. Maskeleme anahtarı ABNF’den, diğer alanlar şemadan doğrulanır.</td></tr>
+      <tr><td>Uygulama</td><td><strong>HTTP/2</strong></td><td>RFC 9113 §4.1</td><td>9 sekizli</td><td class="roadmap-status">${roadmapStatus('http2')}</td><td><strong>Yüksek</strong>. RFC 9000 ile aynı şekil gösterimini kullanır.</td></tr>
     </tbody>
   </table></div>
 
@@ -670,22 +762,28 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 }
 
 function bibliographyPage() {
-  const citedBy = number => protocols.filter(protocol => protocol.refs.includes(number));
+  const citedBy = ref => protocols.filter(protocol => protocol.refs.includes(ref));
+  const pages = ref => citedBy(ref).map(protocol => `<a href="${url(protocol.id)}">${e(protocol.name)}</a>`).join(', ') || '—';
   const list = values => values.length ? values.map(value => e(value.replace(/^RFC0*/, 'RFC '))).join(', ') : '—';
   return page({ id: 'kaynakca', title: 'Kaynakça', pageTitle: 'Kaynakça', description: 'wire sitesindeki bilgilerin dayandığı RFC’lerin künyeleri, bağlantıları ve indirilen metinlerin sha256 özetleri.', body: `
-<header class="page-header"><p class="eyebrow">${bibliography.entries.length} RFC · ${e(bibliography.retrieved)} tarihinde indirildi</p><h1>Kaynakça</h1><p class="lead">Sitedeki her bilgi aşağıdaki RFC’lerden birine dayanır. Metinler <a href="${e(bibliography.source)}">rfc-editor.org</a> adresinden indirilmiştir; sha256 özeti, alan genişliklerinin hangi metne karşı doğrulandığını gösterir.</p></header>
-<ol class="bibliography">${bibliography.entries.map(entry => `<li id="rfc${entry.number}"><h2>RFC ${entry.number}</h2><p class="citation">${citation(entry)} <a href="${e(entry.url)}">${e(entry.url.replace('https://', ''))}</a></p><dl><div><dt>Durum</dt><dd>${e(entry.status)}</dd></div><div><dt>DOI</dt><dd><a href="https://doi.org/${e(entry.doi)}">${e(entry.doi)}</a></dd></div><div><dt>Yerine geçtiği</dt><dd>${list(entry.obsoletes)}</dd></div><div><dt>Yerine geçen</dt><dd>${list(entry.obsoleted_by)}</dd></div><div><dt>Güncelleyen</dt><dd>${list(entry.updated_by)}</dd></div><div><dt>Burada kullanımı</dt><dd>${e(entry.use)}</dd></div><div><dt>Atıf yapan sayfalar</dt><dd>${citedBy(entry.number).map(protocol => `<a href="${url(protocol.id)}">${e(protocol.name)}</a>`).join(', ') || '—'}</dd></div><div><dt>sha256</dt><dd><code>${entry.sha256}</code> (${entry.bytes} sekizli)</dd></div></dl></li>`).join('')}</ol>` });
+<header class="page-header"><p class="eyebrow">${bibliography.entries.length} RFC · ${standards.entries.length} IEEE standardı · RFC’ler ${e(bibliography.retrieved)} tarihinde indirildi</p><h1>Kaynakça</h1><p class="lead">Sitedeki her bilgi aşağıdaki RFC’lerden ya da, alanı tanımlayan bir RFC yoksa, IEEE standartlarından birine dayanır. Metinler <a href="${e(bibliography.source)}">rfc-editor.org</a> adresinden indirilmiştir; sha256 özeti, alan genişliklerinin hangi metne karşı doğrulandığını gösterir.</p></header>
+<ol class="bibliography">${bibliography.entries.map(entry => `<li id="rfc${entry.number}"><h2>RFC ${entry.number}</h2><p class="citation">${citation(entry)} <a href="${e(entry.url)}">${e(entry.url.replace('https://', ''))}</a></p><dl><div><dt>Durum</dt><dd>${e(entry.status)}</dd></div><div><dt>DOI</dt><dd><a href="https://doi.org/${e(entry.doi)}">${e(entry.doi)}</a></dd></div><div><dt>Yerine geçtiği</dt><dd>${list(entry.obsoletes)}</dd></div><div><dt>Yerine geçen</dt><dd>${list(entry.obsoleted_by)}</dd></div><div><dt>Güncelleyen</dt><dd>${list(entry.updated_by)}</dd></div><div><dt>Burada kullanımı</dt><dd>${e(entry.use)}</dd></div><div><dt>Atıf yapan sayfalar</dt><dd>${pages(entry.number)}</dd></div><div><dt>sha256</dt><dd><code>${entry.sha256}</code> (${entry.bytes} sekizli)</dd></div></dl></li>`).join('')}</ol>
+<h2 id="standartlar">IEEE standartları</h2>
+<p>IEEE metinleri lisanslıdır; depoya konmaz ve yeniden dağıtılmaz. Künyeler doi.org kayıtlarından alınmıştır. Lisanslı kopyası olan bir standardın metni yerelde çıkarılır, alanlar onun ileti tablolarına karşı doğrulanır ve sonuç kaydedilir. Kopyası olmayan standart okunmamıştır.</p>
+<ol class="bibliography">${standards.entries.map(entry => `<li id="${e(entry.id)}"><h2>${e(entry.short)}</h2><p class="citation">${standardCitation(entry)} <a href="${e(entry.url)}">${e(entry.url.replace('https://', ''))}</a></p><dl><div><dt>Yayımcı</dt><dd>${e(entry.publisher)}</dd></div><div><dt>ISBN</dt><dd>${e(entry.isbn)}</dd></div><div><dt>Burada kullanımı</dt><dd>${e(entry.use)}</dd></div><div><dt>Atıf yapan sayfalar</dt><dd>${pages(entry.id)}</dd></div><div><dt>Doğrulama</dt><dd>${entry.mib ? `Gövde metni okunmadı. ${e(entry.mib.clause)} maddesinde yayımlanan MIB modülleri (${entry.mib.files.map(item => `${e(item.module)}, sha256 <code>${e(item.sha256.slice(0, 16))}…</code>`).join('; ')}) okundu; <a href="${e(entry.mib.url)}">IEEE indirme arşivi</a>.` : entry.copy ? `Lisanslı bir kopyanın metnine karşı (${entry.copy.pages} sayfa; ISBN ve sayfa sayısıyla tanınır). Kullanılan kopyanın sha256 özeti <code>${e(entry.copy.sha256)}</code>; IEEE her indirmeye filigran eklediği için başka kopyaların özeti farklıdır.` : 'Metni okunmadı'}</dd></div></dl></li>`).join('')}</ol>` });
 }
 
 function methodPage() {
   return page({ id: 'yontem', title: 'Yöntem', pageTitle: 'Yöntem', description: 'wire sitesindeki verinin RFC’lerden nasıl alındığı ve nasıl doğrulandığı.', body: `
-<header class="page-header"><p class="eyebrow">veri nereden geliyor</p><h1>Yöntem</h1><p class="lead">Bu sitedeki alan adları, genişlikler, değerler ve açıklamalar yalnızca RFC’lere dayanır. Neyin makineyle doğrulandığı, neyin elle yazıldığı aşağıda ayrı ayrı belirtilmiştir.</p></header>
+<header class="page-header"><p class="eyebrow">veri nereden geliyor</p><h1>Yöntem</h1><p class="lead">Bu sitedeki alan adları, genişlikler, değerler ve açıklamalar RFC’lere, RFC’si olmayan iki protokolde (LLDP, PTP) ise IEEE standartlarına dayanır. Neyin makineyle doğrulandığı, neyin elle yazıldığı aşağıda ayrı ayrı belirtilmiştir.</p></header>
 <section><h2>Makineyle doğrulananlar</h2><p>Her protokolün alan genişlikleri, atıf yapılan RFC’nin düz metnindeki başlık şemasından okunur ve veri dosyasındaki değerlerle karşılaştırılır. Uyuşmazlıkta derleme durur. RFC metninin sha256 özeti <a href="${url('kaynakca')}">kaynakçadaki</a> özetle aynı olmalıdır.</p>
-<div class="table-scroll" tabindex="0" role="region" aria-label="Doğrulama tablosu"><table class="fields"><thead><tr><th scope="col">Protokol</th><th scope="col">Karşılaştırılan yerleşim</th><th scope="col">Okunan genişlikler</th></tr></thead><tbody>${protocols.map(protocol => `<tr><th scope="row"><a href="${url(protocol.id)}">${e(protocol.name)}</a></th><td>${refLink({ rfc: protocol.layout.rfc, section: protocol.layout.section })} — ${e(protocol.layout.label)}</td><td><code>${checks.get(protocol.id).found.join(' · ')}</code></td></tr>`).join('')}</tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Doğrulama tablosu"><table class="fields"><thead><tr><th scope="col">Protokol</th><th scope="col">Karşılaştırılan yerleşim</th><th scope="col">Okunan genişlikler</th></tr></thead><tbody>${protocols.map(protocol => `<tr><th scope="row"><a href="${url(protocol.id)}">${e(protocol.name)}</a></th><td>${protocol.layout.kind === 'ieee' ? `${joinTr(protocol.layout.refs.map(refLink))} — lisanslı kopya, ${e(protocol.layout.checked.date)}${protocol.layout.mib ? '; MIB modülleri' : ''}` : isVerified(protocol) ? `${joinTr(layoutRefs(protocol).map(refLink))} — ${e(protocol.layout.label)}` : `<strong>Doğrulanmadı</strong>: ${refLink({ std: protocol.layout.std })} metni okunmadı`}</td><td><code>${(checks.get(protocol.id).widths ?? checks.get(protocol.id).found).join(' · ')}</code></td></tr>`).join('')}</tbody></table></div>
+<p class="small">RFC’si olmayan PTP, IEEE 1588-2008’in lisanslı bir kopyasına karşı doğrulanır: <code>npm run sync:ieee</code> metni yerelde çıkarır, alan adlarını ve genişliklerini Table 18 ile Table 26’dan, bileşik alanları <code>struct PortIdentity</code> ve <code>struct Timestamp</code> tanımlarından okur ve sonucu veri dosyasına kaydeder. Metin depoya girmez; kopyası olmayan derlemeler, CI dahil, veriyi bu kayda karşı denetler. Metin bulunduğunda atıf yapılan her bölümün verilen sayfada başladığı da denetlenir.</p>
+<p class="small">Bir yerleşim birden çok RFC’ye karşı da doğrulanabilir: 802.1Q etiketinin TPID ve EtherType alanları RFC 7348’deki VXLAN şemasından, öncelik, DEI ve VLAN ID alanları RFC 6325’teki VLAN Tag Information şemasından okunur. QUIC ve HTTP/2, RFC 9000’in “Header Form (1) = 1,” biçimindeki şekilleriyle yazılmıştır; bu şekillerdeki aralıklar (örneğin 0..160) ve değişken uzunluklu tamsayılar (i) da karşılaştırılır.</p>
 <p class="small">ARP ve Ethernet için RFC 826 bit şeması değil, “16.bit: (ar$hrd) …” biçiminde bir liste verir; karşılaştırma o listeyle yapılır. n ve m, uzunluğu ar$hln ve ar$pln alanlarından gelen adresleri gösterir.</p></section>
 <section><h2>Elle yazılanlar</h2><ul class="notes"><li>Türkçe alan açıklamaları, ilgili RFC bölümü okunarak yazılmış özetlerdir; çeviri değil. Her açıklamanın altında dayandığı bölümün bağlantısı durur.</li><li>Değer tabloları (ICMP türleri, DNS yanıt kodları gibi) atıf yapılan bölümden aktarılmıştır. Güncel IANA kayıtlarındaki sonradan eklenmiş değerleri içermez.</li></ul></section>
 <section><h2>Örnek paketler</h2><ul class="notes"><li>Örnek paketler gerçek trafik yakalamaları değildir. Alan tablosundaki örnek değerlerden derleme sırasında üretilir.</li><li>Sağlama toplamları RFC 1071’deki bire tümleyen toplamıyla, gerektiğinde RFC 768, RFC 9293 ve RFC 8200 §8.1’deki sözde başlıklarla hesaplanır.</li><li>Adresler belgeleme için ayrılmış aralıklardandır: IPv4 için RFC 5737, IPv6 için RFC 3849, MAC için RFC 9542 §2.1.4, alan adı için RFC 2606.</li></ul></section>
-<section><h2>Kapsam dışı</h2><ul class="notes"><li>RFC olarak yayımlanmamış standartlar (örneğin IEEE 802.3) kaynak olarak kullanılmaz; bu yüzden Ethernet sayfası yalnızca RFC 826 ve RFC 894’ün tarif ettiği alanları içerir.</li><li>Seçenekler, uzantı başlıkları ve ileti gövdeleri bu sürümde alan alan çözümlenmemiştir.</li></ul></section>` });
+<section><h2>Kapsam dışı</h2><ul class="notes"><li>RFC olarak yayımlanmamış standartlar (IEEE 802.1Q, 802.1AB, 1588) yalnızca bir protokolü tanımlayan RFC bulunmadığında kaynak olarak kullanılır. Alanları yeniden çizen bir RFC varsa (802.1Q için RFC 6325 ve RFC 7348) genişlikler o RFC’ye karşı doğrulanır. RFC yoksa standardın lisanslı bir kopyasına karşı doğrulanır (PTP için IEEE 1588-2008, LLDP için IEEE 802.1AB-2016). Bir standardın ne kopyası ne MIB’i okunmamışsa sayfa doğrulanmadığını açıkça belirtir; şu an böyle bir sayfa yoktur. Ethernet sayfası yine yalnızca RFC 826 ve RFC 894’ün tarif ettiği alanları içerir.</li><li>Seçenekler, uzantı başlıkları ve ileti gövdeleri bu sürümde alan alan çözümlenmemiştir.</li></ul></section>` });
 }
 
 await rm(out, { recursive: true, force: true });

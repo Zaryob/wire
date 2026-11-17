@@ -272,6 +272,9 @@ body.is-searching .home-stats { display: none; }
 }
 .bits-ruler--half .bits-col-num { background: color-mix(in srgb, var(--surface) 80%, var(--paper)); }
 .verified { margin-top: 12px; }
+/* A layout taken from a standard whose text cannot be downloaded: the build did not check it. */
+.verified--manual { color: var(--ink); background: var(--warning-surface); border-left: 3px solid var(--warning); padding: 8px 12px; }
+.verified--manual strong { color: var(--warning); }
 
 /* Protocol Layer Context Variables */
 .protocol-page--link {
