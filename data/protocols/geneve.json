@@ -1,0 +1,154 @@
+{
+  "order": 23,
+  "name": "Geneve",
+  "title": "Geneve tünel başlığı",
+  "layer": "Taşıma",
+  "rowBits": 32,
+  "summary": "Genel Ağ Sanallaştırma Kapsüllemesi (Generic Network Virtualization Encapsulation - Geneve), VXLAN gibi katman 2 çerçevelerini UDP içinde taşır; ondan farkı, sabit 8 sekizlilik başlığın ardından değişken uzunlukta seçenekler taşıyabilmesidir. Seçenekler, kontrol düzleminin yeni bilgileri başlık biçimi değişmeden eklemesini sağlar.",
+  "layout": {
+    "rfc": 8926,
+    "section": "3.1",
+    "kind": "diagram",
+    "anchor": "|Ver|  Opt Len  |O|C|    Rsvd.  |          Protocol Type        |",
+    "label": "Geneve Packet Format over IPv4"
+  },
+  "notes": [
+    "Geneve, IANA tarafından atanan 6081 numaralı UDP hedef portunu kullanır (RFC 8926 §3.3).",
+    "Opt Len seçeneklerin uzunluğunu 4 sekizlilik sözcük olarak verir; yük, sabit başlıktan 8 + 4 × Opt Len sekizli sonra başlar. Böylece seçenekleri tanımayan bir ara cihaz bile yükü bulabilir.",
+    "Her seçenek Option Class (16 bit), Type (8 bit), üç ayrılmış bit ve 5 bitlik Length alanından oluşan 4 sekizlilik bir başlıkla başlar (RFC 8926 §3.5).",
+    "VXLAN'ın tersine Geneve yalnızca Ethernet taşımaz: Protocol Type alanı EtherType değerlerini kullanır, 0x6558 Ethernet çerçevesi, 0x0800 doğrudan IPv4 anlamına gelir."
+  ],
+  "fields": [
+    {
+      "key": "ver",
+      "name": "Version (Ver)",
+      "bits": 2,
+      "desc": "Tünel başlığının sürümü; güncel sürüm 0'dır. Bilinmeyen sürümdeki paketler atılır.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "opt_len",
+      "name": "Opt Len",
+      "bits": 6,
+      "desc": "Değişken uzunluklu seçeneklerin toplam uzunluğu, 4 sekizlilik sözcük olarak. 0, seçenek olmadığını gösterir.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "o",
+      "name": "O (OAM)",
+      "bits": 1,
+      "desc": "Paket yük değil denetim (OAM) iletisi taşıyorsa 1. Bu paketler normal yük gibi iletilmez, tünel uç noktası tarafından işlenir.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "c",
+      "name": "C (Kritik seçenek)",
+      "bits": 1,
+      "desc": "Seçeneklerden en az biri kritikse 1. Kritik bir seçeneği tanımayan uç nokta paketi atmalıdır.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "rsvd",
+      "name": "Rsvd.",
+      "bits": 6,
+      "desc": "Ayrılmış; gönderimde 0, alımda yok sayılır.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "protocol_type",
+      "name": "Protocol Type",
+      "bits": 16,
+      "desc": "Seçeneklerden sonra gelen yükün türü, EtherType değeriyle. 0x6558 (Transparent Ethernet Bridging) katman 2 Ethernet çerçevesidir.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 25944,
+      "hex": true,
+      "values": [
+        [
+          "0x6558",
+          "Ethernet çerçevesi"
+        ],
+        [
+          "0x0800",
+          "IPv4"
+        ],
+        [
+          "0x86dd",
+          "IPv6"
+        ]
+      ]
+    },
+    {
+      "key": "vni",
+      "name": "Virtual Network Identifier (VNI)",
+      "bits": 24,
+      "desc": "Paketin ait olduğu sanal ağın 24 bitlik kimliği; VXLAN'daki VNI ile aynı genişliktedir.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 5001
+    },
+    {
+      "key": "reserved",
+      "name": "Reserved",
+      "bits": 8,
+      "desc": "Ayrılmış; gönderimde 0.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.4",
+        "label": "Tunnel Header Fields"
+      },
+      "example": 0
+    },
+    {
+      "key": "options",
+      "name": "Variable-Length Options",
+      "bits": "değişken",
+      "desc": "Opt Len ile belirtilen uzunlukta, art arda dizilmiş TLV biçiminde seçenekler.",
+      "ref": {
+        "rfc": 8926,
+        "section": "3.5",
+        "label": "Tunnel Options"
+      }
+    }
+  ],
+  "example": {
+    "payloadFrom": "ethernet",
+    "note": "Seçeneksiz bir Geneve başlığı: Opt Len 0, Protocol Type 0x6558, VNI 5001 (0x001389). Ardından taşınan iç Ethernet çerçevesinin başlığı, yani wire'ın Ethernet örneği gelir. Gerçek pakette bu başlık, hedef portu 6081 olan bir UDP datagramının yüküdür."
+  },
+  "refs": [
+    8926,
+    768
+  ],
+  "id": "geneve"
+}

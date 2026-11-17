@@ -1,0 +1,103 @@
+{
+  "order": 7,
+  "name": "MPLS",
+  "title": "MPLS etiket yığını girdisi",
+  "layer": "Bağlantı",
+  "rowBits": 32,
+  "summary": "Çok Protokollü Etiket Anahtarlama (Multiprotocol Label Switching - MPLS) paketleri IP adresine bakmadan, bağlantı katmanı başlığı ile IP başlığı arasına eklenen 4 sekizlilik etiketlerle iletir. Her girdi 20 bitlik bir etiket, 3 bitlik trafik sınıfı, yığının sonunu gösteren bir bit ve bir TTL taşır.",
+  "layout": {
+    "rfc": 5462,
+    "section": "2.1",
+    "kind": "diagram",
+    "anchor": "| TC  |S|       TTL     |",
+    "label": "Label Stack Entry"
+  },
+  "notes": [
+    "Ethernet üzerinde tek noktaya MPLS paketi EtherType 0x8847 ile taşınır (RFC 3032 §5).",
+    "Etiketler bir yığın oluşturur: her girdi 4 sekizlidir ve S biti 1 olan girdi yığının son, IP başlığına en yakın girdisidir. Yönlendiriciler yalnızca en üstteki etiketi okur, değiştirir ya da çıkarır.",
+    "RFC 3032 üçüncü alanı deneysel kullanım için \"Exp\" olarak adlandırmıştı; RFC 5462 adı Traffic Class (TC) olarak değiştirdi ve alan bugün DiffServ sınıflandırması için kullanılır.",
+    "Etiket değerleri 0–15 özel anlam taşır (RFC 3032 §2.1): 0 IPv4 Explicit NULL, 1 Router Alert, 2 IPv6 Explicit NULL, 3 Implicit NULL. 3 hiçbir zaman pakette görünmez; yalnızca son atlamadan bir önceki yönlendiricinin etiketi çıkarmasını ister."
+  ],
+  "fields": [
+    {
+      "key": "label",
+      "name": "Label",
+      "bits": 20,
+      "desc": "Bir sonraki atlamanın paketi nasıl ileteceğini belirleyen etiket değeri. 0–15 özel değerlerdir; 16 ilk sıradan etikettir.",
+      "ref": {
+        "rfc": 3032,
+        "section": "2.1",
+        "label": "Encoding the Label Stack"
+      },
+      "example": 16,
+      "values": [
+        [
+          "0",
+          "IPv4 Explicit NULL"
+        ],
+        [
+          "1",
+          "Router Alert"
+        ],
+        [
+          "2",
+          "IPv6 Explicit NULL"
+        ],
+        [
+          "3",
+          "Implicit NULL (yalnızca sinyalleşmede)"
+        ],
+        [
+          "16–1048575",
+          "Sıradan etiketler"
+        ]
+      ]
+    },
+    {
+      "key": "tc",
+      "name": "Traffic Class (TC)",
+      "bits": 3,
+      "desc": "Trafik sınıfı; DiffServ ve ECN için kullanılır. RFC 3032'deki adı Exp'ti.",
+      "ref": {
+        "rfc": 5462,
+        "section": "2.1",
+        "label": "RFC 3032"
+      },
+      "example": 0
+    },
+    {
+      "key": "s",
+      "name": "Bottom of Stack (S)",
+      "bits": 1,
+      "desc": "Bu girdi yığının son girdisiyse 1, ardından başka bir etiket geliyorsa 0.",
+      "ref": {
+        "rfc": 3032,
+        "section": "2.1",
+        "label": "Encoding the Label Stack"
+      },
+      "example": 1
+    },
+    {
+      "key": "ttl",
+      "name": "Time to Live (TTL)",
+      "bits": 8,
+      "desc": "Her etiket anahtarlama atlamasında bir azaltılır; 0'a inen paket atılır. Etiket eklenirken genellikle IP başlığının TTL değeri kopyalanır.",
+      "ref": {
+        "rfc": 3032,
+        "section": "2.4",
+        "label": "Processing the Time to Live Field"
+      },
+      "example": 64
+    }
+  ],
+  "example": {
+    "payloadFrom": "ipv4",
+    "note": "Tek girdilik bir yığın: etiket 16, TC 0, S biti 1 (yığının sonu), TTL 64. Ardından wire'ın IPv4 örneği gelir; S biti 1 olduğu için alıcı, etiketi çıkardıktan sonra yükü IP paketi olarak işler. Dört sekizli 00 01 01 40 olarak görünür."
+  },
+  "refs": [
+    3032,
+    5462,
+    791
+  ],
+  "id": "mpls"
+}

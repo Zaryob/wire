@@ -1,0 +1,161 @@
+{
+  "order": 16,
+  "name": "ESP",
+  "title": "IPsec ESP paketi",
+  "layer": "Ağ",
+  "rowBits": 32,
+  "summary": "Kapsüllenen Güvenlik Yükü (Encapsulating Security Payload - ESP), IPsec'in gizlilik sağlayan protokolüdür. 8 sekizlilik başlığı SPI ve sıra numarasından oluşur; şifrelenen yükü dolgu, dolgu uzunluğu ve Next Header alanlarından oluşan bir kuyruk ve bütünlük denetim değeri (ICV) izler. AH'den farklı olarak alanları baştan sona değil, bir başlık ve bir kuyruk olarak yerleşir.",
+  "layout": {
+    "rfc": 4303,
+    "section": "2",
+    "kind": "diagram",
+    "label": "Top-Level Format of an ESP Packet",
+    "parts": [
+      {
+        "anchor": "|               Security Parameters Index (SPI)                 |",
+        "slice": [
+          0,
+          2
+        ]
+      },
+      {
+        "anchor": "|  Pad Length   | Next Header   |",
+        "fromAnchor": true,
+        "slice": [
+          1,
+          3
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "ESP, IPv4 Protocol ya da IPv6 Next Header alanında 50 değeriyle belirtilir; AH ise 51 kullanır.",
+    "Gizlilik Payload Data'dan Next Header'a kadar olan kısmı kapsar; ICV ise ESP başlığını, yükü ve kuyruğu korur. SPI ve sıra numarası şifrelenmez, çünkü alıcı SA'yı ve tekrar saldırısı penceresini şifreyi çözmeden önce bunlarla bulur (RFC 4303 §2).",
+    "Dolgu, şifreli metnin 4 sekizlilik sınırda bitmesini sağlar: Payload Data, Padding, Pad Length ve Next Header birlikte 4'ün katı olmalıdır. Varsayılan dolgu baytları 1, 2, 3 … diye sayar (RFC 4303 §2.4).",
+    "Genişletilmiş sıra numarası (ESN) kullanıldığında 64 bitlik sayacın yalnızca alt 32 biti iletilir; üst yarı yalnızca ICV hesabına girer (RFC 4303 §2.2.1).",
+    "Taşıma kipinde Payload Data özgün paketin üst katman verisidir; tünel kipinde ise iç IP başlığıyla birlikte paketin tamamıdır."
+  ],
+  "fields": [
+    {
+      "key": "spi",
+      "name": "Security Parameters Index (SPI)",
+      "bits": 32,
+      "desc": "Alıcının paketi hangi güvenlik ilişkisine (SA) bağlayacağını belirleyen rastgele 32 bitlik değer. 1–255 aralığı IANA'ya ayrılmıştır, 0 ağda gönderilmez.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.1",
+        "label": "Security Parameters Index (SPI)"
+      },
+      "example": 4096,
+      "hex": true
+    },
+    {
+      "key": "seq",
+      "name": "Sıra numarası",
+      "bits": 32,
+      "desc": "Her pakette bir artan sayaç. SA kurulurken 0'dır, ilk paket 1 taşır; alıcı tekrar saldırılarını bu değerle ayıklar.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.2",
+        "label": "Sequence Number"
+      },
+      "example": 1
+    },
+    {
+      "key": "payload_data",
+      "name": "Payload Data",
+      "bits": 296,
+      "desc": "Next Header alanının türünü belirttiği veri; şifreleme algoritması gerektiriyorsa başında bir başlatma vektörü (IV) bulunur. Uzunluğu pakete göre değişir; buradaki genişlik bu örneğe aittir.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.3",
+        "label": "Payload Data"
+      },
+      "example": "c4120035002565871a2b01000001000000000000076578616d706c6503636f6d0000010001",
+      "type": "bytes",
+      "range": "değişken"
+    },
+    {
+      "key": "padding",
+      "name": "Padding",
+      "bits": 8,
+      "desc": "Şifreli metni blok ya da 4 sekizli sınırına tamamlayan 0–255 sekizlilik dolgu. Varsayılan içerik 1'den başlayan artan baytlardır.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.4",
+        "label": "Padding (for Encryption)"
+      },
+      "example": "01",
+      "type": "bytes",
+      "range": "0–255 sekizli"
+    },
+    {
+      "key": "pad_length",
+      "name": "Pad Length",
+      "bits": 8,
+      "desc": "Hemen önündeki dolgu baytlarının sayısı; 0, dolgu olmadığını gösterir.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.5",
+        "label": "Pad Length"
+      },
+      "example": 1
+    },
+    {
+      "key": "next_header",
+      "name": "Next Header",
+      "bits": 8,
+      "desc": "Payload Data'daki verinin türü; IPv4 Protocol alanıyla aynı değerleri kullanır. 4 iç IPv4 paketi (tünel kipi), 6 TCP, 17 UDP, 59 sahte (dummy) pakettir.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.6",
+        "label": "Next Header"
+      },
+      "example": 17,
+      "values": [
+        [
+          "4",
+          "IPv4 (tünel kipi)"
+        ],
+        [
+          "6",
+          "TCP"
+        ],
+        [
+          "17",
+          "UDP"
+        ],
+        [
+          "41",
+          "IPv6 (tünel kipi)"
+        ],
+        [
+          "59",
+          "Sahte paket (trafik gizleme)"
+        ]
+      ]
+    },
+    {
+      "key": "icv",
+      "name": "Integrity Check Value (ICV)",
+      "bits": 128,
+      "desc": "ESP başlığı, yük ve kuyruk üzerinden hesaplanan bütünlük değeri. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 16 sekizlidir.",
+      "ref": {
+        "rfc": 4303,
+        "section": "2.8",
+        "label": "Integrity Check Value (ICV)"
+      },
+      "example": "5e8f1c2a9b7d43e0a6c1f2b38d4e7a90",
+      "type": "bytes",
+      "range": "değişken"
+    }
+  ],
+  "example": {
+    "note": "Taşıma kipinde, wire'ın UDP örneğini (example.com için bir DNS sorgusu) taşıyan bir ESP paketi, şifreleme öncesi görünümüyle. Payload Data 37 sekizlilik UDP datagramının kendisidir; ardından 1 sekizli dolgu (01), Pad Length 1 ve Next Header 17 (UDP) gelir, böylece 37 + 1 + 2 = 40 sekizli 4'ün katı olur. Gerçek pakette Payload Data'dan Next Header'a kadarki kısım şifrelidir. ICV burada uydurma bir değerdir."
+  },
+  "refs": [
+    4303,
+    768
+  ],
+  "id": "esp"
+}

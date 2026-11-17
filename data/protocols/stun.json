@@ -1,0 +1,125 @@
+{
+  "order": 33,
+  "name": "STUN",
+  "title": "STUN ileti başlığı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "NAT için Oturum Geçiş Yardımcıları (Session Traversal Utilities for NAT - STUN), bir istemcinin NAT arkasından dışarıda hangi IP adresi ve port ile göründüğünü öğrenmesini sağlar. WebRTC ve ICE'in temel yapı taşıdır. Her ileti 20 sekizlilik bir başlıkla başlar, ardından TLV biçiminde öznitelikler gelir.",
+  "layout": {
+    "rfc": 8489,
+    "section": "5",
+    "kind": "diagram",
+    "anchor": "|0 0|     STUN Message Type     |",
+    "label": "Format of STUN Message Header"
+  },
+  "notes": [
+    "STUN, UDP ve TCP üzerinde 3478, TLS üzerinde 5349 numaralı portu kullanır (RFC 8489 §18.6).",
+    "İlk iki bitin 0 olması ve sabit Magic Cookie değeri, STUN paketlerinin aynı porttan geçen RTP, RTCP ya da DTLS paketlerinden ayırt edilmesini sağlar.",
+    "Message Type 14 bitinin içinde yöntemi (örneğin Binding) ve sınıfı (istek, gösterge, başarılı yanıt, hata yanıtı) birbirine karışmış olarak taşır; sınıf bitleri C1 ve C0'dır (RFC 8489 Figure 3).",
+    "XOR-MAPPED-ADDRESS, adresi Magic Cookie ile XOR'layarak taşır. Bazı NAT'lar paket içinde kendi dış adreslerini görünce onu yeniden yazar; XOR bunu önler (RFC 8489 §14.2).",
+    "Her öznitelik 4 sekizlilik sınıra dolgulanır; Message Length başlık hariç, dolgu dahil toplam öznitelik uzunluğudur."
+  ],
+  "fields": [
+    {
+      "key": "zero",
+      "name": "0 0",
+      "bits": 2,
+      "desc": "Her STUN iletisinin en anlamlı iki biti 0 olmalıdır.",
+      "ref": {
+        "rfc": 8489,
+        "section": "5",
+        "label": "STUN Message Structure"
+      },
+      "example": 0
+    },
+    {
+      "key": "type",
+      "name": "STUN Message Type",
+      "bits": 14,
+      "desc": "Yöntem ve sınıf. 0x0001 Binding isteği, 0x0101 Binding başarılı yanıtı, 0x0111 Binding hata yanıtıdır.",
+      "ref": {
+        "rfc": 8489,
+        "section": "5",
+        "label": "STUN Message Structure"
+      },
+      "example": 257,
+      "hex": true,
+      "values": [
+        [
+          "0x0001",
+          "Binding isteği"
+        ],
+        [
+          "0x0011",
+          "Binding göstergesi"
+        ],
+        [
+          "0x0101",
+          "Binding başarılı yanıtı"
+        ],
+        [
+          "0x0111",
+          "Binding hata yanıtı"
+        ]
+      ]
+    },
+    {
+      "key": "length",
+      "name": "Message Length",
+      "bits": 16,
+      "desc": "20 sekizlilik başlık hariç iletinin uzunluğu. Öznitelikler 4 sekizliye dolgulandığı için son iki biti her zaman 0'dır.",
+      "ref": {
+        "rfc": 8489,
+        "section": "5",
+        "label": "STUN Message Structure"
+      },
+      "example": 12
+    },
+    {
+      "key": "cookie",
+      "name": "Magic Cookie",
+      "bits": 32,
+      "desc": "Sabit 0x2112A442 değeri. Eski RFC 3489 istemcilerinden ayırt etmeye ve XOR-MAPPED-ADDRESS'i kodlamaya yarar.",
+      "ref": {
+        "rfc": 8489,
+        "section": "5",
+        "label": "STUN Message Structure"
+      },
+      "example": 554869826,
+      "hex": true
+    },
+    {
+      "key": "transaction_id",
+      "name": "Transaction ID",
+      "bits": 96,
+      "desc": "İsteği yanıtla eşleştiren, istemcinin rastgele seçtiği 96 bitlik kimlik; yanıt aynı değeri taşır.",
+      "ref": {
+        "rfc": 8489,
+        "section": "5",
+        "label": "STUN Message Structure"
+      },
+      "example": "b7e7a701bc34d686fa87dfae",
+      "type": "bytes"
+    },
+    {
+      "key": "attributes",
+      "name": "Öznitelikler",
+      "bits": "değişken",
+      "desc": "Type (16 bit), Length (16 bit) ve değerden oluşan, 4 sekizliye dolgulanmış öznitelikler.",
+      "ref": {
+        "rfc": 8489,
+        "section": "14",
+        "label": "STUN Attributes"
+      }
+    }
+  ],
+  "example": {
+    "payload": "002000080001a147e112a643",
+    "note": "Bir Binding isteğine sunucunun verdiği başarılı yanıt. Tek özniteliği XOR-MAPPED-ADDRESS'tir (tür 0x0020, 8 sekizli): IPv4 ailesi, X-Port a147 ve X-Address e112a643. Magic Cookie ile XOR'landığında istemcinin dış adresi 192.0.2.1:32853 çıkar."
+  },
+  "refs": [
+    8489,
+    5737
+  ],
+  "id": "stun"
+}

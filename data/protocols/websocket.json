@@ -1,0 +1,190 @@
+{
+  "order": 34,
+  "name": "WebSocket",
+  "title": "WebSocket çerçevesi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "WebSocket, bir HTTP el sıkışmasıyla açılan TCP bağlantısı üzerinde iki yönlü ileti taşır. Her ileti, en az 2 sekizlilik bir başlıkla başlayan çerçevelerden oluşur. İstemciden sunucuya giden her çerçeve 4 sekizlilik bir anahtarla maskelenir.",
+  "layout": {
+    "rfc": 6455,
+    "section": "5.2",
+    "kind": "diagram",
+    "label": "Base Framing Protocol",
+    "parts": [
+      {
+        "anchor": "|F|R|R|R| opcode|M| Payload len |",
+        "slice": [
+          0,
+          7
+        ]
+      },
+      {
+        "prose": [
+          "[ frame-masking-key ] ; 32 bits in length"
+        ]
+      }
+    ],
+    "note": "Masking-key RFC şemasında iki satıra bölünerek çizildiği için genişliği aynı bölümdeki ABNF tanımından okunur."
+  },
+  "notes": [
+    "Bağlantı, Upgrade: websocket başlıklı bir HTTP/1.1 isteğiyle açılır; sunucu 101 Switching Protocols ile yanıt verdikten sonra bağlantı yalnızca çerçeve taşır (RFC 6455 §4).",
+    "İstemci her çerçeveyi maskelemek zorundadır, sunucu hiçbirini maskelemez. Maske, aradaki önbellek ve vekil sunucuların çerçeve içeriğini HTTP isteği sanmasını önler (RFC 6455 §5.3, §10.3).",
+    "Yük uzunluğu 125 sekizliye kadar 7 bitlik alana sığar; 126 ardından 16 bitlik, 127 ardından 64 bitlik genişletilmiş uzunluk geldiğini gösterir.",
+    "Denetim çerçeveleri (Close, Ping, Pong) en çok 125 sekizli yük taşır ve parçalanamaz; bir iletinin parçaları arasına girebilirler (RFC 6455 §5.5)."
+  ],
+  "fields": [
+    {
+      "key": "fin",
+      "name": "FIN",
+      "bits": 1,
+      "desc": "İletinin son parçasıysa 1. Tek parçalık iletilerde ilk çerçeve aynı zamanda sondur.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 1
+    },
+    {
+      "key": "rsv1",
+      "name": "RSV1",
+      "bits": 1,
+      "desc": "Bir uzantı anlam tanımlamadıkça 0; anlamı bilinmeyen 1 değeri bağlantıyı başarısız kılar. permessage-deflate uzantısı bu biti sıkıştırma için kullanır.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 0
+    },
+    {
+      "key": "rsv2",
+      "name": "RSV2",
+      "bits": 1,
+      "desc": "RSV1 ile aynı kurallar; uzantılar için ayrılmıştır.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 0
+    },
+    {
+      "key": "rsv3",
+      "name": "RSV3",
+      "bits": 1,
+      "desc": "RSV1 ile aynı kurallar; uzantılar için ayrılmıştır.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 0
+    },
+    {
+      "key": "opcode",
+      "name": "Opcode",
+      "bits": 4,
+      "desc": "Yükün nasıl yorumlanacağı. 0x0–0x7 veri, 0x8–0xF denetim çerçeveleridir.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 1,
+      "values": [
+        [
+          "0x0",
+          "Devam çerçevesi"
+        ],
+        [
+          "0x1",
+          "Metin (UTF-8)"
+        ],
+        [
+          "0x2",
+          "İkili veri"
+        ],
+        [
+          "0x8",
+          "Bağlantıyı kapat"
+        ],
+        [
+          "0x9",
+          "Ping"
+        ],
+        [
+          "0xA",
+          "Pong"
+        ]
+      ]
+    },
+    {
+      "key": "mask",
+      "name": "MASK",
+      "bits": 1,
+      "desc": "Yük maskelenmişse 1 ve Masking-key alanı vardır. İstemciden gelen çerçevelerde her zaman 1'dir.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 1
+    },
+    {
+      "key": "payload_len",
+      "name": "Payload len",
+      "bits": 7,
+      "desc": "Yük uzunluğu. 0–125 doğrudan uzunluktur; 126 ve 127 genişletilmiş uzunluk alanının izlediğini gösterir.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      },
+      "example": 5
+    },
+    {
+      "key": "ext_len",
+      "name": "Extended payload length",
+      "bits": "değişken",
+      "desc": "Payload len 126 ise 16 bitlik, 127 ise 64 bitlik (en anlamlı biti 0) gerçek yük uzunluğu. Bu örnekte bulunmaz.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      }
+    },
+    {
+      "key": "masking_key",
+      "name": "Masking-key",
+      "bits": 32,
+      "desc": "MASK 1 ise bulunan 4 sekizlilik anahtar. Yükün i'nci sekizlisi, anahtarın (i mod 4)'üncü sekizlisiyle XOR'lanır.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.3",
+        "label": "Client-to-Server Masking"
+      },
+      "example": "0x37fa213d",
+      "hex": true
+    },
+    {
+      "key": "payload",
+      "name": "Payload Data",
+      "bits": "değişken",
+      "desc": "Uzantı verisi ve uygulama verisi; MASK 1 ise maskelenmiş olarak.",
+      "ref": {
+        "rfc": 6455,
+        "section": "5.2",
+        "label": "Base Framing Protocol"
+      }
+    }
+  ],
+  "example": {
+    "payload": "7f9f4d5158",
+    "note": "RFC 6455 §5.7'deki örnek: istemcinin gönderdiği, maskelenmiş tek çerçevelik \"Hello\" metin iletisi. 0x81 FIN biti 1 ve opcode 1 (metin), 0x85 MASK biti 1 ve 5 sekizli yüktür. Ardından 37 fa 21 3d anahtarı ve maskelenmiş yük gelir: 7f ^ 37 = 48 (\"H\"), 9f ^ fa = 65 (\"e\") vb."
+  },
+  "refs": [
+    6455
+  ],
+  "id": "websocket"
+}
