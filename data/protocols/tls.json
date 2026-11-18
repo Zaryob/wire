@@ -1,0 +1,100 @@
+{
+  "order": 44,
+  "name": "TLS",
+  "title": "TLS 1.3 kayıt katmanı",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Aktarım Katmanı Güvenliği (Transport Layer Security - TLS), HTTPS'in güvenlik katmanıdır. Bağlantı kurulduktan sonra bütün veriler şifreli TLS kayıtlarında taşınır. Her kaydın 5 sekizlilik başlığı yalnızca bir içerik türü, eski bir sürüm alanı ve uzunluktan oluşur; gerçek içerik türü şifreli kısmın içinde saklanır.",
+  "layout": {
+    "rfc": 9846,
+    "section": "5.2",
+    "kind": "struct",
+    "anchor": "TLSCiphertext",
+    "label": "TLSCiphertext"
+  },
+  "notes": [
+    "HTTPS, HTTP'yi TLS üzerinden taşır; https URI'lerinin varsayılan portu TCP 443'tür (RFC 9110 §4.2.2).",
+    "TLS 1.3'te bütün şifreli kayıtların dış içerik türü application_data (23) ve sürüm alanı 0x0303'tür; gerçek içerik türü şifreli TLSInnerPlaintext'in içindedir (RFC 9846 §5.2). Böylece dışarıdan bakan biri kaydın el sıkışma mı, uyarı mı, uygulama verisi mi olduğunu göremez.",
+    "Şifreli kaydın uzunluğu en çok 2^14 + 256 sekizli olabilir (RFC 9846 §5.2).",
+    "RFC 9846, TLS 1.3'ü tanımlayan RFC 8446'nın yerini almıştır."
+  ],
+  "fields": [
+    {
+      "key": "opaque_type",
+      "name": "opaque_type",
+      "bits": 8,
+      "desc": "Dış içerik türü; TLS 1.3'te şifreli kayıtlar için her zaman application_data (23).",
+      "ref": {
+        "rfc": 9846,
+        "section": "5.2",
+        "label": "Record Payload Protection"
+      },
+      "example": 23,
+      "values": [
+        [
+          "20",
+          "change_cipher_spec"
+        ],
+        [
+          "21",
+          "alert"
+        ],
+        [
+          "22",
+          "handshake"
+        ],
+        [
+          "23",
+          "application_data"
+        ]
+      ]
+    },
+    {
+      "key": "legacy_record_version",
+      "name": "legacy_record_version",
+      "bits": 16,
+      "desc": "Eski sürüm alanı; TLS 1.3'te 0x0303 (TLS 1.2) gönderilir ve alıcı yok sayar.",
+      "ref": {
+        "rfc": 9846,
+        "section": "5.2",
+        "label": "Record Payload Protection"
+      },
+      "example": 771,
+      "hex": true
+    },
+    {
+      "key": "length",
+      "name": "length",
+      "bits": 16,
+      "desc": "Ardından gelen şifreli kaydın uzunluğu, sekizli olarak; en çok 2^14 + 256.",
+      "ref": {
+        "rfc": 9846,
+        "section": "5.2",
+        "label": "Record Payload Protection"
+      },
+      "example": 45
+    },
+    {
+      "key": "encrypted_record",
+      "name": "encrypted_record",
+      "bits": 360,
+      "desc": "AEAD ile şifrelenmiş TLSInnerPlaintext: uygulama verisi, gerçek içerik türü sekizlisi, isteğe bağlı sıfır dolgusu ve doğrulama etiketi. Uzunluğu length alanından gelir.",
+      "ref": {
+        "rfc": 9846,
+        "section": "5.2",
+        "label": "Record Payload Protection"
+      },
+      "example": "d26bac960d010f2f65f3bfecfb5e46fa580f08fa2e852f0819e2cfedfe8d7ce7f2b95dc30b2795c67edbf6331d",
+      "type": "bytes",
+      "range": "değişken"
+    }
+  ],
+  "example": {
+    "note": "HTTPS bağlantısında el sıkışma bittikten sonra gönderilen bir uygulama verisi kaydı: dış tür 23 (application_data), sürüm 0x0303, 45 sekizlilik şifreli kayıt. Şifreli kısım uydurma değerlerdir; içinde HTTP isteğinin bir parçası, gerçek içerik türü ve AEAD doğrulama etiketi bulunur."
+  },
+  "refs": [
+    9846,
+    9110
+  ],
+  "id": "tls"
+}

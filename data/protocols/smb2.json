@@ -1,0 +1,491 @@
+{
+  "order": 50,
+  "name": "SMB2",
+  "title": "SMB2 ECHO isteği",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Sunucu İleti Bloğu (Server Message Block - SMB) sürüm 2 ve 3, yerel ağda dosya, yazıcı ve adlandırılmış kanal paylaşımı sağlar. Her SMB2 iletisi 64 sekizlilik bir başlıkla başlar; Direct TCP üzerinde bu başlığın önünde 4 sekizlilik bir taşıma başlığı bulunur. Bu sayfa Microsoft'un [MS-SMB2] açık spesifikasyonuna dayanır.",
+  "layout": {
+    "kind": "ieee",
+    "method": "smb2",
+    "std": "ms-smb2",
+    "section": "2.2.1.2",
+    "label": "SMB2 Packet Header - SYNC",
+    "refs": [
+      {
+        "std": "ms-smb2",
+        "section": "2.1",
+        "label": "Transport",
+        "page": 32
+      },
+      {
+        "std": "ms-smb2",
+        "section": "2.2",
+        "label": "Message Syntax",
+        "page": 32
+      },
+      {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      {
+        "std": "ms-smb2",
+        "section": "2.2.28",
+        "label": "SMB2 ECHO Request",
+        "page": 116
+      }
+    ],
+    "checked": {
+      "date": "2026-11-18",
+      "sha256": "fef3a06507679130a8cfdcaeaed581482d7f235435dd904f6c794f113ff04bd1",
+      "facts": {
+        "littleEndian": true,
+        "directTcp": [
+          {
+            "name": "Zero",
+            "bits": 8
+          },
+          {
+            "name": "StreamProtocolLength",
+            "bits": 24
+          }
+        ],
+        "streamLengthNetworkOrder": true,
+        "header": [
+          {
+            "name": "ProtocolId",
+            "bits": 32
+          },
+          {
+            "name": "StructureSize",
+            "bits": 16
+          },
+          {
+            "name": "CreditCharge",
+            "bits": 16
+          },
+          {
+            "name": "(ChannelSequence,Reserved)/Status",
+            "bits": 32
+          },
+          {
+            "name": "Command",
+            "bits": 16
+          },
+          {
+            "name": "CreditRequest/CreditResponse",
+            "bits": 16
+          },
+          {
+            "name": "Flags",
+            "bits": 32
+          },
+          {
+            "name": "NextCommand",
+            "bits": 32
+          },
+          {
+            "name": "MessageId",
+            "bits": 64
+          },
+          {
+            "name": "Reserved",
+            "bits": 32
+          },
+          {
+            "name": "TreeId",
+            "bits": 32
+          },
+          {
+            "name": "SessionId",
+            "bits": 64
+          },
+          {
+            "name": "Signature",
+            "bits": 128
+          }
+        ],
+        "protocolId": "0x424D53FE",
+        "structureSize": 64,
+        "commands": [
+          [
+            "NEGOTIATE",
+            "0x0000"
+          ],
+          [
+            "SESSION_SETUP",
+            "0x0001"
+          ],
+          [
+            "LOGOFF",
+            "0x0002"
+          ],
+          [
+            "TREE_CONNECT",
+            "0x0003"
+          ],
+          [
+            "TREE_DISCONNECT",
+            "0x0004"
+          ],
+          [
+            "CREATE",
+            "0x0005"
+          ],
+          [
+            "CLOSE",
+            "0x0006"
+          ],
+          [
+            "FLUSH",
+            "0x0007"
+          ],
+          [
+            "READ",
+            "0x0008"
+          ],
+          [
+            "WRITE",
+            "0x0009"
+          ],
+          [
+            "LOCK",
+            "0x000A"
+          ],
+          [
+            "IOCTL",
+            "0x000B"
+          ],
+          [
+            "CANCEL",
+            "0x000C"
+          ],
+          [
+            "ECHO",
+            "0x000D"
+          ],
+          [
+            "QUERY_DIRECTORY",
+            "0x000E"
+          ],
+          [
+            "CHANGE_NOTIFY",
+            "0x000F"
+          ],
+          [
+            "QUERY_INFO",
+            "0x0010"
+          ],
+          [
+            "SET_INFO",
+            "0x0011"
+          ],
+          [
+            "OPLOCK_BREAK",
+            "0x0012"
+          ],
+          [
+            "SERVER_TO_CLIENT_NOTIFICATION",
+            "0x0013"
+          ]
+        ],
+        "echo": [
+          {
+            "name": "StructureSize",
+            "bits": 16
+          },
+          {
+            "name": "Reserved",
+            "bits": 16
+          }
+        ],
+        "echoStructureSize": 4
+      }
+    }
+  },
+  "notes": [
+    "SMB2 alanları, aksi belirtilmedikçe küçük-endian (en anlamsız sekizli önce) iletilir (MS-SMB2 §2.2). wire'daki diğer protokollerin çoğundan farklı olarak örnekteki 64, 40 00 olarak görünür. Yalnızca Direct TCP başlığındaki uzunluk ağ sırasındadır (§2.1).",
+    "Direct TCP bağlantıları TCP 445 numaralı portu kullanır; NetBIOS üzerinden SMB 139 numaralı portu kullanır (MS-SMB2 §3.3.5.1).",
+    "Başlıktaki Flags alanında SMB2_FLAGS_ASYNC_COMMAND biti 1 ise başlık, Reserved ve TreeId yerine 8 sekizlilik AsyncId taşıyan ASYNC biçimini alır (§2.2.1.1). Bu sayfa SYNC biçimini gösterir.",
+    "[MS-SMB2] bir IETF ya da IEEE standardı değil, Microsoft'un yayımladığı açık spesifikasyondur. Belgenin kopyası depoya konmaz; alanlar sürüm v20260928'in metnine karşı doğrulanır."
+  ],
+  "fields": [
+    {
+      "key": "zero",
+      "name": "Zero",
+      "bits": 8,
+      "desc": "Direct TCP taşıma başlığının ilk sekizlisi; 0 olmalıdır.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.1",
+        "label": "Transport",
+        "page": 32
+      },
+      "example": 0
+    },
+    {
+      "key": "stream_length",
+      "name": "StreamProtocolLength",
+      "bits": 24,
+      "desc": "Ardından gelen SMB2 iletisinin uzunluğu, sekizli olarak, ağ sırasında. 4 sekizlilik taşıma başlığını kapsamaz.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.1",
+        "label": "Transport",
+        "page": 32
+      },
+      "example": 68
+    },
+    {
+      "key": "protocol_id",
+      "name": "ProtocolId",
+      "bits": 32,
+      "desc": "Protokol tanımlayıcısı: 0xFE, 'S', 'M', 'B'.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": "fe534d42",
+      "type": "bytes"
+    },
+    {
+      "key": "structure_size",
+      "name": "StructureSize",
+      "bits": 16,
+      "desc": "Başlığın boyutu; her zaman 64.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 64,
+      "endian": "little"
+    },
+    {
+      "key": "credit_charge",
+      "name": "CreditCharge",
+      "bits": 16,
+      "desc": "İsteğin tükettiği kredi sayısı; SMB 2.0.2 lehçesinde kullanılmaz ve 0'dır.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 1,
+      "endian": "little"
+    },
+    {
+      "key": "status",
+      "name": "(ChannelSequence,Reserved)/Status",
+      "bits": 32,
+      "desc": "İstekte, SMB 3.x'te ChannelSequence ve Reserved alanları; yanıtta durum kodu. Bu örnekte 0.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little"
+    },
+    {
+      "key": "command",
+      "name": "Command",
+      "bits": 16,
+      "desc": "İletinin komut kodu.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 13,
+      "endian": "little",
+      "hex": true,
+      "values": [
+        [
+          "0",
+          "NEGOTIATE"
+        ],
+        [
+          "1",
+          "SESSION_SETUP"
+        ],
+        [
+          "3",
+          "TREE_CONNECT"
+        ],
+        [
+          "5",
+          "CREATE"
+        ],
+        [
+          "8",
+          "READ"
+        ],
+        [
+          "9",
+          "WRITE"
+        ],
+        [
+          "13",
+          "ECHO"
+        ]
+      ]
+    },
+    {
+      "key": "credit_request",
+      "name": "CreditRequest/CreditResponse",
+      "bits": 16,
+      "desc": "İstekte istemcinin istediği, yanıtta sunucunun verdiği kredi sayısı.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 1,
+      "endian": "little"
+    },
+    {
+      "key": "flags",
+      "name": "Flags",
+      "bits": 32,
+      "desc": "İletinin nasıl işleneceğini gösteren bayraklar (yanıt, asenkron, imzalı vb.); bu örnekte 0.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little",
+      "hex": true
+    },
+    {
+      "key": "next_command",
+      "name": "NextCommand",
+      "bits": 32,
+      "desc": "Bileşik isteklerde sıradaki başlığın bu başlığa göre konumu; tek iletide 0.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little"
+    },
+    {
+      "key": "message_id",
+      "name": "MessageId",
+      "bits": 64,
+      "desc": "Aynı bağlantıdaki istek ile yanıtı eşleştiren benzersiz değer.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 5,
+      "endian": "little"
+    },
+    {
+      "key": "reserved",
+      "name": "Reserved",
+      "bits": 32,
+      "desc": "SYNC başlığında ayrılmış alan.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little"
+    },
+    {
+      "key": "tree_id",
+      "name": "TreeId",
+      "bits": 32,
+      "desc": "İsteğin ait olduğu paylaşım bağlantısı; ECHO bir paylaşıma bağlı değildir.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little"
+    },
+    {
+      "key": "session_id",
+      "name": "SessionId",
+      "bits": 64,
+      "desc": "Kurulmuş oturumun kimliği; NEGOTIATE iletilerinde 0 olmalıdır.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": 0,
+      "endian": "little"
+    },
+    {
+      "key": "signature",
+      "name": "Signature",
+      "bits": 128,
+      "desc": "İleti imzalıysa 16 sekizlilik imza; imzasızsa 0.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.1.2",
+        "label": "SMB2 Packet Header - SYNC",
+        "page": 37
+      },
+      "example": "00000000000000000000000000000000",
+      "type": "bytes"
+    },
+    {
+      "key": "echo_structure_size",
+      "name": "StructureSize",
+      "bits": 16,
+      "desc": "ECHO isteğinin, başlık hariç boyutu; her zaman 4.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.28",
+        "label": "SMB2 ECHO Request",
+        "page": 116
+      },
+      "example": 4,
+      "endian": "little"
+    },
+    {
+      "key": "echo_reserved",
+      "name": "Reserved",
+      "bits": 16,
+      "desc": "Kullanılmaz; 0 gönderilir.",
+      "ref": {
+        "std": "ms-smb2",
+        "section": "2.2.28",
+        "label": "SMB2 ECHO Request",
+        "page": 116
+      },
+      "example": 0,
+      "endian": "little"
+    }
+  ],
+  "example": {
+    "note": "İstemcinin, sunucunun istekleri işleyip işlemediğini yoklamak için gönderdiği ECHO isteği (Command 0x000D, MessageId 5). Direct TCP başlığı 68 sekizlilik iletiyi bildirir: 64 sekizli başlık ve 4 sekizli ECHO gövdesi. Oturum kimliği ve imza bu örnekte 0'dır."
+  },
+  "refs": [
+    "ms-smb2"
+  ],
+  "id": "smb2"
+}

@@ -1,0 +1,99 @@
+{
+  "order": 48,
+  "name": "SSH",
+  "title": "SSH ikili paketi",
+  "layer": "Uygulama",
+  "rowBits": 32,
+  "summary": "Güvenli Kabuk (Secure Shell - SSH), sunuculara şifreli uzak oturum açmayı sağlar. Bağlantıdaki her ileti, uzunluk, dolgu uzunluğu, yük, rastgele dolgu ve bir ileti doğrulama kodundan (MAC) oluşan ikili bir pakette taşınır.",
+  "layout": {
+    "rfc": 4253,
+    "section": "6",
+    "kind": "ssh",
+    "anchor": "Each packet is in the following format:",
+    "label": "Binary Packet Protocol"
+  },
+  "notes": [
+    "SSH sunucuları TCP 22 numaralı portu dinler (RFC 4253 §4.1).",
+    "Dolgu en az 4 sekizlidir ve packet_length, padding_length, yük ile dolgunun toplamı, şifrenin blok boyunun ya da 8'in (hangisi büyükse) katı olmalıdır (RFC 4253 §6).",
+    "packet_length, ne kendisini ne de MAC'i kapsar. Şifreleme anlaşıldıktan sonra packet_length dahil bütün paket şifrelenir (RFC 4253 §6); MAC şifrelenmeden paketin sonuna eklenir (RFC 4253 §6.4).",
+    "SFTP, ayrı bir protokol değil, SSH bağlantısı üzerinde çalışan bir alt sistemdir (RFC 4254 §6.5); dosya aktarım iletileri bu paketlerin yükünde taşınır.",
+    "Paket tanımındaki uint32 ve byte[n] gibi veri türleri RFC 4251 §5'te tanımlanır; bütün çok sekizlili sayılar ağ sırasında (en anlamlı sekizli önce) iletilir."
+  ],
+  "fields": [
+    {
+      "key": "packet_length",
+      "name": "packet_length",
+      "bits": 32,
+      "desc": "Paketin uzunluğu, sekizli olarak; MAC'i ve kendisini kapsamaz.",
+      "ref": {
+        "rfc": 4253,
+        "section": "6",
+        "label": "Binary Packet Protocol"
+      },
+      "example": 28
+    },
+    {
+      "key": "padding_length",
+      "name": "padding_length",
+      "bits": 8,
+      "desc": "Rastgele dolgunun uzunluğu, sekizli olarak; 4–255.",
+      "ref": {
+        "rfc": 4253,
+        "section": "6",
+        "label": "Binary Packet Protocol"
+      },
+      "example": 10
+    },
+    {
+      "key": "payload",
+      "name": "payload",
+      "bits": 136,
+      "desc": "Paketin yararlı içeriği; ilk sekizlisi ileti numarasıdır. Sıkıştırma anlaşıldıysa sıkıştırılmıştır.",
+      "ref": {
+        "rfc": 4253,
+        "section": "6",
+        "label": "Binary Packet Protocol"
+      },
+      "example": "050000000c7373682d7573657261757468",
+      "type": "bytes",
+      "range": "değişken"
+    },
+    {
+      "key": "padding",
+      "name": "random padding",
+      "bits": 80,
+      "desc": "Toplam uzunluğu blok boyunun katına tamamlayan rastgele sekizliler.",
+      "ref": {
+        "rfc": 4253,
+        "section": "6",
+        "label": "Binary Packet Protocol"
+      },
+      "example": "b5cea95e13677fb7c995",
+      "type": "bytes",
+      "range": "değişken"
+    },
+    {
+      "key": "mac",
+      "name": "mac",
+      "bits": 256,
+      "desc": "İleti doğrulama kodu; MAC anlaşıldıysa paketin tamamı ve sıra numarası üzerinden hesaplanır. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 32 sekizli.",
+      "ref": {
+        "rfc": 4253,
+        "section": "6",
+        "label": "Binary Packet Protocol"
+      },
+      "example": "2bf35cef3ff456f6d65c97cc373aae5a793d48834cb70d7c0486207fa85d1f03",
+      "type": "bytes",
+      "range": "değişken"
+    }
+  ],
+  "example": {
+    "note": "İstemcinin anahtar değişiminden sonra kullanıcı doğrulama hizmetini istediği paket, şifreleme öncesi görünümüyle: yük SSH_MSG_SERVICE_REQUEST (5, RFC 4253 §12) ve \"ssh-userauth\" dizesidir (uzunluk önekiyle 17 sekizli). 10 sekizli dolgu toplamı 16'nın katına tamamlar. Dolgu ve MAC uydurma değerlerdir."
+  },
+  "refs": [
+    4253,
+    4251,
+    4254
+  ],
+  "id": "ssh"
+}
