@@ -8,6 +8,7 @@ import { diagramWidths, rfc826Layout, proseWidths, octetTable, figureFields } fr
 import { encodeExample, internetChecksum, ipv6Bytes } from '../src/encode.mjs';
 
 const protocols = await loadProtocols();
+const layers = JSON.parse(await readFile(path.join(root, 'data/layers.json'), 'utf8'));
 const byId = new Map(protocols.map(protocol => [protocol.id, protocol]));
 const hex = bytes => bytes.map(byte => byte.toString(16).padStart(2, '0')).join('');
 const encode = id => {
@@ -138,7 +139,7 @@ for (const entry of standards.entries.filter(item => item.copy)) {
         const pdf = pageOf(text, new RegExp(`^${ref.section.replace(/\./g, '\\.')} (?!.*\\.{4})\\S`, 'm'));
         assert.ok(pdf, `${protocol.id}: §${ref.section} not found`);
         assert.equal(pdf - entry.pageOffset, ref.page, `${protocol.id}: §${ref.section} is on printed page ${pdf - entry.pageOffset}`);
-        assert.match(pdfPage(text, pdf), new RegExp(`^${ref.page}$`, 'm'), `printed page ${ref.page} is PDF page ${pdf}`);
+        assert.match(pdfPage(text, pdf), new RegExp(`^${ref.page}( / \\d+)?$`, 'm'), `printed page ${ref.page} is PDF page ${pdf}`);
         count += 1;
       }
     }
@@ -150,6 +151,8 @@ test('every citation resolves to the bibliography and every listed RFC is used',
   const listed = JSON.parse(await readFile(path.join(root, 'sources/rfcs.json'), 'utf8')).rfcs.map(item => item.number);
   assert.deepEqual(bibliography.entries.map(entry => entry.number), listed);
   const cited = new Set();
+  // The Layers page cites the layer sources and the sources of its protocol summaries.
+  for (const ref of [...layers.refs, ...layers.groups.flatMap(group => group.items.flatMap(item => item.refs))]) { if (isRfc(ref)) rfcEntry(ref); else standardEntry(ref); cited.add(ref); }
   for (const protocol of protocols) {
     for (const ref of protocol.refs) { if (isRfc(ref)) rfcEntry(ref); else standardEntry(ref); cited.add(ref); }
     for (const field of protocol.fields) {
@@ -412,4 +415,52 @@ test('example packets of the QUIC 1-RTT and HTTP/3 pages are internally consiste
   assert.equal(http3[1], http3.length - 2, 'Length counts the payload');
   assert.equal(http3[2], 0x06, 'SETTINGS_MAX_FIELD_SECTION_SIZE');
   assert.equal(((http3[3] & 0x3f) << 8) | http3[4], 8192, 'a two-octet variable-length integer');
+});
+
+test('the Layers page states only what its sources say', async () => {
+  const flat = text => text.replace(/\s+/g, ' ');
+  const osi = flat(await rfcText(layers.osiSource.rfc));
+  assert.ok(osi.includes(layers.osiSource.phrase), 'RFC 4949 lists the seven OSI layers');
+  for (const layer of layers.osi) assert.ok(layers.osiSource.phrase.includes(`(${layer.number}) ${layer.name}`), `OSI layer ${layer.number} is ${layer.name}`);
+  const ips = await rfcText(layers.ipsSource.rfc);
+  assert.ok(flat(ips).includes(layers.ipsSource.phrase));
+  for (const layer of layers.ips) assert.match(ips, new RegExp(`o  ${layer.name}`), `RFC 1122 §1.1.3 names the ${layer.name}`);
+  assert.deepEqual(layers.ips.map(layer => layer.wire).sort(), [...new Set(protocols.map(protocol => protocol.layer))].sort(), 'every wire layer group has a TCP/IP layer');
+  for (const group of layers.groups) for (const item of group.items) {
+    for (const id of item.pages) assert.ok(byId.has(id), `${item.name}: no page ${id}`);
+    for (const evidence of item.evidence) {
+      const text = evidence.rfc ? await rfcText(evidence.rfc) : await ieeeText(evidence.std);
+      if (!text) continue; // a licensed text that is not in this checkout
+      assert.ok(flat(text).includes(evidence.phrase), `${item.name}: "${evidence.phrase}" is not in ${evidence.rfc ? `RFC ${evidence.rfc}` : evidence.std}`);
+      assert.ok(item.refs.includes(evidence.rfc ?? evidence.std), `${item.name}: evidence from a source the summary does not cite`);
+    }
+  }
+});
+
+test('example packets of the security, management and file sharing pages are internally consistent', () => {
+  const srtp = encode('srtp').bytes;
+  assert.equal(hex(srtp.slice(0, 12)), hex(encode('rtp').bytes.slice(0, 12)), 'SRTP keeps the RTP header in the clear');
+  assert.equal(srtp.length, encode('rtp').bytes.length + 10, 'same-size encrypted payload plus an 80-bit tag');
+
+  const tls = encode('tls').bytes;
+  assert.deepEqual([tls[0], tls[1], tls[2]], [23, 3, 3], 'application_data, legacy version 0x0303');
+  assert.equal((tls[3] << 8) | tls[4], tls.length - 5, 'length counts the encrypted record');
+  assert.ok(tls.length - 5 <= 2 ** 14 + 256);
+
+  const ssh = encode('ssh').bytes;
+  const packetLength = (ssh[0] << 24) | (ssh[1] << 16) | (ssh[2] << 8) | ssh[3];
+  const padding = ssh[4];
+  assert.ok(padding >= 4, 'at least four bytes of padding (RFC 4253 §6)');
+  assert.equal((4 + packetLength) % 16, 0, 'packet_length plus its own field is a multiple of the block size');
+  assert.equal(ssh.length, 4 + packetLength + 32, 'packet_length excludes itself and the 32-octet MAC');
+  assert.equal(ssh[5], 5, 'SSH_MSG_SERVICE_REQUEST');
+  assert.equal(Buffer.from(ssh.slice(10, 22)).toString(), 'ssh-userauth');
+
+  const smb = encode('smb2').bytes;
+  assert.equal(smb[0], 0, 'Direct TCP header starts with zero');
+  assert.equal((smb[1] << 16) | (smb[2] << 8) | smb[3], smb.length - 4, 'StreamProtocolLength in network order');
+  assert.equal(hex(smb.slice(4, 8)), 'fe534d42', 'ProtocolId 0xFE S M B');
+  assert.equal(smb[8] | (smb[9] << 8), 64, 'StructureSize 64, little-endian');
+  assert.equal(smb[16] | (smb[17] << 8), 0x000d, 'Command ECHO, little-endian');
+  assert.equal(smb[68] | (smb[69] << 8), 4, 'ECHO StructureSize 4');
 });

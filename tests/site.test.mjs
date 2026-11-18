@@ -30,7 +30,7 @@ test('every protocol has a page whose fields link to an RFC', async () => {
       assert.match(html, new RegExp(`<p class="verified verified--manual"><strong>${note}</strong>`), protocol.id);
       assert.ok(html.includes('https://doi.org/10.1109/'), protocol.id);
     } else if (protocol.layout.kind === 'ieee') {
-      assert.match(html, /<p class="verified">Alan (adları ve genişlikleri|genişlikleri \(<code>[^<]+<\/code> bit\), (?:tür numaraları ve )?değerler) <a class="rfc-ref" href="https:\/\/doi\.org\/10\.1109\/[^"]+">IEEE /, protocol.id);
+      assert.match(html, /<p class="verified">Alan (adları ve genişlikleri|genişlikleri \(<code>[^<]+<\/code> bit\), (?:tür numaraları ve )?değerler) <a class="rfc-ref" href="https:\/\/[^"]+">(IEEE|MS-SMB2) /, protocol.id);
       assert.match(html, /metni lisanslı olduğu için depoda bulunmaz/, protocol.id);
       assert.doesNotMatch(html, /verified--manual/, protocol.id);
     } else {
@@ -190,4 +190,16 @@ test('every diagram also carries an 8-bit quarter-row layout with one focusable 
   }
   const style = await readFile(path.join(site, 'style.css'), 'utf8');
   assert.match(style, /@container bits-diagram \(width < 288px\) or \(width < 18rem\) \{/);
+});
+
+test('the Layers page is linked from every page and links back to the protocols', async () => {
+  const layersPage = await readFile(path.join(site, 'katmanlar/index.html'), 'utf8');
+  for (const id of ['ipv4', 'udp', 'dns', 'tls', 'ssh', 'snmp', 'smb2']) assert.ok(layersPage.includes(`href="/wire/${id}/"`), id);
+  for (const key of ['link', 'network', 'transport', 'application']) assert.ok(layersPage.includes(`id="tcpip-${key}"`), key);
+  for (const file of ['index.html', 'tcp/index.html', 'kilavuz/index.html']) {
+    const html = await readFile(path.join(site, file), 'utf8');
+    assert.match(html, /<a href="\/wire\/katmanlar\/" class="button secondary help-btn layers-btn">/, file);
+  }
+  const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
+  assert.match(tcp, /<a class="layer-badge layer-badge--transport" href="\/wire\/katmanlar\/#tcpip-transport">/);
 });
