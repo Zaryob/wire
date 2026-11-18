@@ -34,6 +34,13 @@ export function fieldValue(field) {
     return (prefix << BigInt(bits - 2)) | value;
   }
   if (value < 0n || value >= (1n << BigInt(bits))) throw new Error(`${field.key}: example does not fit in ${bits} bits`);
+  // Fields a standard sends least-significant byte first (MS-SMB2 §2.2) are reversed octet by octet.
+  if (field.endian === 'little') {
+    if (bits % 8) throw new Error(`${field.key}: a little-endian field is whole octets`);
+    let reversed = 0n;
+    for (let i = 0; i < bits / 8; i += 1) reversed = (reversed << 8n) | ((value >> BigInt(i * 8)) & 255n);
+    return reversed;
+  }
   return value;
 }
 
