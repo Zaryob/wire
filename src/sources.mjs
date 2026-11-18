@@ -4,8 +4,9 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { diagramWidths, rfc826Layout, proseWidths, octetTable, figureFields } from './rfc.mjs';
-import { messageFields, lldpMibFacts, lldpTextFacts, vlanTextFacts } from './ieee.mjs';
+import { diagramWidths, rfc826Layout, proseWidths, octetTable, figureFields, presentationStruct, sshPacket } from './rfc.mjs';
+import { messageFields, lldpMibFacts, lldpTextFacts, vlanTextFacts, smb2TextFacts } from './ieee.mjs';
+import { encodeExample } from './encode.mjs';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const bibliography = JSON.parse(await readFile(path.join(root, 'sources/bibliography.json'), 'utf8'));
@@ -119,10 +120,30 @@ export function vlanTextChecks(protocol, facts) {
   ].map(([what, ok]) => ({ what, ok }));
 }
 
+/** What the SMB2 page must agree with in [MS-SMB2]. */
+export function smb2TextChecks(protocol, facts) {
+  const fields = protocol.fields.filter(field => Number.isInteger(field.bits));
+  const by = new Map(fields.map(field => [field.key, field]));
+  const layout = [...facts.directTcp, ...facts.header, ...facts.echo];
+  const multiOctet = fields.filter(field => field.bits > 8 && field.type !== 'bytes' && field.key !== 'stream_length');
+  const commands = new Map(facts.commands);
+  const listed = by.get('command').values.map(([value, name]) => [name.replace(/ \(.*$/, ''), `0x${Number(value).toString(16).padStart(4, '0').toUpperCase()}`]);
+  return [
+    ['Direct TCP başlığı, SYNC başlığı ve ECHO isteği: adlar ve genişlikler (§2.1, §2.2.1.2, §2.2.28)', JSON.stringify(fields.map(field => [field.name, field.bits])) === JSON.stringify(layout.map(item => [item.name, item.bits]))],
+    ['çok sekizlili alanlar little-endian (§2.2)', facts.littleEndian && multiOctet.every(field => field.endian === 'little')],
+    ['StreamProtocolLength ağ sırasında (§2.1)', facts.streamLengthNetworkOrder && !by.get('stream_length').endian],
+    ['ProtocolId FE 53 4D 42 (§2.2.1.2)', by.get('protocol_id').example === facts.protocolId.slice(2).match(/../g).reverse().join('').toLowerCase()],
+    ['StructureSize 64 ve ECHO StructureSize 4', by.get('structure_size').example === facts.structureSize && by.get('echo_structure_size').example === facts.echoStructureSize],
+    ['komut kodları (§2.2.1.2)', listed.every(([name, value]) => commands.get(name) === value) && commands.get('ECHO') === `0x${by.get('command').example.toString(16).padStart(4, '0').toUpperCase()}`],
+    ['StreamProtocolLength = 64 + 4', by.get('stream_length').example === (facts.header.reduce((sum, item) => sum + item.bits, 0) + facts.echo.reduce((sum, item) => sum + item.bits, 0)) / 8],
+  ].map(([what, ok]) => ({ what, ok }));
+}
+
 /** Readers and checks of IEEE layouts stated in words rather than message tables. */
 const textMethods = {
   lldp: { facts: lldpTextFacts, checks: lldpTextChecks },
   vlan: { facts: vlanTextFacts, checks: vlanTextChecks },
+  smb2: { facts: smb2TextFacts, checks: smb2TextChecks },
 };
 
 /** Fields of an IEEE layout read from the standard's text: [{ name, bits }]. */
@@ -246,7 +267,28 @@ export async function verifyLayout(protocol) {
     return { ok: JSON.stringify(expected) === JSON.stringify(found), expected, found };
   }
   const text = await rfcText(protocol.layout.rfc);
-  if (kind === 'figure') {
+  if (kind === 'ber') {
+    // The RFC encodes this very PDU in BER (RFC 3417 §8.1): the example must equal its
+    // hexadecimal listing octet for octet, and the value fields must follow the ASN.1
+    // members in order (RFC 3416 §3).
+    const { listing, until, asn1 } = protocol.layout;
+    const block = text.slice(text.indexOf(listing) + listing.length, text.indexOf(until));
+    const rfcBytes = block.split('\n').map(line => line.match(/\s{2,}((?:[0-9a-f]{2} ?)+)$/)?.[1].trim()).filter(Boolean).join(' ');
+    const ownBytes = encodeExample(protocol).bytes.map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+    const asn1Text = await rfcText(asn1.rfc);
+    const body = asn1Text.slice(asn1Text.indexOf(asn1.anchor), asn1Text.indexOf('}', asn1Text.indexOf(asn1.anchor)));
+    const members = [...body.matchAll(/^\s+(?:SEQUENCE \{\s+)?([a-z][a-z-]+)\s/gm)].map(match => match[1]);
+    const named = protocol.fields.filter(field => field.asn1).map(field => field.asn1);
+    return { ok: rfcBytes === ownBytes && JSON.stringify(named) === JSON.stringify(members), expected: [ownBytes, named], found: [rfcBytes, members], widths: fixed.map(field => field.bits), octets: rfcBytes.split(' ').length, members };
+  }
+  if (kind === 'struct' || kind === 'ssh') {
+    // TLS presentation language (RFC 9846 §3) or the SSH packet list (RFC 4253 §6):
+    // fixed members by width; vectors computed from other fields are variable and
+    // must be variable, or sized for the example (`range`), in the data.
+    const members = kind === 'struct' ? presentationStruct(text, anchor) : sshPacket(text, anchor);
+    found = members.map(member => member.size);
+    expected = protocol.fields.map(field => (field.range || !Number.isInteger(field.bits) ? 'var' : field.bits));
+  } else if (kind === 'figure') {
     const figure = figureFields(text, anchor);
     found = figure.map(item => item.size);
     expected = protocol.fields.map((field, i) => (figure[i] && figureMatch(field, figure[i].size) ? figure[i].size : `${field.bits}${field.range ? ` (${field.range})` : ''}`));

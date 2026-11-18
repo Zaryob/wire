@@ -67,6 +67,22 @@
         "pages": 289,
         "sha256": "25288fd3a4e5da1be961bfdb4bece11ee0b63bcdecec0042d61c5e2f23041c2a"
       }
+    },
+    {
+      "id": "ms-smb2",
+      "short": "MS-SMB2 v20260928",
+      "title": "[MS-SMB2]: Server Message Block (SMB) Protocol Versions 2 and 3",
+      "publisher": "Microsoft",
+      "designation": "[MS-SMB2] v20260928 (28 September 2026)",
+      "url": "https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/",
+      "use": "SMB2 paket başlığı (§2.2.1.2), Direct TCP taşıma başlığı (§2.1) ve ECHO isteği (§2.2.28). Microsoft Open Specifications belgesidir; kopyası depoya konmaz.",
+      "pageOffset": 0,
+      "copy": {
+        "file": ".cache/ieee/ms-smb2.pdf",
+        "pages": 499,
+        "marker": "[MS-SMB2] - v20260928",
+        "sha256": "fef3a06507679130a8cfdcaeaed581482d7f235435dd904f6c794f113ff04bd1"
+      }
     }
   ]
 }
