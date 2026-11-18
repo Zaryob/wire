@@ -188,7 +188,7 @@ function topbar(current, title = '', layer = '') {
     </nav>
   </div>
   <div class="topbar-right">
-    <a href="${url('katmanlar')}" class="button secondary help-btn layers-btn">
+    <a href="${url('')}#katmanlar" class="button secondary help-btn layers-btn">
       ${layersIcon}
       <span>Katmanlar</span>
       <span class="console-sr-only"> — OSI ve TCP/IP katmanları, sık kullanılan protokoller</span>
@@ -204,7 +204,7 @@ function topbar(current, title = '', layer = '') {
 
 function suiteFooter() {
   const column = (title, label, links, listClass = '') => `<nav class="suite-footer__col" aria-label="${e(label)}"><p class="suite-footer__title">${title}</p><ul${listClass ? ` class="${listClass}"` : ''}>${links.map(link => `<li>${link}</li>`).join('')}</ul></nav>`;
-  const site = column('~/wire/', 'Wire', [`<a href="${url('katmanlar')}">katmanlar/<span class="console-sr-only"> — Katmanlar</span></a>`, `<a href="${url('kilavuz')}">kilavuz/<span class="console-sr-only"> — Kılavuz</span></a>`, `<a href="${url('kaynakca')}">kaynakca/<span class="console-sr-only"> — Kaynakça</span></a>`, `<a href="${url('yontem')}">yontem/<span class="console-sr-only"> — Yöntem</span></a>`, `<a href="${asset('lisanslar/')}">lisanslar/<span class="console-sr-only"> — Lisanslar</span></a>`]);
+  const site = column('~/wire/', 'Wire', [`<a href="${url('')}#katmanlar">#katmanlar<span class="console-sr-only"> — Katmanlar</span></a>`, `<a href="${url('kilavuz')}">kilavuz/<span class="console-sr-only"> — Kılavuz</span></a>`, `<a href="${url('kaynakca')}">kaynakca/<span class="console-sr-only"> — Kaynakça</span></a>`, `<a href="${url('yontem')}">yontem/<span class="console-sr-only"> — Yöntem</span></a>`, `<a href="${asset('lisanslar/')}">lisanslar/<span class="console-sr-only"> — Lisanslar</span></a>`]);
   const suite = column('~/siteler/', 'Zaryob siteleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/<span class="console-sr-only"> — ${e(project.title)}</span></a>`), 'console-suite__list');
   const contact = column('~/iletişim', 'Sosyal bağlantılar', ['<a href="https://github.com/Zaryob" rel="me">GitHub <span aria-hidden="true">↗</span></a>', '<a href="https://linkedin.com/in/suleyman_poyraz" rel="me">LinkedIn <span aria-hidden="true">↗</span></a>', '<a href="https://medium.com/@zaryob" rel="me">Medium <span aria-hidden="true">↗</span></a>', '<a href="mailto:zaryob.dev@gmail.com">E-posta</a>']);
   return `<footer class="suite-footer" id="site-footer"><div class="suite-footer__inner"><p class="suite-footer__prompt" aria-hidden="true"><span class="suite-footer__host">zaryob</span>:~/wire $ <span class="suite-footer__cmd">ls -F</span></p><div class="suite-footer__cols">${site}${suite}${contact}</div><div class="suite-footer__legal"><span><span aria-hidden="true"># </span>© Süleyman Poyraz · Ağ protokolü başlıkları, bit bit.</span><span>Her alan bir RFC’ye dayanır.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a></span></div></div></footer>`;
@@ -440,7 +440,7 @@ function protocolPage(protocol) {
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
   return page({ id: protocol.id, title: protocol.title, pageTitle: protocol.title, layer: protocol.layer, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
-<header class="page-header"><p class="eyebrow"><a class="layer-badge layer-badge--${layerKey(protocol.layer)}" href="${url('katmanlar')}#tcpip-${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</a> · ${headerLength ? `${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits) || field.range) ? ' + değişken kısım' : ''}` : 'değişken uzunluklu başlık'}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
+<header class="page-header"><p class="eyebrow"><a class="layer-badge layer-badge--${layerKey(protocol.layer)}" href="${url('')}#tcpip-${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</a> · ${headerLength ? `${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits) || field.range) ? ' + değişken kısım' : ''}` : 'değişken uzunluklu başlık'}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
 <div class="overview-grid">
   <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
 ${verifiedNote(protocol)}</section>
@@ -526,15 +526,17 @@ function home() {
 <div class="home-catalog">
   <div class="home-catalog__header">
     <h2>Protokol Kataloğu</h2>
-    <p class="small">Katmanlara göre gruplanmış RFC başlık şemaları. Ayrıntılı bit düzeni ve örnek paket onaltılık dökümü için bir protokol seçin. Katmanların ne anlama geldiği, OSI modeliyle karşılaştırması ve sık kullanılan protokollerin kısa özetleri <a href="${url('katmanlar')}">Katmanlar</a> sayfasındadır.</p>
+    <p class="small">TCP/IP'nin dört katmanına göre (${layersRef(1122)} §1.1.3). Bit düzeni, alanlar ve örnek paketin onaltılık dökümü için bir protokol seçin; katmanların anlamı ve sık kullanılan protokollerin özetleri <a href="#katmanlar">aşağıda</a>.</p>
   </div>
-  ${layers.map(layer => `<section class="layer layer--${layerKey(layer)}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${layerKey(layer)}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı</h2><ul class="protocol-list">${protocols.filter(protocol => protocol.layer === layer).map(protocol => {
-    const { headerLength } = example(protocol.id);
-    return `<li class="protocol-card protocol-card--${layerKey(protocol.layer)}" data-layer="${layerKey(protocol.layer)}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><div class="protocol-card__header"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><span class="layer-pill layer-pill--${layerKey(protocol.layer)}">${e(protocol.layer)}</span></div><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3><p>${e(protocol.summary)}</p><p class="protocol-card__meta">${headerLength ? `${headerLength} sekizli` : 'değişken uzunluk'} · ${protocol.fields.filter(field => Number.isInteger(field.bits)).length} alan · ${e(protocol.layout.kind === 'standard' ? `${standardEntry(protocol.layout.std).short} (doğrulanmadı)` : protocol.layout.kind === 'ieee' ? standardEntry(protocol.layout.std).short : `RFC ${protocol.layout.rfc}`)}</p></li>`;
-  }).join('')}</ul></section>`).join('')}
-</div>`;
+  ${layersData.ips.slice().reverse().map(ips => ips.wire).filter(layer => layers.includes(layer)).map(layer => {
+    const ips = layersData.ips.find(item => item.wire === layer);
+    const key = layerKey(layer);
+    return `<section class="layer layer--${key}" id="tcpip-${key}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${key}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı <span class="layer-heading__note">${e(ips.name)} · OSI ${e(ips.osi)}</span></h2><ul class="protocol-list protocol-list--compact">${protocols.filter(protocol => protocol.layer === layer).map(protocol => `<li class="protocol-card protocol-card--compact protocol-card--${key}" data-layer="${key}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3></li>`).join('')}</ul></section>`;
+  }).join('')}
+</div>
+${layersSection()}`;
 
-  return page({ id: '', title: 'Wire', description: 'Ethernet, ARP, IPv4, IPv6, ICMP, UDP, TCP ve DNS başlıklarının RFC kaynaklı, bit düzeyinde Türkçe başvurusu.', hero, body });
+  return page({ id: '', title: 'Wire', description: 'Ağ protokolü başlıklarının RFC kaynaklı, bit düzeyinde Türkçe başvurusu; OSI ve TCP/IP katmanları ve sık kullanılan protokollerin kısa özetleriyle.', hero, body });
 }
 
 /** Roadmap status comes from the protocol data, so the table stays correct as protocols are added. */
@@ -547,12 +549,12 @@ function roadmapNote(id) {
   return byId.has(id) ? ` (<a href="${url(id)}">yayında</a>)` : '';
 }
 
-/** The Layers page: OSI and TCP/IP layers, wire's layer groups and short summaries of common protocols. */
-function layersPage() {
-  const wireLayers = [...new Set(protocols.map(protocol => protocol.layer))];
-  const inLayer = layer => protocols.filter(protocol => protocol.layer === layer);
+const layersRef = number => (isRfc(number) ? `<a href="${url('kaynakca')}#rfc${number}">RFC ${number}</a>` : `<a href="${url('kaynakca')}#${e(number)}">${e(standardEntry(number).short)}</a>`);
+
+/** The Layers part of the home page: encapsulation, the OSI model and short summaries of common protocols. */
+function layersSection() {
   const pageLink = id => `<a href="${url(id)}">${e(byId.get(id).name)}</a>`;
-  const ref = number => (isRfc(number) ? `<a href="${url('kaynakca')}#rfc${number}">RFC ${number}</a>` : `<a href="${url('kaynakca')}#${e(number)}">${e(standardEntry(number).short)}</a>`);
+  const ref = layersRef;
   // Encapsulation shown with wire's own example chain: each payload is the next protocol's whole example packet.
   const chain = [];
   for (let id = 'ipv4'; id; id = byId.get(id).example?.payloadFrom) chain.push(id);
@@ -564,19 +566,21 @@ function layersPage() {
     return `<li class="encap__layer encap__layer--${layerKey(protocol.layer)}" style="--depth:${i}"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)}</span> ${pageLink(id)} <span class="small">${i === chain.length - 1 ? `${own} sekizli ileti` : `${own} sekizli başlık`}</span></li>`;
   }).join('')}</ol>`;
   const osiRows = layersData.osi.map(layer => `<tr id="osi-${layer.number}"><th scope="row">${layer.number}</th><td><strong>${e(layer.tr)}</strong><br><span class="small">${e(layer.name)}</span></td><td>${e(layer.desc)}</td><td>${layer.wire ? `<a href="#tcpip-${layerKey(layer.wire)}">${e(layer.wire)}</a>` : '—'}</td></tr>`).join('');
-  const ipsSections = layersData.ips.map(layer => {
-    const members = inLayer(layer.wire);
-    return `<section class="layers-ips" id="tcpip-${layerKey(layer.wire)}" aria-labelledby="tcpip-${layerKey(layer.wire)}-title"><h3 id="tcpip-${layerKey(layer.wire)}-title"><span class="layer-badge layer-badge--${layerKey(layer.wire)}">${e(layer.tr)}</span> <span class="small">${e(layer.name)} · OSI ${e(layer.osi)}</span></h3><p>wire'da ${members.length} sayfa: ${members.map(protocol => pageLink(protocol.id)).join(', ')}.</p></section>`;
-  }).join('');
-  const groups = layersData.groups.map(group => `<section aria-labelledby="group-${e(group.title)}"><h3 id="group-${e(group.title)}">${e(group.title)}</h3><dl class="layers-summary">${group.items.map(item => `<div><dt><strong>${e(item.name)}</strong> <a class="layer-badge layer-badge--${layerKey(item.layer)}" href="#tcpip-${layerKey(item.layer)}">${e(item.layer)}</a>${item.text ? ' <span class="small">metin tabanlı</span>' : ''}</dt><dd><p>${e(item.summary)}</p><p class="small">${item.ports ? `Port: ${e(item.ports)} · ` : ''}${item.pages.length ? `wire: ${item.pages.map(pageLink).join(', ')}` : 'wire’da başlık sayfası yok: metin tabanlı komutlar ve yanıtlarla çalışır.'} · Kaynak: ${item.refs.map(ref).join(', ')}</p></dd></div>`).join('')}</dl></section>`).join('');
-  return page({ id: 'katmanlar', title: 'Katmanlar', pageTitle: 'Katmanlar', description: 'OSI ve TCP/IP katmanları, wire’daki protokollerin hangi katmanda olduğu ve sık kullanılan ağ protokollerinin kısa özetleri.', body: `
-<header class="page-header"><p class="eyebrow">ağ protokolleri neden katman katman</p><h1>Katmanlar</h1><p class="lead">Ağ protokolleri üst üste çalışır: her katman, üstündeki katmanın verisini kendi başlığıyla sarar ve bir alttakine teslim eder. Bu sayfa iki katman modelini, wire'daki protokollerin bu modellerdeki yerini ve günlük kullanımda en sık karşılaşılan protokollerin kısa özetlerini toplar.</p></header>
-<section aria-labelledby="encap-title"><h2 id="encap-title">Bir paketin katmanları</h2><p>wire'ın örnek paketleri birbirinin içine yerleşir. IPv4 örneği bir UDP datagramı taşır, o da bir DNS sorgusu taşır: her katman yalnızca kendi başlığını ekler ve içindekini olduğu gibi taşır. Alıcıda katmanlar ters sırayla açılır.</p>${encapsulation}<p class="small">Sekizli sayıları derleme sırasında wire'ın örneklerinden hesaplanır; Ethernet çerçevesi ve onun altındaki fiziksel ortam bu zincirde gösterilmez.</p></section>
-<section aria-labelledby="osi-title"><h2 id="osi-title">OSI başvuru modeli</h2><p>OSI modeli, ISO ve ITU-T'nin ortak standardı olan yedi katmanlı bir başvuru çerçevesidir. Katmanlar yukarıdan aşağı (7) Uygulama, (6) Sunum, (5) Oturum, (4) Taşıma, (3) Ağ, (2) Veri bağlantı ve (1) Fiziksel'dir (${ref(4949)}). Aşağıdaki açıklamalar ve İnternet protokol takımıyla eşleştirme de aynı kaynaktadır; eşleştirme yaklaşıktır.</p>
+  const groups = layersData.groups.map(group => `<details class="layers-group"><summary id="group-${e(group.title)}">${e(group.title)} <span class="small">${group.items.length} özet</span></summary><dl class="layers-summary">${group.items.map(item => `<div><dt><strong>${e(item.name)}</strong> <a class="layer-badge layer-badge--${layerKey(item.layer)}" href="#tcpip-${layerKey(item.layer)}">${e(item.layer)}</a>${item.text ? ' <span class="small">metin tabanlı</span>' : ''}</dt><dd><p>${e(item.summary)}</p><p class="small">${item.ports ? `Port: ${e(item.ports)} · ` : ''}${item.pages.length ? `wire: ${item.pages.map(pageLink).join(', ')}` : 'wire’da başlık sayfası yok: metin tabanlı komutlar ve yanıtlarla çalışır.'} · Kaynak: ${item.refs.map(ref).join(', ')}</p></dd></div>`).join('')}</dl></details>`).join('');
+  return `<section class="home-layers" id="katmanlar" aria-labelledby="katmanlar-title"><h2 id="katmanlar-title">Katmanlar</h2><p>Ağ protokolleri üst üste çalışır: her katman, üstündeki katmanın verisini kendi başlığıyla sarar ve bir alttakine teslim eder.</p>
+<section aria-labelledby="encap-title"><h3 id="encap-title">Bir paketin katmanları</h3><p>wire'ın örnek paketleri birbirinin içine yerleşir. IPv4 örneği bir UDP datagramı taşır, o da bir DNS sorgusu taşır: her katman yalnızca kendi başlığını ekler ve içindekini olduğu gibi taşır. Alıcıda katmanlar ters sırayla açılır.</p>${encapsulation}<p class="small">Sekizli sayıları derleme sırasında wire'ın örneklerinden hesaplanır; Ethernet çerçevesi ve onun altındaki fiziksel ortam bu zincirde gösterilmez.</p></section>
+<section aria-labelledby="osi-title"><h3 id="osi-title">OSI başvuru modeli</h3><p>OSI modeli, ISO ve ITU-T'nin ortak standardı olan yedi katmanlı bir başvuru çerçevesidir. Katmanlar yukarıdan aşağı (7) Uygulama, (6) Sunum, (5) Oturum, (4) Taşıma, (3) Ağ, (2) Veri bağlantı ve (1) Fiziksel'dir (${ref(4949)}). Aşağıdaki açıklamalar ve İnternet protokol takımıyla eşleştirme de aynı kaynaktadır; eşleştirme yaklaşıktır.</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="OSI katmanları"><table class="fields"><thead><tr><th scope="col">No</th><th scope="col">Katman</th><th scope="col">Ne yapar</th><th scope="col">wire'daki karşılığı</th></tr></thead><tbody>${osiRows}</tbody></table></div></section>
-<section aria-labelledby="tcpip-title"><h2 id="tcpip-title">TCP/IP katmanları ve wire</h2><p>İnternet protokol takımı (TCP/IP), ${ref(1122)} §1.1.3'te dört katmanla anlatılır: Uygulama, Taşıma, İnternet ve Bağlantı. ${ref(4949)}'a göre OSI gibi katmanlı bir başvuru modeli tanımlayan bir İnternet standardı yoktur; katmanlar bir anlatım aracıdır. wire'ın protokol kataloğu bu dört katmana göre gruplanmıştır.</p>${ipsSections}
+<section aria-labelledby="tcpip-title"><h3 id="tcpip-title">TCP/IP katmanları</h3><p>İnternet protokol takımı (TCP/IP), ${ref(1122)} §1.1.3'te dört katmanla anlatılır: Uygulama, Taşıma, İnternet ve Bağlantı. ${ref(4949)}'a göre OSI gibi katmanlı bir başvuru modeli tanımlayan bir İnternet standardı yoktur; katmanlar bir anlatım aracıdır. Yukarıdaki katalog bu dört katmana göre gruplanmıştır.</p>
 <p class="small">Katman sınırları her zaman kesin değildir. ARP Bağlantı ile Ağ arasında çalışır; MPLS etiketi bağlantı başlığı ile IP başlığı arasına girer; ICMP, IGMP, OSPF ve VRRP doğrudan IP üzerinde taşınır ama ağ katmanının işini görür; VXLAN ve Geneve UDP üzerinde taşınır ama bağlantı katmanı çerçeveleri taşır. wire bu protokolleri işlevlerine en yakın gruba yerleştirir.</p></section>
-<section aria-labelledby="common-title"><h2 id="common-title">Sık kullanılan protokoller</h2><p>Günlük internet ve ağ kullanımında en sık karşılaşılan protokoller, kategorilerine göre; son üç grup aynı özetleri uygulamaların altındaki bağlantı, ağ ve taşıma katmanları için verir. Metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) alanlar yerine satır satır komut ve yanıt taşıdıkları için wire'da bit düzeyinde başlık sayfaları yoktur; burada yalnızca özetlenir. Her özetin dayandığı ifade, derleme testlerinde atıf yapılan kaynağın metninde denetlenir.</p>${groups}</section>` });
+<section aria-labelledby="common-title"><h3 id="common-title">Sık kullanılan protokoller</h3><p>Günlük internet ve ağ kullanımında en sık karşılaşılan protokollerin kısa özetleri; son üç grup uygulamaların altındaki bağlantı, ağ ve taşıma katmanları içindir. Metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) alanlar yerine satır satır komut ve yanıt taşıdıkları için wire'da bit düzeyinde başlık sayfaları yoktur; yalnızca burada özetlenir. Her özetin dayandığı ifade, derleme testlerinde atıf yapılan kaynağın metninde denetlenir.</p>${groups}</section></section>`;
+}
+
+/** The old Layers address now lives on the home page; keep its links (and their anchors) working. */
+function layersRedirect() {
+  return `<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Katmanlar · Wire</title><link rel="canonical" href="${origin}${url('')}"><meta http-equiv="refresh" content="0; url=${url('')}#katmanlar"><script>location.replace(${JSON.stringify(url(''))} + (location.hash || '#katmanlar'));</script></head>
+<body><p>Katmanlar artık <a href="${url('')}#katmanlar">ana sayfada</a>.</p></body></html>`;
 }
 
 function guidePage() {
@@ -817,7 +821,7 @@ sudo tcpdump -i any -nn "tcp[tcpflags] & tcp-syn != 0 and port 80"
 
 function bibliographyPage() {
   const citedBy = ref => protocols.filter(protocol => protocol.refs.includes(ref));
-  const pages = ref => [...citedBy(ref).map(protocol => `<a href="${url(protocol.id)}">${e(protocol.name)}</a>`), ...(layersRefs.includes(ref) ? [`<a href="${url('katmanlar')}">Katmanlar</a>`] : [])].join(', ') || '—';
+  const pages = ref => [...citedBy(ref).map(protocol => `<a href="${url(protocol.id)}">${e(protocol.name)}</a>`), ...(layersRefs.includes(ref) ? [`<a href="${url('')}#katmanlar">Ana sayfa: Katmanlar</a>`] : [])].join(', ') || '—';
   const list = values => values.length ? values.map(value => e(value.replace(/^RFC0*/, 'RFC '))).join(', ') : '—';
   return page({ id: 'kaynakca', title: 'Kaynakça', pageTitle: 'Kaynakça', description: 'wire sitesindeki bilgilerin dayandığı RFC’lerin künyeleri, bağlantıları ve indirilen metinlerin sha256 özetleri.', body: `
 <header class="page-header"><p class="eyebrow">${bibliography.entries.length} RFC · ${standards.entries.length} standart (IEEE, Microsoft) · RFC’ler ${e(bibliography.retrieved)} tarihinde indirildi</p><h1>Kaynakça</h1><p class="lead">Sitedeki her bilgi aşağıdaki RFC’lerden ya da, alanı tanımlayan bir RFC yoksa, IEEE standartlarından birine dayanır. Metinler <a href="${e(bibliography.source)}">rfc-editor.org</a> adresinden indirilmiştir; sha256 özeti, alan genişliklerinin hangi metne karşı doğrulandığını gösterir.</p></header>
@@ -848,7 +852,7 @@ async function save(name, content) { const file = path.join(out, name); await mk
 await save('index.html', home());
 for (const protocol of protocols) await save(`${protocol.id}/index.html`, protocolPage(protocol));
 await save('kilavuz/index.html', guidePage());
-await save('katmanlar/index.html', layersPage());
+await save('katmanlar/index.html', layersRedirect());
 await save('kaynakca/index.html', bibliographyPage());
 await save('yontem/index.html', methodPage());
 await save('lisanslar/index.html', page({ id: 'lisanslar', title: 'Lisanslar', description: 'wire sitesinin, ortak temanın ve yazı tiplerinin lisansları.', body: `<header class="page-header"><h1>Lisanslar ve kaynak bildirimleri</h1></header><ul class="notes"><li>Proje kodu ve Türkçe metinler: GPL-3.0-or-later. <a href="${asset('LICENSE.txt')}">Lisans metni</a>.</li><li>Ortak konsol teması <a href="https://github.com/Zaryob/console-theme">console-theme</a> projesinden gelir; CSS ve JavaScript dosyaları GPL-2.0-or-later bildirimlerini korur. <a href="${asset('assets/console/COPYING')}">GPL v2 metni</a>.</li><li>IBM Plex yazı tipleri SIL Open Font License 1.1 ile dağıtılır. <a href="${asset('assets/console/fonts/OFL.txt')}">OFL metni</a>.</li><li>Simgeler için <a href="${asset('assets/console/ICONS-LICENSE.txt')}">simge lisans bildirimi</a>.</li><li>RFC’ler yazarlarına ve IETF Trust’a aittir; bu sitede metinleri yeniden yayımlanmaz, yalnızca atıf yapılır ve bağlantı verilir.</li></ul>` }));
@@ -861,7 +865,7 @@ await save('search.json', JSON.stringify([
     title: 'Katmanlar: OSI ve TCP/IP',
     description: 'OSI ve TCP/IP katmanları, wire’daki protokollerin katmanları ve sık kullanılan protokollerin kısa özetleri.',
     text: `osi tcp/ip katman uygulama sunum oturum taşıma ağ veri bağlantı fiziksel ${layersData.groups.flatMap(group => group.items.map(item => `${item.name} ${item.summary}`)).join(' ')}`,
-    url: 'katmanlar/',
+    url: '#katmanlar',
     type: 'wire/',
     lang: 'tr'
   },
@@ -874,5 +878,5 @@ await save('search.json', JSON.stringify([
     lang: 'tr'
   }
 ], null, 2));
-await save('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['', ...protocols.map(protocol => protocol.id), 'katmanlar', 'kilavuz', 'yontem', 'kaynakca'].map(id => `<url><loc>${origin}${url(id)}</loc></url>`).join('')}</urlset>`);
+await save('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['', ...protocols.map(protocol => protocol.id), 'kilavuz', 'yontem', 'kaynakca'].map(id => `<url><loc>${origin}${url(id)}</loc></url>`).join('')}</urlset>`);
 console.log(`wire: ${protocols.length} protokol, ${bibliography.entries.length} RFC → _site/ (base: ${base || '/'})`);

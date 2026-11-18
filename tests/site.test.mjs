@@ -4,6 +4,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { root, loadProtocols } from '../src/sources.mjs';
+const layers = JSON.parse(await readFile(path.join(root, 'data/layers.json'), 'utf8'));
 
 const build = spawnSync(process.execPath, ['scripts/build.mjs'], { cwd: root, encoding: 'utf8' });
 const site = path.join(root, '_site');
@@ -192,14 +193,24 @@ test('every diagram also carries an 8-bit quarter-row layout with one focusable 
   assert.match(style, /@container bits-diagram \(width < 288px\) or \(width < 18rem\) \{/);
 });
 
-test('the Layers page is linked from every page and links back to the protocols', async () => {
-  const layersPage = await readFile(path.join(site, 'katmanlar/index.html'), 'utf8');
-  for (const id of ['ipv4', 'udp', 'dns', 'tls', 'ssh', 'snmp', 'smb2']) assert.ok(layersPage.includes(`href="/wire/${id}/"`), id);
-  for (const key of ['link', 'network', 'transport', 'application']) assert.ok(layersPage.includes(`id="tcpip-${key}"`), key);
+test('the home page carries the Layers section, linked from every page, and the old address forwards to it', async () => {
+  const home = await readFile(path.join(site, 'index.html'), 'utf8');
+  for (const id of ['ipv4', 'udp', 'dns', 'tls', 'ssh', 'snmp', 'smb2']) assert.ok(home.includes(`href="/wire/${id}/"`), id);
+  for (const key of ['link', 'network', 'transport', 'application']) assert.match(home, new RegExp(`<section class="layer layer--${key}" id="tcpip-${key}"`), key);
+  for (const id of ['katmanlar', 'encap-title', 'osi-1', 'osi-7', 'common-title']) assert.ok(home.includes(`id="${id}"`), id);
+  assert.equal((home.match(/<details class="layers-group">/g) ?? []).length, layers.groups.length, 'one collapsible group per summary group');
+  // Cards carry only the address and title; the details stay on the protocol pages and in the filter text.
+  assert.doesNotMatch(home, /protocol-card__meta|layer-pill/);
+  assert.match(home, /<li class="protocol-card protocol-card--compact protocol-card--network" data-layer="network" data-search="[^"]*checksum[^"]*"><p class="protocol-card__path">~\/wire\/ipv4<\/p><h3><a href="\/wire\/ipv4\/">/);
   for (const file of ['index.html', 'tcp/index.html', 'kilavuz/index.html']) {
     const html = await readFile(path.join(site, file), 'utf8');
-    assert.match(html, /<a href="\/wire\/katmanlar\/" class="button secondary help-btn layers-btn">/, file);
+    assert.match(html, /<a href="\/wire\/#katmanlar" class="button secondary help-btn layers-btn">/, file);
+    assert.doesNotMatch(html, /href="\/wire\/katmanlar\//, file);
   }
   const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
-  assert.match(tcp, /<a class="layer-badge layer-badge--transport" href="\/wire\/katmanlar\/#tcpip-transport">/);
+  assert.match(tcp, /<a class="layer-badge layer-badge--transport" href="\/wire\/#tcpip-transport">/);
+  const old = await readFile(path.join(site, 'katmanlar/index.html'), 'utf8');
+  assert.match(old, /<meta name="robots" content="noindex">/);
+  assert.match(old, /location\.replace\("\/wire\/" \+ \(location\.hash \|\| '#katmanlar'\)\)/, 'old anchors such as #tcpip-link keep working');
+  assert.doesNotMatch(await readFile(path.join(site, 'sitemap.xml'), 'utf8'), /katmanlar/);
 });
