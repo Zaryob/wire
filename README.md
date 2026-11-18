@@ -16,7 +16,7 @@ the 802.1Q tag against IEEE 802.1Q-2022, PTP against IEEE 1588-2008, LLDP agains
 
 ## Protocols and Layers Covered
 
-This release covers 51 on-the-wire protocols, and a [Layers page](https://zaryob.github.io/wire/katmanlar/) explains the OSI and TCP/IP layers and summarises common protocols in every layer, each against a phrase from its RFC (including text-based ones such as HTTP/1.1, FTP, SMTP, POP3, IMAP and SIP, which have no bit-level header page):
+This release covers 51 on-the-wire protocols, and the [home page](https://zaryob.github.io/wire/#katmanlar) lists them as cards by TCP/IP layer, then explains the OSI and TCP/IP layers and summarises common protocols in every layer, each against a phrase from its RFC (including text-based ones such as HTTP/1.1, FTP, SMTP, POP3, IMAP and SIP, which have no bit-level header page):
 
 1. **Link Layer**: Ethernet (RFC 826, RFC 894, RFC 9542), ARP (RFC 826), RARP (RFC 903), PPPoE (RFC 2516), 802.1Q VLAN tag (IEEE 802.1Q-2022, verified against a licensed copy), LLDP (IEEE 802.1AB-2016, verified against a licensed copy and its MIB modules), MPLS label stack entry (RFC 3032, RFC 5462).
 2. **Network Layer**: IPv4 (RFC 791, RFC 2474, RFC 3168, RFC 5737), IPv6 (RFC 8200, RFC 2474, RFC 3168, RFC 3849), IPv6 Fragment (RFC 8200 §4.5), ICMPv4 (RFC 792), ICMPv6 (RFC 4443, RFC 8200), IPv6 Segment Routing Header (RFC 8754), IGMPv2 (RFC 2236), IGMPv3 Membership Query (RFC 9776), GRE (RFC 2784), IPsec AH (RFC 4302), IPsec ESP (RFC 4303), OSPFv2 Hello (RFC 2328), VRRPv3 (RFC 9568).
@@ -39,12 +39,12 @@ Every piece of information is anchored in IETF RFC specifications (`sources/rfcs
 | **RFC 826** | An Ethernet Address Resolution Protocol | ARP packet format and Ethernet transmission fields. |
 | **RFC 894** | Transmission of IP Datagrams over Ethernet | IP packet encapsulation in Ethernet II frames (EtherType 0x0800). |
 | **RFC 903** | A Reverse Address Resolution Protocol | RARP packet format and reverse address resolution mechanism. |
-| **RFC 959** | File Transfer Protocol (FTP) | Summary on the Layers page (text protocol). |
+| **RFC 959** | File Transfer Protocol (FTP) | Summary in the home page's Layers section (text protocol). |
 | **RFC 1035** | Domain Names - Implementation and Specification | DNS header format, flags, question/answer records. |
 | **RFC 1071** | Computing the Internet Checksum | 16-bit ones' complement checksum algorithm. |
-| **RFC 1122** | Requirements for Internet Hosts -- Communication Layers | The four TCP/IP layers on the Layers page. |
+| **RFC 1122** | Requirements for Internet Hosts -- Communication Layers | The four TCP/IP layers in the home page's Layers section. |
 | **RFC 1901** | Introduction to Community-based SNMPv2 | SNMPv2c message wrapper. |
-| **RFC 1939** | Post Office Protocol - Version 3 | Summary on the Layers page (text protocol). |
+| **RFC 1939** | Post Office Protocol - Version 3 | Summary in the home page's Layers section (text protocol). |
 | **RFC 2131** | Dynamic Host Configuration Protocol | DHCPv4 message format and the fixed fields shared with BOOTP. |
 | **RFC 2132** | DHCP Options and BOOTP Vendor Extensions | DHCP Message Type, Parameter Request List and End options. |
 | **RFC 2236** | Internet Group Management Protocol, Version 2 | IGMPv2 multicast group membership reports and queries. |
@@ -55,7 +55,7 @@ Every piece of information is anchored in IETF RFC specifications (`sources/rfcs
 | **RFC 2784** | Generic Routing Encapsulation (GRE) | GRE packet header and tunnel checksum verification. |
 | **RFC 3032** | MPLS Label Stack Encoding | MPLS label stack entry: Label, S bit and TTL. |
 | **RFC 3168** | The Addition of Explicit Congestion Notification to IP | ECN 2-bit field in IP and control flags in TCP. |
-| **RFC 3261** | SIP: Session Initiation Protocol | Summary on the Layers page (text protocol). |
+| **RFC 3261** | SIP: Session Initiation Protocol | Summary in the home page's Layers section (text protocol). |
 | **RFC 3416** | Version 2 of the Protocol Operations for SNMP | PDU definitions; the order of the GetBulkRequest fields. |
 | **RFC 3417** | Transport Mappings for SNMP | BER example that the SNMP page reproduces byte for byte; UDP 161/162. |
 | **RFC 3711** | The Secure Real-time Transport Protocol (SRTP) | SRTP packet and its 80-bit authentication tag. |
@@ -71,7 +71,7 @@ Every piece of information is anchored in IETF RFC specifications (`sources/rfcs
 | **RFC 4340** | Datagram Congestion Control Protocol (DCCP) | DCCP packet header and congestion-controlled datagram flows. |
 | **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 error and informational messages. |
 | **RFC 4949** | Internet Security Glossary, Version 2 | The seven OSI layers and their approximate alignment with TCP/IP. |
-| **RFC 5321** | Simple Mail Transfer Protocol | Summary on the Layers page (text protocol). |
+| **RFC 5321** | Simple Mail Transfer Protocol | Summary in the home page's Layers section (text protocol). |
 | **RFC 5398** | Autonomous System (AS) Number Reservation for Documentation Use | Documentation AS numbers (64496–64511). |
 | **RFC 5462** | MPLS Label Stack Entry: "EXP" Field Renamed to "Traffic Class" Field | The 3-bit TC field of the label stack entry. |
 | **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | IPv4 documentation blocks (`192.0.2.0/24`, etc.). |
@@ -89,9 +89,9 @@ Every piece of information is anchored in IETF RFC specifications (`sources/rfcs
 | **RFC 8926** | Geneve: Generic Network Virtualization Encapsulation | Geneve tunnel header and options. |
 | **RFC 9000** | QUIC: A UDP-Based Multiplexed and Secure Transport | QUIC Initial packet and variable-length integers, checked against the RFC's figure notation. |
 | **RFC 9001** | Using TLS to Secure QUIC | Header protection and Initial keys. |
-| **RFC 9051** | Internet Message Access Protocol (IMAP) - Version 4rev2 | Summary on the Layers page (text protocol). |
+| **RFC 9051** | Internet Message Access Protocol (IMAP) - Version 4rev2 | Summary in the home page's Layers section (text protocol). |
 | **RFC 9110** | HTTP Semantics | http and https schemes and ports. |
-| **RFC 9112** | HTTP/1.1 | Summary on the Layers page (text protocol). |
+| **RFC 9112** | HTTP/1.1 | Summary in the home page's Layers section (text protocol). |
 | **RFC 9113** | HTTP/2 | HTTP/2 frame header and SETTINGS frame. |
 | **RFC 9114** | HTTP/3 | HTTP/3 frame layout and SETTINGS frame, checked against the RFC's figure notation. |
 | **RFC 9260** | Stream Control Transmission Protocol | SCTP common header, multi-streaming, and 32-bit CRC-32c checksum. |

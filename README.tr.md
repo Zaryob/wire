@@ -10,7 +10,7 @@ Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türk
 
 ## Kapsanan Protokoller ve Katmanlar
 
-Bu sürümde tel üzerindeki 51 protokol en ince ayrıntısına kadar incelenmektedir. Ayrıca [Katmanlar](https://zaryob.github.io/wire/katmanlar/) sayfası OSI ve TCP/IP katmanlarını anlatır ve sık kullanılan protokolleri dört katmanın her biri için, RFC’sindeki bir ifadeye dayanarak özetler; bit düzeyinde başlığı olmayan metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) yalnızca orada yer alır.
+Bu sürümde tel üzerindeki 51 protokol en ince ayrıntısına kadar incelenmektedir. [Ana sayfa](https://zaryob.github.io/wire/#katmanlar) protokolleri TCP/IP katmanlarına göre kartlarla listeler; altındaki Katmanlar bölümü OSI ve TCP/IP katmanlarını anlatır ve sık kullanılan protokolleri dört katmanın her biri için, RFC’sindeki bir ifadeye dayanarak özetler; bit düzeyinde başlığı olmayan metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) yalnızca orada yer alır. Eski `/wire/katmanlar/` adresi ana sayfaya yönlenir.
 
 1. **Bağlantı Katmanı (Data Link Layer)**
    - **Ethernet (RFC 826, RFC 894, RFC 9542)**: 48 bitlik hedef ve kaynak MAC adresleri, EtherType alanı ve çerçeve sınırları.
@@ -79,12 +79,12 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına (`sources/rfcs.json`), b
 | **RFC 826** | An Ethernet Address Resolution Protocol | ARP paket yapısı ve Ethernet iletim katmanı alanları. |
 | **RFC 894** | Transmission of IP Datagrams over Ethernet | IP datagramlarının Ethernet çerçevesinde taşınması (EtherType 0x0800). |
 | **RFC 903** | A Reverse Address Resolution Protocol | RARP paket formatı ve ters adres çözümleme mekanizması. |
-| **RFC 959** | File Transfer Protocol (FTP) | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 959** | File Transfer Protocol (FTP) | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 1035** | Domain Names - Implementation and Specification | DNS ileti başlığı, bayraklar ve kaynak kayıt formatı. |
 | **RFC 1071** | Computing the Internet Checksum | 16-bit bire tümleyen internet sağlama toplamı hesaplama algoritması. |
-| **RFC 1122** | Requirements for Internet Hosts -- Communication Layers | Katmanlar sayfasındaki dört TCP/IP katmanı. |
+| **RFC 1122** | Requirements for Internet Hosts -- Communication Layers | Ana sayfanın Katmanlar bölümündeki dört TCP/IP katmanı. |
 | **RFC 1901** | Introduction to Community-based SNMPv2 | SNMPv2c ileti zarfı. |
-| **RFC 1939** | Post Office Protocol - Version 3 | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 1939** | Post Office Protocol - Version 3 | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 2131** | Dynamic Host Configuration Protocol | DHCPv4 ileti biçimi ve BOOTP ile ortak sabit alanlar. |
 | **RFC 2132** | DHCP Options and BOOTP Vendor Extensions | DHCP ileti türü, parametre istek listesi ve bitiş seçenekleri. |
 | **RFC 2236** | Internet Group Management Protocol, Version 2 | IGMPv2 çok noktaya yayın (multicast) üyelik raporları ve sorguları. |
@@ -95,7 +95,7 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına (`sources/rfcs.json`), b
 | **RFC 2784** | Generic Routing Encapsulation (GRE) | GRE paket başlığı ve tünel sağlama toplamı. |
 | **RFC 3032** | MPLS Label Stack Encoding | MPLS etiket yığını girdisi: Label, S biti ve TTL. |
 | **RFC 3168** | The Addition of Explicit Congestion Notification to IP | IP ve TCP başlıklarında tıkanıklık uyarısı sağlayan 2 bitlik ECN. |
-| **RFC 3261** | SIP: Session Initiation Protocol | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 3261** | SIP: Session Initiation Protocol | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 3416** | Version 2 of the Protocol Operations for SNMP | PDU tanımları; GetBulkRequest alanlarının sırası. |
 | **RFC 3417** | Transport Mappings for SNMP | SNMP sayfasının bayt bayt yeniden ürettiği BER örneği; UDP 161/162. |
 | **RFC 3711** | The Secure Real-time Transport Protocol (SRTP) | SRTP paketi ve 80 bitlik doğrulama etiketi. |
@@ -111,7 +111,7 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına (`sources/rfcs.json`), b
 | **RFC 4340** | Datagram Congestion Control Protocol (DCCP) | DCCP paket başlığı ve çift yönlü tıkanıklık denetimi. |
 | **RFC 4443** | ICMPv6 for the IPv6 Specification | ICMPv6 hata ve bilgilendirme iletileri. |
 | **RFC 4949** | Internet Security Glossary, Version 2 | OSI'nin yedi katmanı ve TCP/IP ile yaklaşık hizalanması. |
-| **RFC 5321** | Simple Mail Transfer Protocol | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 5321** | Simple Mail Transfer Protocol | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 5398** | Autonomous System (AS) Number Reservation for Documentation Use | Belgeleme AS numaraları (64496–64511). |
 | **RFC 5462** | MPLS Label Stack Entry: "EXP" Field Renamed to "Traffic Class" Field | Etiket girdisindeki 3 bitlik TC alanı. |
 | **RFC 5737** | IPv4 Address Blocks Reserved for Documentation | Örneklerde kullanılan IPv4 belgeleme blokları (`192.0.2.0/24` vb.). |
@@ -129,9 +129,9 @@ Sitedeki ve kılavuzdaki her bilgi IETF standartlarına (`sources/rfcs.json`), b
 | **RFC 8926** | Geneve: Generic Network Virtualization Encapsulation | Geneve tünel başlığı ve seçenekleri. |
 | **RFC 9000** | QUIC: A UDP-Based Multiplexed and Secure Transport | QUIC Initial paketi ve değişken uzunluklu tamsayılar; RFC'nin şekil gösterimine karşı doğrulanır. |
 | **RFC 9001** | Using TLS to Secure QUIC | Başlık koruması ve Initial anahtarları. |
-| **RFC 9051** | Internet Message Access Protocol (IMAP) - Version 4rev2 | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 9051** | Internet Message Access Protocol (IMAP) - Version 4rev2 | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 9110** | HTTP Semantics | http ve https şemaları ve portları. |
-| **RFC 9112** | HTTP/1.1 | Katmanlar sayfasındaki özet (metin tabanlı). |
+| **RFC 9112** | HTTP/1.1 | Ana sayfanın Katmanlar bölümündeki özet (metin tabanlı). |
 | **RFC 9113** | HTTP/2 | HTTP/2 çerçeve başlığı ve SETTINGS çerçevesi. |
 | **RFC 9114** | HTTP/3 | HTTP/3 çerçeve biçimi ve SETTINGS çerçevesi; RFC'nin şekil gösterimine karşı doğrulanır. |
 | **RFC 9260** | Stream Control Transmission Protocol | SCTP ortak başlığı, çoklu akış ve 32-bit CRC-32c sağlama toplamı. |
