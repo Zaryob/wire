@@ -148,3 +148,58 @@ export function octetTable(text, anchor) {
   }
   throw new Error(`table after ${anchor} has no "Table N:" caption`);
 }
+
+/**
+ * Members of a TLS presentation-language structure (RFC 9846 §3): the lines between
+ * `struct {` and `} name;`. Sizes are bits, or "var" for vectors whose length is
+ * another field ("opaque fragment[TLSPlaintext.length]"). A member type may be a
+ * uintN, a `uintN Type;` alias, or an enumerated type whose largest value (in
+ * parentheses) sets its width in whole octets (RFC 9846 §3.5).
+ */
+export function presentationStruct(text, name) {
+  const lines = text.split('\n');
+  const end = lines.findIndex(line => line.trim() === `} ${name};`);
+  if (end < 0) throw new Error(`struct not found: ${name}`);
+  let start = end;
+  while (start > 0 && lines[start].trim() !== 'struct {') start -= 1;
+  const uint = type => type.match(/^uint(\d+)$/)?.[1];
+  const typeBits = type => {
+    if (uint(type)) return Number(uint(type));
+    if (type === 'opaque') return 8;
+    const alias = text.match(new RegExp(`^\\s*(uint\\d+) ${type};`, 'm'));
+    if (alias) return Number(uint(alias[1]));
+    const enumEnd = lines.findIndex(line => line.trim() === `} ${type};`);
+    if (enumEnd > 0) {
+      const max = lines.slice(Math.max(0, enumEnd - 40), enumEnd).join('\n').match(/\((\d+)\)\s*$/);
+      if (max) return 8 * Math.ceil(Math.log2(Number(max[1]) + 1) / 8);
+    }
+    throw new Error(`${name}: unknown type ${type}`);
+  };
+  return lines.slice(start + 1, end).map(line => line.replace(/\/\*.*?\*\//g, '').trim()).filter(Boolean).map(line => {
+    const member = line.match(/^(\w+) (\w+)(?:\[([^\]]+)\])?(?:\s*=\s*[^;]+)?;$/);
+    if (!member) throw new Error(`${name}: unreadable member ${line}`);
+    const [, type, field, length] = member;
+    const size = length === undefined ? typeBits(type) : /^\d+$/.test(length) ? typeBits(type) * Number(length) : 'var';
+    return { name: field, size };
+  });
+}
+
+/**
+ * The SSH binary packet as RFC 4253 §6 lists it ("uint32    packet_length",
+ * "byte[n1]  payload; …"), read from the lines after `anchor`. Sizes are bits,
+ * or "var" for byte[n] fields whose length is computed.
+ */
+export function sshPacket(text, anchor) {
+  const lines = text.split('\n');
+  const at = lines.findIndex(line => line.includes(anchor));
+  if (at < 0) throw new Error(`anchor not found: ${anchor}`);
+  const fields = [];
+  for (const line of lines.slice(at + 1)) {
+    const item = line.match(/^\s+(uint32|uint64|byte|boolean)(\[(\w+)\])?\s+(.+?)(?:;.*)?$/);
+    if (!item) { if (fields.length) break; continue; }
+    const [, type, , count, field] = item;
+    const bits = { uint32: 32, uint64: 64, byte: 8, boolean: 8 }[type];
+    fields.push({ name: field.trim(), size: count === undefined ? bits : /^\d+$/.test(count) ? bits * Number(count) : 'var' });
+  }
+  return fields;
+}
