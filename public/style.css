@@ -505,6 +505,13 @@ table.fields tbody tr { transition: background-color .15s ease; }
   .topbar .help-btn > span:last-child { display: none; }
 }
 
+/* Two secondary buttons (Katmanlar, Kılavuz) do not fit beside the library button on phones:
+   they keep their text label for assistive technology and show only their icon. */
+@media (max-width: 440px) {
+  .topbar .help-btn > span:not(.console-sr-only) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .topbar .help-btn { min-width: 44px; justify-content: center; }
+}
+
 .bits-scroll-hint { margin: 8px 0 0; color: var(--muted); font-size: var(--text-sm); }
 
 .wire-site .guide-content { font: 400 var(--text-prose)/var(--line-prose) var(--font-prose); }
@@ -516,3 +523,19 @@ table.fields tbody tr { transition: background-color .15s ease; }
 
 /* The home page has no "/" hint on the header search; keep its label beside the icon. */
 .wire-site .console-search-open:not(:has(kbd)) { justify-content: flex-start; }
+
+/* Layers page: encapsulation chain and protocol summaries. */
+a.layer-badge { text-decoration: none; }
+a.layer-badge:hover, a.layer-badge:focus-visible { text-decoration: underline; }
+.encap { list-style: none; margin: 16px 0; padding: 0; display: grid; gap: 6px; }
+.encap__layer { margin-left: calc(var(--depth) * 1.25rem); padding: 8px 12px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: var(--surface); }
+.encap__layer--link { border-left-color: var(--layer-link); }
+.encap__layer--network { border-left-color: var(--layer-network); }
+.encap__layer--transport { border-left-color: var(--layer-transport); }
+.encap__layer--application { border-left-color: var(--layer-application); }
+.layers-ips h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.layers-summary { display: grid; gap: 12px; margin: 0; }
+.layers-summary > div { padding: 12px 14px; border: 1px solid var(--line); background: var(--surface); }
+.layers-summary dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+.layers-summary dd { margin: 6px 0 0; }
+.layers-summary dd p { margin: 0 0 6px; max-width: 90ch; }
