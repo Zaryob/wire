@@ -6,9 +6,9 @@ import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { root, standardEntry, ieeeText, ieeeFields, mibText } from '../src/sources.mjs';
-import { lldpMibFacts, lldpTextFacts, vlanTextFacts } from '../src/ieee.mjs';
+import { lldpMibFacts, lldpTextFacts, vlanTextFacts, smb2TextFacts } from '../src/ieee.mjs';
 
-const textFacts = { lldp: lldpTextFacts, vlan: vlanTextFacts };
+const textFacts = { lldp: lldpTextFacts, vlan: vlanTextFacts, smb2: smb2TextFacts };
 
 const directory = path.join(root, 'data/protocols');
 const today = new Date().toISOString().slice(0, 10);

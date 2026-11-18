@@ -251,3 +251,54 @@ export function vlanTextFacts(text) {
     dropEligibleName: /the Drop Eligible Indicator \(DEI\) in the VLAN tag/.test(all),
   };
 }
+
+// [MS-SMB2] draws each structure as a bit grid whose cells survive text extraction as
+// the field names in order, and defines every field as "Name (N bytes): …".
+
+/** A structure's fields: its figure's names in order, sized by their "(N bytes)" definitions. */
+function msStructure(section) {
+  // Running page footers and the page markers of the extracted text can fall inside a figure.
+  const footer = /^(\d+ \/ \d+|\[MS-SMB2\] - v\d+|Server Message Block \(SMB\) Protocol Versions 2 and 3|Copyright © \d+ Microsoft Corporation|Release: .*|\f?\[pdf \d+\])$/;
+  const lines = section.split('\n').filter(line => !footer.test(line.trim()));
+  section = lines.join('\n');
+  const ruler = lines.findIndex(line => line.trim() === '0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1');
+  const defs = [...section.matchAll(/^(\S[^\n]*?) \((\d+) bytes?\):/gm)].map(([, name, octets]) => ({ name, bits: Number(octets) * 8 }));
+  // Figure cells: the lines between the bit ruler and the first definition, split on known names.
+  const figure = lines.slice(ruler + 1).join('\n').split(defs[0] ? `${defs[0].name} (` : '\u0000')[0];
+  const names = [];
+  let rest = figure.replace(/\n/g, ' ').replace(/\.\.\./g, ' ').replace(/\s+/g, ' ').trim();
+  const known = [...new Set(defs.map(def => def.name))].sort((a, b) => b.length - a.length);
+  while (rest) {
+    const next = known.find(name => rest === name || rest.startsWith(`${name} `));
+    if (!next) throw new Error(`MS-SMB2 figure: cannot read "${rest.slice(0, 40)}"`);
+    names.push(next);
+    rest = rest.slice(next.length).trim();
+  }
+  // Nested definitions ("ChannelSequence (2 bytes)") are skipped: each figure name takes the next definition of that name.
+  let at = 0;
+  return names.map(name => {
+    while (at < defs.length && defs[at].name !== name) at += 1;
+    if (at === defs.length) throw new Error(`MS-SMB2: no definition for ${name}`);
+    return defs[at++];
+  });
+}
+
+/** What [MS-SMB2] states about the Direct TCP header, the SYNC header and the ECHO request. */
+export function smb2TextFacts(text) {
+  const all = flat(text);
+  const sync = between(text, /^2\.2\.1\.2 SMB2 Packet Header - SYNC$/m, /^2\.2\.2 SMB2 ERROR Response$/m);
+  const transport = between(text, /^2\.1 Transport$/m, /^2\.2 Message Syntax$/m);
+  const echo = between(text, /^2\.2\.28 SMB2 ECHO Request$/m, /^2\.2\.29 SMB2 ECHO Response$/m);
+  const commands = between(text, /^Name Value\nSMB2 NEGOTIATE 0x0000/m, /^CreditRequest\/CreditResponse \(2 bytes\)/m);
+  return {
+    littleEndian: /multiple-byte fields \(16-bit, 32-bit, and 64-bit fields\) in an SMB 2 Protocol message MUST be transmitted in little-endian order/.test(all),
+    directTcp: [...transport.matchAll(/^(Zero|StreamProtocolLength) \((\d+) bytes?\):/gm)].map(([, name, octets]) => ({ name, bits: Number(octets) * 8 })),
+    streamLengthNetworkOrder: /length, in bytes, of the SMB2Message in network byte order/.test(all),
+    header: msStructure(sync),
+    protocolId: need(flat(sync), /The value MUST be set to (0x[0-9A-F]{8}), also represented as \(in network order\) 0xFE, 'S', 'M', and 'B'/, 'ProtocolId value')[1],
+    structureSize: Number(need(flat(sync), /StructureSize \(2 bytes\): This MUST be set to (\d+)/, 'header StructureSize')[1]),
+    commands: [...commands.matchAll(/^SMB2 ([A-Z_]+) (0x[0-9A-F]{4})$/gm)].map(([, name, value]) => [name, value]),
+    echo: msStructure(echo),
+    echoStructureSize: Number(need(flat(echo), /StructureSize \(2 bytes\): The client MUST set this to (\d+)/, 'ECHO StructureSize')[1]),
+  };
+}
