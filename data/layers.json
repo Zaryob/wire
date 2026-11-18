@@ -184,19 +184,30 @@
           "name": "IP (IPv4 / IPv6)",
           "layer": "Ağ",
           "ports": null,
-          "summary": "Her cihaza bir adres verir ve paketleri ağlar arasında, yönlendirici yönlendirici hedefe taşır. ICMP hata ve tanı iletilerini taşır.",
+          "summary": "Her cihaza bir adres verir ve datagramları ağlar arasında, yönlendirici yönlendirici hedefe taşır; gerekirse uzun datagramları parçalar. IPv6, IPv4’ün yerini almak üzere tasarlanmış yeni sürümdür.",
           "pages": [
             "ipv4",
             "ipv6",
-            "ipv6-frag",
-            "icmp",
-            "icmpv6"
+            "ipv6-frag"
           ],
           "refs": [
             791,
             8200
           ],
-          "evidence": []
+          "evidence": [
+            {
+              "rfc": 791,
+              "phrase": "The internet protocol provides for transmitting blocks of data called datagrams from sources to destinations"
+            },
+            {
+              "rfc": 791,
+              "phrase": "The internet protocol also provides for fragmentation and reassembly of long datagrams"
+            },
+            {
+              "rfc": 8200,
+              "phrase": "designed as the successor to IP version 4 (IPv4)"
+            }
+          ]
         }
       ]
     },
@@ -466,6 +477,356 @@
             {
               "rfc": 4254,
               "phrase": "TCP/IP Port Forwarding"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Bağlantı katmanı protokolleri",
+      "items": [
+        {
+          "name": "IP üzerinden Ethernet",
+          "layer": "Bağlantı",
+          "ports": null,
+          "summary": "IP datagramlarının bir Ethernet çerçevesine nasıl yerleştirileceğini tanımlar: çerçevenin EtherType alanı yükün IP olduğunu söyler.",
+          "pages": [
+            "ethernet"
+          ],
+          "refs": [
+            894
+          ],
+          "evidence": [
+            {
+              "rfc": 894,
+              "phrase": "This RFC specifies a standard method of encapsulating Internet Protocol (IP) [1] datagrams on an Ethernet"
+            }
+          ]
+        },
+        {
+          "name": "ARP",
+          "layer": "Bağlantı",
+          "ports": null,
+          "summary": "Bir protokol adresini (ör. IPv4 adresini) aynı yerel ağdaki 48 bitlik Ethernet adresine çevirir. Gönderici yanıtı bir tabloda saklar ve sonraki çerçevelerde kullanır.",
+          "pages": [
+            "arp"
+          ],
+          "refs": [
+            826
+          ],
+          "evidence": [
+            {
+              "rfc": 826,
+              "phrase": "a method of Converting Protocol Addresses (e.g., IP addresses) to Local Network Addresses (e.g., Ethernet addresses)"
+            }
+          ]
+        },
+        {
+          "name": "RARP",
+          "layer": "Bağlantı",
+          "ports": null,
+          "summary": "ARP’nin tersi: yalnızca donanım adresini bilen bir cihaz (ör. disksiz iş istasyonu) kendi IP adresini ağdaki bir sunucudan öğrenir. Bugün yerini DHCP almıştır.",
+          "pages": [
+            "rarp"
+          ],
+          "refs": [
+            903
+          ],
+          "evidence": [
+            {
+              "rfc": 903,
+              "phrase": "they must discover their protocol address from some external source"
+            }
+          ]
+        },
+        {
+          "name": "PPPoE",
+          "layer": "Bağlantı",
+          "ports": null,
+          "summary": "Noktadan noktaya PPP oturumlarını Ethernet üzerinde kurar ve PPP paketlerini Ethernet çerçevelerine sarar; DSL ve fiber erişiminde kullanıcı oturumu böyle açılır.",
+          "pages": [
+            "pppoe"
+          ],
+          "refs": [
+            2516
+          ],
+          "evidence": [
+            {
+              "rfc": 2516,
+              "phrase": "This document describes how to build PPP sessions and encapsulate PPP packets over Ethernet"
+            }
+          ]
+        },
+        {
+          "name": "MPLS",
+          "layer": "Bağlantı",
+          "ports": null,
+          "summary": "Ağ katmanı paketinin önüne 4 sekizlik etiket yığını girdileri ekleyerek onu “etiketli paket” yapar; bu paketleri etiket anahtarlamalı yönlendiriciler (LSR) iletir. Bağlantı ile ağ katmanı arasında durduğu için sık sık “2,5. katman” denir.",
+          "pages": [
+            "mpls"
+          ],
+          "refs": [
+            3032
+          ],
+          "evidence": [
+            {
+              "rfc": 3032,
+              "phrase": "requires a set of procedures for augmenting network layer packets with \"label stacks\""
+            },
+            {
+              "rfc": 3032,
+              "phrase": "Each label stack entry is represented by 4 octets"
+            },
+            {
+              "rfc": 3032,
+              "phrase": "Routers which support MPLS are known as \"Label Switching Routers\", or \"LSRs\""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Ağ katmanı: denetim, yönlendirme ve güvenlik",
+      "items": [
+        {
+          "name": "ICMP / ICMPv6",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "IP’nin yanında çalışan denetim iletileri: datagram işlenirken çıkan hataları bildirir ve ping gibi tanı işlerini yapar. IP’yi güvenilir yapmaz; yalnızca sorunlar hakkında geri bildirim verir.",
+          "pages": [
+            "icmp",
+            "icmpv6"
+          ],
+          "refs": [
+            792,
+            4443
+          ],
+          "evidence": [
+            {
+              "rfc": 792,
+              "phrase": "The purpose of these control messages is to provide feedback about problems in the communication environment, not to make IP reliable"
+            },
+            {
+              "rfc": 4443,
+              "phrase": "ICMPv6 is used by IPv6 nodes to report errors encountered in processing packets"
+            }
+          ]
+        },
+        {
+          "name": "IGMP",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "IPv4 cihazlarının hangi çok noktaya yayın (multicast) gruplarına üye olduğunu komşu yönlendiricilere bildirdiği protokol.",
+          "pages": [
+            "igmp",
+            "igmpv3"
+          ],
+          "refs": [
+            2236,
+            9776
+          ],
+          "evidence": [
+            {
+              "rfc": 2236,
+              "phrase": "used by IP hosts to report their multicast group memberships to any immediately- neighboring multicast routers"
+            }
+          ]
+        },
+        {
+          "name": "IPsec (AH / ESP)",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "IP datagramlarını ağ katmanında korur. AH bütünlük, kaynak doğrulama ve yeniden oynatma koruması sağlar; ESP bunlara gizlilik (şifreleme) ekler.",
+          "pages": [
+            "ah",
+            "esp"
+          ],
+          "refs": [
+            4302,
+            4303
+          ],
+          "evidence": [
+            {
+              "rfc": 4302,
+              "phrase": "is used to provide connectionless integrity and data origin authentication for IP datagrams"
+            },
+            {
+              "rfc": 4303,
+              "phrase": "ESP is used to provide confidentiality, data origin authentication, connectionless integrity, an anti-replay service"
+            }
+          ]
+        },
+        {
+          "name": "GRE",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "Bir ağ katmanı protokolünü başka bir ağ katmanı protokolünün içinde taşıyan genel tünel; ör. IPv4 içinde IPv6 ya da başka bir IPv4 paketi.",
+          "pages": [
+            "gre"
+          ],
+          "refs": [
+            2784
+          ],
+          "evidence": [
+            {
+              "rfc": 2784,
+              "phrase": "encapsulation of an arbitrary network layer protocol over another arbitrary network layer protocol"
+            }
+          ]
+        },
+        {
+          "name": "OSPF",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "Tek bir özerk sistem içinde çalışan bağlantı durumu (link-state) yönlendirme protokolü: her yönlendirici aynı topoloji veritabanını tutar ve en kısa yolları buradan hesaplar. Doğrudan IP üzerinde çalışır.",
+          "pages": [
+            "ospf"
+          ],
+          "refs": [
+            2328
+          ],
+          "evidence": [
+            {
+              "rfc": 2328,
+              "phrase": "OSPF is a link-state routing protocol. It is designed to be run internal to a single Autonomous System"
+            },
+            {
+              "rfc": 2328,
+              "phrase": "Each OSPF router maintains an identical database describing the Autonomous System's topology"
+            }
+          ]
+        },
+        {
+          "name": "VRRP",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "Birkaç yönlendiricinin tek bir sanal varsayılan ağ geçidi gibi davranmasını sağlar; asıl yönlendirici düşünce yedeği devralır, uç cihazların ayarı değişmez.",
+          "pages": [
+            "vrrp"
+          ],
+          "refs": [
+            9568
+          ],
+          "evidence": [
+            {
+              "rfc": 9568,
+              "phrase": "is designed to eliminate the single point of failure inherent in a network utilizing default routing"
+            }
+          ]
+        },
+        {
+          "name": "Segment Routing (SRH)",
+          "layer": "Ağ",
+          "ports": null,
+          "summary": "Kaynak, paketin geçeceği segmentlerin listesini bir IPv6 yönlendirme uzantı başlığına yazar; ara düğümler bu listeye göre iletir.",
+          "pages": [
+            "srh"
+          ],
+          "refs": [
+            8754
+          ],
+          "evidence": [
+            {
+              "rfc": 8754,
+              "phrase": "Segment Routing can be applied to the IPv6 data plane using a new type of Routing Extension Header called the Segment Routing Header (SRH)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Taşıma katmanı ve kaplama ağları",
+      "items": [
+        {
+          "name": "SCTP",
+          "layer": "Taşıma",
+          "ports": null,
+          "summary": "IP üzerinde güvenilir, ileti tabanlı taşıma. Bir bağlantı (association) içinde birden çok akış taşır ve iki uç birden fazla adresle bağlanabilir (multi-homing); telefon sinyalleşmesi ve WebRTC veri kanalları kullanır.",
+          "pages": [
+            "sctp"
+          ],
+          "refs": [
+            9260
+          ],
+          "evidence": [
+            {
+              "rfc": 9260,
+              "phrase": "SCTP is a reliable transport protocol operating on top of a connectionless packet network, such as IP"
+            },
+            {
+              "rfc": 9260,
+              "phrase": "network-level fault tolerance through supporting of multi-homing"
+            }
+          ]
+        },
+        {
+          "name": "DCCP",
+          "layer": "Taşıma",
+          "ports": null,
+          "summary": "Tıkanıklık denetimli ama güvenilir olmayan datagramlar için çift yönlü bağlantılar kurar: UDP gibi teslimi garanti etmez, TCP gibi ağı boğmaz.",
+          "pages": [
+            "dccp"
+          ],
+          "refs": [
+            4340
+          ],
+          "evidence": [
+            {
+              "rfc": 4340,
+              "phrase": "provides bidirectional unicast connections of congestion-controlled unreliable datagrams"
+            }
+          ]
+        },
+        {
+          "name": "QUIC",
+          "layer": "Taşıma",
+          "ports": null,
+          "summary": "UDP üzerinde çalışan, güvenliği TLS ile sağlanan genel amaçlı taşıma protokolü. HTTP/3 bunun üzerinde çalışır.",
+          "pages": [
+            "quic",
+            "quic-1rtt",
+            "http3"
+          ],
+          "refs": [
+            9000,
+            9001
+          ],
+          "evidence": [
+            {
+              "rfc": 9000,
+              "phrase": "QUIC is a secure general-purpose transport protocol"
+            },
+            {
+              "rfc": 9001,
+              "phrase": "This document describes how Transport Layer Security (TLS) is used to secure QUIC"
+            }
+          ]
+        },
+        {
+          "name": "VXLAN / Geneve",
+          "layer": "Taşıma",
+          "ports": "UDP 4789 / 6081",
+          "summary": "Sanal makinelerin 2. katman ağlarını 3. katman ağ üzerinden UDP ile tüneller (kaplama ağı); veri merkezlerinde kiracıları birbirinden ayırır. Geneve, aynı işi genişletilebilir seçeneklerle yapan genel kapsülleme biçimidir.",
+          "pages": [
+            "vxlan",
+            "geneve"
+          ],
+          "refs": [
+            7348,
+            8926
+          ],
+          "evidence": [
+            {
+              "rfc": 7348,
+              "phrase": "A Framework for Overlaying Virtualized Layer 2 Networks over Layer 3 Networks"
+            },
+            {
+              "rfc": 7348,
+              "phrase": "IANA has assigned the value 4789 for the VXLAN UDP port"
+            },
+            {
+              "rfc": 8926,
+              "phrase": "Dest Port = 6081 Geneve"
             }
           ]
         }

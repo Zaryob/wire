@@ -426,7 +426,11 @@ test('the Layers page states only what its sources say', async () => {
   assert.ok(flat(ips).includes(layers.ipsSource.phrase));
   for (const layer of layers.ips) assert.match(ips, new RegExp(`o  ${layer.name}`), `RFC 1122 §1.1.3 names the ${layer.name}`);
   assert.deepEqual(layers.ips.map(layer => layer.wire).sort(), [...new Set(protocols.map(protocol => protocol.layer))].sort(), 'every wire layer group has a TCP/IP layer');
+  const items = layers.groups.flatMap(group => group.items);
+  for (const layer of layers.ips) assert.ok(items.some(item => item.layer === layer.wire), `a summary in the ${layer.wire} layer`);
   for (const group of layers.groups) for (const item of group.items) {
+    assert.ok(item.evidence.length, `${item.name}: a summary with no source phrase`);
+    assert.ok(layers.ips.some(layer => layer.wire === item.layer), `${item.name}: unknown layer ${item.layer}`);
     for (const id of item.pages) assert.ok(byId.has(id), `${item.name}: no page ${id}`);
     for (const evidence of item.evidence) {
       const text = evidence.rfc ? await rfcText(evidence.rfc) : await ieeeText(evidence.std);
