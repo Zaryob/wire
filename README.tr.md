@@ -10,7 +10,7 @@ Ağ protokollerinin başlık alanları için RFC kaynaklı, bit düzeyinde Türk
 
 ## Kapsanan Protokoller ve Katmanlar
 
-Bu sürümde tel üzerindeki 51 protokol en ince ayrıntısına kadar incelenmektedir. Ayrıca [Katmanlar](https://zaryob.github.io/wire/katmanlar/) sayfası OSI ve TCP/IP katmanlarını anlatır ve sık kullanılan protokolleri özetler; bit düzeyinde başlığı olmayan metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) yalnızca orada yer alır.
+Bu sürümde tel üzerindeki 51 protokol en ince ayrıntısına kadar incelenmektedir. Ayrıca [Katmanlar](https://zaryob.github.io/wire/katmanlar/) sayfası OSI ve TCP/IP katmanlarını anlatır ve sık kullanılan protokolleri dört katmanın her biri için, RFC’sindeki bir ifadeye dayanarak özetler; bit düzeyinde başlığı olmayan metin tabanlı protokoller (HTTP/1.1, FTP, SMTP, POP3, IMAP, SIP) yalnızca orada yer alır.
 
 1. **Bağlantı Katmanı (Data Link Layer)**
    - **Ethernet (RFC 826, RFC 894, RFC 9542)**: 48 bitlik hedef ve kaynak MAC adresleri, EtherType alanı ve çerçeve sınırları.

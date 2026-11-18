@@ -16,7 +16,7 @@ the 802.1Q tag against IEEE 802.1Q-2022, PTP against IEEE 1588-2008, LLDP agains
 
 ## Protocols and Layers Covered
 
-This release covers 51 on-the-wire protocols, and a [Layers page](https://zaryob.github.io/wire/katmanlar/) explains the OSI and TCP/IP layers and summarises common protocols (including text-based ones such as HTTP/1.1, FTP, SMTP, POP3, IMAP and SIP, which have no bit-level header page):
+This release covers 51 on-the-wire protocols, and a [Layers page](https://zaryob.github.io/wire/katmanlar/) explains the OSI and TCP/IP layers and summarises common protocols in every layer, each against a phrase from its RFC (including text-based ones such as HTTP/1.1, FTP, SMTP, POP3, IMAP and SIP, which have no bit-level header page):
 
 1. **Link Layer**: Ethernet (RFC 826, RFC 894, RFC 9542), ARP (RFC 826), RARP (RFC 903), PPPoE (RFC 2516), 802.1Q VLAN tag (IEEE 802.1Q-2022, verified against a licensed copy), LLDP (IEEE 802.1AB-2016, verified against a licensed copy and its MIB modules), MPLS label stack entry (RFC 3032, RFC 5462).
 2. **Network Layer**: IPv4 (RFC 791, RFC 2474, RFC 3168, RFC 5737), IPv6 (RFC 8200, RFC 2474, RFC 3168, RFC 3849), IPv6 Fragment (RFC 8200 §4.5), ICMPv4 (RFC 792), ICMPv6 (RFC 4443, RFC 8200), IPv6 Segment Routing Header (RFC 8754), IGMPv2 (RFC 2236), IGMPv3 Membership Query (RFC 9776), GRE (RFC 2784), IPsec AH (RFC 4302), IPsec ESP (RFC 4303), OSPFv2 Hello (RFC 2328), VRRPv3 (RFC 9568).
