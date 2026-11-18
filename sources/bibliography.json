@@ -1,5 +1,5 @@
 {
-  "retrieved": "2026-11-17",
+  "retrieved": "2026-11-18",
   "source": "https://www.rfc-editor.org/",
   "entries": [
     {
@@ -138,6 +138,35 @@
       "use": "RARP paketi ve ters adres çözümleme"
     },
     {
+      "number": 959,
+      "title": "File Transfer Protocol",
+      "authors": [
+        "J. Postel",
+        "J. Reynolds"
+      ],
+      "date": "October 1985",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC765"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC2228",
+        "RFC2640",
+        "RFC2773",
+        "RFC3659",
+        "RFC5797",
+        "RFC7151"
+      ],
+      "doi": "10.17487/RFC959",
+      "url": "https://www.rfc-editor.org/rfc/rfc959",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc959.txt",
+      "sha256": "e2eb01566e64c12ed75a0c4bd02231e62f91eebb86f596abc40999d5e8bc5a91",
+      "bytes": 147316,
+      "use": "FTP: komut ve veri bağlantıları"
+    },
+    {
       "number": 1035,
       "title": "Domain names - implementation and specification",
       "authors": [
@@ -212,6 +241,86 @@
       "sha256": "e10dfd6816447843d47a7f1b990eba756a791a6308fd5b698a6276075a8e4f9b",
       "bytes": 53524,
       "use": "İnternet sağlama toplamının hesaplanması"
+    },
+    {
+      "number": 1122,
+      "title": "Requirements for Internet Hosts - Communication Layers",
+      "authors": [
+        "R. Braden, Ed."
+      ],
+      "date": "October 1989",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC793"
+      ],
+      "updated_by": [
+        "RFC1349",
+        "RFC4379",
+        "RFC5884",
+        "RFC6093",
+        "RFC6298",
+        "RFC6633",
+        "RFC6864",
+        "RFC8029",
+        "RFC9293"
+      ],
+      "doi": "10.17487/RFC1122",
+      "url": "https://www.rfc-editor.org/rfc/rfc1122",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc1122.txt",
+      "sha256": "9f526e6bebc868324fedb90aebbcf6e5b15c53fd373ca5d5ce1c2cdcd264e04f",
+      "bytes": 289148,
+      "use": "İnternet protokol takımının katmanları"
+    },
+    {
+      "number": 1901,
+      "title": "Introduction to Community-based SNMPv2",
+      "authors": [
+        "J. Case",
+        "K. McCloghrie",
+        "M. Rose",
+        "S. Waldbusser"
+      ],
+      "date": "January 1996",
+      "status": "HISTORIC",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC1901",
+      "url": "https://www.rfc-editor.org/rfc/rfc1901",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc1901.txt",
+      "sha256": "99a2f06b0e96780d8ad8e00e407d7ebb7ac08974ccd176363dc6b995c0f50162",
+      "bytes": 15903,
+      "use": "SNMPv2c topluluk tabanlı ileti biçimi"
+    },
+    {
+      "number": 1939,
+      "title": "Post Office Protocol - Version 3",
+      "authors": [
+        "J. Myers",
+        "M. Rose"
+      ],
+      "date": "May 1996",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC1725"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC1957",
+        "RFC2449",
+        "RFC6186",
+        "RFC8314"
+      ],
+      "doi": "10.17487/RFC1939",
+      "url": "https://www.rfc-editor.org/rfc/rfc1939",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc1939.txt",
+      "sha256": "1c02e8a3208e33416807597629dfab693354359563d4ae1a9b242374e05886c9",
+      "bytes": 47018,
+      "use": "POP3 posta erişimi"
     },
     {
       "number": 2131,
@@ -493,6 +602,101 @@
       "use": "IP ve TCP başlıklarında ECN"
     },
     {
+      "number": 3261,
+      "title": "SIP: Session Initiation Protocol",
+      "authors": [
+        "J. Rosenberg",
+        "H. Schulzrinne",
+        "G. Camarillo",
+        "A. Johnston",
+        "J. Peterson",
+        "R. Sparks",
+        "M. Handley",
+        "E. Schooler"
+      ],
+      "date": "July 2002",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC2543"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC3265",
+        "RFC3853",
+        "RFC4320",
+        "RFC4916",
+        "RFC5393",
+        "RFC5621",
+        "RFC5626",
+        "RFC5630",
+        "RFC5922",
+        "RFC5954",
+        "RFC6026",
+        "RFC6141",
+        "RFC6665",
+        "RFC6878",
+        "RFC7462",
+        "RFC7463",
+        "RFC8217",
+        "RFC8591",
+        "RFC8760",
+        "RFC8898",
+        "RFC8996"
+      ],
+      "doi": "10.17487/RFC3261",
+      "url": "https://www.rfc-editor.org/rfc/rfc3261",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3261.txt",
+      "sha256": "d513777f77fea01a4de9c0a2d9d6713cb53b8231f1b7a2ab56705f8d51b066dc",
+      "bytes": 647976,
+      "use": "SIP oturum başlatma"
+    },
+    {
+      "number": 3416,
+      "title": "Version 2 of the Protocol Operations for the Simple Network Management Protocol (SNMP)",
+      "authors": [
+        "R. Presuhn, Ed."
+      ],
+      "date": "December 2002",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC1905"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC3416",
+      "url": "https://www.rfc-editor.org/rfc/rfc3416",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3416.txt",
+      "sha256": "e310ccf5a9cbbcb6c47d2fc0b50316889588d85447c7be0d40ddf74be70c8ac8",
+      "bytes": 70043,
+      "use": "SNMP PDU tanımları (GetRequest)"
+    },
+    {
+      "number": 3417,
+      "title": "Transport Mappings for the Simple Network Management Protocol (SNMP)",
+      "authors": [
+        "R. Presuhn, Ed."
+      ],
+      "date": "December 2002",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC1906"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC4789",
+        "RFC5590"
+      ],
+      "doi": "10.17487/RFC3417",
+      "url": "https://www.rfc-editor.org/rfc/rfc3417",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3417.txt",
+      "sha256": "874be9c26a2ae30bb1ae17405ca53fa493dc40a0a8bda98fa659b82985e943c0",
+      "bytes": 38650,
+      "use": "SNMP taşıma eşlemeleri (UDP 161/162)"
+    },
+    {
       "number": 3550,
       "title": "RTP: A Transport Protocol for Real-Time Applications",
       "authors": [
@@ -554,6 +758,33 @@
       "use": "RTP ses/görüntü profili ve statik yük türleri"
     },
     {
+      "number": 3711,
+      "title": "The Secure Real-time Transport Protocol (SRTP)",
+      "authors": [
+        "M. Baugher",
+        "D. McGrew",
+        "M. Naslund",
+        "E. Carrara",
+        "K. Norrman"
+      ],
+      "date": "March 2004",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC5506",
+        "RFC6904",
+        "RFC9335"
+      ],
+      "doi": "10.17487/RFC3711",
+      "url": "https://www.rfc-editor.org/rfc/rfc3711",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc3711.txt",
+      "sha256": "dc58e15fd6f450cd64eb38105362e52e78701ed995b05bf80ca12bb0c3a9c324",
+      "bytes": 134270,
+      "use": "SRTP paket biçimi"
+    },
+    {
       "number": 3849,
       "title": "IPv6 Address Prefix Reserved for Documentation",
       "authors": [
@@ -575,6 +806,79 @@
       "sha256": "b0741fc609be565b356c62d2f9b9ef30469f3fe7bde386c2690e173751bb1941",
       "bytes": 7872,
       "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
+    },
+    {
+      "number": 4251,
+      "title": "The Secure Shell (SSH) Protocol Architecture",
+      "authors": [
+        "T. Ylonen",
+        "C. Lonvick, Ed."
+      ],
+      "date": "January 2006",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC8308",
+        "RFC9141"
+      ],
+      "doi": "10.17487/RFC4251",
+      "url": "https://www.rfc-editor.org/rfc/rfc4251",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4251.txt",
+      "sha256": "23a5052796d29edc2f0ff4f5be557df244544d129cfc26ed51971a6485eff4ef",
+      "bytes": 71750,
+      "use": "SSH mimarisi ve veri türleri"
+    },
+    {
+      "number": 4253,
+      "title": "The Secure Shell (SSH) Transport Layer Protocol",
+      "authors": [
+        "T. Ylonen",
+        "C. Lonvick, Ed."
+      ],
+      "date": "January 2006",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC6668",
+        "RFC8268",
+        "RFC8308",
+        "RFC8332",
+        "RFC8709",
+        "RFC8758",
+        "RFC9142"
+      ],
+      "doi": "10.17487/RFC4253",
+      "url": "https://www.rfc-editor.org/rfc/rfc4253",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4253.txt",
+      "sha256": "b471173305154f6c66facffcf7a4a25fc5c32765cb30542120be6c20a88f1ed3",
+      "bytes": 68263,
+      "use": "SSH ikili paket protokolü"
+    },
+    {
+      "number": 4254,
+      "title": "The Secure Shell (SSH) Connection Protocol",
+      "authors": [
+        "T. Ylonen",
+        "C. Lonvick, Ed."
+      ],
+      "date": "January 2006",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC8308"
+      ],
+      "doi": "10.17487/RFC4254",
+      "url": "https://www.rfc-editor.org/rfc/rfc4254",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4254.txt",
+      "sha256": "bfc727e9350067eaa49edeecc3d32f1e3518dd57cf3c36ceed02177156c5703f",
+      "bytes": 50338,
+      "use": "SSH bağlantı protokolü ve alt sistemler"
     },
     {
       "number": 4271,
@@ -706,6 +1010,52 @@
       "sha256": "f20d1de8878e1142000bfeaa3ad1b0540fab7653a395cf7b07e81d2da2f650bf",
       "bytes": 48969,
       "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 4949,
+      "title": "Internet Security Glossary, Version 2",
+      "authors": [
+        "R. Shirey"
+      ],
+      "date": "August 2007",
+      "status": "INFORMATIONAL",
+      "obsoletes": [
+        "RFC2828"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC4949",
+      "url": "https://www.rfc-editor.org/rfc/rfc4949",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc4949.txt",
+      "sha256": "32d1e3837ae5a7d2e99a63f43c6fea3dd350ffc6ac55b3aaadad250546ad7f87",
+      "bytes": 867626,
+      "use": "OSI başvuru modelinin katmanları ve İnternet protokol takımıyla karşılaştırması"
+    },
+    {
+      "number": 5321,
+      "title": "Simple Mail Transfer Protocol",
+      "authors": [
+        "J. Klensin"
+      ],
+      "date": "October 2008",
+      "status": "DRAFT STANDARD",
+      "obsoletes": [
+        "RFC2821"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC1123"
+      ],
+      "updated_by": [
+        "RFC7504"
+      ],
+      "doi": "10.17487/RFC5321",
+      "url": "https://www.rfc-editor.org/rfc/rfc5321",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc5321.txt",
+      "sha256": "7d560eddff1b213c17d4e1e5f95005728b2f05bc2b3947f0fcc91717c6707634",
+      "bytes": 225929,
+      "use": "SMTP posta gönderimi"
     },
     {
       "number": 5398,
@@ -1077,7 +1427,8 @@
       "obsoleted_by": [],
       "updates": [],
       "updated_by": [
-        "RFC9800"
+        "RFC9800",
+        "RFC10094"
       ],
       "doi": "10.17487/RFC8754",
       "url": "https://www.rfc-editor.org/rfc/rfc8754",
@@ -1146,6 +1497,86 @@
       "sha256": "3bbaecdf5afd278052a2c48348ce118c4ff8d0cf6b9915549858171b3f98a591",
       "bytes": 126175,
       "use": "QUIC başlık koruması ve Initial anahtarları"
+    },
+    {
+      "number": 9051,
+      "title": "Internet Message Access Protocol (IMAP) - Version 4rev2",
+      "authors": [
+        "A. Melnikov, Ed.",
+        "B. Leiba, Ed."
+      ],
+      "date": "August 2021",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC3501"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [],
+      "doi": "10.17487/RFC9051",
+      "url": "https://www.rfc-editor.org/rfc/rfc9051",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9051.txt",
+      "sha256": "acf52a50eb748ea21b5ffdcb31c761d3fbba6242d53d4f53c2555de039c5c3cf",
+      "bytes": 367391,
+      "use": "IMAP4rev2 posta erişimi"
+    },
+    {
+      "number": 9110,
+      "title": "HTTP Semantics",
+      "authors": [
+        "R. Fielding, Ed.",
+        "M. Nottingham, Ed.",
+        "J. Reschke, Ed."
+      ],
+      "date": "June 2022",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC2818",
+        "RFC7230",
+        "RFC7231",
+        "RFC7232",
+        "RFC7233",
+        "RFC7235",
+        "RFC7538",
+        "RFC7615",
+        "RFC7694"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC3864"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC9110",
+      "url": "https://www.rfc-editor.org/rfc/rfc9110",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9110.txt",
+      "sha256": "21c1cdce6ab0e5509b04d84a28000836c7a087cf786efe6f04877ebfff47232a",
+      "bytes": 502941,
+      "use": "HTTP anlamları; http ve https şemaları"
+    },
+    {
+      "number": 9112,
+      "title": "HTTP/1.1",
+      "authors": [
+        "R. Fielding, Ed.",
+        "M. Nottingham, Ed.",
+        "J. Reschke, Ed."
+      ],
+      "date": "June 2022",
+      "status": "INTERNET STANDARD",
+      "obsoletes": [
+        "RFC7230"
+      ],
+      "obsoleted_by": [],
+      "updates": [],
+      "updated_by": [
+        "RFC9931"
+      ],
+      "doi": "10.17487/RFC9112",
+      "url": "https://www.rfc-editor.org/rfc/rfc9112",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9112.txt",
+      "sha256": "e4f426bac6206b67fdf9e0da826154f70588db2133a0a86b15cde4ff725d8937",
+      "bytes": 109913,
+      "use": "HTTP/1.1 mesaj sözdizimi"
     },
     {
       "number": 9113,
@@ -1314,6 +1745,35 @@
       "sha256": "87ea3971431648a3a9acb662bc4254798de8fefa1e62f5fbf075ddd8b47dc207",
       "bytes": 125649,
       "use": "IGMPv3 Membership Query iletisi"
+    },
+    {
+      "number": 9846,
+      "title": "The Transport Layer Security (TLS) Protocol Version 1.3",
+      "authors": [
+        "E. Rescorla"
+      ],
+      "date": "July 2026",
+      "status": "PROPOSED STANDARD",
+      "obsoletes": [
+        "RFC5077",
+        "RFC5246",
+        "RFC6961",
+        "RFC7627",
+        "RFC8422",
+        "RFC8446"
+      ],
+      "obsoleted_by": [],
+      "updates": [
+        "RFC5705",
+        "RFC6066"
+      ],
+      "updated_by": [],
+      "doi": "10.17487/RFC9846",
+      "url": "https://www.rfc-editor.org/rfc/rfc9846",
+      "text_url": "https://www.rfc-editor.org/rfc/rfc9846.txt",
+      "sha256": "b1bee06a814f92ca4677c85b97519be53869b2bf8edc79ade955fb51c0402b17",
+      "bytes": 339413,
+      "use": "TLS 1.3 kayıt katmanı"
     }
   ]
 }

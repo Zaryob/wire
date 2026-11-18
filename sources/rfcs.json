@@ -26,12 +26,28 @@
       "use": "RARP paketi ve ters adres çözümleme"
     },
     {
+      "number": 959,
+      "use": "FTP: komut ve veri bağlantıları"
+    },
+    {
       "number": 1035,
       "use": "DNS ileti başlığı"
     },
     {
       "number": 1071,
       "use": "İnternet sağlama toplamının hesaplanması"
+    },
+    {
+      "number": 1122,
+      "use": "İnternet protokol takımının katmanları"
+    },
+    {
+      "number": 1901,
+      "use": "SNMPv2c topluluk tabanlı ileti biçimi"
+    },
+    {
+      "number": 1939,
+      "use": "POP3 posta erişimi"
     },
     {
       "number": 2131,
@@ -74,6 +90,18 @@
       "use": "IP ve TCP başlıklarında ECN"
     },
     {
+      "number": 3261,
+      "use": "SIP oturum başlatma"
+    },
+    {
+      "number": 3416,
+      "use": "SNMP PDU tanımları (GetRequest)"
+    },
+    {
+      "number": 3417,
+      "use": "SNMP taşıma eşlemeleri (UDP 161/162)"
+    },
+    {
       "number": 3550,
       "use": "RTP sabit başlığı"
     },
@@ -82,8 +110,24 @@
       "use": "RTP ses/görüntü profili ve statik yük türleri"
     },
     {
+      "number": 3711,
+      "use": "SRTP paket biçimi"
+    },
+    {
       "number": 3849,
       "use": "Örneklerde kullanılan IPv6 belgeleme öneki"
+    },
+    {
+      "number": 4251,
+      "use": "SSH mimarisi ve veri türleri"
+    },
+    {
+      "number": 4253,
+      "use": "SSH ikili paket protokolü"
+    },
+    {
+      "number": 4254,
+      "use": "SSH bağlantı protokolü ve alt sistemler"
     },
     {
       "number": 4271,
@@ -104,6 +148,14 @@
     {
       "number": 4443,
       "use": "ICMPv6 iletileri"
+    },
+    {
+      "number": 4949,
+      "use": "OSI başvuru modelinin katmanları ve İnternet protokol takımıyla karşılaştırması"
+    },
+    {
+      "number": 5321,
+      "use": "SMTP posta gönderimi"
     },
     {
       "number": 5398,
@@ -174,6 +226,18 @@
       "use": "QUIC başlık koruması ve Initial anahtarları"
     },
     {
+      "number": 9051,
+      "use": "IMAP4rev2 posta erişimi"
+    },
+    {
+      "number": 9110,
+      "use": "HTTP anlamları; http ve https şemaları"
+    },
+    {
+      "number": 9112,
+      "use": "HTTP/1.1 mesaj sözdizimi"
+    },
+    {
       "number": 9113,
       "use": "HTTP/2 çerçeve başlığı ve SETTINGS çerçevesi"
     },
@@ -200,6 +264,10 @@
     {
       "number": 9776,
       "use": "IGMPv3 Membership Query iletisi"
+    },
+    {
+      "number": 9846,
+      "use": "TLS 1.3 kayıt katmanı"
     }
   ]
 }
