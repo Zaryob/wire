@@ -20,6 +20,7 @@
     {
       "key": "sport",
       "name": "Source Port",
+      "label": "Kaynak port",
       "bits": 16,
       "desc": "Kaynak port numarası.",
       "ref": {
@@ -31,6 +32,7 @@
     {
       "key": "dport",
       "name": "Destination Port",
+      "label": "Hedef port",
       "bits": 16,
       "desc": "Hedef port numarası. Örneğin standart HTTP web sunucusu için 80.",
       "ref": {
@@ -42,6 +44,7 @@
     {
       "key": "seq",
       "name": "Sequence Number",
+      "label": "Sıra numarası",
       "bits": 32,
       "desc": "Segmentteki ilk veri sekizlisinin sıra numarası. SYN bayrağı varsa bu değer başlangıç sıra numarasıdır (ISN) ve ilk veri sekizlisi ISN+1’dir.",
       "ref": {
@@ -54,6 +57,7 @@
     {
       "key": "ack",
       "name": "Acknowledgment Number",
+      "label": "Onay numarası",
       "bits": 32,
       "desc": "ACK biti varsa, gönderenin almayı beklediği bir sonraki sıra numarası. Bağlantı kurulduktan sonra her zaman gönderilir.",
       "ref": {
@@ -65,6 +69,7 @@
     {
       "key": "doff",
       "name": "Data Offset",
+      "label": "Veri başlangıcı",
       "bits": 4,
       "desc": "TCP başlığındaki 32 bitlik sözcük sayısı; verinin nerede başladığını gösterir.",
       "ref": {
@@ -76,6 +81,7 @@
     {
       "key": "rsrvd",
       "name": "Reserved",
+      "label": "Ayrılmış",
       "bits": 4,
       "desc": "İleride kullanılmak üzere ayrılmış denetim bitleri. Üretilen segmentlerde sıfır olmalı, alınan segmentlerde yok sayılmalıdır.",
       "ref": {
@@ -87,6 +93,7 @@
     {
       "key": "cwr",
       "name": "CWR",
+      "label": "Tıkanıklık penceresi azaltıldı",
       "bits": 1,
       "desc": "Congestion Window Reduced.",
       "ref": {
@@ -98,6 +105,7 @@
     {
       "key": "ece",
       "name": "ECE",
+      "label": "ECN bildirimi",
       "bits": 1,
       "desc": "ECN-Echo.",
       "ref": {
@@ -109,6 +117,7 @@
     {
       "key": "urg",
       "name": "URG",
+      "label": "Acil işaretçisi geçerli",
       "bits": 1,
       "desc": "Urgent Pointer alanı anlamlıdır.",
       "ref": {
@@ -120,6 +129,7 @@
     {
       "key": "ackf",
       "name": "ACK",
+      "label": "Onay numarası geçerli",
       "bits": 1,
       "desc": "Acknowledgment alanı anlamlıdır.",
       "ref": {
@@ -131,6 +141,7 @@
     {
       "key": "psh",
       "name": "PSH",
+      "label": "Veriyi uygulamaya hemen ilet",
       "bits": 1,
       "desc": "Push işlevi.",
       "ref": {
@@ -142,6 +153,7 @@
     {
       "key": "rst",
       "name": "RST",
+      "label": "Bağlantıyı sıfırla",
       "bits": 1,
       "desc": "Bağlantıyı sıfırla.",
       "ref": {
@@ -153,6 +165,7 @@
     {
       "key": "syn",
       "name": "SYN",
+      "label": "Sıra numaralarını eşzamanla",
       "bits": 1,
       "desc": "Sıra numaralarını eşzamanla.",
       "ref": {
@@ -164,6 +177,7 @@
     {
       "key": "fin",
       "name": "FIN",
+      "label": "Gönderim sona erdi",
       "bits": 1,
       "desc": "Gönderenden başka veri yok.",
       "ref": {
@@ -175,6 +189,7 @@
     {
       "key": "window",
       "name": "Window",
+      "label": "Pencere boyutu",
       "bits": 16,
       "desc": "Gönderenin, Acknowledgment alanındaki numaradan başlayarak kabul etmeye hazır olduğu veri sekizlisi sayısı. İşaretsiz sayı olarak ele alınmalıdır.",
       "ref": {
@@ -186,6 +201,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "Başlık ve metindeki 16 bitlik sözcüklerin bire tümleyen toplamının 16 bitlik bire tümleyeni. Hesap sırasında alanın kendisi sıfır sayılır.",
       "ref": {
@@ -198,6 +214,7 @@
     {
       "key": "urgent",
       "name": "Urgent Pointer",
+      "label": "Acil işaretçisi",
       "bits": 16,
       "desc": "Acil verinin yerini segmentin sıra numarasına göre pozitif bir uzaklık olarak verir. Yalnızca URG biti olan segmentlerde yorumlanır.",
       "ref": {
@@ -209,6 +226,7 @@
     {
       "key": "options",
       "name": "Options",
+      "label": "Seçenekler",
       "bits": null,
       "desc": "Değişken uzunlukta seçenekler; başlık 32 bitin katı olacak biçimde doldurulur.",
       "ref": {

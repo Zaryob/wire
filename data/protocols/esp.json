@@ -39,6 +39,7 @@
     {
       "key": "spi",
       "name": "Security Parameters Index (SPI)",
+      "label": "Güvenlik parametreleri dizini",
       "bits": 32,
       "desc": "Alıcının paketi hangi güvenlik ilişkisine (SA) bağlayacağını belirleyen rastgele 32 bitlik değer. 1–255 aralığı IANA'ya ayrılmıştır, 0 ağda gönderilmez.",
       "ref": {
@@ -64,6 +65,7 @@
     {
       "key": "payload_data",
       "name": "Payload Data",
+      "label": "Yük verisi",
       "bits": 296,
       "desc": "Next Header alanının türünü belirttiği veri; şifreleme algoritması gerektiriyorsa başında bir başlatma vektörü (IV) bulunur. Uzunluğu pakete göre değişir; buradaki genişlik bu örneğe aittir.",
       "ref": {
@@ -78,6 +80,7 @@
     {
       "key": "padding",
       "name": "Padding",
+      "label": "Dolgu",
       "bits": 8,
       "desc": "Şifreli metni blok ya da 4 sekizli sınırına tamamlayan 0–255 sekizlilik dolgu. Varsayılan içerik 1'den başlayan artan baytlardır.",
       "ref": {
@@ -92,6 +95,7 @@
     {
       "key": "pad_length",
       "name": "Pad Length",
+      "label": "Dolgu uzunluğu",
       "bits": 8,
       "desc": "Hemen önündeki dolgu baytlarının sayısı; 0, dolgu olmadığını gösterir.",
       "ref": {
@@ -104,6 +108,7 @@
     {
       "key": "next_header",
       "name": "Next Header",
+      "label": "Sonraki başlık",
       "bits": 8,
       "desc": "Payload Data'daki verinin türü; IPv4 Protocol alanıyla aynı değerleri kullanır. 4 iç IPv4 paketi (tünel kipi), 6 TCP, 17 UDP, 59 sahte (dummy) pakettir.",
       "ref": {
@@ -138,6 +143,7 @@
     {
       "key": "icv",
       "name": "Integrity Check Value (ICV)",
+      "label": "Bütünlük denetim değeri",
       "bits": 128,
       "desc": "ESP başlığı, yük ve kuyruk üzerinden hesaplanan bütünlük değeri. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 16 sekizlidir.",
       "ref": {

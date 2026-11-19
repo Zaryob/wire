@@ -18,6 +18,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "İletinin türü. Yankı isteği için 8, yankı yanıtı için 0.",
       "ref": {
@@ -28,49 +29,50 @@
       "values": [
         [
           "0",
-          "Echo Reply"
+          "Yankı yanıtı (Echo Reply)"
         ],
         [
           "3",
-          "Destination Unreachable"
+          "Hedefe ulaşılamıyor (Destination Unreachable)"
         ],
         [
           "4",
-          "Source Quench"
+          "Kaynağın gönderim hızını azaltma isteği (Source Quench)"
         ],
         [
           "5",
-          "Redirect"
+          "Yeniden yönlendirme (Redirect)"
         ],
         [
           "8",
-          "Echo"
+          "Yankı isteği (Echo)"
         ],
         [
           "11",
-          "Time Exceeded"
+          "Süre aşıldı (Time Exceeded)"
         ],
         [
           "12",
-          "Parameter Problem"
+          "Parametre sorunu (Parameter Problem)"
         ],
         [
           "13",
-          "Timestamp"
+          "Zaman damgası (Timestamp)"
         ],
         [
           "14",
-          "Timestamp Reply"
+          "Zaman damgası yanıtı (Timestamp Reply)"
         ],
         [
           "15",
-          "Information Request"
+          "Bilgi isteği (Information Request)"
         ]
       ]
     },
     {
       "key": "code",
       "name": "Code",
+      "label": "Kod",
       "bits": 8,
       "desc": "Türün alt ayrımı. Yankı iletilerinde 0.",
       "ref": {
@@ -82,6 +84,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "ICMP iletisinin bire tümleyen toplamının 16 bitlik bire tümleyeni.",
       "ref": {
@@ -94,6 +97,7 @@
     {
       "key": "id",
       "name": "Identifier",
+      "label": "Tanımlayıcı",
       "bits": 16,
       "desc": "Yankı isteklerini yanıtlarla eşleştirmeye yardım eden tanımlayıcı; sıfır olabilir.",
       "ref": {
@@ -106,6 +110,7 @@
     {
       "key": "seq",
       "name": "Sequence Number",
+      "label": "Sıra numarası",
       "bits": 16,
       "desc": "Yankı isteklerini yanıtlarla eşleştirmeye yardım eden sıra numarası; sıfır olabilir.",
       "ref": {
@@ -117,6 +122,7 @@
     {
       "key": "data",
       "name": "Data",
+      "label": "Veri",
       "bits": null,
       "desc": "Yankı isteğinde gelen veri, yanıtta aynen geri gönderilir.",
       "ref": {

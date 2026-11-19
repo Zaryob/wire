@@ -22,6 +22,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 24,
       "desc": "Yükün uzunluğu, sekizli olarak; 9 sekizlilik başlık dahil değildir.",
       "ref": {
@@ -34,6 +35,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "Çerçeve türü; yükün biçimini ve anlamını belirler. Bilinmeyen türler yok sayılır.",
       "ref": {
@@ -46,37 +48,38 @@
       "values": [
         [
           "0x00",
-          "DATA"
+          "Veri (DATA)"
         ],
         [
           "0x01",
-          "HEADERS"
+          "Başlıklar (HEADERS)"
         ],
         [
           "0x03",
-          "RST_STREAM"
+          "Akışı sıfırlama (RST_STREAM)"
         ],
         [
           "0x04",
-          "SETTINGS"
+          "Ayarlar (SETTINGS)"
         ],
         [
           "0x06",
-          "PING"
+          "Bağlantı yoklama (PING)"
         ],
         [
           "0x07",
-          "GOAWAY"
+          "Bağlantıyı sonlandırma bildirimi (GOAWAY)"
         ],
         [
           "0x08",
-          "WINDOW_UPDATE"
+          "Pencere güncelleme (WINDOW_UPDATE)"
         ]
       ]
     },
     {
       "key": "flags",
       "name": "Flags",
+      "label": "Bayraklar",
       "bits": 8,
       "desc": "Türe özgü bayraklar. SETTINGS için 0x01 ACK, karşı tarafın ayarlarının alındığını bildirir.",
       "ref": {
@@ -90,6 +93,7 @@
     {
       "key": "reserved",
       "name": "Reserved",
+      "label": "Ayrılmış",
       "bits": 1,
       "desc": "Anlamı olmayan ayrılmış bit; gönderimde 0, alımda yok sayılır.",
       "ref": {
@@ -102,6 +106,7 @@
     {
       "key": "stream_id",
       "name": "Stream Identifier",
+      "label": "Akış kimliği",
       "bits": 31,
       "desc": "Çerçevenin ait olduğu akış. 0, bağlantının tamamını ilgilendiren çerçeveler içindir; istemcinin açtığı akışlar tek, sunucununkiler çift numaralıdır.",
       "ref": {
@@ -114,6 +119,7 @@
     {
       "key": "payload",
       "name": "Frame Payload",
+      "label": "Çerçeve yükü",
       "bits": "değişken",
       "desc": "Türe özgü yük. SETTINGS'te her biri 16 bitlik tanımlayıcı ve 32 bitlik değerden oluşan 6 sekizlilik ayarlar.",
       "ref": {

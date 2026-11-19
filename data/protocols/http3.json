@@ -21,6 +21,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "Çerçeve türü, değişken uzunluklu tamsayı olarak.",
       "ref": {
@@ -34,37 +35,38 @@
       "values": [
         [
           "0x00",
-          "DATA"
+          "Veri (DATA)"
         ],
         [
           "0x01",
-          "HEADERS"
+          "Başlıklar (HEADERS)"
         ],
         [
           "0x03",
-          "CANCEL_PUSH"
+          "Sunucu gönderimini iptal etme (CANCEL_PUSH)"
         ],
         [
           "0x04",
-          "SETTINGS"
+          "Ayarlar (SETTINGS)"
         ],
         [
           "0x05",
-          "PUSH_PROMISE"
+          "Sunucu gönderimi bildirimi (PUSH_PROMISE)"
         ],
         [
           "0x07",
-          "GOAWAY"
+          "Bağlantıyı sonlandırma bildirimi (GOAWAY)"
         ],
         [
           "0x0d",
-          "MAX_PUSH_ID"
+          "En büyük sunucu gönderim kimliği (MAX_PUSH_ID)"
         ]
       ]
     },
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 8,
       "desc": "Frame Payload'un uzunluğu, sekizli olarak, değişken uzunluklu tamsayı olarak.",
       "ref": {
@@ -79,6 +81,7 @@
     {
       "key": "payload",
       "name": "Frame Payload",
+      "label": "Çerçeve yükü",
       "bits": "değişken",
       "desc": "Türe özgü yük. SETTINGS'te tanımlayıcı ve değer çiftleri, her biri değişken uzunluklu tamsayı.",
       "ref": {

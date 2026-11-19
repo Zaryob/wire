@@ -20,6 +20,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "İletinin türü; kalan verinin biçimini belirler.",
       "ref": {
@@ -30,33 +31,34 @@
       "values": [
         [
           "1",
-          "Destination Unreachable"
+          "Hedefe ulaşılamıyor (Destination Unreachable)"
         ],
         [
           "2",
-          "Packet Too Big"
+          "Paket çok büyük (Packet Too Big)"
         ],
         [
           "3",
-          "Time Exceeded"
+          "Süre aşıldı (Time Exceeded)"
         ],
         [
           "4",
-          "Parameter Problem"
+          "Parametre sorunu (Parameter Problem)"
         ],
         [
           "128",
-          "Echo Request"
+          "Yankı isteği (Echo Request)"
         ],
         [
           "129",
-          "Echo Reply"
+          "Yankı yanıtı (Echo Reply)"
         ]
       ]
     },
     {
       "key": "code",
       "name": "Code",
+      "label": "Kod",
       "bits": 8,
       "desc": "İleti türüne bağlıdır; iletiyi bir düzey daha ayrıntılandırır.",
       "ref": {
@@ -68,6 +70,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "ICMPv6 iletisindeki ve IPv6 başlığının bazı alanlarındaki veri bozulmalarını saptar.",
       "ref": {
@@ -80,6 +83,7 @@
     {
       "key": "body",
       "name": "Message Body",
+      "label": "İleti gövdesi",
       "bits": null,
       "desc": "Türe göre değişen ileti gövdesi. Yankı isteğinde 16 bitlik tanımlayıcı, 16 bitlik sıra numarası ve veri bulunur (RFC 4443 §4.1).",
       "ref": {

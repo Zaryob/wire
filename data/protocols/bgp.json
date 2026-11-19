@@ -1,7 +1,7 @@
 {
   "order": 51,
   "name": "BGP",
-  "title": "BGP OPEN mesajı",
+  "title": "BGP OPEN iletisi",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Sınır Ağ Geçidi Protokolü (Border Gateway Protocol - BGP), özerk sistemler arasında yönlendirme bilgisi alışverişi yapar ve internetin yönlendirme protokolüdür. Her BGP mesajı 19 sekizlilik bir başlıkla başlar. TCP bağlantısı kurulduktan sonra iki taraf da önce, sürümü, AS numarasını, tutma süresini ve BGP kimliğini bildiren bir OPEN mesajı gönderir.",
@@ -36,6 +36,7 @@
     {
       "key": "marker",
       "name": "Marker",
+      "label": "İşaretçi",
       "bits": 128,
       "desc": "Uyumluluk için korunan 16 sekizlilik alan; bütün bitleri 1 olmalıdır.",
       "ref": {
@@ -49,6 +50,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 16,
       "desc": "Başlık dahil mesajın toplam uzunluğu, sekizli olarak; 19 ile 4096 arasında.",
       "ref": {
@@ -61,6 +63,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "Mesaj türü.",
       "ref": {
@@ -72,25 +75,26 @@
       "values": [
         [
           "1",
-          "OPEN"
+          "Oturum açma (OPEN)"
         ],
         [
           "2",
-          "UPDATE"
+          "Güncelleme (UPDATE)"
         ],
         [
           "3",
-          "NOTIFICATION"
+          "Bildirim (NOTIFICATION)"
         ],
         [
           "4",
-          "KEEPALIVE"
+          "Oturumu canlı tutma (KEEPALIVE)"
         ]
       ]
     },
     {
       "key": "version",
       "name": "Version",
+      "label": "Sürüm",
       "bits": 8,
       "desc": "BGP sürümü; güncel sürüm 4'tür.",
       "ref": {
@@ -103,6 +107,7 @@
     {
       "key": "my_as",
       "name": "My Autonomous System",
+      "label": "Gönderenin özerk sistem numarası",
       "bits": 16,
       "desc": "Gönderenin özerk sistem (AS) numarası.",
       "ref": {
@@ -115,6 +120,7 @@
     {
       "key": "hold_time",
       "name": "Hold Time",
+      "label": "Bekleme süresi",
       "bits": 16,
       "desc": "Önerilen tutma süresi, saniye olarak. İki tarafın önerisinden küçük olanı kullanılır; 0 ya da en az 3 olmalıdır.",
       "ref": {
@@ -127,6 +133,7 @@
     {
       "key": "bgp_id",
       "name": "BGP Identifier",
+      "label": "BGP kimliği",
       "bits": 32,
       "desc": "Gönderenin BGP kimliği; yönlendiricinin IP adreslerinden birine eşittir ve bütün oturumlarında aynıdır.",
       "ref": {
@@ -140,6 +147,7 @@
     {
       "key": "opt_len",
       "name": "Opt Parm Len",
+      "label": "İsteğe bağlı parametre uzunluğu",
       "bits": 8,
       "desc": "İsteğe bağlı parametrelerin toplam uzunluğu, sekizli olarak; parametre yoksa 0.",
       "ref": {
@@ -152,6 +160,7 @@
     {
       "key": "opt_params",
       "name": "Optional Parameters",
+      "label": "İsteğe bağlı parametreler",
       "bits": "değişken",
       "desc": "Parametre türü, uzunluğu ve değerinden oluşan isteğe bağlı parametreler.",
       "ref": {

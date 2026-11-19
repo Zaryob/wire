@@ -500,7 +500,8 @@
       try { address = new URL(url, base); } catch { return; }
       if (!['http:', 'https:'].includes(address.protocol) || address.origin !== base.origin) return;
       // Carry only an explicit preference; a browser-language guess must not become one downstream.
-      const preferred = window.ZaryobLanguage ? (window.ZaryobLanguage.explicit ? uiLanguage() : '') : root.lang;
+      const preference = window.ZaryobLanguage;
+      const preferred = preference ? (preference.explicit ? preference.language : '') : root.lang;
       if (preferred) address.searchParams.set('lang', preferred);
       if (searchQuery && !address.searchParams.has('highlight') && !['syscall/', 'pin-atlas/'].includes(type)) {
         address.searchParams.set('highlight', searchQuery);

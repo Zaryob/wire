@@ -22,6 +22,7 @@
     {
       "key": "msg_type",
       "name": "msg-type",
+      "label": "İleti türü",
       "bits": 8,
       "desc": "DHCP ileti türü (§7.3).",
       "ref": {
@@ -33,61 +34,62 @@
       "values": [
         [
           "1",
-          "SOLICIT"
+          "Sunucu arama (SOLICIT)"
         ],
         [
           "2",
-          "ADVERTISE"
+          "Sunucu duyurusu (ADVERTISE)"
         ],
         [
           "3",
-          "REQUEST"
+          "İstek (REQUEST)"
         ],
         [
           "4",
-          "CONFIRM"
+          "Onaylama (CONFIRM)"
         ],
         [
           "5",
-          "RENEW"
+          "Yenileme (RENEW)"
         ],
         [
           "6",
-          "REBIND"
+          "Yeniden bağlanma (REBIND)"
         ],
         [
           "7",
-          "REPLY"
+          "Yanıt (REPLY)"
         ],
         [
           "8",
-          "RELEASE"
+          "Adresi bırakma (RELEASE)"
         ],
         [
           "9",
-          "DECLINE"
+          "Adresi reddetme (DECLINE)"
         ],
         [
           "10",
-          "RECONFIGURE"
+          "Yeniden yapılandırma (RECONFIGURE)"
         ],
         [
           "11",
-          "INFORMATION-REQUEST"
+          "Bilgi isteği (INFORMATION-REQUEST)"
         ],
         [
           "12",
-          "RELAY-FORW"
+          "Aktarılan istek (RELAY-FORW)"
         ],
         [
           "13",
-          "RELAY-REPL"
+          "Aktarılan yanıt (RELAY-REPL)"
         ]
       ]
     },
     {
       "key": "transaction_id",
       "name": "transaction-id",
+      "label": "İşlem kimliği",
       "bits": 24,
       "desc": "Bu ileti alışverişinin işlem kimliği. İstemci rastgele seçer; sunucu yanıtta aynı değeri döndürür.",
       "ref": {
@@ -101,6 +103,7 @@
     {
       "key": "options",
       "name": "options",
+      "label": "Seçenekler",
       "bits": "değişken",
       "desc": "İletinin taşıdığı seçenekler (§21); iletinin boyutundan 4 sekizli eksik uzunlukta.",
       "ref": {

@@ -404,7 +404,7 @@
   const state = window.ZaryobLanguage;
   const { supported } = state;
   const root = document.documentElement;
-  let language = state.language;
+  let language = state.uiLanguage;
   const t = (source, values = {}) => (language === 'tr' ? translations[source] || source : source)
     .replace(/\{(\w+)\}/g, (match, key) => Object.hasOwn(values, key) ? String(values[key]) : match);
   const apply = (scope = document) => {
@@ -457,8 +457,8 @@
     const destination = translationTarget();
     if (navigate && destination) location.assign(destination);
   };
-  state.subscribe(next => {
-    language = next;
+  state.subscribe(() => {
+    language = state.uiLanguage;
     apply();
     window.dispatchEvent(new CustomEvent('zaryob:language', { detail: { language } }));
   });

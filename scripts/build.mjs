@@ -213,7 +213,7 @@ function suiteFooter() {
 function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '' }) {
   const fullTitle = id === '' ? 'Wire · Ağ protokolü başlıkları, bit bit' : `${title} · Wire`;
   return `<!doctype html>
-<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/language.js')}"></script><script src="${asset('assets/console/i18n.js')}"></script><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
+<html lang="tr" data-fixed-ui-language="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${origin}${url(id)}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="tr_TR"><meta property="og:type" content="website"><script src="${asset('assets/console/language.js')}"></script><script src="${asset('assets/console/i18n.js')}"></script><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
 <body class="console-site wire-site${className ? ` ${className}` : ''}">${header(id)}
 ${topbar(id, pageTitle || title, layer)}
 <main id="main" tabindex="-1">${hero}<div class="wire-main">${body}</div></main>
@@ -222,25 +222,30 @@ ${suiteFooter()}
 }
 
 /** Diagram cells: one per field per row; whole-row multiples collapse to one row. */
+const fieldLabel = field => field.label ?? field.name;
+const hasCompactFlag = field => field.label && field.bits <= 2 && /^[A-Z][A-Z0-9]{0,3}$/.test(field.name);
+const bitLabel = field => hasCompactFlag(field) ? field.name : fieldLabel(field);
+const bitLabelAttributes = field => hasCompactFlag(field) ? ` title="${e(field.label)}" aria-label="${e(`${field.label} (${field.name})`)}"` : '';
+
 function diagram(protocol) {
   const cols = protocol.rowBits;
   const cells = [];
   let offset = 0;
   for (const field of protocol.fields) {
     // A variable field fills a row of its own; the field after it starts a new row.
-    if (!Number.isInteger(field.bits)) { cells.push({ field, span: cols, label: `${field.name} (değişken)`, variable: true }); offset = 0; continue; }
+    if (!Number.isInteger(field.bits)) { cells.push({ field, span: cols, label: `${bitLabel(field)} (değişken)`, variable: true }); offset = 0; continue; }
     // A field the standard leaves variable, sized here for the example, is drawn the same way when it
     // would fill a row or more; cutting it at the example's width would suggest a fixed layout.
-    if (field.range && field.bits >= cols) { cells.push({ field, span: cols, label: `${field.name} (değişken, örnekte ${field.bits} bit)`, variable: true }); offset = 0; continue; }
+    if (field.range && field.bits >= cols) { cells.push({ field, span: cols, label: `${bitLabel(field)} (değişken, örnekte ${field.bits} bit)`, variable: true }); offset = 0; continue; }
     if (field.bits > cols && offset % cols === 0 && field.bits % cols === 0) {
-      cells.push({ field, span: cols, label: `${field.name} (${field.bits} bit)` });
+      cells.push({ field, span: cols, label: `${bitLabel(field)} (${field.bits} bit)` });
     } else {
       let left = field.bits;
       let at = offset;
       let first = true;
       while (left > 0) {
         const span = Math.min(left, cols - (at % cols));
-        cells.push({ field, span, label: first ? field.name : '…' });
+        cells.push({ field, span, label: first ? bitLabel(field) : '…' });
         left -= span; at += span; first = false;
       }
     }
@@ -251,7 +256,7 @@ function diagram(protocol) {
   const byteBands = Array.from({ length: byteCount }, (_, i) => {
     const startBit = i * 8;
     const endBit = startBit + 7;
-    return `<div class="bits-byte-band" style="grid-column:span 8" title="${i + 1}. Sekizli (Byte ${i}): Bit ${startBit}–${endBit}"><span>Sekizli ${i} <small>(Bit ${startBit}–${endBit})</small></span></div>`;
+    return `<div class="bits-byte-band" style="grid-column:span 8" title="Sekizli ${i}, bit ${startBit}–${endBit}"><span>Sekizli ${i} <small>(Bit ${startBit}–${endBit})</small></span></div>`;
   }).join('');
 
   const bitNumbers = Array.from({ length: cols }, (_, bit) => {
@@ -288,7 +293,7 @@ function diagram(protocol) {
       ${cells.map(cell => {
         const fieldIdx = protocol.fields.indexOf(cell.field);
         const cadence = fieldIdx >= 0 ? (fieldIdx % 2 === 0 ? 'bit-cell--even' : 'bit-cell--odd') : '';
-        return `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"><span>${e(cell.label)}</span></a>`;
+        return `<a class="bit-cell${cell.span === 1 ? ' bit-cell--narrow' : ''}${cell.variable ? ' bit-cell--variable' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${cell.span}" href="#f-${cell.field.key}" data-field="${cell.field.key}"${bitLabelAttributes(cell.field)}><span>${e(cell.label)}</span></a>`;
       }).join('')}
     </div>${quarter}${split}
   </div>
@@ -310,10 +315,10 @@ function splitDiagram(protocol, cadenceOf, half = 16) {
   let offset = 0;
   const cell = (field, span, label, extra = {}) => ({ field, span, label, ...extra });
   for (const field of protocol.fields) {
-    if (!Number.isInteger(field.bits)) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken)`, { variable: true })] }); line = null; offset = 0; continue; }
-    if (field.range && field.bits >= rowBits) { lines.push({ start: null, cells: [cell(field, half, `${field.name} (değişken, örnekte ${field.bits} bit)`, { variable: true })] }); line = null; offset = 0; continue; }
+    if (!Number.isInteger(field.bits)) { lines.push({ start: null, cells: [cell(field, half, `${bitLabel(field)} (değişken)`, { variable: true })] }); line = null; offset = 0; continue; }
+    if (field.range && field.bits >= rowBits) { lines.push({ start: null, cells: [cell(field, half, `${bitLabel(field)} (değişken, örnekte ${field.bits} bit)`, { variable: true })] }); line = null; offset = 0; continue; }
     if (field.bits > rowBits && offset % rowBits === 0 && field.bits % rowBits === 0) {
-      lines.push({ start: null, cells: [cell(field, half, `${field.name} (${field.bits} bit)`)] });
+      lines.push({ start: null, cells: [cell(field, half, `${bitLabel(field)} (${field.bits} bit)`)] });
       line = null; offset += field.bits; continue;
     }
     let left = field.bits;
@@ -322,7 +327,7 @@ function splitDiagram(protocol, cadenceOf, half = 16) {
     while (left > 0) {
       if (at % half === 0 || !line) { line = { start: at - (at % half), cells: [] }; lines.push(line); }
       const span = Math.min(left, half - (at % half));
-      line.cells.push(cell(field, span, first ? field.name : `${field.name} (devam)`, { continued: !first }));
+      line.cells.push(cell(field, span, first ? bitLabel(field) : `${bitLabel(field)} (devam)`, { continued: !first }));
       left -= span; at += span; first = false;
     }
     offset += field.bits;
@@ -335,7 +340,7 @@ function splitDiagram(protocol, cadenceOf, half = 16) {
   const piece = item => {
     const cadence = cadenceOf(item.field);
     const hidden = item.continued ? ' aria-hidden="true" tabindex="-1"' : '';
-    return `<a class="bit-cell${item.span === 1 ? ' bit-cell--narrow' : ''}${item.variable ? ' bit-cell--variable' : ''}${item.continued ? ' bit-cell--continued' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${item.span}" href="#f-${item.field.key}" data-field="${item.field.key}"${hidden}><span>${e(item.label)}</span></a>`;
+    return `<a class="bit-cell${item.span === 1 ? ' bit-cell--narrow' : ''}${item.variable ? ' bit-cell--variable' : ''}${item.continued ? ' bit-cell--continued' : ''}${cadence ? ' ' + cadence : ''}" style="grid-column:span ${item.span}" href="#f-${item.field.key}" data-field="${item.field.key}"${hidden || bitLabelAttributes(item.field)}><span>${e(item.label)}</span></a>`;
   };
   return `
     <div class="bits ${half === 8 ? 'bits--quarter' : 'bits--split'}" style="--cols:${half}">
@@ -435,7 +440,8 @@ function protocolPage(protocol) {
     const range = ranges[field.key];
     const position = range ? (range.bits === 1 ? `${range.offset}` : `${range.offset}–${range.offset + range.bits - 1}`) : '—';
     const values = field.values ? `<dl class="field-values">${field.values.map(([value, label]) => `<div><dt>${e(value)}</dt><dd>${e(label)}</dd></div>`).join('')}</dl>` : '';
-    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0" role="row"><th scope="row" role="rowheader">${e(field.name)}</th><td class="num" role="cell" data-label="${fieldColumns[1]}">${position}</td><td class="num" role="cell" data-label="${fieldColumns[2]}">${e(widthText(field))}</td><td class="num" role="cell" data-label="${fieldColumns[3]}"><code>${e(exampleValue(field, range, bytes))}</code></td><td role="cell" data-label="${fieldColumns[4]}"><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
+    const originalName = field.label ? `<small class="field-source-name" lang="en">${e(field.name)}</small>` : '';
+    return `<tr id="f-${field.key}" data-field="${field.key}" tabindex="0" role="row"><th scope="row" role="rowheader">${e(fieldLabel(field))}${originalName}</th><td class="num" role="cell" data-label="${fieldColumns[1]}">${position}</td><td class="num" role="cell" data-label="${fieldColumns[2]}">${e(widthText(field))}</td><td class="num" role="cell" data-label="${fieldColumns[3]}"><code>${e(exampleValue(field, range, bytes))}</code></td><td role="cell" data-label="${fieldColumns[4]}"><p>${e(field.desc)}</p>${values}<p class="field-ref">${refLink(field.ref)}</p></td></tr>`;
   }).join('');
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
@@ -451,6 +457,8 @@ ${protocol.notes?.length ? `<section aria-labelledby="notes-title"><h2 id="notes
 <section aria-labelledby="refs-title"><h2 id="refs-title">Kaynaklar</h2><ol class="references">${protocol.refs.map(ref => { const item = source(ref); return `<li><a href="${url('kaynakca')}#${item.anchor}">[${e(item.label)}]</a> ${item.citation}</li>`; }).join('')}</ol></section>
 <nav class="page-neighbors" aria-label="Önceki ve sonraki protokol">${neighbor(protocols[index - 1], '← Önceki')}${neighbor(protocols[index + 1], 'Sonraki →')}</nav>` });
 }
+
+const fieldSearchNames = field => field.label ? `${field.label} ${field.name}` : field.name;
 
 function home() {
   const layers = [...new Set(protocols.map(protocol => protocol.layer))];
@@ -531,7 +539,7 @@ function home() {
   ${layersData.ips.slice().reverse().map(ips => ips.wire).filter(layer => layers.includes(layer)).map(layer => {
     const ips = layersData.ips.find(item => item.wire === layer);
     const key = layerKey(layer);
-    return `<section class="layer layer--${key}" id="tcpip-${key}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${key}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı <span class="layer-heading__note">${e(ips.name)} · OSI ${e(ips.osi)}</span></h2><ul class="protocol-list protocol-list--compact">${protocols.filter(protocol => protocol.layer === layer).map(protocol => `<li class="protocol-card protocol-card--compact protocol-card--${key}" data-layer="${key}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(field => field.name).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3></li>`).join('')}</ul></section>`;
+    return `<section class="layer layer--${key}" id="tcpip-${key}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${key}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı <span class="layer-heading__note">${e(ips.name)} · OSI ${e(ips.osi)}</span></h2><ul class="protocol-list protocol-list--compact">${protocols.filter(protocol => protocol.layer === layer).map(protocol => `<li class="protocol-card protocol-card--compact protocol-card--${key}" data-layer="${key}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(fieldSearchNames).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3></li>`).join('')}</ul></section>`;
   }).join('')}
 </div>
 ${layersSection()}`;
@@ -860,7 +868,7 @@ await save('404.html', page({ id: '404', title: 'Sayfa bulunamadı', description
 await save('LICENSE.txt', await readFile(path.join(root, 'LICENSE'), 'utf8'));
 await save('.nojekyll', '');
 await save('search.json', JSON.stringify([
-  ...protocols.map(protocol => ({ title: protocol.title, description: protocol.summary, text: protocol.fields.map(field => `${field.name} ${field.desc}`).join(' '), url: `${protocol.id}/`, type: 'wire/', lang: 'tr' })),
+  ...protocols.map(protocol => ({ title: protocol.title, description: protocol.summary, text: protocol.fields.map(field => `${fieldSearchNames(field)} ${field.desc}`).join(' '), url: `${protocol.id}/`, type: 'wire/', lang: 'tr' })),
   {
     title: 'Katmanlar: OSI ve TCP/IP',
     description: 'OSI ve TCP/IP katmanları, wire’daki protokollerin katmanları ve sık kullanılan protokollerin kısa özetleri.',
@@ -879,4 +887,4 @@ await save('search.json', JSON.stringify([
   }
 ], null, 2));
 await save('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['', ...protocols.map(protocol => protocol.id), 'kilavuz', 'yontem', 'kaynakca'].map(id => `<url><loc>${origin}${url(id)}</loc></url>`).join('')}</urlset>`);
-console.log(`wire: ${protocols.length} protokol, ${bibliography.entries.length} RFC → _site/ (base: ${base || '/'})`);
+console.log(`wire: ${protocols.length} protokol, ${bibliography.entries.length} RFC → _site/ (taban yol: ${base || '/'})`);

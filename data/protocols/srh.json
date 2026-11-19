@@ -1,7 +1,7 @@
 {
   "order": 11,
   "name": "SRH",
-  "title": "IPv6 Segment Routing Header",
+  "title": "IPv6 segment yönlendirme başlığı",
   "layer": "Ağ",
   "rowBits": 32,
   "summary": "Segment Routing Header (SRH), IPv6 Routing başlığının 4 numaralı türüdür. Kaynak, paketin geçeceği segmentlerin (IPv6 adreslerinin) listesini başlığa yazar. Her segment uç noktası Segments Left alanını bir azaltır ve hedef adresi listedeki bir sonraki segmentle değiştirir.",
@@ -38,6 +38,7 @@
     {
       "key": "next_header",
       "name": "Next Header",
+      "label": "Sonraki başlık",
       "bits": 8,
       "desc": "SRH'den sonra gelen başlığın türü; IPv6 başlığının Next Header alanıyla aynı değerleri kullanır. 59 (No Next Header), SRH'den sonra başka başlık olmadığını gösterir (RFC 8200 §4.7).",
       "ref": {
@@ -50,6 +51,7 @@
     {
       "key": "hdr_ext_len",
       "name": "Hdr Ext Len",
+      "label": "Uzantı başlığı uzunluğu",
       "bits": 8,
       "desc": "İlk 8 sekizli hariç başlık uzunluğu, 8 sekizlilik birimlerle.",
       "ref": {
@@ -62,6 +64,7 @@
     {
       "key": "routing_type",
       "name": "Routing Type",
+      "label": "Yönlendirme türü",
       "bits": 8,
       "desc": "Routing başlığının türü; SRH için 4.",
       "ref": {
@@ -74,6 +77,7 @@
     {
       "key": "segments_left",
       "name": "Segments Left",
+      "label": "Kalan segment sayısı",
       "bits": 8,
       "desc": "Hedefe ulaşmadan önce ziyaret edilecek segment sayısı; aynı zamanda listede bir sonraki aktif segmentin indeksi.",
       "ref": {
@@ -86,6 +90,7 @@
     {
       "key": "last_entry",
       "name": "Last Entry",
+      "label": "Son girdinin dizini",
       "bits": 8,
       "desc": "Segment listesindeki son girdinin indeksi (sıfırdan başlar).",
       "ref": {
@@ -98,6 +103,7 @@
     {
       "key": "flags",
       "name": "Flags",
+      "label": "Bayraklar",
       "bits": 8,
       "desc": "8 bitlik bayrak alanı; tanımlı bütün bitler kullanılmıyor (U): 0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -110,6 +116,7 @@
     {
       "key": "tag",
       "name": "Tag",
+      "label": "Etiket",
       "bits": 16,
       "desc": "Paketi bir sınıfa ya da gruba ait olarak işaretler; kullanılmıyorsa 0 gönderilir.",
       "ref": {
@@ -122,6 +129,7 @@
     {
       "key": "segment0",
       "name": "Segment List[0]",
+      "label": "Segment listesi [0]",
       "bits": 128,
       "desc": "SR yolunun son segmenti: paketin varacağı son IPv6 adresi.",
       "ref": {
@@ -135,6 +143,7 @@
     {
       "key": "segment1",
       "name": "Segment List[1]",
+      "label": "Segment listesi [1]",
       "bits": 128,
       "desc": "SR yolunun ilk segmenti; bu iki segmentli örnekte listenin son girdisi.",
       "ref": {
@@ -148,6 +157,7 @@
     {
       "key": "tlvs",
       "name": "Optional TLVs",
+      "label": "İsteğe bağlı TLV’ler",
       "bits": "değişken",
       "desc": "Segment listesinden sonra gelen isteğe bağlı TLV nesneleri.",
       "ref": {

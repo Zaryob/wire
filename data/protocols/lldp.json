@@ -285,6 +285,7 @@
     {
       "key": "chassis_type",
       "name": "Chassis ID TLV: Type",
+      "label": "Kasa kimliği TLV türü",
       "bits": 7,
       "desc": "TLV türü; Chassis ID için 1 (Table 8-1). Her LLDPDU'nun ilk TLV'sidir. Tür alanı, TLV'nin ilk sekizlisinin en anlamlı yedi bitidir; 9–126 ileride kullanılmak üzere ayrılmıştır.",
       "ref": {
@@ -298,6 +299,7 @@
     {
       "key": "chassis_len",
       "name": "Chassis ID TLV: Length",
+      "label": "Kasa kimliği TLV uzunluğu",
       "bits": 9,
       "desc": "Bilgi dizisinin sekizli cinsinden uzunluğu: alt tür sekizlisi ile kimliğin toplamı (§8.5.2.1). Alan, ilk sekizlinin en az anlamlı bitiyle başlar ve 9 bittir.",
       "ref": {
@@ -311,6 +313,7 @@
     {
       "key": "chassis_subtype",
       "name": "Chassis ID subtype",
+      "label": "Kasa kimliği alt türü",
       "bits": 8,
       "desc": "Kimliğin neye dayandığı (Table 8-2). 4, kasadaki bir portun MAC adresidir. 0 ve 8–255 ayrılmıştır.",
       "ref": {
@@ -355,6 +358,7 @@
     {
       "key": "chassis_id",
       "name": "Chassis ID",
+      "label": "Kasa kimliği",
       "bits": 48,
       "desc": "Kasayı tanımlayan değer; boş olamaz. Bu örnekte bir portunun MAC adresi.",
       "ref": {
@@ -370,6 +374,7 @@
     {
       "key": "port_type",
       "name": "Port ID TLV: Type",
+      "label": "Port kimliği TLV türü",
       "bits": 7,
       "desc": "TLV türü; Port ID için 2 (Table 8-1). LLDPDU'nun ikinci TLV'si olmalıdır.",
       "ref": {
@@ -383,6 +388,7 @@
     {
       "key": "port_len",
       "name": "Port ID TLV: Length",
+      "label": "Port kimliği TLV uzunluğu",
       "bits": 9,
       "desc": "Alt tür sekizlisi ile port kimliğinin toplam uzunluğu, sekizli olarak (§8.5.3.1).",
       "ref": {
@@ -396,6 +402,7 @@
     {
       "key": "port_subtype",
       "name": "Port ID subtype",
+      "label": "Port kimliği alt türü",
       "bits": 8,
       "desc": "Port kimliğinin neye dayandığı (Table 8-3). 5, arayüzün ifName değeridir. 0 ve 8–255 ayrılmıştır.",
       "ref": {
@@ -440,6 +447,7 @@
     {
       "key": "port_id",
       "name": "Port ID",
+      "label": "Port kimliği",
       "bits": 32,
       "desc": "Çerçeveyi gönderen portun kimliği; boş olamaz. Bu örnekte ASCII \"eth0\".",
       "ref": {
@@ -455,6 +463,7 @@
     {
       "key": "ttl_type",
       "name": "Time To Live TLV: Type",
+      "label": "Yaşam süresi TLV türü",
       "bits": 7,
       "desc": "TLV türü; Time To Live için 3 (Table 8-1). LLDPDU'nun üçüncü TLV'si olmalıdır.",
       "ref": {
@@ -468,6 +477,7 @@
     {
       "key": "ttl_len",
       "name": "Time To Live TLV: Length",
+      "label": "Yaşam süresi TLV uzunluğu",
       "bits": 9,
       "desc": "TTL alanının uzunluğu: 2 sekizli.",
       "ref": {
@@ -481,6 +491,7 @@
     {
       "key": "ttl",
       "name": "Time To Live",
+      "label": "Yaşam süresi",
       "bits": 16,
       "desc": "Alıcının bu bilgileri kaç saniye geçerli sayacağı; 0–65535. Değeri txTTL'dir: min(msgTxInterval × msgTxHold + 1, 65535) (§9.2.5.22). Varsayılan değerlerle (30 s, 4) 121'dir. 0, alıcının bu porta ait bütün bilgileri silmesini ister.",
       "ref": {
@@ -494,6 +505,7 @@
     {
       "key": "end_type",
       "name": "End Of LLDPDU TLV: Type",
+      "label": "Bitiş TLV türü",
       "bits": 7,
       "desc": "Bitiş TLV'sinin türü, 0. Bitiş TLV'si isteğe bağlıdır; varsa son TLV olmalıdır (§8.2).",
       "ref": {
@@ -507,6 +519,7 @@
     {
       "key": "end_len",
       "name": "End Of LLDPDU TLV: Length",
+      "label": "Bitiş TLV uzunluğu",
       "bits": 9,
       "desc": "Bitiş TLV'si 2 sekizlilik, tamamı sıfır bir TLV'dir; uzunluğu 0'dır.",
       "ref": {

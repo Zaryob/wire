@@ -22,6 +22,7 @@
     {
       "key": "ver",
       "name": "Version (Ver)",
+      "label": "Sürüm",
       "bits": 2,
       "desc": "Tünel başlığının sürümü; güncel sürüm 0'dır. Bilinmeyen sürümdeki paketler atılır.",
       "ref": {
@@ -34,6 +35,7 @@
     {
       "key": "opt_len",
       "name": "Opt Len",
+      "label": "Seçenek uzunluğu",
       "bits": 6,
       "desc": "Değişken uzunluklu seçeneklerin toplam uzunluğu, 4 sekizlilik sözcük olarak. 0, seçenek olmadığını gösterir.",
       "ref": {
@@ -46,6 +48,7 @@
     {
       "key": "o",
       "name": "O (OAM)",
+      "label": "İşletim ve bakım iletisi",
       "bits": 1,
       "desc": "Paket yük değil denetim (OAM) iletisi taşıyorsa 1. Bu paketler normal yük gibi iletilmez, tünel uç noktası tarafından işlenir.",
       "ref": {
@@ -58,6 +61,7 @@
     {
       "key": "c",
       "name": "C (Kritik seçenek)",
+      "label": "Kritik seçenek",
       "bits": 1,
       "desc": "Seçeneklerden en az biri kritikse 1. Kritik bir seçeneği tanımayan uç nokta paketi atmalıdır.",
       "ref": {
@@ -70,6 +74,7 @@
     {
       "key": "rsvd",
       "name": "Rsvd.",
+      "label": "Ayrılmış",
       "bits": 6,
       "desc": "Ayrılmış; gönderimde 0, alımda yok sayılır.",
       "ref": {
@@ -82,6 +87,7 @@
     {
       "key": "protocol_type",
       "name": "Protocol Type",
+      "label": "Protokol türü",
       "bits": 16,
       "desc": "Seçeneklerden sonra gelen yükün türü, EtherType değeriyle. 0x6558 (Transparent Ethernet Bridging) katman 2 Ethernet çerçevesidir.",
       "ref": {
@@ -109,6 +115,7 @@
     {
       "key": "vni",
       "name": "Virtual Network Identifier (VNI)",
+      "label": "Sanal ağ kimliği",
       "bits": 24,
       "desc": "Paketin ait olduğu sanal ağın 24 bitlik kimliği; VXLAN'daki VNI ile aynı genişliktedir.",
       "ref": {
@@ -121,6 +128,7 @@
     {
       "key": "reserved",
       "name": "Reserved",
+      "label": "Ayrılmış",
       "bits": 8,
       "desc": "Ayrılmış; gönderimde 0.",
       "ref": {
@@ -133,6 +141,7 @@
     {
       "key": "options",
       "name": "Variable-Length Options",
+      "label": "Değişken uzunluklu seçenekler",
       "bits": "değişken",
       "desc": "Opt Len ile belirtilen uzunlukta, art arda dizilmiş TLV biçiminde seçenekler.",
       "ref": {

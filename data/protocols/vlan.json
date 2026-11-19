@@ -132,6 +132,7 @@
     {
       "key": "tpid",
       "name": "Tag Protocol Identifier (TPID)",
+      "label": "Etiket protokolü tanımlayıcısı",
       "bits": 16,
       "desc": "Çerçevenin etiketli olduğunu ve etiketin türünü gösteren EtherType; iki sekizlidir. Müşteri VLAN etiketi (C-TAG) için 81-00.",
       "ref": {
@@ -160,6 +161,7 @@
     {
       "key": "pcp",
       "name": "Priority Code Point (PCP)",
+      "label": "Öncelik kodu",
       "bits": 3,
       "desc": "Çerçevenin önceliği ve, seçilen kodlamaya göre, atılabilirliği. Varsayılan 8P0D kodlamasında PCP önceliğe eşittir. Öncelik değerlerinin önerilen trafik türleri Table I-2'dedir; 1 en düşük, 7 en yüksek önceliktir.",
       "ref": {
@@ -172,41 +174,42 @@
       "values": [
         [
           "1",
-          "Background (BK)"
+          "Arka plan (Background) (BK)"
         ],
         [
           "0",
-          "Best Effort, varsayılan (BE)"
+          "Eldeki olanaklarla iletim (Best Effort), varsayılan (BE)"
         ],
         [
           "2",
-          "Excellent Effort (EE)"
+          "Yüksek öncelikli iletim (Excellent Effort) (EE)"
         ],
         [
           "3",
-          "Critical Applications (CA)"
+          "Kritik uygulamalar (CA)"
         ],
         [
           "4",
-          "Video, < 100 ms (VI)"
+          "Görüntü, 100 ms altında (VI)"
         ],
         [
           "5",
-          "Voice, < 10 ms (VO)"
+          "Ses, 10 ms altında (VO)"
         ],
         [
           "6",
-          "Internetwork Control (IC)"
+          "Ağlar arası denetim (IC)"
         ],
         [
           "7",
-          "Network Control (NC)"
+          "Ağ denetimi (NC)"
         ]
       ]
     },
     {
       "key": "dei",
       "name": "Drop Eligible Indicator (DEI)",
+      "label": "Atılabilirlik göstergesi",
       "bits": 1,
       "desc": "Port Use_DEI ile yapılandırıldığında çerçevenin drop_eligible parametresini taşır: 1, tıkanıklıkta öncelikle atılabilecek çerçeveyi gösterir.",
       "ref": {
@@ -220,6 +223,7 @@
     {
       "key": "vid",
       "name": "VLAN Identifier (VID)",
+      "label": "VLAN kimliği",
       "bits": 12,
       "desc": "Çerçevenin ait olduğu VLAN; 12 bitlik işaretsiz sayı. Bazı değerlerin özel anlamı vardır (Table 9-2).",
       "ref": {
@@ -251,6 +255,7 @@
     {
       "key": "type",
       "name": "EtherType",
+      "label": "Ethernet türü",
       "bits": 16,
       "desc": "Etiketin ardından gelen yükün türü; etiketsiz çerçevedeki EtherType ile aynıdır. 0x0800 IPv4 datagramıdır.",
       "ref": {

@@ -22,6 +22,7 @@
     {
       "key": "label",
       "name": "Label",
+      "label": "Etiket",
       "bits": 20,
       "desc": "Bir sonraki atlamanın paketi nasıl ileteceğini belirleyen etiket değeri. 0–15 özel değerlerdir; 16 ilk sıradan etikettir.",
       "ref": {
@@ -33,19 +34,19 @@
       "values": [
         [
           "0",
-          "IPv4 Explicit NULL"
+          "IPv4 açık boş etiket (IPv4 Explicit NULL)"
         ],
         [
           "1",
-          "Router Alert"
+          "Yönlendirici uyarısı (Router Alert)"
         ],
         [
           "2",
-          "IPv6 Explicit NULL"
+          "IPv6 açık boş etiket (IPv6 Explicit NULL)"
         ],
         [
           "3",
-          "Implicit NULL (yalnızca sinyalleşmede)"
+          "Örtük boş etiket (Implicit NULL), yalnızca sinyalleşmede"
         ],
         [
           "16–1048575",
@@ -56,6 +57,7 @@
     {
       "key": "tc",
       "name": "Traffic Class (TC)",
+      "label": "Trafik sınıfı",
       "bits": 3,
       "desc": "Trafik sınıfı; DiffServ ve ECN için kullanılır. RFC 3032'deki adı Exp'ti.",
       "ref": {
@@ -68,6 +70,7 @@
     {
       "key": "s",
       "name": "Bottom of Stack (S)",
+      "label": "Yığın sonu",
       "bits": 1,
       "desc": "Bu girdi yığının son girdisiyse 1, ardından başka bir etiket geliyorsa 0.",
       "ref": {
@@ -80,6 +83,7 @@
     {
       "key": "ttl",
       "name": "Time to Live (TTL)",
+      "label": "Yaşam süresi",
       "bits": 8,
       "desc": "Her etiket anahtarlama atlamasında bir azaltılır; 0'a inen paket atılır. Etiket eklenirken genellikle IP başlığının TTL değeri kopyalanır.",
       "ref": {

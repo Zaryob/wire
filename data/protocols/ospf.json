@@ -43,6 +43,7 @@
     {
       "key": "version",
       "name": "Version #",
+      "label": "Sürüm numarası",
       "bits": 8,
       "desc": "OSPF sürümü; bu belge sürüm 2'yi tanımlar.",
       "ref": {
@@ -55,6 +56,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "OSPF paket türü.",
       "ref": {
@@ -66,29 +68,30 @@
       "values": [
         [
           "1",
-          "Hello"
+          "Komşu keşfi (Hello)"
         ],
         [
           "2",
-          "Database Description"
+          "Veritabanı tanımı (Database Description)"
         ],
         [
           "3",
-          "Link State Request"
+          "Bağlantı durumu isteği (Link State Request)"
         ],
         [
           "4",
-          "Link State Update"
+          "Bağlantı durumu güncellemesi (Link State Update)"
         ],
         [
           "5",
-          "Link State Acknowledgment"
+          "Bağlantı durumu onayı (Link State Acknowledgment)"
         ]
       ]
     },
     {
       "key": "length",
       "name": "Packet length",
+      "label": "Paket uzunluğu",
       "bits": 16,
       "desc": "Başlık dahil OSPF paketinin uzunluğu, sekizli olarak.",
       "ref": {
@@ -101,6 +104,7 @@
     {
       "key": "router_id",
       "name": "Router ID",
+      "label": "Yönlendirici kimliği",
       "bits": 32,
       "desc": "Paketi gönderen yönlendiricinin kimliği.",
       "ref": {
@@ -114,6 +118,7 @@
     {
       "key": "area_id",
       "name": "Area ID",
+      "label": "Bölge kimliği",
       "bits": 32,
       "desc": "Paketin ait olduğu alan; omurga alanı 0.0.0.0'dır.",
       "ref": {
@@ -127,6 +132,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "Kimlik doğrulama alanı hariç bütün paketin IP sağlama toplamı.",
       "ref": {
@@ -141,6 +147,7 @@
     {
       "key": "autype",
       "name": "AuType",
+      "label": "Kimlik doğrulama türü",
       "bits": 16,
       "desc": "Kullanılan kimlik doğrulama yöntemi.",
       "ref": {
@@ -152,21 +159,22 @@
       "values": [
         [
           "0",
-          "Null authentication"
+          "Kimlik doğrulama yok (Null authentication)"
         ],
         [
           "1",
-          "Simple password"
+          "Basit parola (Simple password)"
         ],
         [
           "2",
-          "Cryptographic authentication"
+          "Kriptografik kimlik doğrulama (Cryptographic authentication)"
         ]
       ]
     },
     {
       "key": "authentication",
       "name": "Authentication",
+      "label": "Kimlik doğrulama",
       "bits": 64,
       "desc": "Kimlik doğrulama yönteminin kullandığı 64 bitlik alan; AuType 0 iken anlamı yoktur.",
       "ref": {
@@ -180,6 +188,7 @@
     {
       "key": "network_mask",
       "name": "Network Mask",
+      "label": "Ağ maskesi",
       "bits": 32,
       "desc": "Paketin gönderildiği arayüzün ağ maskesi.",
       "ref": {
@@ -193,6 +202,7 @@
     {
       "key": "hello_interval",
       "name": "HelloInterval",
+      "label": "Komşu keşfi ileti aralığı",
       "bits": 16,
       "desc": "Yönlendiricinin Hello paketleri arasındaki süre, saniye olarak. Yerel ağ için örnek değer 10 s'dir (RFC 2328 C.3).",
       "ref": {
@@ -205,6 +215,7 @@
     {
       "key": "options",
       "name": "Options",
+      "label": "Seçenekler",
       "bits": 8,
       "desc": "Yönlendiricinin desteklediği isteğe bağlı yetenekler (RFC 2328 A.2). 0x02, E bitidir: AS dışı LSA'ların alana taşınabildiğini gösterir.",
       "ref": {
@@ -218,6 +229,7 @@
     {
       "key": "rtr_pri",
       "name": "Rtr Pri",
+      "label": "Yönlendirici önceliği",
       "bits": 8,
       "desc": "Yönlendiricinin Designated Router seçimindeki önceliği; 0, yönlendiricinin DR ya da BDR olamayacağını gösterir.",
       "ref": {
@@ -230,6 +242,7 @@
     {
       "key": "dead_interval",
       "name": "RouterDeadInterval",
+      "label": "Komşu zaman aşımı",
       "bits": 32,
       "desc": "Bir komşudan Hello alınmayınca onun kapandığına karar verilene kadar geçen süre, saniye olarak. HelloInterval'ın bir katı olmalıdır (örneğin 4) (RFC 2328 C.3).",
       "ref": {
@@ -242,6 +255,7 @@
     {
       "key": "dr",
       "name": "Designated Router",
+      "label": "Atanmış yönlendirici",
       "bits": 32,
       "desc": "Gönderenin bu ağ için bildiği Designated Router'ın arayüz adresi; yoksa 0.0.0.0.",
       "ref": {
@@ -255,6 +269,7 @@
     {
       "key": "bdr",
       "name": "Backup Designated Router",
+      "label": "Yedek atanmış yönlendirici",
       "bits": 32,
       "desc": "Backup Designated Router'ın arayüz adresi; yoksa 0.0.0.0.",
       "ref": {
@@ -268,6 +283,7 @@
     {
       "key": "neighbor",
       "name": "Neighbor",
+      "label": "Komşu",
       "bits": 32,
       "desc": "Son RouterDeadInterval içinde Hello paketi alınan bir komşunun Router ID'si. Liste uzunluğu değişkendir; bu örnekte bir komşu vardır.",
       "ref": {

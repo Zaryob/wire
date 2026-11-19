@@ -22,6 +22,7 @@
     {
       "key": "op",
       "name": "op",
+      "label": "İşlem kodu",
       "bits": 8,
       "desc": "İleti işlem kodu: istemciden sunucuya giden iletilerde 1 (BOOTREQUEST), sunucudan istemciye gidenlerde 2 (BOOTREPLY).",
       "ref": {
@@ -31,13 +32,14 @@
       },
       "example": 1,
       "values": [
-        ["1", "BOOTREQUEST"],
-        ["2", "BOOTREPLY"]
+        ["1", "Önyükleme isteği (BOOTREQUEST)"],
+        ["2", "Önyükleme yanıtı (BOOTREPLY)"]
       ]
     },
     {
       "key": "htype",
       "name": "htype",
+      "label": "Donanım adresi türü",
       "bits": 8,
       "desc": "Donanım adresi türü; ARP'nin donanım türü numaralarını kullanır. Ethernet için 1.",
       "ref": {
@@ -50,6 +52,7 @@
     {
       "key": "hlen",
       "name": "hlen",
+      "label": "Donanım adresi uzunluğu",
       "bits": 8,
       "desc": "Donanım adresinin sekizli cinsinden uzunluğu; Ethernet MAC adresi için 6.",
       "ref": {
@@ -62,6 +65,7 @@
     {
       "key": "hops",
       "name": "hops",
+      "label": "Atlama sayısı",
       "bits": 8,
       "desc": "İstemci sıfır yazar; ileti bir aktarıcı ajan (relay agent) üzerinden geçtikçe artırılabilir.",
       "ref": {
@@ -74,6 +78,7 @@
     {
       "key": "xid",
       "name": "xid",
+      "label": "İşlem kimliği",
       "bits": 32,
       "desc": "İstemcinin seçtiği rastgele işlem kimliği. İstemci ve sunucu, istek ile yanıtı bu değerle eşleştirir.",
       "ref": {
@@ -87,6 +92,7 @@
     {
       "key": "secs",
       "name": "secs",
+      "label": "Geçen süre",
       "bits": 16,
       "desc": "İstemcinin adres alma veya yenileme sürecine başlamasından bu yana geçen saniye.",
       "ref": {
@@ -99,6 +105,7 @@
     {
       "key": "flags",
       "name": "flags",
+      "label": "Bayraklar",
       "bits": 16,
       "desc": "En soldaki bit BROADCAST (B) bayrağıdır: henüz IP adresi olmadığı için tek noktaya yayın yanıtı alamayan istemci bu biti 1 yaparak yanıtın yayınla gönderilmesini ister. Kalan 15 bit sıfır olmalıdır (MBZ).",
       "ref": {
@@ -112,6 +119,7 @@
     {
       "key": "ciaddr",
       "name": "ciaddr",
+      "label": "İstemci IP adresi",
       "bits": 32,
       "type": "ipv4",
       "desc": "İstemcinin IP adresi; yalnızca istemci BOUND, RENEW veya REBINDING durumundayken ve ARP isteklerine yanıt verebiliyorken doldurulur.",
@@ -125,6 +133,7 @@
     {
       "key": "yiaddr",
       "name": "yiaddr",
+      "label": "İstemciye önerilen IP adresi",
       "bits": 32,
       "type": "ipv4",
       "desc": "'your' adresi: sunucunun istemciye önerdiği veya atadığı IP adresi. DHCPOFFER ve DHCPACK'te doldurulur.",
@@ -138,6 +147,7 @@
     {
       "key": "siaddr",
       "name": "siaddr",
+      "label": "Önyükleme sunucusunun IP adresi",
       "bits": 32,
       "type": "ipv4",
       "desc": "Önyüklemenin bir sonraki adımında kullanılacak sunucunun (ör. TFTP sunucusu) adresi; sunucu DHCPOFFER ve DHCPACK'te döndürür.",
@@ -151,6 +161,7 @@
     {
       "key": "giaddr",
       "name": "giaddr",
+      "label": "Aktarıcı IP adresi",
       "bits": 32,
       "type": "ipv4",
       "desc": "İletiyi başka bir alt ağdaki sunucuya ileten aktarıcı ajanın adresi; doğrudan iletişimde sıfırdır.",
@@ -164,6 +175,7 @@
     {
       "key": "chaddr",
       "name": "chaddr",
+      "label": "İstemci donanım adresi",
       "bits": 128,
       "type": "bytes",
       "desc": "İstemcinin donanım adresi. Ethernet'te ilk 6 sekizli MAC adresidir (hlen), kalan 10 sekizli sıfırla doldurulur.",
@@ -177,6 +189,7 @@
     {
       "key": "sname",
       "name": "sname",
+      "label": "Sunucu adı",
       "bits": 512,
       "desc": "İsteğe bağlı sunucu konak adı, boş karakterle sonlanan dizgi. Option Overload seçeneğiyle ek seçenek alanı olarak da kullanılabilir.",
       "ref": {
@@ -189,6 +202,7 @@
     {
       "key": "file",
       "name": "file",
+      "label": "Önyükleme dosyası",
       "bits": 1024,
       "desc": "Önyükleme dosyasının adı, boş karakterle sonlanan dizgi. DHCPDISCOVER'da boş veya genel bir ad, DHCPOFFER'da tam dizin yoludur.",
       "ref": {
@@ -201,6 +215,7 @@
     {
       "key": "options",
       "name": "options",
+      "label": "Seçenekler",
       "bits": "değişken",
       "desc": "Sihirli çerez (0x63825363) ile başlayan seçenek listesi. İstemci en az 312 sekizlilik seçenek alanı alabilmelidir; bu da 576 sekizlilik bir DHCP iletisi demektir.",
       "ref": {

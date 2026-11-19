@@ -57,6 +57,7 @@
     {
       "key": "ccval",
       "name": "CCVal",
+      "label": "Tıkanıklık denetim değeri",
       "bits": 4,
       "desc": "Tıkanıklık Denetim Değeri (CCVal); göndericinin Tıkanıklık Denetim Profili (CCID) tarafından pencere veya RTT takibi için kullanılır.",
       "ref": {

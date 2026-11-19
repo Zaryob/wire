@@ -23,6 +23,7 @@
     {
       "key": "packet_length",
       "name": "packet_length",
+      "label": "Paket uzunluğu",
       "bits": 32,
       "desc": "Paketin uzunluğu, sekizli olarak; MAC'i ve kendisini kapsamaz.",
       "ref": {
@@ -35,6 +36,7 @@
     {
       "key": "padding_length",
       "name": "padding_length",
+      "label": "Dolgu uzunluğu",
       "bits": 8,
       "desc": "Rastgele dolgunun uzunluğu, sekizli olarak; 4–255.",
       "ref": {
@@ -47,6 +49,7 @@
     {
       "key": "payload",
       "name": "payload",
+      "label": "Yük",
       "bits": 136,
       "desc": "Paketin yararlı içeriği; ilk sekizlisi ileti numarasıdır. Sıkıştırma anlaşıldıysa sıkıştırılmıştır.",
       "ref": {
@@ -61,6 +64,7 @@
     {
       "key": "padding",
       "name": "random padding",
+      "label": "Rastgele dolgu",
       "bits": 80,
       "desc": "Toplam uzunluğu blok boyunun katına tamamlayan rastgele sekizliler.",
       "ref": {
@@ -75,6 +79,7 @@
     {
       "key": "mac",
       "name": "mac",
+      "label": "İleti doğrulama kodu",
       "bits": 256,
       "desc": "İleti doğrulama kodu; MAC anlaşıldıysa paketin tamamı ve sıra numarası üzerinden hesaplanır. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 32 sekizli.",
       "ref": {

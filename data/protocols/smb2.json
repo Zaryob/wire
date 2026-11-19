@@ -215,6 +215,7 @@
     {
       "key": "zero",
       "name": "Zero",
+      "label": "Sıfır",
       "bits": 8,
       "desc": "Direct TCP taşıma başlığının ilk sekizlisi; 0 olmalıdır.",
       "ref": {
@@ -228,6 +229,7 @@
     {
       "key": "stream_length",
       "name": "StreamProtocolLength",
+      "label": "TCP yük uzunluğu",
       "bits": 24,
       "desc": "Ardından gelen SMB2 iletisinin uzunluğu, sekizli olarak, ağ sırasında. 4 sekizlilik taşıma başlığını kapsamaz.",
       "ref": {
@@ -241,6 +243,7 @@
     {
       "key": "protocol_id",
       "name": "ProtocolId",
+      "label": "Protokol kimliği",
       "bits": 32,
       "desc": "Protokol tanımlayıcısı: 0xFE, 'S', 'M', 'B'.",
       "ref": {
@@ -255,6 +258,7 @@
     {
       "key": "structure_size",
       "name": "StructureSize",
+      "label": "Yapı boyutu",
       "bits": 16,
       "desc": "Başlığın boyutu; her zaman 64.",
       "ref": {
@@ -269,6 +273,7 @@
     {
       "key": "credit_charge",
       "name": "CreditCharge",
+      "label": "Kullanılan kredi sayısı",
       "bits": 16,
       "desc": "İsteğin tükettiği kredi sayısı; SMB 2.0.2 lehçesinde kullanılmaz ve 0'dır.",
       "ref": {
@@ -283,6 +288,7 @@
     {
       "key": "status",
       "name": "(ChannelSequence,Reserved)/Status",
+      "label": "Kanal sıra numarası ve ayrılmış alan / durum",
       "bits": 32,
       "desc": "İstekte, SMB 3.x'te ChannelSequence ve Reserved alanları; yanıtta durum kodu. Bu örnekte 0.",
       "ref": {
@@ -297,6 +303,7 @@
     {
       "key": "command",
       "name": "Command",
+      "label": "Komut",
       "bits": 16,
       "desc": "İletinin komut kodu.",
       "ref": {
@@ -342,6 +349,7 @@
     {
       "key": "credit_request",
       "name": "CreditRequest/CreditResponse",
+      "label": "İstenen veya verilen kredi sayısı",
       "bits": 16,
       "desc": "İstekte istemcinin istediği, yanıtta sunucunun verdiği kredi sayısı.",
       "ref": {
@@ -356,6 +364,7 @@
     {
       "key": "flags",
       "name": "Flags",
+      "label": "Bayraklar",
       "bits": 32,
       "desc": "İletinin nasıl işleneceğini gösteren bayraklar (yanıt, asenkron, imzalı vb.); bu örnekte 0.",
       "ref": {
@@ -371,6 +380,7 @@
     {
       "key": "next_command",
       "name": "NextCommand",
+      "label": "Sonraki komutun konumu",
       "bits": 32,
       "desc": "Bileşik isteklerde sıradaki başlığın bu başlığa göre konumu; tek iletide 0.",
       "ref": {
@@ -385,6 +395,7 @@
     {
       "key": "message_id",
       "name": "MessageId",
+      "label": "İleti kimliği",
       "bits": 64,
       "desc": "Aynı bağlantıdaki istek ile yanıtı eşleştiren benzersiz değer.",
       "ref": {
@@ -399,6 +410,7 @@
     {
       "key": "reserved",
       "name": "Reserved",
+      "label": "Ayrılmış",
       "bits": 32,
       "desc": "SYNC başlığında ayrılmış alan.",
       "ref": {
@@ -413,6 +425,7 @@
     {
       "key": "tree_id",
       "name": "TreeId",
+      "label": "Paylaşım bağlantısı kimliği",
       "bits": 32,
       "desc": "İsteğin ait olduğu paylaşım bağlantısı; ECHO bir paylaşıma bağlı değildir.",
       "ref": {
@@ -427,6 +440,7 @@
     {
       "key": "session_id",
       "name": "SessionId",
+      "label": "Oturum kimliği",
       "bits": 64,
       "desc": "Kurulmuş oturumun kimliği; NEGOTIATE iletilerinde 0 olmalıdır.",
       "ref": {
@@ -441,6 +455,7 @@
     {
       "key": "signature",
       "name": "Signature",
+      "label": "İmza",
       "bits": 128,
       "desc": "İleti imzalıysa 16 sekizlilik imza; imzasızsa 0.",
       "ref": {
@@ -455,6 +470,7 @@
     {
       "key": "echo_structure_size",
       "name": "StructureSize",
+      "label": "Yapı boyutu",
       "bits": 16,
       "desc": "ECHO isteğinin, başlık hariç boyutu; her zaman 4.",
       "ref": {
@@ -469,6 +485,7 @@
     {
       "key": "echo_reserved",
       "name": "Reserved",
+      "label": "Ayrılmış",
       "bits": 16,
       "desc": "Kullanılmaz; 0 gönderilir.",
       "ref": {

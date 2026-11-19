@@ -20,6 +20,7 @@
     {
       "key": "version",
       "name": "Version",
+      "label": "Sürüm",
       "bits": 4,
       "desc": "İnternet Protokolü sürüm numarası; değeri 6’dır.",
       "ref": {
@@ -31,6 +32,7 @@
     {
       "key": "tc",
       "name": "Traffic Class",
+      "label": "Trafik sınıfı",
       "bits": 8,
       "desc": "8 bitlik trafik sınıfı alanı.",
       "ref": {
@@ -42,6 +44,7 @@
     {
       "key": "flow",
       "name": "Flow Label",
+      "label": "Akış etiketi",
       "bits": 20,
       "desc": "20 bitlik akış etiketi.",
       "ref": {
@@ -53,6 +56,7 @@
     {
       "key": "length",
       "name": "Payload Length",
+      "label": "Yük uzunluğu",
       "bits": 16,
       "desc": "Bu başlıktan sonra gelen yükün sekizli cinsinden uzunluğu. Uzantı başlıkları yükün parçası sayılır.",
       "ref": {
@@ -64,6 +68,7 @@
     {
       "key": "next",
       "name": "Next Header",
+      "label": "Sonraki başlık",
       "bits": 8,
       "desc": "IPv6 başlığının hemen ardından gelen başlığın türü. IPv4 Protocol alanıyla aynı değerleri kullanır.",
       "ref": {
@@ -89,6 +94,7 @@
     {
       "key": "hop",
       "name": "Hop Limit",
+      "label": "Atlama sınırı",
       "bits": 8,
       "desc": "Paketi ileten her düğüm değeri bir azaltır. Sıfır olarak gelen ya da sıfıra düşen paket iletilmez, atılır.",
       "ref": {
@@ -100,6 +106,7 @@
     {
       "key": "src",
       "name": "Source Address",
+      "label": "Kaynak adresi",
       "bits": 128,
       "desc": "Paketi oluşturanın 128 bitlik adresi.",
       "ref": {
@@ -112,6 +119,7 @@
     {
       "key": "dst",
       "name": "Destination Address",
+      "label": "Hedef adresi",
       "bits": 128,
       "desc": "Paketin hedeflenen alıcısının 128 bitlik adresi. Routing başlığı varsa nihai alıcı olmayabilir.",
       "ref": {

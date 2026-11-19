@@ -91,6 +91,7 @@
     {
       "key": "request_id",
       "name": "request-id",
+      "label": "İstek kimliği",
       "bits": 32,
       "desc": "İsteği yanıtla eşleştiren tamsayı.",
       "ref": {
@@ -129,6 +130,7 @@
     {
       "key": "non_repeaters",
       "name": "non-repeaters",
+      "label": "Tekrarlanmayacak değişken sayısı",
       "bits": 8,
       "desc": "Listenin başından, yalnızca bir kez sıradaki nesneyle yanıtlanacak değişken sayısı.",
       "ref": {
@@ -167,6 +169,7 @@
     {
       "key": "max_repetitions",
       "name": "max-repetitions",
+      "label": "Azami tekrar sayısı",
       "bits": 8,
       "desc": "Kalan değişkenlerin her biri için en çok kaç sıradaki nesnenin döndürüleceği.",
       "ref": {
@@ -206,6 +209,7 @@
     {
       "key": "bindings",
       "name": "variable-bindings",
+      "label": "Değişken bağlamaları",
       "bits": "değişken",
       "desc": "Her biri bir OID ve bir değerden oluşan SEQUENCE'lar; istekte değerler NULL'dır.",
       "ref": {

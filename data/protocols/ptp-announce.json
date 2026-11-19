@@ -171,6 +171,7 @@
     {
       "key": "transport_specific",
       "name": "transportSpecific",
+      "label": "Taşımaya özgü alan",
       "bits": 4,
       "desc": "Alt katmandaki taşıma protokolünün kullanabileceği alan; anlamı taşıma eklerinde (Annex D–I) tanımlanır. Ethernet eşlemesinde 0 DEFAULT değeridir (Table F.2); UDP/IPv4 eşlemesinde bit 0, sürüm 1 donanımı için 124 sekizlilik dolgu ister (Table D.2).",
       "ref": {
@@ -184,6 +185,7 @@
     {
       "key": "message_type",
       "name": "messageType",
+      "label": "İleti türü",
       "bits": 4,
       "desc": "İletinin türü. 0–3 olay iletileridir ve gönderim ile alım anları zaman damgasıyla ölçülür; 8–D genel iletilerdir. En anlamlı bit iki sınıfı ayırır.",
       "ref": {
@@ -247,6 +249,7 @@
     {
       "key": "reserved_version",
       "name": "reserved",
+      "label": "Ayrılmış",
       "bits": 4,
       "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2). §13.3.2.2'deki nota göre messageType'ın ileride genişletilmesi için ayrılmıştır.",
       "ref": {
@@ -260,6 +263,7 @@
     {
       "key": "version",
       "name": "versionPTP",
+      "label": "PTP sürümü",
       "bits": 4,
       "desc": "Gönderen portun portDS.versionNumber değeri. Standardın bu sürümü için 2'dir (§7.5.5).",
       "ref": {
@@ -273,6 +277,7 @@
     {
       "key": "message_length",
       "name": "messageLength",
+      "label": "İleti uzunluğu",
       "bits": 16,
       "desc": "İletinin başlığın ilk sekizlisinden son sekizlisine kadar toplam uzunluğu. Annex D'deki dolgu dahil değildir.",
       "ref": {
@@ -286,6 +291,7 @@
     {
       "key": "domain",
       "name": "domainNumber",
+      "label": "Zaman alanı numarası",
       "bits": 8,
       "desc": "Sıradan ya da sınır saatlerde, gönderen saatin defaultDS.domainNumber değeri. Aynı ağdaki bağımsız zaman alanları bu numarayla ayrılır.",
       "ref": {
@@ -299,6 +305,7 @@
     {
       "key": "reserved_domain",
       "name": "reserved",
+      "label": "Ayrılmış",
       "bits": 8,
       "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -312,6 +319,7 @@
     {
       "key": "flags",
       "name": "flagField",
+      "label": "Bayraklar",
       "bits": 16,
       "desc": "İki sekizlilik bayrak dizisi; anlamları Table 20'dedir. Bir ileti türü için tanımlanmamış bayraklar 0 olur. Onaltılık değer, sekizli 0'ın bitlerini üst, sekizli 1'in bitlerini alt baytta gösterir.",
       "ref": {
@@ -372,6 +380,7 @@
     {
       "key": "correction",
       "name": "correctionField",
+      "label": "Zaman düzeltmesi",
       "bits": 64,
       "desc": "Düzeltme değeri, nanosaniyenin 2^16 katı biriminde işaretli sayı olarak; örneğin 2,5 ns 0x0000000000028000'dir. Sync'te kesirli nanosaniyeleri, saydam saatlerdeki bekleme süresini, eşler arası saatlerde yol gecikmesini ve asimetri düzeltmesini taşır (Table 21).",
       "ref": {
@@ -386,6 +395,7 @@
     {
       "key": "reserved_body",
       "name": "reserved",
+      "label": "Ayrılmış",
       "bits": 32,
       "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -399,6 +409,7 @@
     {
       "key": "clock_identity",
       "name": "sourcePortIdentity.clockIdentity",
+      "label": "Kaynak portun saat kimliği",
       "bits": 64,
       "desc": "İletiyi gönderen portun portDS.portIdentity değerinin saat kısmı: 8 sekizlilik bir EUI-64. EUI-48'den türetildiğinde OUI'nin üç sekizlisi başa, 3. ve 4. sekizlilere FF ile FE, kalan üç sekizli sona yazılır (§7.5.2.2.2, NOTE 2).",
       "ref": {
@@ -413,6 +424,7 @@
     {
       "key": "port_number",
       "name": "sourcePortIdentity.portNumber",
+      "label": "Kaynak port numarası",
       "bits": 16,
       "desc": "Saatin iletiyi gönderen PTP portunun numarası. N portlu bir düğümde portlar 1, 2, …, N numaralanır; 0 ve 0xFFFF ayrılmıştır (§7.5.2.3).",
       "ref": {
@@ -426,6 +438,7 @@
     {
       "key": "sequence_id",
       "name": "sequenceId",
+      "label": "Sıra kimliği",
       "bits": 16,
       "desc": "Gönderenin her ileti türü için ayrı tuttuğu sıra numarası (§7.3.7). Follow_Up, Delay_Resp gibi yanıtlar ait oldukları iletinin değerini taşır (Table 22).",
       "ref": {
@@ -439,6 +452,7 @@
     {
       "key": "control",
       "name": "controlField",
+      "label": "Denetim alanı",
       "bits": 8,
       "desc": "Sürüm 1 donanımıyla uyumluluk için korunan alan; alıcının kullanması önerilmez. Değeri ileti türüne göre Table 23'te verilir.",
       "ref": {
@@ -478,6 +492,7 @@
     {
       "key": "log_interval",
       "name": "logMessageInterval",
+      "label": "İleti aralığının üssü",
       "bits": 8,
       "desc": "İletilerin gönderim aralığının 2 tabanında logaritması, işaretli sayı olarak. Çok noktaya yayınlanan Sync'te portDS.logSyncInterval değeridir, tek noktaya gönderilende 0x7F (Table 24). 0 saniyede bir ileti demektir.",
       "ref": {
@@ -492,6 +507,7 @@
     {
       "key": "origin_seconds",
       "name": "originTimestamp.secondsField",
+      "label": "Gönderim zamanı, saniye",
       "bits": 48,
       "desc": "0 ya da gönderim anının ±1 s'den kötü olmayan bir tahmini (§13.5.2.1).",
       "ref": {
@@ -505,6 +521,7 @@
     {
       "key": "origin_ns",
       "name": "originTimestamp.nanosecondsField",
+      "label": "Gönderim zamanı, nanosaniye",
       "bits": 32,
       "desc": "Aynı anın nanosaniye kısmı.",
       "ref": {
@@ -518,6 +535,7 @@
     {
       "key": "utc_offset",
       "name": "currentUtcOffset",
+      "label": "Güncel UTC farkı",
       "bits": 16,
       "desc": "TAI ile UTC arasındaki fark, saniye olarak; timePropertiesDS.currentUtcOffset değeri. flagField'daki currentUtcOffsetValid 1 ise geçerlidir.",
       "ref": {
@@ -531,6 +549,7 @@
     {
       "key": "reserved_announce",
       "name": "reserved",
+      "label": "Ayrılmış",
       "bits": 8,
       "desc": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2).",
       "ref": {
@@ -544,6 +563,7 @@
     {
       "key": "priority1",
       "name": "grandmasterPriority1",
+      "label": "Ana saatin birinci önceliği",
       "bits": 8,
       "desc": "Ana saatin birinci önceliği; BMC algoritmasında küçük değer önce gelir. Başlangıç değeri PTP profilinde belirlenir, 0–255 arasında yapılandırılabilir (§7.6.2.2).",
       "ref": {
@@ -557,6 +577,7 @@
     {
       "key": "clock_class",
       "name": "grandmasterClockQuality.clockClass",
+      "label": "Ana saatin sınıfı",
       "bits": 8,
       "desc": "Ana saatin dağıttığı zamanın izlenebilirliği (Table 5). 6, birincil bir zaman kaynağına eşitlenmiş ve PTP zaman ölçeği dağıtan bir saattir.",
       "ref": {
@@ -588,6 +609,7 @@
     {
       "key": "clock_accuracy",
       "name": "grandmasterClockQuality.clockAccuracy",
+      "label": "Ana saatin doğruluğu",
       "bits": 8,
       "desc": "Ana saatin zaman doğruluğu (Table 6). 0x21, 100 ns içinde doğru demektir.",
       "ref": {
@@ -628,6 +650,7 @@
     {
       "key": "variance",
       "name": "grandmasterClockQuality.offsetScaledLogVariance",
+      "label": "Ana saatin ölçeklenmiş logaritmik varyansı",
       "bits": 16,
       "desc": "Ana saatin kararlılığının, ölçeklenmiş logaritmik varyans olarak tahmini (§7.6.3); BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
       "ref": {
@@ -642,6 +665,7 @@
     {
       "key": "priority2",
       "name": "grandmasterPriority2",
+      "label": "Ana saatin ikinci önceliği",
       "bits": 8,
       "desc": "Ana saatin ikinci önceliği; parentDS.grandmasterPriority2 değeri (§7.6.2.3). BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
       "ref": {
@@ -655,6 +679,7 @@
     {
       "key": "grandmaster_identity",
       "name": "grandmasterIdentity",
+      "label": "Ana saat kimliği",
       "bits": 64,
       "desc": "Ana saatin kimliği; parentDS.grandmasterIdentity değeri.",
       "ref": {
@@ -669,6 +694,7 @@
     {
       "key": "steps_removed",
       "name": "stepsRemoved",
+      "label": "Ana saate olan adım sayısı",
       "bits": 16,
       "desc": "Gönderen saat ile ana saat arasındaki iletişim yolu sayısı; ana saatin kendisi için 0.",
       "ref": {
@@ -682,6 +708,7 @@
     {
       "key": "time_source",
       "name": "timeSource",
+      "label": "Zaman kaynağı",
       "bits": 8,
       "desc": "Ana saatin zaman kaynağının türü; yalnızca bilgi içindir, ana saat seçiminde kullanılmaz (Table 7).",
       "ref": {

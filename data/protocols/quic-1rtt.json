@@ -22,6 +22,7 @@
     {
       "key": "header_form",
       "name": "Header Form",
+      "label": "Başlık biçimi",
       "bits": 1,
       "desc": "Kısa başlık için 0.",
       "ref": {
@@ -34,6 +35,7 @@
     {
       "key": "fixed_bit",
       "name": "Fixed Bit",
+      "label": "Sabit bit",
       "bits": 1,
       "desc": "Her zaman 1.",
       "ref": {
@@ -46,6 +48,7 @@
     {
       "key": "spin_bit",
       "name": "Spin Bit",
+      "label": "Gecikme ölçüm biti",
       "bits": 1,
       "desc": "Gecikme ölçümü için kullanılabilen bit; kullanılmıyorsa uç nokta rastgele değer gönderebilir (RFC 9000 §17.4).",
       "ref": {
@@ -58,6 +61,7 @@
     {
       "key": "reserved_bits",
       "name": "Reserved Bits",
+      "label": "Ayrılmış bitler",
       "bits": 2,
       "desc": "Ayrılmış; başlık koruması kaldırıldıktan sonra 0 olmalıdır.",
       "ref": {
@@ -70,6 +74,7 @@
     {
       "key": "key_phase",
       "name": "Key Phase",
+      "label": "Anahtar evresi",
       "bits": 1,
       "desc": "Paketi korumak için kullanılan anahtar kuşağı.",
       "ref": {
@@ -82,6 +87,7 @@
     {
       "key": "pn_length",
       "name": "Packet Number Length",
+      "label": "Paket numarası uzunluğu",
       "bits": 2,
       "desc": "Packet Number alanının uzunluğu eksi bir, sekizli olarak; 1, iki sekizli demektir.",
       "ref": {
@@ -94,6 +100,7 @@
     {
       "key": "dcid",
       "name": "Destination Connection ID",
+      "label": "Hedef bağlantı kimliği",
       "bits": 64,
       "desc": "Alıcının bağlantıyı tanıdığı kimlik. Uzunluğu pakette yazmaz; alıcı onu kendisi seçtiği için bilir.",
       "ref": {
@@ -108,6 +115,7 @@
     {
       "key": "packet_number",
       "name": "Packet Number",
+      "label": "Paket numarası",
       "bits": 16,
       "desc": "Paket numarası; uzunluğu ilk sekizlideki Packet Number Length'ten gelir.",
       "ref": {
@@ -121,6 +129,7 @@
     {
       "key": "payload",
       "name": "Packet Payload",
+      "label": "Paket yükü",
       "bits": "değişken",
       "desc": "Şifreli çerçeveler (STREAM, ACK vb.) ve AEAD doğrulama etiketi.",
       "ref": {

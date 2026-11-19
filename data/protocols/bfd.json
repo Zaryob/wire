@@ -22,6 +22,7 @@
     {
       "key": "vers",
       "name": "Vers",
+      "label": "Sürüm",
       "bits": 3,
       "desc": "Protokol sürümü; bu belge sürüm 1'i tanımlar.",
       "ref": {
@@ -34,6 +35,7 @@
     {
       "key": "diag",
       "name": "Diag",
+      "label": "Tanı",
       "bits": 5,
       "desc": "Yerel sistemin oturum durumundaki son değişikliğin nedeni. 0 tanı yok, 1 denetim algılama süresi doldu, 3 komşu oturumu kapattı, 7 yönetici kapattı.",
       "ref": {
@@ -84,6 +86,7 @@
     {
       "key": "sta",
       "name": "Sta",
+      "label": "Oturum durumu",
       "bits": 2,
       "desc": "Gönderen sistemin gördüğü oturum durumu.",
       "ref": {
@@ -95,25 +98,26 @@
       "values": [
         [
           "0",
-          "AdminDown"
+          "Yönetici tarafından kapatılmış (AdminDown)"
         ],
         [
           "1",
-          "Down"
+          "Kapalı (Down)"
         ],
         [
           "2",
-          "Init"
+          "Başlatılıyor (Init)"
         ],
         [
           "3",
-          "Up"
+          "Açık (Up)"
         ]
       ]
     },
     {
       "key": "p",
       "name": "P",
+      "label": "Yoklama",
       "bits": 1,
       "desc": "Poll: gönderen, bağlantıyı ya da bir parametre değişikliğini doğrulamak istiyor ve F biti 1 olan bir yanıt bekliyor.",
       "ref": {
@@ -126,6 +130,7 @@
     {
       "key": "f",
       "name": "F",
+      "label": "Yoklama yanıtı",
       "bits": 1,
       "desc": "Final: gönderen, P biti 1 olan bir pakete yanıt veriyor.",
       "ref": {
@@ -138,6 +143,7 @@
     {
       "key": "c",
       "name": "C",
+      "label": "Denetim düzleminden bağımsız",
       "bits": 1,
       "desc": "Control Plane Independent: BFD iletim düzleminde çalışıyor ve denetim düzlemindeki kesintilerden etkilenmiyor.",
       "ref": {
@@ -150,6 +156,7 @@
     {
       "key": "a",
       "name": "A",
+      "label": "Kimlik doğrulama var",
       "bits": 1,
       "desc": "Authentication Present: kimlik doğrulama bölümü var ve oturum doğrulanıyor.",
       "ref": {
@@ -162,6 +169,7 @@
     {
       "key": "d",
       "name": "D",
+      "label": "İstem kipi",
       "bits": 1,
       "desc": "Demand: gönderen istem kipinde; karşı tarafın düzenli denetim paketi göndermeyi bırakmasını istiyor.",
       "ref": {
@@ -174,6 +182,7 @@
     {
       "key": "m",
       "name": "M",
+      "label": "Çok noktaya iletim",
       "bits": 1,
       "desc": "Multipoint: noktadan çok noktaya uzantılar için ayrılmış; gönderirken ve alırken sıfır olmalıdır.",
       "ref": {
@@ -186,6 +195,7 @@
     {
       "key": "detect_mult",
       "name": "Detect Mult",
+      "label": "Algılama süresi çarpanı",
       "bits": 8,
       "desc": "Algılama süresi çarpanı. Kararlaştırılan gönderim aralığıyla çarpılınca alıcının algılama süresini verir.",
       "ref": {
@@ -198,6 +208,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 8,
       "desc": "BFD denetim paketinin bayt cinsinden uzunluğu; kimlik doğrulama yoksa 24.",
       "ref": {
@@ -210,6 +221,7 @@
     {
       "key": "my_disc",
       "name": "My Discriminator",
+      "label": "Yerel oturum ayırıcı",
       "bits": 32,
       "desc": "Gönderenin ürettiği benzersiz, sıfır olmayan değer; aynı iki sistem arasındaki birden çok BFD oturumunu ayırır.",
       "ref": {
@@ -223,6 +235,7 @@
     {
       "key": "your_disc",
       "name": "Your Discriminator",
+      "label": "Karşı uç oturum ayırıcı",
       "bits": 32,
       "desc": "Karşı sistemden alınan My Discriminator değerinin yansıması; henüz bilinmiyorsa sıfır.",
       "ref": {
@@ -236,6 +249,7 @@
     {
       "key": "min_tx",
       "name": "Desired Min TX Interval",
+      "label": "İstenen en kısa gönderim aralığı",
       "bits": 32,
       "desc": "Yerel sistemin denetim paketi göndermek istediği en kısa aralık, mikrosaniye cinsinden. Sıfır ayrılmıştır.",
       "ref": {
@@ -248,6 +262,7 @@
     {
       "key": "min_rx",
       "name": "Required Min RX Interval",
+      "label": "Desteklenen en kısa alım aralığı",
       "bits": 32,
       "desc": "Sistemin destekleyebildiği, alınan denetim paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, karşı tarafın düzenli paket göndermemesi demektir.",
       "ref": {
@@ -260,6 +275,7 @@
     {
       "key": "min_echo_rx",
       "name": "Required Min Echo RX Interval",
+      "label": "Desteklenen en kısa yankı alım aralığı",
       "bits": 32,
       "desc": "Alınan BFD Echo paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, Echo işlevinin desteklenmediğini gösterir.",
       "ref": {

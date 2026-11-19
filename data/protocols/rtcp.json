@@ -23,6 +23,7 @@
     {
       "key": "v",
       "name": "Version (V)",
+      "label": "Sürüm",
       "bits": 2,
       "desc": "RTP sürümü; RTP başlığındakiyle aynı olarak 2.",
       "ref": {
@@ -35,6 +36,7 @@
     {
       "key": "p",
       "name": "Padding (P)",
+      "label": "Dolgu",
       "bits": 1,
       "desc": "1 ise paketin sonunda, son sekizlisi dolgu uzunluğunu veren dolgu baytları vardır.",
       "ref": {
@@ -47,6 +49,7 @@
     {
       "key": "rc",
       "name": "Reception Report Count (RC)",
+      "label": "Alım raporu sayısı",
       "bits": 5,
       "desc": "Bu pakette bulunan alım raporu bloklarının sayısı (0–31).",
       "ref": {
@@ -59,6 +62,7 @@
     {
       "key": "pt",
       "name": "Packet Type (PT)",
+      "label": "Paket türü",
       "bits": 8,
       "desc": "RTCP paket türü; gönderici raporu için 200.",
       "ref": {
@@ -93,6 +97,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 16,
       "desc": "Paketin uzunluğu, 32 bitlik sözcük olarak, eksi bir. Ortak başlık ve dolgu dahildir.",
       "ref": {
@@ -105,6 +110,7 @@
     {
       "key": "ssrc",
       "name": "SSRC of sender",
+      "label": "Gönderenin SSRC değeri",
       "bits": 32,
       "desc": "Bu raporu gönderen kaynağın senkronizasyon kaynağı kimliği; aynı kaynağın RTP paketlerindeki SSRC ile aynıdır.",
       "ref": {
@@ -118,6 +124,7 @@
     {
       "key": "ntp_msw",
       "name": "NTP timestamp, most significant word",
+      "label": "NTP zaman damgasının üst sözcüğü",
       "bits": 32,
       "desc": "Raporun gönderildiği an, NTP biçiminde: 1900'den bu yana geçen saniyelerin tam sayı kısmı.",
       "ref": {
@@ -131,6 +138,7 @@
     {
       "key": "ntp_lsw",
       "name": "NTP timestamp, least significant word",
+      "label": "NTP zaman damgasının alt sözcüğü",
       "bits": 32,
       "desc": "Aynı anın saniye kesri; 2^32 bir saniyeye karşılık gelir.",
       "ref": {
@@ -144,6 +152,7 @@
     {
       "key": "rtp_ts",
       "name": "RTP timestamp",
+      "label": "RTP zaman damgası",
       "bits": 32,
       "desc": "NTP zaman damgasıyla aynı ana karşılık gelen RTP zaman damgası, akışın örnekleme saati biriminde.",
       "ref": {
@@ -156,6 +165,7 @@
     {
       "key": "packet_count",
       "name": "Sender's packet count",
+      "label": "Gönderilen paket sayısı",
       "bits": 32,
       "desc": "Akışın başından bu rapora kadar gönderilen RTP paketlerinin sayısı.",
       "ref": {
@@ -168,6 +178,7 @@
     {
       "key": "octet_count",
       "name": "Sender's octet count",
+      "label": "Gönderilen sekizli sayısı",
       "bits": 32,
       "desc": "Aynı süre içinde gönderilen RTP yükü sekizlilerinin sayısı; başlıklar ve dolgu dahil değildir.",
       "ref": {
@@ -180,6 +191,7 @@
     {
       "key": "ssrc_1",
       "name": "SSRC_1 (SSRC of first source)",
+      "label": "İlk kaynağın SSRC değeri",
       "bits": 32,
       "desc": "Bu alım raporu bloğunun hangi kaynağın akışı hakkında olduğu.",
       "ref": {
@@ -193,6 +205,7 @@
     {
       "key": "fraction_lost",
       "name": "Fraction lost",
+      "label": "Paket kayıp oranı",
       "bits": 8,
       "desc": "Son rapordan bu yana kaybolan paketlerin oranı, 256 ile çarpılmış sabit noktalı sayı olarak.",
       "ref": {
@@ -205,6 +218,7 @@
     {
       "key": "cumulative_lost",
       "name": "Cumulative number of packets lost",
+      "label": "Toplam kayıp paket sayısı",
       "bits": 24,
       "desc": "Alım başladığından beri beklenip gelmeyen paketlerin toplam sayısı.",
       "ref": {
@@ -217,6 +231,7 @@
     {
       "key": "ext_highest_seq",
       "name": "Extended highest sequence number received",
+      "label": "Alınan en büyük genişletilmiş sıra numarası",
       "bits": 32,
       "desc": "Alt 16 biti alınan en yüksek sıra numarası, üst 16 biti sıra numarasının kaç kez başa döndüğü.",
       "ref": {
@@ -229,6 +244,7 @@
     {
       "key": "jitter",
       "name": "Interarrival jitter",
+      "label": "Paket geliş aralığı değişkenliği",
       "bits": 32,
       "desc": "Paketlerin varış aralıklarındaki değişimin istatistiksel tahmini, zaman damgası biriminde.",
       "ref": {
@@ -241,6 +257,7 @@
     {
       "key": "lsr",
       "name": "Last SR timestamp (LSR)",
+      "label": "Son gönderici raporunun zaman damgası",
       "bits": 32,
       "desc": "Bu kaynaktan alınan son SR'nin NTP zaman damgasının ortadaki 32 biti; henüz SR alınmadıysa 0.",
       "ref": {
@@ -253,6 +270,7 @@
     {
       "key": "dlsr",
       "name": "Delay since last SR (DLSR)",
+      "label": "Son gönderici raporundan beri geçen süre",
       "bits": 32,
       "desc": "O SR'nin alınmasıyla bu raporun gönderilmesi arasındaki süre, 1/65536 saniye biriminde; SR alınmadıysa 0.",
       "ref": {

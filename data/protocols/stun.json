@@ -23,6 +23,7 @@
     {
       "key": "zero",
       "name": "0 0",
+      "label": "İki sıfır bit",
       "bits": 2,
       "desc": "Her STUN iletisinin en anlamlı iki biti 0 olmalıdır.",
       "ref": {
@@ -35,6 +36,7 @@
     {
       "key": "type",
       "name": "STUN Message Type",
+      "label": "STUN ileti türü",
       "bits": 14,
       "desc": "Yöntem ve sınıf. 0x0001 Binding isteği, 0x0101 Binding başarılı yanıtı, 0x0111 Binding hata yanıtıdır.",
       "ref": {
@@ -66,6 +68,7 @@
     {
       "key": "length",
       "name": "Message Length",
+      "label": "İleti uzunluğu",
       "bits": 16,
       "desc": "20 sekizlilik başlık hariç iletinin uzunluğu. Öznitelikler 4 sekizliye dolgulandığı için son iki biti her zaman 0'dır.",
       "ref": {
@@ -78,6 +81,7 @@
     {
       "key": "cookie",
       "name": "Magic Cookie",
+      "label": "Sihirli çerez",
       "bits": 32,
       "desc": "Sabit 0x2112A442 değeri. Eski RFC 3489 istemcilerinden ayırt etmeye ve XOR-MAPPED-ADDRESS'i kodlamaya yarar.",
       "ref": {
@@ -91,6 +95,7 @@
     {
       "key": "transaction_id",
       "name": "Transaction ID",
+      "label": "İşlem kimliği",
       "bits": 96,
       "desc": "İsteği yanıtla eşleştiren, istemcinin rastgele seçtiği 96 bitlik kimlik; yanıt aynı değeri taşır.",
       "ref": {

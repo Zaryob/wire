@@ -36,6 +36,7 @@
     {
       "key": "fin",
       "name": "FIN",
+      "label": "Son parça",
       "bits": 1,
       "desc": "İletinin son parçasıysa 1. Tek parçalık iletilerde ilk çerçeve aynı zamanda sondur.",
       "ref": {
@@ -48,6 +49,7 @@
     {
       "key": "rsv1",
       "name": "RSV1",
+      "label": "Ayrılmış bit 1",
       "bits": 1,
       "desc": "Bir uzantı anlam tanımlamadıkça 0; anlamı bilinmeyen 1 değeri bağlantıyı başarısız kılar. permessage-deflate uzantısı bu biti sıkıştırma için kullanır.",
       "ref": {
@@ -60,6 +62,7 @@
     {
       "key": "rsv2",
       "name": "RSV2",
+      "label": "Ayrılmış bit 2",
       "bits": 1,
       "desc": "RSV1 ile aynı kurallar; uzantılar için ayrılmıştır.",
       "ref": {
@@ -72,6 +75,7 @@
     {
       "key": "rsv3",
       "name": "RSV3",
+      "label": "Ayrılmış bit 3",
       "bits": 1,
       "desc": "RSV1 ile aynı kurallar; uzantılar için ayrılmıştır.",
       "ref": {
@@ -84,6 +88,7 @@
     {
       "key": "opcode",
       "name": "Opcode",
+      "label": "İşlem kodu",
       "bits": 4,
       "desc": "Yükün nasıl yorumlanacağı. 0x0–0x7 veri, 0x8–0xF denetim çerçeveleridir.",
       "ref": {
@@ -111,17 +116,18 @@
         ],
         [
           "0x9",
-          "Ping"
+          "Yoklama (Ping)"
         ],
         [
           "0xA",
-          "Pong"
+          "Yoklama yanıtı (Pong)"
         ]
       ]
     },
     {
       "key": "mask",
       "name": "MASK",
+      "label": "Maske bayrağı",
       "bits": 1,
       "desc": "Yük maskelenmişse 1 ve Masking-key alanı vardır. İstemciden gelen çerçevelerde her zaman 1'dir.",
       "ref": {
@@ -134,6 +140,7 @@
     {
       "key": "payload_len",
       "name": "Payload len",
+      "label": "Yük uzunluğu",
       "bits": 7,
       "desc": "Yük uzunluğu. 0–125 doğrudan uzunluktur; 126 ve 127 genişletilmiş uzunluk alanının izlediğini gösterir.",
       "ref": {
@@ -146,6 +153,7 @@
     {
       "key": "ext_len",
       "name": "Extended payload length",
+      "label": "Genişletilmiş yük uzunluğu",
       "bits": "değişken",
       "desc": "Payload len 126 ise 16 bitlik, 127 ise 64 bitlik (en anlamlı biti 0) gerçek yük uzunluğu. Bu örnekte bulunmaz.",
       "ref": {
@@ -157,6 +165,7 @@
     {
       "key": "masking_key",
       "name": "Masking-key",
+      "label": "Maskeleme anahtarı",
       "bits": 32,
       "desc": "MASK 1 ise bulunan 4 sekizlilik anahtar. Yükün i'nci sekizlisi, anahtarın (i mod 4)'üncü sekizlisiyle XOR'lanır.",
       "ref": {
@@ -170,6 +179,7 @@
     {
       "key": "payload",
       "name": "Payload Data",
+      "label": "Yük verisi",
       "bits": "değişken",
       "desc": "Uzantı verisi ve uygulama verisi; MASK 1 ise maskelenmiş olarak.",
       "ref": {

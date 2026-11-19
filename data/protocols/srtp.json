@@ -37,6 +37,7 @@
     {
       "key": "v",
       "name": "V",
+      "label": "Sürüm",
       "bits": 2,
       "desc": "Version: RTP sürümü. Bu belgede tanımlanan sürüm 2'dir.",
       "ref": {
@@ -49,6 +50,7 @@
     {
       "key": "p",
       "name": "P",
+      "label": "Dolgu",
       "bits": 1,
       "desc": "Padding: 1 ise paketin sonunda yükün parçası olmayan dolgu sekizlileri vardır; son sekizli, kendisi dahil dolgu sekizlilerinin sayısını verir.",
       "ref": {
@@ -61,6 +63,7 @@
     {
       "key": "x",
       "name": "X",
+      "label": "Başlık uzantısı",
       "bits": 1,
       "desc": "Extension: 1 ise sabit başlığı tam olarak bir başlık uzantısı izler (§5.3.1).",
       "ref": {
@@ -73,6 +76,7 @@
     {
       "key": "cc",
       "name": "CC",
+      "label": "CSRC sayısı",
       "bits": 4,
       "desc": "CSRC count: sabit başlığı izleyen CSRC tanımlayıcılarının sayısı. Paketler bir karıştırıcıdan (mixer) geçmediyse 0'dır.",
       "ref": {
@@ -85,6 +89,7 @@
     {
       "key": "m",
       "name": "M",
+      "label": "İşaretçi",
       "bits": 1,
       "desc": "Marker: anlamı profile bağlıdır; çerçeve sınırları gibi önemli olayları işaretlemeye yarar. Ses profilinde bir konuşma diliminin ilk paketini gösterir.",
       "ref": {
@@ -97,6 +102,7 @@
     {
       "key": "pt",
       "name": "Payload Type (PT)",
+      "label": "Yük türü",
       "bits": 7,
       "desc": "Yükün biçimi. RFC 3551 statik türler tanımlar: 0 PCMU (G.711 µ-law, 8000 Hz), 8 PCMA (G.711 A-law), 9 G722; 96–127 dinamik olarak (ör. SDP ile) atanır.",
       "ref": {
@@ -131,6 +137,7 @@
     {
       "key": "seq",
       "name": "Sequence Number",
+      "label": "Sıra numarası",
       "bits": 16,
       "desc": "Gönderilen her RTP veri paketinde bir artar; alıcı kaybı saptamak ve sırayı düzeltmek için kullanır.",
       "ref": {
@@ -143,6 +150,7 @@
     {
       "key": "ts",
       "name": "Timestamp",
+      "label": "Zaman damgası",
       "bits": 32,
       "desc": "Yükteki ilk sekizlinin örnekleme anı, örnekleme saatinin birimleriyle. 8000 Hz'lik seste 20 ms'lik her paket 160 artırır.",
       "ref": {
@@ -156,6 +164,7 @@
     {
       "key": "ssrc",
       "name": "SSRC",
+      "label": "Eşzamanlama kaynağı kimliği",
       "bits": 32,
       "desc": "Synchronization source: akışın kaynağını tanımlayan rastgele 32 bitlik kimlik. Aynı oturumdaki iki kaynağın SSRC'si aynı olmamalıdır.",
       "ref": {
@@ -169,6 +178,7 @@
     {
       "key": "encrypted_payload",
       "name": "Encrypted Portion (payload)",
+      "label": "Şifreli yük",
       "bits": 1280,
       "desc": "RTP yükünün şifrelenmiş hali. Önceden tanımlı dönüşümlerde düz metinle aynı uzunluktadır; burada 160 sekizlilik PCMU yükü.",
       "ref": {
@@ -183,6 +193,7 @@
     {
       "key": "auth_tag",
       "name": "Authentication Tag",
+      "label": "Doğrulama etiketi",
       "bits": 80,
       "desc": "Başlık ve şifreli yük üzerinden hesaplanan doğrulama etiketi. Tam 80 bitlik etiket kullanılmalıdır (SHOULD).",
       "ref": {

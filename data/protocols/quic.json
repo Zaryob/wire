@@ -23,6 +23,7 @@
     {
       "key": "header_form",
       "name": "Header Form",
+      "label": "Başlık biçimi",
       "bits": 1,
       "desc": "Uzun başlık için 1, kısa başlık (1-RTT paketleri) için 0.",
       "ref": {
@@ -35,6 +36,7 @@
     {
       "key": "fixed_bit",
       "name": "Fixed Bit",
+      "label": "Sabit bit",
       "bits": 1,
       "desc": "Her zaman 1; 0 olan paketler geçerli QUIC paketi değildir ve atılır.",
       "ref": {
@@ -47,6 +49,7 @@
     {
       "key": "long_packet_type",
       "name": "Long Packet Type",
+      "label": "Uzun başlıklı paket türü",
       "bits": 2,
       "desc": "Uzun başlıklı paketin türü; Initial için 0.",
       "ref": {
@@ -58,7 +61,7 @@
       "values": [
         [
           "0",
-          "Initial"
+          "Başlangıç (Initial)"
         ],
         [
           "1",
@@ -66,17 +69,18 @@
         ],
         [
           "2",
-          "Handshake"
+          "Bağlantı kurulumu (Handshake)"
         ],
         [
           "3",
-          "Retry"
+          "Yeniden deneme (Retry)"
         ]
       ]
     },
     {
       "key": "reserved_bits",
       "name": "Reserved Bits",
+      "label": "Ayrılmış bitler",
       "bits": 2,
       "desc": "Ayrılmış; başlık koruması kaldırıldıktan sonra 0 olmalıdır.",
       "ref": {
@@ -89,6 +93,7 @@
     {
       "key": "pn_length",
       "name": "Packet Number Length",
+      "label": "Paket numarası uzunluğu",
       "bits": 2,
       "desc": "Packet Number alanının uzunluğu eksi bir, sekizli olarak; 0 bir sekizli demektir.",
       "ref": {
@@ -101,6 +106,7 @@
     {
       "key": "version",
       "name": "Version",
+      "label": "Sürüm",
       "bits": 32,
       "desc": "QUIC sürümü. 0x00000001 RFC 9000'in tanımladığı QUIC sürüm 1'dir; 0 sürüm görüşmesi paketlerine ayrılmıştır.",
       "ref": {
@@ -114,6 +120,7 @@
     {
       "key": "dcid_len",
       "name": "Destination Connection ID Length",
+      "label": "Hedef bağlantı kimliği uzunluğu",
       "bits": 8,
       "desc": "Ardından gelen hedef bağlantı kimliğinin sekizli cinsinden uzunluğu; QUIC sürüm 1'de en çok 20.",
       "ref": {
@@ -126,6 +133,7 @@
     {
       "key": "dcid",
       "name": "Destination Connection ID",
+      "label": "Hedef bağlantı kimliği",
       "bits": 64,
       "desc": "Alıcının bağlantıyı tanıdığı kimlik. İlk Initial'da istemci en az 8 sekizlilik rastgele bir değer seçer; Retry sonrasında sunucunun Retry'da verdiği kimliği kullanır.",
       "ref": {
@@ -140,6 +148,7 @@
     {
       "key": "scid_len",
       "name": "Source Connection ID Length",
+      "label": "Kaynak bağlantı kimliği uzunluğu",
       "bits": 8,
       "desc": "Ardından gelen kaynak bağlantı kimliğinin uzunluğu.",
       "ref": {
@@ -152,6 +161,7 @@
     {
       "key": "scid",
       "name": "Source Connection ID",
+      "label": "Kaynak bağlantı kimliği",
       "bits": 64,
       "desc": "Gönderenin, karşı tarafın kendisine yazarken kullanmasını istediği bağlantı kimliği.",
       "ref": {
@@ -166,6 +176,7 @@
     {
       "key": "token_length",
       "name": "Token Length",
+      "label": "Belirteç uzunluğu",
       "bits": 8,
       "desc": "Ardından gelen belirtecin uzunluğu, değişken uzunluklu tamsayı olarak. Belirteç yoksa 0.",
       "ref": {
@@ -180,6 +191,7 @@
     {
       "key": "token",
       "name": "Token",
+      "label": "Belirteç",
       "bits": 128,
       "desc": "Sunucunun bir Retry paketinde ya da önceki bir bağlantıda NEW_TOKEN çerçevesiyle verdiği belirteç; istemcinin adresini doğrulamaya yarar. İçeriği yalnızca sunucu için anlamlıdır.",
       "ref": {
@@ -194,6 +206,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 16,
       "desc": "Packet Number ve şifreli yükün toplam uzunluğu, değişken uzunluklu tamsayı olarak. Aynı datagramda birden çok QUIC paketi taşınabildiği için gereklidir.",
       "ref": {
@@ -208,6 +221,7 @@
     {
       "key": "packet_number",
       "name": "Packet Number",
+      "label": "Paket numarası",
       "bits": 8,
       "desc": "Paket numarası; uzunluğu ilk sekizlideki Packet Number Length alanından gelir. Her paket numara uzayı (Initial, Handshake, uygulama) 0'dan başlar.",
       "ref": {
@@ -221,6 +235,7 @@
     {
       "key": "payload",
       "name": "Packet Payload",
+      "label": "Paket yükü",
       "bits": "değişken",
       "desc": "Şifreli çerçeveler: Initial'da TLS ClientHello'yu taşıyan CRYPTO çerçeveleri, ACK ve PADDING. Sonunda AEAD algoritmasının 16 sekizlilik doğrulama etiketi bulunur.",
       "ref": {

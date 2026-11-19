@@ -1,7 +1,7 @@
 {
   "order": 15,
   "name": "IGMPv3",
-  "title": "IGMPv3 Membership Query",
+  "title": "IGMPv3 üyelik sorgusu",
   "layer": "Ağ",
   "rowBits": 32,
   "summary": "IGMP sürüm 3, bir ağdaki sistemlerin hangi çok noktaya yayın gruplarını, hangi kaynaklardan dinlediğini yönlendiriciye bildirmesini sağlar. Sorgulayıcı yönlendirici Membership Query iletileriyle üyelikleri yoklar; IGMPv2'den farkı, sorgunun belirli kaynaklarla sınırlanabilmesidir.",
@@ -31,6 +31,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 8,
       "desc": "İleti türü; Membership Query için 0x11.",
       "ref": {
@@ -44,6 +45,7 @@
     {
       "key": "max_resp",
       "name": "Max Resp Code",
+      "label": "Azami yanıt süresi kodu",
       "bits": 8,
       "desc": "Yanıt için tanınan en uzun süre, saniyenin onda biri cinsinden ya da üstel kodlanmış. 100, 10 saniyedir.",
       "ref": {
@@ -56,6 +58,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "Bütün IGMP iletisinin, Checksum alanı 0 alınarak hesaplanan RFC 1071 sağlama toplamı.",
       "ref": {
@@ -70,6 +73,7 @@
     {
       "key": "group",
       "name": "Group Address",
+      "label": "Grup adresi",
       "bits": 32,
       "desc": "Sorgulanan çok noktaya yayın grubu; genel sorguda 0.",
       "ref": {
@@ -83,6 +87,7 @@
     {
       "key": "flags",
       "name": "Flags",
+      "label": "Bayraklar",
       "bits": 4,
       "desc": "Ayrılmış bayraklar; 0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -95,6 +100,7 @@
     {
       "key": "s",
       "name": "S Flag",
+      "label": "Yönlendirici güncellemesini engelleme",
       "bits": 1,
       "desc": "1 ise yönlendiriciler bu sorgu nedeniyle zamanlayıcılarını güncellemez.",
       "ref": {
@@ -107,6 +113,7 @@
     {
       "key": "qrv",
       "name": "QRV",
+      "label": "Sorgulayıcı sağlamlık değişkeni",
       "bits": 3,
       "desc": "Sorgulayıcının sağlamlık değişkeni (Robustness Variable); varsayılan 2.",
       "ref": {
@@ -119,6 +126,7 @@
     {
       "key": "qqic",
       "name": "QQIC",
+      "label": "Sorgulayıcı sorgu aralığı kodu",
       "bits": 8,
       "desc": "Sorgulayıcının sorgu aralığı, saniye olarak ya da üstel kodlanmış; varsayılan 125.",
       "ref": {
@@ -131,6 +139,7 @@
     {
       "key": "n",
       "name": "Number of Sources (N)",
+      "label": "Kaynak sayısı",
       "bits": 16,
       "desc": "İletideki kaynak adreslerinin sayısı; genel sorguda 0.",
       "ref": {
@@ -143,6 +152,7 @@
     {
       "key": "sources",
       "name": "Source Address [1..N]",
+      "label": "Kaynak adresleri [1..N]",
       "bits": "değişken",
       "desc": "Sorgunun sınırlandığı kaynakların IPv4 adresleri.",
       "ref": {

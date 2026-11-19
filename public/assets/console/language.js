@@ -5,12 +5,14 @@
   const supported = ['tr', 'en'];
   const key = 'zaryob-language';
   const root = document.documentElement;
+  const fixedLanguage = supported.includes(root.dataset.fixedUiLanguage) ? root.dataset.fixedUiLanguage : null;
   // <html lang> states the language of the page content and is never rewritten;
   // the interface language lives in data-ui-language.
   root.dataset.originalLanguage = root.lang;
   const browserLanguage = () => /^tr(?:-|$)/i.test(navigator.languages?.[0] || navigator.language || '') ? 'tr' : 'en';
   const query = new URL(location.href).searchParams.get('lang');
   let language = browserLanguage();
+  const uiLanguage = () => fixedLanguage ?? language;
   // Explicit: chosen by the reader (saved selection or ?lang=), not guessed from the browser.
   let explicit = false;
   try {
@@ -29,7 +31,7 @@
     });
   };
   const render = () => {
-    root.dataset.uiLanguage = language;
+    root.dataset.uiLanguage = uiLanguage();
     applyProjectLinks();
   };
   const set = (next, { persist = true, updateUrl = true, explicit: chosen = true } = {}) => {
@@ -49,10 +51,11 @@
   window.ZaryobLanguage = {
     supported, browserLanguage, set, applyProjectLinks,
     get language() { return language; },
+    get uiLanguage() { return uiLanguage(); },
     get explicit() { return explicit; },
     subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
   };
-  root.dataset.uiLanguage = language;
+  root.dataset.uiLanguage = uiLanguage();
   document.addEventListener('DOMContentLoaded', () => {
     if (supported.includes(query)) try { localStorage.setItem(key, language); } catch { /* Optional. */ }
     render();

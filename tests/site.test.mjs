@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
+import { createContext, runInContext } from 'node:vm';
 import path from 'node:path';
 import { root, loadProtocols } from '../src/sources.mjs';
 const layers = JSON.parse(await readFile(path.join(root, 'data/layers.json'), 'utf8'));
@@ -38,8 +39,47 @@ test('every protocol has a page whose fields link to an RFC', async () => {
       assert.ok(html.includes(`https://www.rfc-editor.org/rfc/rfc${protocol.layout.rfc}`), protocol.id);
       assert.doesNotMatch(html, /verified--manual/, protocol.id);
     }
-    assert.match(html, /<html lang="tr">/);
+    assert.match(html, /<html lang="tr" data-fixed-ui-language="tr">/);
   }
+});
+
+test('shared controls stay Turkish while links carry an explicit suite preference', async () => {
+  const listeners = [];
+  const values = new Map([['zaryob-language', 'en']]);
+  const root = { lang: 'tr', dataset: { fixedUiLanguage: 'tr' } };
+  const link = { getAttribute: () => '/syscall/' };
+  const document = {
+    documentElement: root,
+    querySelector: () => null,
+    querySelectorAll: selector => selector === '[data-console-projects] a[href]' ? [link] : [],
+    addEventListener: (_, callback) => listeners.push(callback),
+  };
+  const window = { addEventListener() {}, dispatchEvent() {} };
+  const context = createContext({
+    document, window, URL, location: { href: 'https://zaryob.github.io/wire/?lang=en' },
+    navigator: { languages: ['en-US'] },
+    localStorage: { getItem: key => values.get(key), setItem: (key, value) => values.set(key, value) },
+  });
+  for (const file of ['language.js', 'i18n.js']) {
+    runInContext(await readFile(path.join(site, 'assets/console', file), 'utf8'), context);
+  }
+  listeners.forEach(callback => callback());
+  assert.equal(root.dataset.uiLanguage, 'tr');
+  assert.equal(window.ZaryobI18n.t('Dark'), 'Koyu');
+  assert.equal(window.ZaryobI18n.t('Searching…'), 'Aranıyor…');
+  assert.equal(values.get('zaryob-language'), 'en');
+  assert.equal(new URL(link.href).searchParams.get('lang'), 'en');
+});
+
+test('translated field names appear in diagrams, tables and both search indexes', async () => {
+  const tcp = await readFile(path.join(site, 'tcp/index.html'), 'utf8');
+  assert.match(tcp, /data-field="sport"><span>Kaynak port<\/span>/);
+  assert.match(tcp, /role="rowheader">Kaynak port<small class="field-source-name" lang="en">Source Port<\/small><\/th>/);
+  assert.match(tcp, /aria-label="Sıra numaralarını eşzamanla \(SYN\)"><span>SYN<\/span>/);
+  const records = JSON.parse(await readFile(path.join(site, 'search.json'), 'utf8'));
+  assert.match(records.find(record => record.url === 'tcp/').text, /Kaynak port Source Port/);
+  const home = await readFile(path.join(site, 'index.html'), 'utf8');
+  assert.match(home, /data-search="[^"]*kaynak port source port[^"]*"[^>]*><p class="protocol-card__path">~\/wire\/tcp<\/p>/);
 });
 
 test('local links and assets resolve', async () => {

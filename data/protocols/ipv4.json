@@ -20,6 +20,7 @@
     {
       "key": "version",
       "name": "Version",
+      "label": "Sürüm",
       "bits": 4,
       "desc": "Başlığın biçimini belirtir. Bu belge sürüm 4’ü tarif eder.",
       "ref": {
@@ -31,6 +32,7 @@
     {
       "key": "ihl",
       "name": "IHL",
+      "label": "IPv4 başlık uzunluğu",
       "bits": 4,
       "desc": "Başlığın 32 bitlik sözcük cinsinden uzunluğu; verinin nerede başladığını gösterir. Geçerli bir başlık için en küçük değer 5’tir.",
       "ref": {
@@ -42,6 +44,7 @@
     {
       "key": "tos",
       "name": "Type of Service",
+      "label": "Hizmet türü",
       "bits": 8,
       "desc": "RFC 791’de hizmet niteliği göstergesi. Günümüzde ilk altı biti DSCP (RFC 2474 §3), son iki biti ECN alanıdır (RFC 3168 §5).",
       "ref": {
@@ -53,6 +56,7 @@
     {
       "key": "length",
       "name": "Total Length",
+      "label": "Toplam uzunluk",
       "bits": 16,
       "desc": "Datagramın başlık ve veri dahil sekizli cinsinden toplam uzunluğu. En çok 65.535 olabilir; her konak en az 576 sekizlilik datagramı kabul edebilmelidir.",
       "ref": {
@@ -64,6 +68,7 @@
     {
       "key": "id",
       "name": "Identification",
+      "label": "Tanımlayıcı",
       "bits": 16,
       "desc": "Gönderenin atadığı, bir datagramın parçalarını birleştirmeye yarayan tanımlayıcı değer.",
       "ref": {
@@ -76,6 +81,7 @@
     {
       "key": "flags",
       "name": "Flags",
+      "label": "Bayraklar",
       "bits": 3,
       "desc": "Denetim bayrakları. Bit 0 ayrılmıştır ve sıfır olmalıdır; bit 1 DF (parçalama), bit 2 MF (daha parça var).",
       "ref": {
@@ -101,6 +107,7 @@
     {
       "key": "frag",
       "name": "Fragment Offset",
+      "label": "Parça konumu",
       "bits": 13,
       "desc": "Bu parçanın datagram içindeki yeri. 8 sekizlilik (64 bit) birimlerle ölçülür; ilk parçanın değeri sıfırdır.",
       "ref": {
@@ -112,6 +119,7 @@
     {
       "key": "ttl",
       "name": "Time to Live",
+      "label": "Yaşam süresi",
       "bits": 8,
       "desc": "Datagramın internet sisteminde kalabileceği en uzun süre. Datagramı işleyen her modül değeri en az bir azaltır; sıfır olduğunda datagram yok edilir.",
       "ref": {
@@ -123,6 +131,7 @@
     {
       "key": "protocol",
       "name": "Protocol",
+      "label": "Protokol",
       "bits": 8,
       "desc": "Veri kısmında kullanılan bir üst düzey protokol.",
       "ref": {
@@ -148,6 +157,7 @@
     {
       "key": "checksum",
       "name": "Header Checksum",
+      "label": "Başlık sağlama toplamı",
       "bits": 16,
       "desc": "Yalnızca başlık üzerinde hesaplanır: başlıktaki 16 bitlik sözcüklerin bire tümleyen toplamının bire tümleyeni. Hesap sırasında bu alan sıfır sayılır.",
       "ref": {
@@ -160,6 +170,7 @@
     {
       "key": "src",
       "name": "Source Address",
+      "label": "Kaynak adresi",
       "bits": 32,
       "desc": "Kaynak adresi.",
       "ref": {
@@ -172,6 +183,7 @@
     {
       "key": "dst",
       "name": "Destination Address",
+      "label": "Hedef adresi",
       "bits": 32,
       "desc": "Hedef adresi.",
       "ref": {
@@ -184,6 +196,7 @@
     {
       "key": "options",
       "name": "Options",
+      "label": "Seçenekler",
       "bits": null,
       "desc": "Değişken uzunlukta seçenekler. Datagramda bulunmayabilir; bulunduğunda başlık 32 bit sınırına kadar doldurulur.",
       "ref": {

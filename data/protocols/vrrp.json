@@ -31,6 +31,7 @@
     {
       "key": "version",
       "name": "Version",
+      "label": "Sürüm",
       "bits": 4,
       "desc": "VRRP sürümü; bu belge için 3.",
       "ref": {
@@ -43,6 +44,7 @@
     {
       "key": "type",
       "name": "Type",
+      "label": "Tür",
       "bits": 4,
       "desc": "Paket türü; tanımlı tek tür 1, ADVERTISEMENT'tır.",
       "ref": {
@@ -55,6 +57,7 @@
     {
       "key": "vrid",
       "name": "Virtual Rtr ID (VRID)",
+      "label": "Sanal yönlendirici kimliği",
       "bits": 8,
       "desc": "Paketin ait olduğu sanal yönlendirici, 1–255.",
       "ref": {
@@ -67,6 +70,7 @@
     {
       "key": "priority",
       "name": "Priority",
+      "label": "Öncelik",
       "bits": 8,
       "desc": "Gönderen yönlendiricinin bu sanal yönlendirici için önceliği. Yedekler için varsayılan 100'dür.",
       "ref": {
@@ -93,6 +97,7 @@
     {
       "key": "count",
       "name": "IPvX Addr Count",
+      "label": "IP adresi sayısı",
       "bits": 8,
       "desc": "Pakette bulunan IPv4 ya da IPv6 adreslerinin sayısı; en az 1.",
       "ref": {
@@ -105,6 +110,7 @@
     {
       "key": "rsvd",
       "name": "Reserve",
+      "label": "Ayrılmış",
       "bits": 4,
       "desc": "0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -117,6 +123,7 @@
     {
       "key": "max_adv",
       "name": "Max Advertise Interval",
+      "label": "Azami duyuru aralığı",
       "bits": 12,
       "desc": "Duyurular arasındaki süre, santisaniye olarak; varsayılan 100 (1 saniye).",
       "ref": {
@@ -129,6 +136,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "IPv4'te VRRP mesajının, Checksum alanı 0 alınarak hesaplanan RFC 1071 sağlama toplamı.",
       "ref": {
@@ -143,6 +151,7 @@
     {
       "key": "address",
       "name": "IPv4 Address",
+      "label": "IPv4 adresi",
       "bits": 32,
       "desc": "Sanal yönlendiriciyle ilişkili IPv4 adresi. Adres sayısı IPvX Addr Count'tan gelir; bu örnekte bir adres vardır.",
       "ref": {

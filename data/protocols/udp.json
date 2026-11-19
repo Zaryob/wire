@@ -19,6 +19,7 @@
     {
       "key": "sport",
       "name": "Source Port",
+      "label": "Kaynak port",
       "bits": 16,
       "desc": "İsteğe bağlı alan. Anlamlı olduğunda gönderen sürecin portunu belirtir; kullanılmıyorsa sıfır konur.",
       "ref": {
@@ -30,6 +31,7 @@
     {
       "key": "dport",
       "name": "Destination Port",
+      "label": "Hedef port",
       "bits": 16,
       "desc": "Belirli bir internet hedef adresi bağlamında anlam taşıyan hedef portu.",
       "ref": {
@@ -41,6 +43,7 @@
     {
       "key": "length",
       "name": "Length",
+      "label": "Uzunluk",
       "bits": 16,
       "desc": "Başlık ve veri dahil datagramın sekizli cinsinden uzunluğu; en küçük değeri 8’dir.",
       "ref": {
@@ -52,6 +55,7 @@
     {
       "key": "checksum",
       "name": "Checksum",
+      "label": "Sağlama toplamı",
       "bits": 16,
       "desc": "IP başlığından alınan bilgilerle kurulan sözde başlığın, UDP başlığının ve verinin bire tümleyen toplamının 16 bitlik bire tümleyeni.",
       "ref": {
@@ -64,6 +68,7 @@
     {
       "key": "data",
       "name": "Data",
+      "label": "Veri",
       "bits": null,
       "desc": "Datagramın taşıdığı veri sekizlileri.",
       "ref": {

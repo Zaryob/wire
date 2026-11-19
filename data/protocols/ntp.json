@@ -30,6 +30,7 @@
     {
       "key": "li",
       "name": "LI",
+      "label": "Artık saniye göstergesi",
       "bits": 2,
       "desc": "Leap Indicator (artık saniye göstergesi). Günün son dakikasına artık saniye eklenip çıkarılacağını bildirir. 3, saatin henüz eşzamanlanmadığı anlamına gelir.",
       "ref": {
@@ -48,6 +49,7 @@
     {
       "key": "vn",
       "name": "VN",
+      "label": "Sürüm numarası",
       "bits": 3,
       "desc": "Version Number: NTP sürüm numarası; NTPv4 için 4.",
       "ref": {
@@ -60,6 +62,7 @@
     {
       "key": "mode",
       "name": "Mode",
+      "label": "Kip",
       "bits": 3,
       "desc": "İletişim kipi. İstemci isteği 3, sunucu yanıtı 4 taşır.",
       "ref": {
@@ -82,6 +85,7 @@
     {
       "key": "stratum",
       "name": "Stratum",
+      "label": "Saat katmanı",
       "bits": 8,
       "desc": "Sunucunun başvuru saatine uzaklığı. 1 birincil sunucu (ör. GPS alıcılı), 2–15 NTP ile eşzamanlanan ikincil sunucu, 16 eşzamansızdır. 0 ise Kiss-o'-Death paketini belirtir.",
       "ref": {
@@ -100,6 +104,7 @@
     {
       "key": "poll",
       "name": "Poll",
+      "label": "Sorgulama aralığı",
       "bits": 8,
       "desc": "Ardışık iletiler arasındaki en uzun aralık, log₂ saniye cinsinden işaretli tamsayı. 6 değeri 2⁶ = 64 saniyedir.",
       "ref": {
@@ -112,6 +117,7 @@
     {
       "key": "precision",
       "name": "Precision",
+      "label": "Hassasiyet",
       "bits": 8,
       "desc": "Sistem saatinin duyarlılığı, log₂ saniye cinsinden işaretli (ikiye tümleyen) tamsayı. Örnekteki 0xe9 = −23, yani 2⁻²³ ≈ 119 nanosaniyedir.",
       "ref": {
@@ -125,6 +131,7 @@
     {
       "key": "rootdelay",
       "name": "Root Delay",
+      "label": "Kök gecikmesi",
       "bits": 32,
       "desc": "Başvuru saatine kadar toplam gidiş-dönüş gecikmesi, NTP kısa biçiminde (16.16). Örnekteki 0x00000a3d ≈ 0,040 saniyedir.",
       "ref": {
@@ -138,6 +145,7 @@
     {
       "key": "rootdisp",
       "name": "Root Dispersion",
+      "label": "Kök dağılımı",
       "bits": 32,
       "desc": "Başvuru saatine kadar biriken toplam belirsizlik (dispersion), NTP kısa biçiminde. Örnekteki 0x00000831 ≈ 0,032 saniyedir.",
       "ref": {
@@ -151,6 +159,7 @@
     {
       "key": "refid",
       "name": "Reference ID",
+      "label": "Başvuru saati kimliği",
       "bits": 32,
       "type": "ipv4",
       "desc": "Başvuru kaynağının kimliği. Stratum 1'de dört karakterlik ASCII saat kaynağı (\"GPS\", \"PPS\" gibi), Stratum 0'da kiss kodu (\"RATE\", \"DENY\"), daha üst stratumlarda IPv4 üzerinden üst sunucunun adresidir.",
@@ -164,6 +173,7 @@
     {
       "key": "reftime",
       "name": "Reference Timestamp",
+      "label": "Başvuru zaman damgası",
       "bits": 64,
       "desc": "Sistem saatinin en son ayarlandığı an, 64 bitlik NTP zaman damgası biçiminde. Örnek: 16 Kasım 2026 11:58:20 UTC.",
       "ref": {
@@ -177,6 +187,7 @@
     {
       "key": "org",
       "name": "Origin Timestamp (T1)",
+      "label": "İsteğin gönderim zamanı",
       "bits": 64,
       "desc": "İsteğin istemciden ayrıldığı an. Sunucu, istemcinin Transmit Timestamp değerini bu alana kopyalar; istemci bununla yanıtı kendi isteğiyle eşleştirir. Örnek: 12:00:00,000 UTC.",
       "ref": {
@@ -190,6 +201,7 @@
     {
       "key": "rec",
       "name": "Receive Timestamp (T2)",
+      "label": "İsteğin alım zamanı",
       "bits": 64,
       "desc": "İsteğin sunucuya ulaştığı an. Örnek: 12:00:00,012 UTC.",
       "ref": {
@@ -203,6 +215,7 @@
     {
       "key": "xmt",
       "name": "Transmit Timestamp (T3)",
+      "label": "Yanıtın gönderim zamanı",
       "bits": 64,
       "desc": "Yanıtın sunucudan ayrıldığı an. Örnek: 12:00:00,013 UTC.",
       "ref": {
