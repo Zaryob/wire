@@ -37,7 +37,8 @@ if (filter) {
   const cards = [...document.querySelectorAll('.protocol-card')];
   const status = document.getElementById('filter-status');
   filter.addEventListener('input', () => {
-    const terms = filter.value.toLocaleLowerCase('tr').split(/\s+/).filter(Boolean);
+    const isTr = document.documentElement.lang === 'tr';
+    const terms = filter.value.toLocaleLowerCase(isTr ? 'tr' : 'en').split(/\s+/).filter(Boolean);
     let visible = 0;
     if (terms.length) {
       document.body.classList.add('is-searching');
@@ -50,7 +51,11 @@ if (filter) {
       if (match) visible += 1;
     }
     document.querySelectorAll('.layer').forEach(layer => { layer.hidden = !layer.querySelector('.protocol-card:not([hidden])'); });
-    status.textContent = terms.length ? `${visible} protokol eşleşti.` : '';
+    status.textContent = terms.length
+      ? (isTr
+          ? `${visible} protokol eşleşti.`
+          : `${visible} matching protocol${visible === 1 ? '' : 's'}.`)
+      : '';
   });
 
   // On this page "/" jumps to the protocol filter. The capture phase runs before the shared header's
