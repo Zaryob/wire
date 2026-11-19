@@ -129,7 +129,11 @@
               "rfc": 9114,
               "phrase": "QUIC"
             }
-          ]
+          ],
+          "summary_tr": "Web'in protokolü: istemci bir istek gönderir, sunucu bir yanıt döndürür. HTTP/1.1 metin tabanlıdır; HTTP/2 ve HTTP/3 aynı anlamları ikili çerçevelerle taşır. HTTPS, HTTP'yi TLS ile şifreli bir bağlantı üzerinden taşır.",
+          "summary_en": "The protocol of the Web: the client sends a request, the server returns a response. HTTP/1.1 is text-based; HTTP/2 and HTTP/3 carry the same semantics via binary framing. HTTPS runs HTTP over a TLS-encrypted connection.",
+          "ports_tr": "TCP 80 / 443; HTTP/3 için UDP üzerinde QUIC",
+          "ports_en": "TCP 80 / 443; QUIC over UDP for HTTP/3"
         },
         {
           "name": "DNS",
@@ -151,7 +155,11 @@
               "rfc": 1035,
               "phrase": "datagram access using UDP"
             }
-          ]
+          ],
+          "summary_tr": "example.com gibi alan adlarını IP adreslerine ve diğer kayıtlara çevirir. Sorgular genellikle UDP ile, büyük yanıtlar TCP ile taşınır.",
+          "summary_en": "Resolves human-readable domain names like example.com to IP addresses and other resource records. Typically uses UDP for small queries and answers, and TCP for large responses or zone transfers.",
+          "ports_tr": "UDP / TCP 53",
+          "ports_en": "UDP 53 (queries), TCP 53 (large responses and zone transfers)"
         },
         {
           "name": "TCP / UDP",
@@ -178,7 +186,11 @@
               "rfc": 768,
               "phrase": "with a minimum of protocol mechanism"
             }
-          ]
+          ],
+          "summary_tr": "TCP, iki program arasında güvenilir, sıralı bir bayt akışı kurar. UDP ise bağlantı kurmadan, en az mekanizmayla tek tek datagram gönderir; hız ve basitlik isteyen uygulamalar (DNS, RTP, QUIC) onu kullanır.",
+          "summary_en": "TCP establishes a reliable, ordered, error-checked byte stream between two processes with flow and congestion control. UDP provides lightweight, connectionless datagram delivery with minimal overhead.",
+          "ports_tr": null,
+          "ports_en": "Transport layer; port numbers 0–65535"
         },
         {
           "name": "IP (IPv4 / IPv6)",
@@ -207,7 +219,11 @@
               "rfc": 8200,
               "phrase": "designed as the successor to IP version 4 (IPv4)"
             }
-          ]
+          ],
+          "summary_tr": "Her cihaza bir adres verir ve datagramları ağlar arasında, yönlendirici yönlendirici hedefe taşır; gerekirse uzun datagramları parçalar. IPv6, IPv4’ün yerini almak üzere tasarlanmış yeni sürümdür.",
+          "summary_en": "Assigns addresses to devices and routes datagrams hop-by-hop across networks and routers. IPv4 uses 32-bit addresses; IPv6 uses 128-bit addresses and eliminates in-network router fragmentation.",
+          "ports_tr": null,
+          "ports_en": "Network layer; carried inside Ethernet frames"
         }
       ]
     },
@@ -233,7 +249,11 @@
               "rfc": 959,
               "phrase": "data connection"
             }
-          ]
+          ],
+          "summary_tr": "Sunucuya dosya yüklemek ve indirmek için kullanılır. Komutlar ve yanıtlar bir denetim bağlantısında metin olarak, dosyalar ayrı bir veri bağlantısında taşınır.",
+          "summary_en": "Uploads and downloads files to and from a server. Operates via text commands and responses on port 21, and opens separate data connections for transfers. Largely superseded by SFTP and HTTPS.",
+          "ports_tr": "TCP 21 (denetim)",
+          "ports_en": "TCP 21 (control), TCP 20 (active data)"
         },
         {
           "name": "SFTP",
@@ -256,7 +276,11 @@
               "rfc": 4253,
               "phrase": "port 22"
             }
-          ]
+          ],
+          "summary_tr": "SSH bağlantısının içinde bir alt sistem olarak çalışan dosya aktarım protokolüdür; şifreleme ve kimlik doğrulamayı SSH sağlar. Protokolün kendisi IETF'te taslak olarak kaldı ve RFC olarak yayımlanmadı; wire'da ayrı sayfası yoktur.",
+          "summary_en": "A secure file transfer protocol operating as a subsystem inside an encrypted SSH connection. Unlike FTP, transfers both commands and files over a single encrypted port (22).",
+          "ports_tr": "TCP 22 (SSH üzerinden)",
+          "ports_en": "TCP 22 (inside SSH)"
         },
         {
           "name": "DHCP",
@@ -293,7 +317,11 @@
               "rfc": 2132,
               "phrase": "Domain Name Server Option"
             }
-          ]
+          ],
+          "summary_tr": "Ağa bağlanan cihazlara IP adresini, ağ maskesini, varsayılan ağ geçidini ve DNS sunucularını otomatik olarak dağıtır. DHCPv6 aynı işi IPv6 için yapar.",
+          "summary_en": "Dynamically assigns IP addresses, subnet masks, default gateways, and DNS servers to devices joining a network. DHCPv4 runs over UDP ports 67/68; DHCPv6 runs over UDP ports 546/547.",
+          "ports_tr": "UDP 67 / 68",
+          "ports_en": "UDP 67 (server) / 68 (client) for IPv4; UDP 547 (server) / 546 (client) for IPv6"
         },
         {
           "name": "SNMP",
@@ -316,7 +344,11 @@
               "rfc": 3417,
               "phrase": "listen on UDP port 162"
             }
-          ]
+          ],
+          "summary_tr": "Yönlendirici, anahtar gibi cihazların durumunu uzaktan okumayı ve yönetmeyi sağlar. Ajanlar 161, bildirim alıcıları 162 numaralı portu dinler.",
+          "summary_en": "Used to query and configure status and metrics on network devices like routers and switches. Messages use ASN.1 BER encoding over UDP.",
+          "ports_tr": "UDP 161 / 162",
+          "ports_en": "UDP 161 (queries), UDP 162 (traps and notifications)"
         },
         {
           "name": "SMB",
@@ -334,7 +366,11 @@
               "std": "ms-smb2",
               "phrase": "TCP port 445"
             }
-          ]
+          ],
+          "summary_tr": "Yerel ağda dosya, yazıcı ve adlandırılmış kanal paylaşımı sağlar. Sürüm 2 ve 3, Microsoft'un [MS-SMB2] açık spesifikasyonunda tanımlıdır.",
+          "summary_en": "Enables sharing of files, printers, and named pipes on local networks. Modern networks use SMB2/SMB3 over Direct TCP (port 445).",
+          "ports_tr": "TCP 445",
+          "ports_en": "TCP 445 (Direct TCP), TCP 139 (NetBIOS)"
         }
       ]
     },
@@ -372,7 +408,11 @@
               "rfc": 5321,
               "phrase": "DATA"
             }
-          ]
+          ],
+          "summary_tr": "E-postayı gönderir ve sunucular arasında iletir. İstemci EHLO, MAIL, RCPT ve DATA gibi metin komutlarıyla göndereni, alıcıları ve iletiyi bildirir.",
+          "summary_en": "Transfers and relays email between servers. Clients send text commands like EHLO, MAIL FROM, RCPT TO, and DATA; servers answer with numeric response codes.",
+          "ports_tr": "TCP 25",
+          "ports_en": "TCP 25 (relay), TCP 587 (submission with STARTTLS), TCP 465 (implicit TLS)"
         },
         {
           "name": "POP3",
@@ -393,7 +433,11 @@
               "rfc": 1939,
               "phrase": "normally, mail is downloaded and then deleted"
             }
-          ]
+          ],
+          "summary_tr": "Sunucudaki posta kutusundan iletileri istemciye indirir. Genellikle iletiler indirildikten sonra sunucudan silinir; protokol iletileri sunucuda bırakmaya da izin verir.",
+          "summary_en": "Downloads messages from a server mailbox to a local client. Typically deletes messages from the server after download. Operates via simple text commands.",
+          "ports_tr": "TCP 110",
+          "ports_en": "TCP 110 (unencrypted), TCP 995 (POP3S over TLS)"
         },
         {
           "name": "IMAP",
@@ -410,7 +454,11 @@
               "rfc": 9051,
               "phrase": "port 143 (cleartext port) or port 993 (Implicit TLS port)"
             }
-          ]
+          ],
+          "summary_tr": "İletiler sunucudaki klasörlerde kalır; istemciler onları sunucuda okur, işaretler ve düzenler. Böylece aynı posta kutusu birden çok cihazda tutarlı görünür.",
+          "summary_en": "Maintains email folders directly on the server; clients synchronize changes, flags, and folders bidirectionally. Operates via text commands with client-chosen tags.",
+          "ports_tr": "TCP 143 / 993 (TLS)",
+          "ports_en": "TCP 143 (unencrypted / STARTTLS), TCP 993 (IMAPS over TLS)"
         }
       ]
     },
@@ -434,7 +482,11 @@
               "rfc": 3261,
               "phrase": "It is 5060 for UDP, TCP and SCTP, 5061 for TLS"
             }
-          ]
+          ],
+          "summary_tr": "IP üzerinden sesli ve görüntülü görüşmeleri (VoIP) başlatır, değiştirir ve sonlandırır. Metin tabanlıdır; görüşmenin kendisi RTP ile taşınır.",
+          "summary_en": "Establishes, modifies, and terminates voice and video sessions (VoIP) over IP. Uses text-based headers similar to HTTP (INVITE, 200 OK, ACK, BYE) and negotiates media parameters using SDP.",
+          "ports_tr": "5060 (UDP, TCP, SCTP) / 5061 (TLS)",
+          "ports_en": "UDP 5060, TCP 5060, TLS 5061"
         },
         {
           "name": "RTP / SRTP",
@@ -455,7 +507,11 @@
               "rfc": 3711,
               "phrase": "Encrypted Portion"
             }
-          ]
+          ],
+          "summary_tr": "Canlı ses ve görüntü akışlarını sıra numarası ve zaman damgasıyla gerçek zamanlı taşır; RTCP akışın istatistiklerini bildirir. SRTP yükü şifreler ve her pakete bir doğrulama etiketi ekler.",
+          "summary_en": "Delivers live audio and video streams with sequence numbering, timestamps, and payload type identification. SRTP adds encryption and authentication.",
+          "ports_tr": null,
+          "ports_en": "Typically dynamic even UDP ports (e.g. 10000–20000)"
         },
         {
           "name": "SSH",
@@ -478,7 +534,11 @@
               "rfc": 4254,
               "phrase": "TCP/IP Port Forwarding"
             }
-          ]
+          ],
+          "summary_tr": "Sunuculara şifreli ve kimliği doğrulanmış bir uzak oturum açar. Komut satırı, dosya aktarımı (SFTP) ve port yönlendirme aynı şifreli bağlantıda taşınır.",
+          "summary_en": "Opens an encrypted and authenticated remote session to servers. After key exchange, encrypts and authenticates all packets with symmetric ciphers and MACs. Powers shell access and SFTP.",
+          "ports_tr": "TCP 22",
+          "ports_en": "TCP 22"
         }
       ]
     },
@@ -501,7 +561,11 @@
               "rfc": 894,
               "phrase": "This RFC specifies a standard method of encapsulating Internet Protocol (IP) [1] datagrams on an Ethernet"
             }
-          ]
+          ],
+          "summary_tr": "IP datagramlarının bir Ethernet çerçevesine nasıl yerleştirileceğini tanımlar: çerçevenin EtherType alanı yükün IP olduğunu söyler.",
+          "summary_en": "Defines how IP datagrams are encapsulated into Ethernet frames. Uses EtherType 0x0800 for IPv4 and 0x86DD for IPv6.",
+          "ports_tr": null,
+          "ports_en": "Link layer; carried over physical Ethernet"
         },
         {
           "name": "ARP",
@@ -519,7 +583,11 @@
               "rfc": 826,
               "phrase": "a method of Converting Protocol Addresses (e.g., IP addresses) to Local Network Addresses (e.g., Ethernet addresses)"
             }
-          ]
+          ],
+          "summary_tr": "Bir protokol adresini (ör. IPv4 adresini) aynı yerel ağdaki 48 bitlik Ethernet adresine çevirir. Gönderici yanıtı bir tabloda saklar ve sonraki çerçevelerde kullanır.",
+          "summary_en": "Resolves an IPv4 address to a 48-bit hardware MAC address on the local network using broadcast requests and unicast replies.",
+          "ports_tr": null,
+          "ports_en": "Link layer; carried with EtherType 0x0806"
         },
         {
           "name": "RARP",
@@ -537,7 +605,11 @@
               "rfc": 903,
               "phrase": "they must discover their protocol address from some external source"
             }
-          ]
+          ],
+          "summary_tr": "ARP’nin tersi: yalnızca donanım adresini bilen bir cihaz (ör. disksiz iş istasyonu) kendi IP adresini ağdaki bir sunucudan öğrenir. Bugün yerini DHCP almıştır.",
+          "summary_en": "Reverse of ARP: enables a device knowing only its MAC address (e.g., during diskless booting) to broadcast a request and discover its IPv4 address.",
+          "ports_tr": null,
+          "ports_en": "Link layer; carried with EtherType 0x8035"
         },
         {
           "name": "PPPoE",
@@ -555,7 +627,11 @@
               "rfc": 2516,
               "phrase": "This document describes how to build PPP sessions and encapsulate PPP packets over Ethernet"
             }
-          ]
+          ],
+          "summary_tr": "Noktadan noktaya PPP oturumlarını Ethernet üzerinde kurar ve PPP paketlerini Ethernet çerçevelerine sarar; DSL ve fiber erişiminde kullanıcı oturumu böyle açılır.",
+          "summary_en": "Establishes and frames point-to-point PPP sessions over Ethernet, common in DSL and broadband subscriber access networks.",
+          "ports_tr": null,
+          "ports_en": "Link layer; EtherType 0x8863 (Discovery) and 0x8864 (Session)"
         },
         {
           "name": "MPLS",
@@ -581,7 +657,11 @@
               "rfc": 3032,
               "phrase": "Routers which support MPLS are known as \"Label Switching Routers\", or \"LSRs\""
             }
-          ]
+          ],
+          "summary_tr": "Ağ katmanı paketinin önüne 4 sekizlik etiket yığını girdileri ekleyerek onu “etiketli paket” yapar; bu paketleri etiket anahtarlamalı yönlendiriciler (LSR) iletir. Bağlantı ile ağ katmanı arasında durduğu için sık sık “2,5. katman” denir.",
+          "summary_en": "Inserts 4-octet label stack entries before the network-layer packet, enabling fast label switching along label switched paths (LSPs) without IP lookups.",
+          "ports_tr": null,
+          "ports_en": "Carried between link and network headers; EtherType 0x8847"
         }
       ]
     },
@@ -610,7 +690,11 @@
               "rfc": 4443,
               "phrase": "ICMPv6 is used by IPv6 nodes to report errors encountered in processing packets"
             }
-          ]
+          ],
+          "summary_tr": "IP’nin yanında çalışan denetim iletileri: datagram işlenirken çıkan hataları bildirir ve ping gibi tanı işlerini yapar. IP’yi güvenilir yapmaz; yalnızca sorunlar hakkında geri bildirim verir.",
+          "summary_en": "Control messages accompanying IP: reports errors when datagrams cannot be delivered and provides diagnostic tools like ping and traceroute.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; IPv4 Protocol 1, IPv6 Next Header 58"
         },
         {
           "name": "IGMP",
@@ -630,7 +714,11 @@
               "rfc": 2236,
               "phrase": "used by IP hosts to report their multicast group memberships to any immediately- neighboring multicast routers"
             }
-          ]
+          ],
+          "summary_tr": "IPv4 cihazlarının hangi çok noktaya yayın (multicast) gruplarına üye olduğunu komşu yönlendiricilere bildirdiği protokol.",
+          "summary_en": "Enables IPv4 devices to report multicast group memberships to local multicast routers. Replaced by MLD in IPv6.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IPv4; Protocol 2"
         },
         {
           "name": "IPsec (AH / ESP)",
@@ -654,7 +742,11 @@
               "rfc": 4303,
               "phrase": "ESP is used to provide confidentiality, data origin authentication, connectionless integrity, an anti-replay service"
             }
-          ]
+          ],
+          "summary_tr": "IP datagramlarını ağ katmanında korur. AH bütünlük, kaynak doğrulama ve yeniden oynatma koruması sağlar; ESP bunlara gizlilik (şifreleme) ekler.",
+          "summary_en": "Protects IP datagrams at the network layer. AH provides integrity and authentication; ESP adds payload confidentiality.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; AH Protocol 51, ESP Protocol 50"
         },
         {
           "name": "GRE",
@@ -672,7 +764,11 @@
               "rfc": 2784,
               "phrase": "encapsulation of an arbitrary network layer protocol over another arbitrary network layer protocol"
             }
-          ]
+          ],
+          "summary_tr": "Bir ağ katmanı protokolünü başka bir ağ katmanı protokolünün içinde taşıyan genel tünel; ör. IPv4 içinde IPv6 ya da başka bir IPv4 paketi.",
+          "summary_en": "Encapsulates arbitrary network-layer packets inside another network-layer protocol, creating point-to-point IP tunnels across intermediate networks.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; Protocol 47"
         },
         {
           "name": "OSPF",
@@ -694,7 +790,11 @@
               "rfc": 2328,
               "phrase": "Each OSPF router maintains an identical database describing the Autonomous System's topology"
             }
-          ]
+          ],
+          "summary_tr": "Tek bir özerk sistem içinde çalışan bağlantı durumu (link-state) yönlendirme protokolü: her yönlendirici aynı topoloji veritabanını tutar ve en kısa yolları buradan hesaplar. Doğrudan IP üzerinde çalışır.",
+          "summary_en": "A link-state interior gateway routing protocol operating within an autonomous system. Routers synchronize topology databases and compute shortest paths using Dijkstra's algorithm.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IPv4; Protocol 89"
         },
         {
           "name": "VRRP",
@@ -712,7 +812,11 @@
               "rfc": 9568,
               "phrase": "is designed to eliminate the single point of failure inherent in a network utilizing default routing"
             }
-          ]
+          ],
+          "summary_tr": "Birkaç yönlendiricinin tek bir sanal varsayılan ağ geçidi gibi davranmasını sağlar; asıl yönlendirici düşünce yedeği devralır, uç cihazların ayarı değişmez.",
+          "summary_en": "Enables several physical routers to act as a single virtual default gateway, providing transparent automatic failover if the master router fails.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; Protocol 112"
         },
         {
           "name": "Segment Routing (SRH)",
@@ -730,7 +834,11 @@
               "rfc": 8754,
               "phrase": "Segment Routing can be applied to the IPv6 data plane using a new type of Routing Extension Header called the Segment Routing Header (SRH)"
             }
-          ]
+          ],
+          "summary_tr": "Kaynak, paketin geçeceği segmentlerin listesini bir IPv6 yönlendirme uzantı başlığına yazar; ara düğümler bu listeye göre iletir.",
+          "summary_en": "The source encodes an ordered list of segments (IPv6 addresses) in an IPv6 routing extension header, steering the packet along an explicit network path without per-flow core state.",
+          "ports_tr": null,
+          "ports_en": "IPv6 extension header; Next Header 43, Routing Type 4"
         }
       ]
     },
@@ -757,7 +865,11 @@
               "rfc": 9260,
               "phrase": "network-level fault tolerance through supporting of multi-homing"
             }
-          ]
+          ],
+          "summary_tr": "IP üzerinde güvenilir, ileti tabanlı taşıma. Bir bağlantı (association) içinde birden çok akış taşır ve iki uç birden fazla adresle bağlanabilir (multi-homing); telefon sinyalleşmesi ve WebRTC veri kanalları kullanır.",
+          "summary_en": "Reliable, message-oriented transport over IP. Supports multiple independent streams within an association and multi-homing across multiple IP addresses.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; Protocol 132"
         },
         {
           "name": "DCCP",
@@ -775,7 +887,11 @@
               "rfc": 4340,
               "phrase": "provides bidirectional unicast connections of congestion-controlled unreliable datagrams"
             }
-          ]
+          ],
+          "summary_tr": "Tıkanıklık denetimli ama güvenilir olmayan datagramlar için çift yönlü bağlantılar kurar: UDP gibi teslimi garanti etmez, TCP gibi ağı boğmaz.",
+          "summary_en": "Lightweight transport providing congestion-controlled but unreliable datagram delivery for streaming audio/video and interactive gaming.",
+          "ports_tr": null,
+          "ports_en": "Carried directly in IP; Protocol 33"
         },
         {
           "name": "QUIC",
@@ -800,7 +916,11 @@
               "rfc": 9001,
               "phrase": "This document describes how Transport Layer Security (TLS) is used to secure QUIC"
             }
-          ]
+          ],
+          "summary_tr": "UDP üzerinde çalışan, güvenliği TLS ile sağlanan genel amaçlı taşıma protokolü. HTTP/3 bunun üzerinde çalışır.",
+          "summary_en": "A general-purpose transport protocol running over UDP, secured by TLS 1.3. Provides multiplexed streams without head-of-line blocking and fast 0-RTT/1-RTT connection setup.",
+          "ports_tr": null,
+          "ports_en": "UDP; port chosen by application (e.g. 443 for HTTP/3)"
         },
         {
           "name": "VXLAN / Geneve",
@@ -828,7 +948,11 @@
               "rfc": 8926,
               "phrase": "Dest Port = 6081 Geneve"
             }
-          ]
+          ],
+          "summary_tr": "Sanal makinelerin 2. katman ağlarını 3. katman ağ üzerinden UDP ile tüneller (kaplama ağı); veri merkezlerinde kiracıları birbirinden ayırır. Geneve, aynı işi genişletilebilir seçeneklerle yapan genel kapsülleme biçimidir.",
+          "summary_en": "Overlay tunneling protocols that encapsulate Layer 2 Ethernet frames inside Layer 4 UDP datagrams, scaling virtual networks across data centers with 24-bit identifiers.",
+          "ports_tr": "UDP 4789 / 6081",
+          "ports_en": "UDP 4789 (VXLAN), UDP 6081 (Geneve)"
         }
       ]
     }
