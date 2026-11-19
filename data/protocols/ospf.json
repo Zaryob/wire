@@ -4,7 +4,7 @@
   "title": "OSPFv2 komşu keşif paketi (Hello)",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "Önce En Kısa Yolu Aç (Open Shortest Path First - OSPF), bir özerk sistemin içinde bağlantı durumu yönlendirmesi yapar. Her OSPF paketi 24 sekizlilik ortak bir başlıkla başlar. Hello paketleri komşuları bulur ve aynı ağdaki yönlendiricilerin ağ maskesi ile zaman aralıkları üzerinde anlaştığını denetler.",
+  "summary": "OSPFv2 (Open Shortest Path First), bir özerk sistem içinde çalışan IPv4 bağlantı durumu yönlendirme protokolüdür. Ortak paket başlığı 24 bayttır. Bu sayfadaki Hello paketi komşuları bulur ve komşuluk için gereken ağ ayarlarını bildirir.",
   "layout": {
     "rfc": 2328,
     "section": "A.3.2",

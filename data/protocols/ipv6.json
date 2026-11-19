@@ -4,7 +4,7 @@
   "title": "IPv6 başlığı",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "İnternet Protokolü sürüm 6 paketinin sabit başlığı. Her zaman 40 sekizlidir; ek bilgiler uzantı başlıklarında taşınır.",
+  "summary": "IPv6 (Internet Protocol version 6), 128 bitlik adreslerle paketleri ağlar arasında taşır. Temel IPv6 başlığı sabit 40 bayttır. Next Header alanı, hemen ardından gelen uzantı başlığını veya üst katman protokolünü tanımlar.",
   "layout": {
     "rfc": 8200,
     "section": "3",

@@ -4,7 +4,7 @@
   "title": "SSH ikili paketi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Güvenli Kabuk (Secure Shell - SSH), sunuculara şifreli uzak oturum açmayı sağlar. Bağlantıdaki her ileti, uzunluk, dolgu uzunluğu, yük, rastgele dolgu ve bir ileti doğrulama kodundan (MAC) oluşan ikili bir pakette taşınır.",
+  "summary": "SSH (Secure Shell), uzak oturum ve diğer uygulamalar için güvenli bir kanal sağlar. RFC 4253’teki ikili paket biçimi 4 bayt paket uzunluğu, 1 bayt dolgu uzunluğu, yük ve rastgele dolgudan oluşur. Kullanılan MAC algoritmasına göre paketi bir doğrulama kodu izler.",
   "layout": {
     "rfc": 4253,
     "section": "6",

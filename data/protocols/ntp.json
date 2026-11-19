@@ -4,7 +4,7 @@
   "title": "NTPv4 başlığı",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Ağ Zaman Protokolü (Network Time Protocol - NTPv4) paket başlığı. Temel başlık 48 sekizlidir ve dört adet 64 bitlik zaman damgası taşır; UDP üzerinde 123 numaralı portu kullanır.",
+  "summary": "NTPv4 (Network Time Protocol), ağdaki saatleri eşzamanlamak için zaman damgaları alışverişi yapar. Temel NTP başlığı 48 bayttır ve dört 64 bitlik zaman damgası içerir. NTP sunucuları UDP 123 numaralı portu kullanır.",
   "layout": {
     "rfc": 5905,
     "section": "7.3",

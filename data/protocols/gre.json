@@ -4,7 +4,7 @@
   "title": "GRE başlığı",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "Genel Yönlendirme Kapsüllemesi (Generic Routing Encapsulation), çok çeşitli ağ katmanı protokollerini sanal noktadan noktaya bağlantılar (tüneller) üzerinden taşımak için kullanılan hafif bir kapsülleme protokolüdür. IP protokol numarası 47'dir.",
+  "summary": "GRE (Generic Routing Encapsulation), bir ağ katmanı paketini başka bir ağ katmanı paketi içinde taşır. RFC 2784’teki temel GRE başlığı 4 bayttır ve iç protokolün türünü belirtir. IP, GRE’yi protokol numarası 47 ile tanır.",
   "layout": {
     "rfc": 2784,
     "kind": "diagram",

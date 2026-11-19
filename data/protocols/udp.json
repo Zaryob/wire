@@ -4,7 +4,7 @@
   "title": "UDP başlığı",
   "layer": "Taşıma",
   "rowBits": 32,
-  "summary": "Kullanıcı Datagram Protokolü başlığı dört alandan oluşur ve 8 sekizlidir. IP içinde protokol numarası 17’dir.",
+  "summary": "UDP (User Datagram Protocol), uygulamalar arasında bağlantı kurmadan datagram taşır. Sabit 8 baytlık başlığı, her biri 16 bit olan kaynak portu, hedef portu, uzunluk ve sağlama toplamından oluşur. Length alanı başlık ile veri yükünün toplam uzunluğunu verir.",
   "layout": {
     "rfc": 768,
     "kind": "diagram",
@@ -45,7 +45,7 @@
       "name": "Length",
       "label": "Uzunluk",
       "bits": 16,
-      "desc": "Başlık ve veri dahil datagramın sekizli cinsinden uzunluğu; en küçük değeri 8’dir.",
+      "desc": "UDP datagramının bayt cinsinden toplam uzunluğu. 8 baytlık sabit başlığı ve veri yükünü kapsar.",
       "ref": {
         "rfc": 768,
         "label": "Fields"

@@ -141,7 +141,11 @@ function header(current) {
 <header class="console-header"><div class="console-header__inner">
   <div class="console-identity"><a class="console-brand" href="${origin}/" aria-label="Zaryob ana sayfa">zaryob</a><span class="console-prompt-separator" aria-hidden="true">:</span>
     <details class="console-projects" data-console-projects><summary role="button" aria-controls="console-project-menu"><span class="console-project-path"><span class="console-prompt-separator">~/</span>wire</span><span class="console-sr-only"> — Proje değiştir</span><span class="console-prompt-dollar" aria-hidden="true">$</span><span class="console-prompt-cursor" aria-hidden="true"></span>${chevron}</summary><nav class="console-project-menu" id="console-project-menu" aria-label="Zaryob projeleri">
-      ${projects.map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}</small></a>`).join('\n      ')}
+      ${projects.map(project => {
+        const tr = project.key === 'wire' ? url('') : origin + (project.path_tr ?? project.path);
+        const en = project.key === 'wire' ? url('') : origin + (project.path_en ?? project.path);
+        return `<a href="${e(tr)}" data-project-tr="${e(tr)}" data-project-en="${e(en)}"${project.key === 'wire' ? ' aria-current="location"' : ''}><span>${e(project.title)}</span><small>${e(project.prompt)}</small></a>`;
+      }).join('\n      ')}
     </nav></details>
   </div>
   <div class="console-header-actions">
@@ -205,7 +209,7 @@ function topbar(current, title = '', layer = '') {
 function suiteFooter() {
   const column = (title, label, links, listClass = '') => `<nav class="suite-footer__col" aria-label="${e(label)}"><p class="suite-footer__title">${title}</p><ul${listClass ? ` class="${listClass}"` : ''}>${links.map(link => `<li>${link}</li>`).join('')}</ul></nav>`;
   const site = column('~/wire/', 'Wire', [`<a href="${url('')}#katmanlar">#katmanlar<span class="console-sr-only"> — Katmanlar</span></a>`, `<a href="${url('kilavuz')}">kilavuz/<span class="console-sr-only"> — Kılavuz</span></a>`, `<a href="${url('kaynakca')}">kaynakca/<span class="console-sr-only"> — Kaynakça</span></a>`, `<a href="${url('yontem')}">yontem/<span class="console-sr-only"> — Yöntem</span></a>`, `<a href="${asset('lisanslar/')}">lisanslar/<span class="console-sr-only"> — Lisanslar</span></a>`]);
-  const suite = column('~/siteler/', 'Zaryob siteleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : `${origin}${e(project.path)}`}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/<span class="console-sr-only"> — ${e(project.title)}</span></a>`), 'console-suite__list');
+  const suite = column('~/siteler/', 'Zaryob siteleri', projects.filter(project => project.key !== 'home').map(project => `<a href="${project.key === 'wire' ? url('') : e(origin + (project.path_tr ?? project.path))}"${project.key === 'wire' ? ' aria-current="location"' : ''}>${e(project.prompt)}/<span class="console-sr-only"> — ${e(project.title)}</span></a>`), 'console-suite__list');
   const contact = column('~/iletişim', 'Sosyal bağlantılar', ['<a href="https://github.com/Zaryob" rel="me">GitHub <span aria-hidden="true">↗</span></a>', '<a href="https://linkedin.com/in/suleyman_poyraz" rel="me">LinkedIn <span aria-hidden="true">↗</span></a>', '<a href="https://medium.com/@zaryob" rel="me">Medium <span aria-hidden="true">↗</span></a>', '<a href="mailto:zaryob.dev@gmail.com">E-posta</a>']);
   return `<footer class="suite-footer" id="site-footer"><div class="suite-footer__inner"><p class="suite-footer__prompt" aria-hidden="true"><span class="suite-footer__host">zaryob</span>:~/wire $ <span class="suite-footer__cmd">ls -F</span></p><div class="suite-footer__cols">${site}${suite}${contact}</div><div class="suite-footer__legal"><span><span aria-hidden="true"># </span>© Süleyman Poyraz · Ağ protokolü başlıkları, bit bit.</span><span>Her alan bir RFC’ye dayanır.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a></span></div></div></footer>`;
 }
@@ -372,7 +376,9 @@ function exampleValue(field, range, bytes) {
 const fieldColumns = ['Alan', 'Bit', 'Genişlik', 'Örnek', 'Açıklama ve kaynak'];
 
 function protocolPage(protocol) {
-  const { bytes, headerLength, fieldsLength, ranges } = example(protocol.id);
+  const { bytes, fieldsLength, ranges } = example(protocol.id);
+  const { layout } = protocol;
+  const formatSources = layout.std ? [{ std: layout.std }] : layoutRefs(protocol);
   const myLayer = layerKey(protocol.layer);
   const fromId = protocol.example?.payloadFrom;
   const subProto = fromId ? byId.get(fromId) : null;
@@ -385,7 +391,7 @@ function protocolPage(protocol) {
   const legendItems = [];
   legendItems.push(`<div class="hex-legend__item">
     <span class="hex-legend__swatch hex-legend__swatch--proto" aria-hidden="true"></span>
-    <span><strong>${e(protocol.title)}</strong> (${fieldsLength === headerLength ? `${headerLength} sekizli başlık` : headerLength ? `${fieldsLength} sekizli alan, ${headerLength} sekizlisi sabit başlık` : `${fieldsLength} sekizli alan, tamamı değişken uzunluklu`} — alanlar ardışık tonlarla ayrılmıştır)</span>
+    <span><strong>${e(protocol.title)}</strong> (${fieldsLength} bayt gösterilen alan — alanlar ardışık tonlarla ayrılmıştır)</span>
   </div>`);
 
   if (subProto) {
@@ -446,7 +452,7 @@ function protocolPage(protocol) {
   const index = protocols.indexOf(protocol);
   const neighbor = (item, label) => item ? `<a href="${url(item.id)}"><small>${label}</small>${e(item.name)}</a>` : '<span></span>';
   return page({ id: protocol.id, title: protocol.title, pageTitle: protocol.title, layer: protocol.layer, description: protocol.summary, className: `protocol-page--${myLayer}`, body: `
-<header class="page-header"><p class="eyebrow"><a class="layer-badge layer-badge--${layerKey(protocol.layer)}" href="${url('')}#tcpip-${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</a> · ${headerLength ? `${headerLength} sekizli${protocol.fields.some(field => !Number.isInteger(field.bits) || field.range) ? ' + değişken kısım' : ''}` : 'değişken uzunluklu başlık'}</p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p></header>
+<header class="page-header"><p class="eyebrow"><a class="layer-badge layer-badge--${layerKey(protocol.layer)}" href="${url('')}#tcpip-${layerKey(protocol.layer)}">${e(protocol.layer)} katmanı</a></p><h1>${e(protocol.title)}</h1><p class="lead">${e(protocol.summary)}</p><p class="small">Biçim kaynağı ${joinTr(formatSources.map(refLink))}</p></header>
 <div class="overview-grid">
   <section class="overview-grid__col" aria-labelledby="layout-title"><h2 id="layout-title">Yerleşim</h2>${diagram(protocol)}
 ${verifiedNote(protocol)}</section>

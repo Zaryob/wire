@@ -4,7 +4,7 @@
   "title": "QUIC 1-RTT paketi (kısa başlık)",
   "layer": "Taşıma",
   "rowBits": 32,
-  "summary": "El sıkışma bittikten sonra QUIC verisi 1-RTT paketlerinde taşınır. Bu paketler kısa başlık kullanır: sürüm, kaynak bağlantı kimliği ya da uzunluk alanı yoktur; yalnızca hedef bağlantı kimliği ve paket numarası bulunur. Başlığın kısa olması her pakette sekizli kazandırır.",
+  "summary": "QUIC v1 1-RTT paketleri uygulama verisini kısa başlıkla taşır. Başlık bayrakları, varsa hedef bağlantı kimliğini ve paket numarasını içerir. Uzunluk alanı bulunmadığından paket UDP datagramının sonuna kadar uzanır.",
   "layout": {
     "rfc": 9000,
     "section": "17.3.1",

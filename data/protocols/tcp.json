@@ -4,7 +4,7 @@
   "title": "TCP başlığı",
   "layer": "Taşıma",
   "rowBits": 32,
-  "summary": "İletim Denetim Protokolü segmentinin başlığı. Seçenek taşımadığında 20 sekizlidir; Data Offset alanı başlığın gerçek uzunluğunu verir.",
+  "summary": "TCP (Transmission Control Protocol), uygulamalar arasında güvenilir ve sıralı bir bayt akışı taşır. TCP başlığı 20–60 bayttır; bayt cinsinden uzunluğu, 4 bitlik Data Offset alanının dört katıdır.",
   "layout": {
     "rfc": 9293,
     "section": "3.1",
@@ -71,7 +71,7 @@
       "name": "Data Offset",
       "label": "Veri başlangıcı",
       "bits": 4,
-      "desc": "TCP başlığındaki 32 bitlik sözcük sayısı; verinin nerede başladığını gösterir.",
+      "desc": "TCP başlığının 32 bitlik sözcük cinsinden uzunluğu. Geçerli değer 5–15’tir; bu değerin dört katı, yükün başladığı bayt ofsetini verir.",
       "ref": {
         "rfc": 9293,
         "section": "3.1"

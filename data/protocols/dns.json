@@ -4,7 +4,7 @@
   "title": "DNS ileti başlığı",
   "layer": "Uygulama",
   "rowBits": 16,
-  "summary": "Her DNS iletisi 12 sekizlilik bir başlıkla başlar. Başlık, iletinin sorgu mu yanıt mı olduğunu ve ardından gelen dört bölümde kaç kayıt bulunduğunu belirtir.",
+  "summary": "DNS (Domain Name System), alan adları için IP adresi, posta sunucusu gibi kaynak kayıtlarını sorgular. Her DNS iletisi sabit 12 baytlık bir başlıkla başlar. Başlıkta işlem kimliği, sorgu ve yanıt bayrakları ile dört bölümün sayaçları bulunur.",
   "layout": {
     "rfc": 1035,
     "section": "4.1.1",

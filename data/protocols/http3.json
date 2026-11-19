@@ -4,7 +4,7 @@
   "title": "HTTP/3 çerçevesi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "HTTP/3, HTTP'yi QUIC üzerinde taşır. HTTP/2'deki gibi istekler ve yanıtlar çerçevelerle taşınır, ancak akışları QUIC yönettiği için çerçeve başlığında akış kimliği ya da bayrak yoktur: yalnızca değişken uzunluklu tamsayı olarak tür ve uzunluk bulunur.",
+  "summary": "HTTP/3, HTTP isteklerini ve yanıtlarını QUIC akışlarında taşır. HTTP/3 çerçevesi iki değişken uzunluklu tamsayıyla başlar: tür ve yük uzunluğu. Akış kimliği QUIC katmanına aittir.",
   "layout": {
     "rfc": 9114,
     "section": "7.1",

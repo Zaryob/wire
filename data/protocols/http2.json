@@ -4,7 +4,7 @@
   "title": "HTTP/2 çerçevesi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "HTTP/2 istekleri ve yanıtları metin satırları yerine ikili çerçevelerle taşır; aynı TCP bağlantısında birçok akış çerçeve çerçeve iç içe ilerler. Her çerçeve, uzunluğu, türü, bayrakları ve ait olduğu akışı belirten 9 sekizlilik bir başlıkla başlar.",
+  "summary": "HTTP/2, bir bağlantı üzerinde birden fazla HTTP akışını ikili çerçevelerle çoğullar. Her çerçevenin başlığı sabit 9 bayttır ve yük uzunluğunu, türü, bayrakları ve akış kimliğini taşır. Length alanı 9 baytlık başlığı saymaz.",
   "layout": {
     "rfc": 9113,
     "section": "4.1",

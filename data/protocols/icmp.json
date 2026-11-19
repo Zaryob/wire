@@ -4,7 +4,7 @@
   "title": "ICMP yankı iletisi",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "İnternet Denetim İleti Protokolü, IP datagramının veri kısmında taşınır (protokol numarası 1). Her ileti tür, kod ve sağlama toplamı ile başlar; devamı türe göre değişir. Burada yankı (echo) iletisinin yerleşimi gösterilir.",
+  "summary": "ICMPv4 (Internet Control Message Protocol), IPv4 hata ve tanılama iletilerini taşır. IPv4 protokol numarası 1’dir. İlk 4 bayt tür, kod ve sağlama toplamıdır; kalan biçim ileti türüne göre değişir. Bu sayfa Echo Request ve Echo Reply biçimini gösterir.",
   "layout": {
     "rfc": 792,
     "kind": "diagram",

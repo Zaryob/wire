@@ -4,7 +4,7 @@
   "title": "DHCPv4 iletisi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Dinamik Konak Yapılandırma Protokolü (Dynamic Host Configuration Protocol - DHCPv4) iletisi. BOOTP'tan devralınan 236 sekizlilik sabit kısmı değişken uzunluklu seçenekler izler; UDP üzerinde istemci 68, sunucu 67 numaralı portu kullanır.",
+  "summary": "DHCPv4 (Dynamic Host Configuration Protocol), istemcilere IPv4 adresi ve ağ yapılandırması sağlar. BOOTP’tan gelen 236 baytlık sabit bölümün ardından 4 baytlık DHCP sihirli değeri ve seçenekler gelir. Sunucu UDP 67, istemci UDP 68 kullanır.",
   "layout": {
     "rfc": 2131,
     "section": "2",

@@ -4,7 +4,7 @@
   "title": "ARP paketi",
   "layer": "Bağlantı",
   "rowBits": 16,
-  "summary": "Adres Çözümleme Protokolü, bir protokol adresine (örneğin bir IPv4 adresine) karşılık gelen 48 bitlik Ethernet adresini bulur. Paket, Ethernet çerçevesinin veri alanında taşınır.",
+  "summary": "ARP (Address Resolution Protocol), yerel bağlantıda bir IPv4 adresine karşılık gelen MAC adresini bulur. Ethernet üzerindeki IPv4 ARP iletisi 28 bayttır ve Ethernet çerçevesinde 0x0806 EtherType değeriyle taşınır.",
   "layout": {
     "rfc": 826,
     "kind": "rfc826",

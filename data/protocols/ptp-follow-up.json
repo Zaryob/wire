@@ -4,7 +4,7 @@
   "title": "PTP takip iletisi (Follow_Up)",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "İki adımlı bir ana saat, Sync iletisinin kesin çıkış anını ancak ileti gönderildikten sonra bilir. Bu anı, aynı sequenceId ile gönderdiği Follow_Up iletisinin preciseOriginTimestamp alanında bildirir. Bu sayfa IEEE 1588-2008 metnine dayanır.",
+  "summary": "İki adımlı PTP’de Follow_Up, daha önce gönderilen Sync iletisinin kesin çıkış anını bildirir. Alıcı, Follow_Up ile Sync iletisini ortak sequenceId ve kaynak port kimliğiyle eşleştirir.",
   "layout": {
     "kind": "ieee",
     "std": "ieee-1588-2008",

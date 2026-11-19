@@ -4,7 +4,7 @@
   "title": "ICMPv6 iletisi",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "IPv6 için İnternet Denetim İleti Protokolü. Her ileti tür, kod ve sağlama toplamı ile başlar; ileti gövdesinin biçimini tür belirler. Next Header değeri 58’dir.",
+  "summary": "ICMPv6, IPv6 hata ve tanılama iletilerini taşır ve IPv6 Next Header değeri 58’dir. İlk 4 bayt tür, kod ve sağlama toplamıdır. Bu sayfa Echo Request (128) ve Echo Reply (129) iletilerindeki kimlik ve sıra numarası alanlarını gösterir.",
   "layout": {
     "rfc": 4443,
     "section": "2.1",

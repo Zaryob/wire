@@ -4,7 +4,7 @@
   "title": "IPv4 başlığı",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "İnternet Protokolü sürüm 4 datagramının başlığı. Seçenek taşımadığında 20 sekizlidir; IHL alanı başlığın gerçek uzunluğunu verir.",
+  "summary": "IPv4 (Internet Protocol version 4), 32 bitlik adreslerle datagramları ağlar arasında taşır. IPv4 başlığı 20–60 bayttır; bayt cinsinden uzunluğu IHL alanının dört katıdır. Total Length, başlık ile veri yükünün toplamını verir.",
   "layout": {
     "rfc": 791,
     "section": "3.1",
@@ -34,7 +34,7 @@
       "name": "IHL",
       "label": "IPv4 başlık uzunluğu",
       "bits": 4,
-      "desc": "Başlığın 32 bitlik sözcük cinsinden uzunluğu; verinin nerede başladığını gösterir. Geçerli bir başlık için en küçük değer 5’tir.",
+      "desc": "IPv4 başlığının 32 bitlik sözcük cinsinden uzunluğu. Geçerli değer 5–15’tir; örneğin IHL 5, 20 baytlık başlık anlamına gelir.",
       "ref": {
         "rfc": 791,
         "section": "3.1"

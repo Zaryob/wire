@@ -4,7 +4,7 @@
   "title": "QUIC başlangıç paketi (Initial)",
   "layer": "Taşıma",
   "rowBits": 32,
-  "summary": "QUIC, UDP üzerinde çalışan, şifrelemeyi ve akış çoğullamayı içinde barındıran bir taşıma protokolüdür; HTTP/3 onun üzerinde çalışır. Bağlantının ilk paketi olan Initial, uzun başlık biçimindedir: sürümü, iki bağlantı kimliğini, bir belirteci ve TLS el sıkışmasını taşıyan şifreli yükün uzunluğunu içerir.",
+  "summary": "QUIC, UDP üzerinde şifreleme ve birden fazla bağımsız akış sağlayan bir taşıma protokolüdür. Bu sayfa QUIC v1 Initial paketini gösterir. Uzun başlık sürümü, iki bağlantı kimliğini, belirteç alanlarını, uzunluğu ve paket numarasını taşır.",
   "layout": {
     "rfc": 9000,
     "section": "17.2.2",

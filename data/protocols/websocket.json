@@ -4,7 +4,7 @@
   "title": "WebSocket çerçevesi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "WebSocket, bir HTTP el sıkışmasıyla açılan TCP bağlantısı üzerinde iki yönlü ileti taşır. Her ileti, en az 2 sekizlilik bir başlıkla başlayan çerçevelerden oluşur. İstemciden sunucuya giden her çerçeve 4 sekizlilik bir anahtarla maskelenir.",
+  "summary": "WebSocket, açılış el sıkışmasından sonra iki yönlü iletileri çerçeveler halinde taşır. Çerçevenin ilk 2 baytı türü, bayrakları, maske bitini ve kısa uzunluğu taşır. İstemciden sunucuya giden her çerçeve 4 baytlık bir anahtarla maskelenir.",
   "layout": {
     "rfc": 6455,
     "section": "5.2",

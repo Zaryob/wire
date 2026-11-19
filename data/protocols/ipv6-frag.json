@@ -4,7 +4,7 @@
   "title": "IPv6 Parçalama başlığı",
   "layer": "Ağ",
   "rowBits": 32,
-  "summary": "IPv6 Parçalama Uzantı Başlığı (Fragment Header), kaynak düğümün yol MTU'sundan daha büyük paketleri parçalara ayırarak göndermesini sağlar. IPv4'ün aksine, IPv6'da parçalama yönlendiriciler tarafından değil, yalnızca kaynak düğüm tarafından yapılır. Başlık 8 sekizlidir.",
+  "summary": "IPv6 Fragment Header, parçalanmış IPv6 paketlerinin hedefte yeniden birleştirilmesi için kullanılan sabit 8 baytlık uzantı başlığıdır. Kaynak düğüm ekler; IPv6 yönlendiricileri geçişte paket parçalamaz. Fragment Offset, parçanın konumunu 8 baytlık birimlerle verir.",
   "layout": {
     "rfc": 8200,
     "kind": "diagram",

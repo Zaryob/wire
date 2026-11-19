@@ -4,7 +4,7 @@
   "title": "PTP gecikme isteği (Delay_Req)",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Bağımlı saat, ana saate olan yol gecikmesini ölçmek için Delay_Req iletisi gönderir ve kendi gönderim anını not eder. Ana saat bu iletinin varış anını Delay_Resp ile geri bildirir. Delay_Req, Sync ile aynı biçimdedir (Table 26). Bu sayfa IEEE 1588-2008 metnine dayanır.",
+  "summary": "PTP Delay_Req, bağımlı saatin ana saate giden yolun gecikmesini ölçmek için gönderdiği iletidir. Bağımlı saat kendi gönderim anını kaydeder; ana saat alım anını Delay_Resp ile bildirir. IEEE 1588-2008 temel biçimi 34 bayt başlık ve 10 bayt zaman damgası içerir.",
   "layout": {
     "kind": "ieee",
     "std": "ieee-1588-2008",

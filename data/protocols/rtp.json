@@ -4,7 +4,7 @@
   "title": "RTP başlığı",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Gerçek Zamanlı Taşıma Protokolü (Real-time Transport Protocol - RTP) sabit başlığı. Ses ve görüntü akışlarını taşır; her pakette bulunan sabit kısım 12 sekizlidir, ardından katkıda bulunan kaynakların (CSRC) listesi gelebilir. Genellikle UDP üzerinde taşınır.",
+  "summary": "RTP (Real-time Transport Protocol), ses ve görüntü gibi gerçek zamanlı verileri sıra numarası ve zaman damgasıyla taşır. Asgari RTP başlığı 12 bayttır. CSRC listesi ve başlık uzantısı, kullanıldığında başlığı büyütür.",
   "layout": {
     "rfc": 3550,
     "section": "5.1",

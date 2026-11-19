@@ -4,7 +4,7 @@
   "title": "DHCPv6 iletisi",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "IPv6 için Dinamik Konak Yapılandırma Protokolü (DHCPv6) istemci-sunucu iletisi. DHCPv4'ün aksine sabit kısım yalnızca 4 sekizlidir: ileti türü ve işlem kimliği. Bütün bilgi tür-uzunluk-değer biçimindeki seçeneklerde taşınır. UDP üzerinde istemci 546, sunucu 547 numaralı portu kullanır.",
+  "summary": "DHCPv6, istemcilere IPv6 adresi, önek veya başka ağ ayarları sağlayabilir. Bu sayfadaki istemci–sunucu iletisinin sabit bölümü 4 bayttır: 1 bayt ileti türü ve 3 bayt işlem kimliği. İstemci UDP 546, sunucu ve aktarıcı UDP 547 kullanır.",
   "layout": {
     "rfc": 8415,
     "section": "8",

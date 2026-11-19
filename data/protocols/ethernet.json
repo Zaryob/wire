@@ -4,7 +4,7 @@
   "title": "Ethernet çerçeve başlığı",
   "layer": "Bağlantı",
   "rowBits": 16,
-  "summary": "Bir Ethernet çerçevesinin başındaki hedef adresi, kaynak adresi ve tür alanı. IP datagramı ya da ARP paketi bu üç alandan hemen sonra gelir.",
+  "summary": "Etiketsiz Ethernet II çerçevesinin başlığı 14 bayttır: 6 bayt hedef MAC adresi, 6 bayt kaynak MAC adresi ve 2 bayt EtherType. EtherType, veri alanında IPv4 veya ARP gibi hangi protokolün taşındığını belirtir.",
   "layout": {
     "rfc": 826,
     "kind": "rfc826",

@@ -4,7 +4,7 @@
   "title": "PTP duyuru iletisi (Announce)",
   "layer": "Uygulama",
   "rowBits": 32,
-  "summary": "Ana saat olmaya aday her saat, kendi niteliklerini Announce iletisiyle duyurur. Saatler bu iletilerdeki öncelik, sınıf ve doğruluk bilgilerini en iyi ana saat algoritmasında (BMC) karşılaştırır ve alanın ana saatini seçer. Bu sayfa IEEE 1588-2008 metnine dayanır.",
+  "summary": "PTP Announce, bir saatin kimliğini, önceliğini, sınıfını ve doğruluğunu ağdaki diğer saatlere bildirir. IEEE 1588-2008’de ortak başlık 34 bayt, Announce gövdesinin sabit kısmı 30 bayttır. Bu bilgiler ana saat seçiminde kullanılır.",
   "layout": {
     "kind": "ieee",
     "std": "ieee-1588-2008",

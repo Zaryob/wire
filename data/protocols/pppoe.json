@@ -4,7 +4,7 @@
   "title": "PPPoE başlığı",
   "layer": "Bağlantı",
   "rowBits": 32,
-  "summary": "Ethernet Üzerinden Noktadan Noktaya Protokol (PPPoE), genişbant erişim sağlayıcılarının Ethernet altyapısı üzerinde kullanıcı kimlik doğrulama ve oturum yönetimi yapmasını sağlar. Başlık 6 sekizlidir.",
+  "summary": "PPPoE (Point-to-Point Protocol over Ethernet), PPP oturumlarının Ethernet üzerinde kurulmasını ve taşınmasını sağlar. Keşif ve oturum paketleri 6 baytlık ortak bir başlık kullanır. Ethernet EtherType değerleri keşif için 0x8863, oturum için 0x8864’tür.",
   "layout": {
     "rfc": 2516,
     "kind": "diagram",
