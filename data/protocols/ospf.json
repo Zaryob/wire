@@ -1,7 +1,7 @@
 {
   "order": 19,
   "name": "OSPFv2",
-  "title": "OSPFv2 Hello paketi",
+  "title": "OSPFv2 komşu keşif paketi (Hello)",
   "layer": "Ağ",
   "rowBits": 32,
   "summary": "Önce En Kısa Yolu Aç (Open Shortest Path First - OSPF), bir özerk sistemin içinde bağlantı durumu yönlendirmesi yapar. Her OSPF paketi 24 sekizlilik ortak bir başlıkla başlar. Hello paketleri komşuları bulur ve aynı ağdaki yönlendiricilerin ağ maskesi ile zaman aralıkları üzerinde anlaştığını denetler.",

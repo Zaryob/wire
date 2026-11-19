@@ -1,7 +1,7 @@
 {
   "order": 34,
   "name": "PTP",
-  "title": "PTP Sync iletisi",
+  "title": "PTP eşzamanlama iletisi (Sync)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Hassas Zaman Protokolü (Precision Time Protocol - PTP), ağdaki saatleri bir ana saate eşitler. Her PTP iletisi 34 sekizlilik ortak bir başlıkla başlar. Ana saatin düzenli gönderdiği Sync iletisi, başlığa iletinin çıkış anını taşıyan 10 sekizlilik bir zaman damgası ekler. Bu sayfa IEEE 1588-2008 metnine dayanır.",

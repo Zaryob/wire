@@ -17,7 +17,7 @@ createServer(async (req, res) => {
   try {
     let pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
     if (pathname === '/' && base) { res.writeHead(302, { Location: `${base}/` }); return res.end(); }
-    if (base && !(pathname === base || pathname.startsWith(`${base}/`))) { res.writeHead(404); return res.end('Not found'); }
+    if (base && !(pathname === base || pathname.startsWith(`${base}/`))) { res.writeHead(404); return res.end('Sayfa bulunamadı'); }
     pathname = pathname.slice(base.length);
     let file = path.resolve(site, `.${pathname}`);
     if (file !== site && !file.startsWith(site + path.sep)) { res.writeHead(403); return res.end(); }
@@ -25,4 +25,4 @@ createServer(async (req, res) => {
     const data = await readFile(file);
     res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(data);
   } catch { res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' }); res.end(await readFile(path.join(site, '404.html'))); }
-}).listen(port, host, () => console.log(`Local: http://${host.includes(':') ? `[${host}]` : host}:${port}${base}/`));
+}).listen(port, host, () => console.log(`Yerel adres: http://${host.includes(':') ? `[${host}]` : host}:${port}${base}/`));

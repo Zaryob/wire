@@ -16,7 +16,7 @@ const byId = new Map(standards.entries.map(entry => [entry.id, entry]));
 /** A non-RFC standard cited by id, e.g. "ieee-802.1q-2022". */
 export const standardEntry = id => {
   const entry = byId.get(id);
-  if (!entry) throw new Error(`standard ${id} is cited but missing from sources/standards.json`);
+  if (!entry) throw new Error(`Atıf yapılan ${id} standardı sources/standards.json dosyasında bulunamadı.`);
   return entry;
 };
 /**
@@ -40,7 +40,7 @@ export async function mibText(id) {
     let data;
     try { data = await readFile(path.join(root, file)); } catch { return null; }
     const digest = createHash('sha256').update(data).digest('hex');
-    if (digest !== sha256) throw new Error(`${file}: sha256 ${digest} differs from sources/standards.json`);
+    if (digest !== sha256) throw new Error(`${file}: SHA-256 özeti ${digest}, sources/standards.json dosyasındaki değerle uyuşmuyor.`);
     parts.push(data.toString('utf8'));
   }
   return parts.join('\n');
@@ -154,7 +154,7 @@ export const isRfc = ref => Number.isInteger(ref);
 export const refKey = ref => ref.std ?? ref.rfc;
 export const rfcEntry = number => {
   const entry = byNumber.get(number);
-  if (!entry) throw new Error(`RFC ${number} is cited but missing from sources/bibliography.json`);
+  if (!entry) throw new Error(`Atıf yapılan RFC ${number}, sources/bibliography.json dosyasında bulunamadı.`);
   return entry;
 };
 
@@ -170,7 +170,7 @@ export async function rfcText(number) {
     await writeFile(file, data);
   }
   const digest = createHash('sha256').update(data).digest('hex');
-  if (digest !== entry.sha256) throw new Error(`RFC ${number} text does not match the recorded sha256; run npm run sync and review the change`);
+  if (digest !== entry.sha256) throw new Error(`RFC ${number} metninin SHA-256 özeti kayıtla uyuşmuyor. npm run sync komutunu çalıştırıp değişikliği inceleyin.`);
   return data.toString('utf8');
 }
 

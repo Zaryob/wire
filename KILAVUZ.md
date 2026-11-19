@@ -1133,10 +1133,10 @@ Bir protokolün `wire` sistemine eklenebilmesi için şu dört temel koşul aran
 | **GRE (Generic Routing Encapsulation)** | **RFC 2784** | §2.1 — 32 bit ızgara | **Eklendi**. C (1), Reserved0 (12), Version (3), Protocol Type (16), Checksum (16), Reserved1 (16). Doğrulanmış IPv4 yükü taşır. |
 | **IPsec AH (Authentication Header)** | **RFC 4302** | §2 — 32 bit ızgara | **Eklendi**. Next Header (8), Payload Len (8), Reserved (16), SPI (32), Sequence Number (32), ICV (değişken). TCP segmentlerini korur. |
 | **IPsec ESP** | **RFC 4303** | §2 — 32 bit ızgara | **Eklendi**. SPI (32), Sequence Number (32), Payload (değişken), Padding, Pad Length (8), Next Header (8), ICV (değişken). Başlık ve kuyruk aynı şemanın iki ayrı satırından doğrulanır; değişken alanlar örnek için boyutlandırılır. |
-| **IGMPv3 Membership Query** | **RFC 9776** | §4.1 — 32 bit ızgara | **Eklendi**. Type, Max Resp Code, Checksum, Group Address, Flags, S, QRV, QQIC, Number of Sources. |
+| **IGMPv3 üyelik sorgusu** | **RFC 9776** | §4.1 — 32 bit ızgara | **Eklendi**. İleti türü, azami yanıt süresi kodu, sağlama toplamı, grup adresi, bayraklar, S, QRV, QQIC ve kaynak sayısı. |
 | **OSPFv2 Hello** | **RFC 2328** | A.3.1, A.3.2 — 32 bit ızgara | **Eklendi**. 24 sekizlilik ortak başlık ve Hello gövdesi; 64 bitlik Authentication alanı iki satırda çizildiği için genişliği metinden okunur. |
 | **VRRPv3** | **RFC 9568** | §5.1 — 32 bit ızgara | **Eklendi**. IPv4 sağlama toplamı sözde başlıksız hesaplanır (§5.2.8). |
-| **IPv6 Segment Routing Header** | **RFC 8754** | §2 — 32 bit ızgara | **Eklendi**. Routing Type 4; segment listesi ters sıradadır. |
+| **IPv6 segment yönlendirme başlığı** | **RFC 8754** | §2 — 32 bit ızgara | **Eklendi**. Yönlendirme türü 4. Segment listesi ters sıradadır. |
 
 #### 3. İletim Katmanı (Transport Layer) Adayları
 

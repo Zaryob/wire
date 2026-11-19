@@ -1,7 +1,7 @@
 {
   "order": 49,
   "name": "SNMP",
-  "title": "SNMP GetBulkRequest PDU",
+  "title": "SNMP toplu okuma isteği (GetBulkRequest)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Basit Ağ Yönetim Protokolü (Simple Network Management Protocol - SNMP), yönlendirici ve anahtar gibi cihazların durumunu uzaktan okumayı ve yönetmeyi sağlar. İletiler sabit bir başlık değil, ASN.1 ile tanımlanıp BER ile kodlanan iç içe tür-uzunluk-değer yapılarıdır. Bu sayfa, RFC'nin kendi BER örneğini bayt bayt gösterir.",

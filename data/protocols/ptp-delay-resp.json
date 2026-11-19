@@ -1,7 +1,7 @@
 {
   "order": 37,
   "name": "PTP Delay_Resp",
-  "title": "PTP Delay_Resp iletisi",
+  "title": "PTP gecikme yanıtı (Delay_Resp)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Ana saat, aldığı her Delay_Req için bir Delay_Resp gönderir: iletinin varış anını ve isteyen portun kimliğini taşır. Bağımlı saat bu anla yol gecikmesini hesaplar. Bu sayfa IEEE 1588-2008 metnine dayanır.",

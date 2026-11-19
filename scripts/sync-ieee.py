@@ -18,7 +18,7 @@ from pathlib import Path
 try:
     import pdfplumber
 except ImportError:
-    sys.exit('Install the PDF reader first: python3 -m pip install pdfplumber')
+    sys.exit('PDF okuyucusunu yükleyin: python3 -m pip install pdfplumber')
 
 ROOT = Path(__file__).resolve().parents[1]
 STANDARDS = json.loads((ROOT / 'sources/standards.json').read_text())
@@ -31,7 +31,7 @@ for entry in STANDARDS['entries']:
         continue
     pdf_path = ROOT / copy['file']
     if not pdf_path.exists():
-        print(f"{entry['short']}: no copy at {copy['file']}; skipped")
+        print(f"{entry['short']}: {copy['file']} konumunda kopya bulunamadı. Bu standart atlandı.")
         continue
     data = pdf_path.read_bytes()
     digest = hashlib.sha256(data).hexdigest()
@@ -39,7 +39,7 @@ for entry in STANDARDS['entries']:
     stamp = out.with_suffix('.sha256')
     # A copy whose text was already extracted is skipped; extraction of a large standard takes minutes.
     if out.exists() and stamp.exists() and stamp.read_text().strip() == digest and '--force' not in sys.argv:
-        print(f"{entry['short']}: text already extracted from this copy")
+        print(f"{entry['short']}: Bu kopyanın metni daha önce çıkarılmış.")
         found += 1
         continue
     with pdfplumber.open(pdf_path) as pdf:
@@ -47,22 +47,22 @@ for entry in STANDARDS['entries']:
     # IEEE stamps every download with its own watermark, so another licensed copy of the
     # same edition has a different digest. The edition is identified by its content instead.
     if len(pages) != copy['pages']:
-        sys.exit(f"{entry['short']}: {len(pages)} pages, expected {copy['pages']}; is this the cited edition?")
+        sys.exit(f"{entry['short']}: {len(pages)} sayfa bulundu, {copy['pages']} sayfa bekleniyordu. Atıf yapılan baskıyı kontrol edin.")
     if entry.get('isbn'):
         isbn = '-'.join([entry['isbn'][:3], entry['isbn'][3], entry['isbn'][4:8], entry['isbn'][8:12], entry['isbn'][12]])
         if not any(f'ISBN {isbn}' in page for page in pages[:10]):
-            sys.exit(f"{entry['short']}: ISBN {isbn} not found in the front matter; is this the cited edition?")
+            sys.exit(f"{entry['short']}: ISBN {isbn} ön sayfalarda bulunamadı. Atıf yapılan baskıyı kontrol edin.")
     # Documents without an ISBN (Microsoft Open Specifications) name their version on every page.
     if copy.get('marker') and not all(copy['marker'] in page for page in pages[1:]):
-        sys.exit(f"{entry['short']}: not every page names {copy['marker']}; is this the cited version?")
+        sys.exit(f"{entry['short']}: Bazı sayfalarda {copy['marker']} ibaresi bulunamadı. Atıf yapılan sürümü kontrol edin.")
     if any('Authorized licensed use' in page for page in pages):
-        sys.exit(f"{entry['short']}: watermark left in the extracted text")
+        sys.exit(f"{entry['short']}: Çıkarılan metinde filigran kaldı.")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(''.join(f'\f[pdf {i}]\n{text}\n' for i, text in enumerate(pages, 1)))
     stamp.write_text(digest + '\n')
-    note = '' if digest == copy['sha256'] else f" (a different copy than the recorded check, sha256 {digest[:12]}…)"
-    print(f"{entry['short']}: {len(pages)} pages → {out.relative_to(ROOT)}{note}")
+    note = '' if digest == copy['sha256'] else f" (doğrulama kaydında kullanılandan farklı kopya, SHA-256 {digest[:12]}…)"
+    print(f"{entry['short']}: {len(pages)} sayfa → {out.relative_to(ROOT)}{note}")
     found += 1
 
 if not found:
-    print('No licensed IEEE copies found; pages keep their recorded checks.')
+    print('Lisanslı IEEE kopyası bulunamadı. Sayfaların doğrulama kayıtları korundu.')

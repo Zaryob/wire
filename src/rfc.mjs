@@ -16,7 +16,7 @@ const isContent = line => /^\s*[|:]/.test(line);
 export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false } = {}) {
   const raw = text.split('\n');
   const at = raw.findIndex(line => line.includes(anchor));
-  if (at < 0) throw new Error(`diagram anchor not found: ${anchor}`);
+  if (at < 0) throw new Error(`Şema başlangıcı bulunamadı: ${anchor}`);
   // The diagram's left edge is the first bar of the anchor row. Text before
   // that column on any line is a side label, not part of the diagram.
   const column = raw[at].search(/[|:]/);
@@ -30,7 +30,7 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
   let start = at;
   if (fromAnchor) start = at - 1;
   else while (start > 0 && (isSeparator(lines[start - 1]) || isContent(lines[start - 1]) || isContinuation(lines[start - 1]))) start -= 1;
-  if (!isSeparator(lines[start])) throw new Error(`no diagram ruler above anchor: ${anchor}`);
+  if (!isSeparator(lines[start])) throw new Error(`Şema başlangıcının üstünde bit cetveli bulunamadı: ${anchor}`);
   // The ruler is the widest separator of the diagram: a diagram may open with a
   // short one (RFC 4271 OPEN starts with an 8-bit "Version" row).
   let ruler = '';
@@ -67,7 +67,7 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
     block.push(line);
   }
   flush();
-  if (widths.some(width => !Number.isInteger(width))) throw new Error(`diagram does not divide into whole bits: ${anchor}`);
+  if (widths.some(width => !Number.isInteger(width))) throw new Error(`Şemadaki genişlikler tam bitlere bölünemiyor: ${anchor}`);
   return widths;
 }
 
@@ -80,7 +80,7 @@ export function diagramWidths(text, anchor, rowBits = 32, { fromAnchor = false }
 export function figureFields(text, anchor) {
   const lines = text.split('\n');
   const at = lines.findIndex(line => line.trim() === `${anchor} {`);
-  if (at < 0) throw new Error(`figure not found: ${anchor}`);
+  if (at < 0) throw new Error(`Şekil bulunamadı: ${anchor}`);
   const fields = [];
   for (const line of lines.slice(at + 1)) {
     const item = line.trim();
@@ -88,10 +88,10 @@ export function figureFields(text, anchor) {
     // Blank lines and page breaks (form feed, running header and footer) may fall inside a figure.
     if (!item || item.includes('\f') || /^RFC \d+ /.test(item) || /\[Page \d+\]$/.test(item)) continue;
     const field = item.match(/^(.+?) \(([^)]*)\)(?:\s*=\s*[^,]+)?,?$/);
-    if (!field) throw new Error(`unreadable figure line in ${anchor}: ${item}`);
+    if (!field) throw new Error(`${anchor} şeklinin satırı okunamadı: ${item}`);
     fields.push({ name: field[1], size: field[2] });
   }
-  throw new Error(`figure ${anchor} has no closing brace`);
+  throw new Error(`${anchor} şeklinin kapanış ayracı bulunamadı.`);
 }
 
 /**
@@ -103,7 +103,7 @@ export function figureFields(text, anchor) {
 export function rfc826Layout(text) {
   const start = text.indexOf('Ethernet transmission layer');
   const end = text.indexOf('Packet Generation:');
-  if (start < 0 || end < 0) throw new Error('RFC 826 packet format section not found');
+  if (start < 0 || end < 0) throw new Error('RFC 826 paket biçimi bölümü bulunamadı.');
   const ethernet = [];
   const arp = [];
   for (const line of text.slice(start, end).split('\n')) {
@@ -125,9 +125,9 @@ export function rfc826Layout(text) {
 export function proseWidths(text, phrases) {
   const flat = text.replace(/\s+/g, ' ');
   return phrases.map(phrase => {
-    if (!flat.includes(phrase)) throw new Error(`phrase not found in RFC text: ${phrase}`);
+    if (!flat.includes(phrase)) throw new Error(`İfade RFC metninde bulunamadı: ${phrase}`);
     const width = phrase.match(/(\d+)-bit\b|(\d+) bits in length\b/);
-    if (!width) throw new Error(`phrase states no N-bit width: ${phrase}`);
+    if (!width) throw new Error(`İfadede “N-bit” biçiminde bir genişlik yok: ${phrase}`);
     return Number(width[1] ?? width[2]);
   });
 }
@@ -139,14 +139,14 @@ export function proseWidths(text, phrases) {
  */
 export function octetTable(text, anchor) {
   const start = text.indexOf(anchor);
-  if (start < 0) throw new Error(`table anchor not found: ${anchor}`);
+  if (start < 0) throw new Error(`Tablo başlangıcı bulunamadı: ${anchor}`);
   const rows = [];
   for (const line of text.slice(start).split('\n').slice(1)) {
     if (/^\s*Table \d+:/.test(line)) return rows;
     const row = line.match(/^\s{1,6}([a-z]\w*)\s+(\d+|var)\s{2}/);
     if (row) rows.push({ name: row[1], size: row[2] === 'var' ? 'var' : Number(row[2]) * 8 });
   }
-  throw new Error(`table after ${anchor} has no "Table N:" caption`);
+  throw new Error(`${anchor} sonrasındaki tabloda “Table N:” başlığı yok.`);
 }
 
 /**
@@ -159,7 +159,7 @@ export function octetTable(text, anchor) {
 export function presentationStruct(text, name) {
   const lines = text.split('\n');
   const end = lines.findIndex(line => line.trim() === `} ${name};`);
-  if (end < 0) throw new Error(`struct not found: ${name}`);
+  if (end < 0) throw new Error(`Yapı bulunamadı: ${name}`);
   let start = end;
   while (start > 0 && lines[start].trim() !== 'struct {') start -= 1;
   const uint = type => type.match(/^uint(\d+)$/)?.[1];
@@ -173,11 +173,11 @@ export function presentationStruct(text, name) {
       const max = lines.slice(Math.max(0, enumEnd - 40), enumEnd).join('\n').match(/\((\d+)\)\s*$/);
       if (max) return 8 * Math.ceil(Math.log2(Number(max[1]) + 1) / 8);
     }
-    throw new Error(`${name}: unknown type ${type}`);
+    throw new Error(`${name}: Bilinmeyen tür ${type}`);
   };
   return lines.slice(start + 1, end).map(line => line.replace(/\/\*.*?\*\//g, '').trim()).filter(Boolean).map(line => {
     const member = line.match(/^(\w+) (\w+)(?:\[([^\]]+)\])?(?:\s*=\s*[^;]+)?;$/);
-    if (!member) throw new Error(`${name}: unreadable member ${line}`);
+    if (!member) throw new Error(`${name}: Okunamayan üye tanımı: ${line}`);
     const [, type, field, length] = member;
     const size = length === undefined ? typeBits(type) : /^\d+$/.test(length) ? typeBits(type) * Number(length) : 'var';
     return { name: field, size };
@@ -192,7 +192,7 @@ export function presentationStruct(text, name) {
 export function sshPacket(text, anchor) {
   const lines = text.split('\n');
   const at = lines.findIndex(line => line.includes(anchor));
-  if (at < 0) throw new Error(`anchor not found: ${anchor}`);
+  if (at < 0) throw new Error(`Başlangıç ifadesi bulunamadı: ${anchor}`);
   const fields = [];
   for (const line of lines.slice(at + 1)) {
     const item = line.match(/^\s+(uint32|uint64|byte|boolean)(\[(\w+)\])?\s+(.+?)(?:;.*)?$/);

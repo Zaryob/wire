@@ -1,7 +1,7 @@
 {
   "order": 35,
   "name": "PTP Follow_Up",
-  "title": "PTP Follow_Up iletisi",
+  "title": "PTP takip iletisi (Follow_Up)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "İki adımlı bir ana saat, Sync iletisinin kesin çıkış anını ancak ileti gönderildikten sonra bilir. Bu anı, aynı sequenceId ile gönderdiği Follow_Up iletisinin preciseOriginTimestamp alanında bildirir. Bu sayfa IEEE 1588-2008 metnine dayanır.",

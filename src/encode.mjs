@@ -10,7 +10,7 @@ export function ipv6Bytes(address) {
   const right = address.includes('::') ? groups(tail) : [];
   const middle = address.includes('::') ? Array(8 - left.length - right.length).fill('0') : [];
   const all = [...left, ...middle, ...right];
-  if (all.length !== 8) throw new Error(`bad IPv6 address: ${address}`);
+  if (all.length !== 8) throw new Error(`Geçersiz IPv6 adresi: ${address}`);
   return all.flatMap(group => { const value = parseInt(group, 16); return [value >> 8, value & 255]; });
 }
 
@@ -22,21 +22,21 @@ export function fieldValue(field) {
   else if (type === 'ipv6') bytes = ipv6Bytes(example);
   else if (type === 'mac' || type === 'bytes') bytes = hexBytes(example);
   if (bytes) {
-    if (bytes.length * 8 !== bits) throw new Error(`${field.key}: example is ${bytes.length * 8} bits, field is ${bits}`);
+    if (bytes.length * 8 !== bits) throw new Error(`${field.key}: Örnek ${bytes.length * 8} bit, alan ${bits} bit.`);
     return bytes.reduce((sum, byte) => (sum << 8n) | BigInt(byte), 0n);
   }
   const value = BigInt(example);
   if (type === 'varint') {
     // RFC 9000 §16: the two most significant bits give the length (1, 2, 4 or 8 octets).
     const prefix = { 8: 0n, 16: 1n, 32: 2n, 64: 3n }[bits];
-    if (prefix === undefined) throw new Error(`${field.key}: a variable-length integer is 8, 16, 32 or 64 bits`);
-    if (value < 0n || value >= (1n << BigInt(bits - 2))) throw new Error(`${field.key}: example does not fit in a ${bits / 8}-octet variable-length integer`);
+    if (prefix === undefined) throw new Error(`${field.key}: Değişken uzunluklu tamsayı 8, 16, 32 veya 64 bit olmalı.`);
+    if (value < 0n || value >= (1n << BigInt(bits - 2))) throw new Error(`${field.key}: Örnek, ${bits / 8} sekizlili değişken uzunluklu tamsayıya sığmıyor.`);
     return (prefix << BigInt(bits - 2)) | value;
   }
-  if (value < 0n || value >= (1n << BigInt(bits))) throw new Error(`${field.key}: example does not fit in ${bits} bits`);
+  if (value < 0n || value >= (1n << BigInt(bits))) throw new Error(`${field.key}: Örnek ${bits} bite sığmıyor.`);
   // Fields a standard sends least-significant byte first (MS-SMB2 §2.2) are reversed octet by octet.
   if (field.endian === 'little') {
-    if (bits % 8) throw new Error(`${field.key}: a little-endian field is whole octets`);
+    if (bits % 8) throw new Error(`${field.key}: En az anlamlı baytı önce gelen alanın genişliği sekiz bitin katı olmalı.`);
     let reversed = 0n;
     for (let i = 0; i < bits / 8; i += 1) reversed = (reversed << 8n) | ((value >> BigInt(i * 8)) & 255n);
     return reversed;
@@ -70,7 +70,7 @@ function pseudoHeader(kind, pseudo, length) {
 export function encodeExample(protocol) {
   const fixed = protocol.fields.filter(field => Number.isInteger(field.bits));
   const total = fixed.reduce((sum, field) => sum + field.bits, 0);
-  if (total % 8) throw new Error(`${protocol.id}: fixed fields are not a whole number of octets`);
+  if (total % 8) throw new Error(`${protocol.id}: Sabit alanların toplam genişliği sekiz bitin katı değil.`);
   const ranges = {};
   let offset = 0;
   let header = 0n;

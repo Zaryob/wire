@@ -1,7 +1,7 @@
 {
   "order": 36,
   "name": "PTP Delay_Req",
-  "title": "PTP Delay_Req iletisi",
+  "title": "PTP gecikme isteği (Delay_Req)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Bağımlı saat, ana saate olan yol gecikmesini ölçmek için Delay_Req iletisi gönderir ve kendi gönderim anını not eder. Ana saat bu iletinin varış anını Delay_Resp ile geri bildirir. Delay_Req, Sync ile aynı biçimdedir (Table 26). Bu sayfa IEEE 1588-2008 metnine dayanır.",

@@ -43,14 +43,14 @@ function example(id) {
 const checks = new Map();
 for (const protocol of protocols) {
   const check = await verifyLayout(protocol);
-  if (check.stale) throw new Error(`${protocol.id}: the ${protocol.layout.std} text or MIB no longer matches the recorded check; run npm run sync:ieee and review the change`);
+  if (check.stale) throw new Error(`${protocol.id}: ${protocol.layout.std} metni veya MIB dosyası doğrulama kaydıyla uyuşmuyor. npm run sync:ieee komutunu çalıştırıp değişikliği inceleyin.`);
   const failed = [...(check.partial ?? []), ...(check.items ?? []), ...(check.mibItems ?? [])].filter(item => !item.ok);
-  if (failed.length) throw new Error(`${protocol.id}: data disagrees with ${protocol.layout.std}: ${failed.map(item => item.what).join('; ')}`);
+  if (failed.length) throw new Error(`${protocol.id}: Veri ${protocol.layout.std} ile uyuşmuyor. ${failed.map(item => item.what).join('; ')}`);
   const against = protocol.layout.kind === 'ieee' ? protocol.layout.std : `RFC ${protocol.layout.rfc}`;
-  if (!check.ok) throw new Error(`${protocol.id}: fields ${check.expected} do not match ${against} (${check.found})`);
+  if (!check.ok) throw new Error(`${protocol.id}: Alanlar ${against} ile uyuşmuyor. Veri: ${check.expected}. Kaynak: ${check.found}.`);
   checks.set(protocol.id, check);
   for (const ref of protocol.refs) if (isRfc(ref)) rfcEntry(ref); else standardEntry(ref);
-  for (const field of protocol.fields) if (!protocol.refs.includes(refKey(field.ref))) throw new Error(`${protocol.id}.${field.key}: ${refKey(field.ref)} is not in the page's references`);
+  for (const field of protocol.fields) if (!protocol.refs.includes(refKey(field.ref))) throw new Error(`${protocol.id}.${field.key}: ${refKey(field.ref)} sayfanın kaynak listesinde bulunamadı.`);
 }
 
 const refText = ref => `${ref.std ? standardEntry(ref.std).short : `RFC ${ref.rfc}`}${ref.section ? ` §${ref.section}` : ref.label ? `, “${ref.label}”` : ''}${ref.page ? `, s. ${ref.page}` : ''}`;
@@ -539,7 +539,7 @@ function home() {
   ${layersData.ips.slice().reverse().map(ips => ips.wire).filter(layer => layers.includes(layer)).map(layer => {
     const ips = layersData.ips.find(item => item.wire === layer);
     const key = layerKey(layer);
-    return `<section class="layer layer--${key}" id="tcpip-${key}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${key}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı <span class="layer-heading__note">${e(ips.name)} · OSI ${e(ips.osi)}</span></h2><ul class="protocol-list protocol-list--compact">${protocols.filter(protocol => protocol.layer === layer).map(protocol => `<li class="protocol-card protocol-card--compact protocol-card--${key}" data-layer="${key}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(fieldSearchNames).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3></li>`).join('')}</ul></section>`;
+    return `<section class="layer layer--${key}" id="tcpip-${key}" aria-labelledby="layer-${e(layer)}"><h2 id="layer-${e(layer)}" class="layer-heading layer-heading--${key}"><span class="layer-heading__indicator" aria-hidden="true"></span>${e(layer)} katmanı <span class="layer-heading__note">OSI ${e(ips.osi)}</span></h2><ul class="protocol-list protocol-list--compact">${protocols.filter(protocol => protocol.layer === layer).map(protocol => `<li class="protocol-card protocol-card--compact protocol-card--${key}" data-layer="${key}" data-search="${e(`${protocol.name} ${protocol.title} ${protocol.summary} ${protocol.fields.map(fieldSearchNames).join(' ')} ${protocol.refs.join(' ')}`.toLocaleLowerCase('tr'))}"><p class="protocol-card__path">~/wire/${e(protocol.id)}</p><h3><a href="${url(protocol.id)}">${e(protocol.title)}</a></h3></li>`).join('')}</ul></section>`;
   }).join('')}
 </div>
 ${layersSection()}`;
@@ -573,7 +573,7 @@ function layersSection() {
     const own = i === chain.length - 1 ? innermost.bytes.length : sizes[i].bytes.length - sizes[i + 1].bytes.length;
     return `<li class="encap__layer encap__layer--${layerKey(protocol.layer)}" style="--depth:${i}"><span class="layer-badge layer-badge--${layerKey(protocol.layer)}">${e(protocol.layer)}</span> ${pageLink(id)} <span class="small">${i === chain.length - 1 ? `${own} sekizli ileti` : `${own} sekizli başlık`}</span></li>`;
   }).join('')}</ol>`;
-  const osiRows = layersData.osi.map(layer => `<tr id="osi-${layer.number}"><th scope="row">${layer.number}</th><td><strong>${e(layer.tr)}</strong><br><span class="small">${e(layer.name)}</span></td><td>${e(layer.desc)}</td><td>${layer.wire ? `<a href="#tcpip-${layerKey(layer.wire)}">${e(layer.wire)}</a>` : '—'}</td></tr>`).join('');
+  const osiRows = layersData.osi.map(layer => `<tr id="osi-${layer.number}"><th scope="row">${layer.number}</th><td><strong>${e(layer.tr)}</strong><br><span class="small" lang="en">${e(layer.name)}</span></td><td>${e(layer.desc)}</td><td>${layer.wire ? `<a href="#tcpip-${layerKey(layer.wire)}">${e(layer.wire)}</a>` : '—'}</td></tr>`).join('');
   const groups = layersData.groups.map(group => `<details class="layers-group"><summary id="group-${e(group.title)}">${e(group.title)} <span class="small">${group.items.length} özet</span></summary><dl class="layers-summary">${group.items.map(item => `<div><dt><strong>${e(item.name)}</strong> <a class="layer-badge layer-badge--${layerKey(item.layer)}" href="#tcpip-${layerKey(item.layer)}">${e(item.layer)}</a>${item.text ? ' <span class="small">metin tabanlı</span>' : ''}</dt><dd><p>${e(item.summary)}</p><p class="small">${item.ports ? `Port: ${e(item.ports)} · ` : ''}${item.pages.length ? `wire: ${item.pages.map(pageLink).join(', ')}` : 'wire’da başlık sayfası yok: metin tabanlı komutlar ve yanıtlarla çalışır.'} · Kaynak: ${item.refs.map(ref).join(', ')}</p></dd></div>`).join('')}</dl></details>`).join('');
   return `<section class="home-layers" id="katmanlar" aria-labelledby="katmanlar-title"><h2 id="katmanlar-title">Katmanlar</h2><p>Ağ protokolleri üst üste çalışır: her katman, üstündeki katmanın verisini kendi başlığıyla sarar ve bir alttakine teslim eder.</p>
 <section aria-labelledby="encap-title"><h3 id="encap-title">Bir paketin katmanları</h3><p>wire'ın örnek paketleri birbirinin içine yerleşir. IPv4 örneği bir UDP datagramı taşır, o da bir DNS sorgusu taşır: her katman yalnızca kendi başlığını ekler ve içindekini olduğu gibi taşır. Alıcıda katmanlar ters sırayla açılır.</p>${encapsulation}<p class="small">Sekizli sayıları derleme sırasında wire'ın örneklerinden hesaplanır; Ethernet çerçevesi ve onun altındaki fiziksel ortam bu zincirde gösterilmez.</p></section>

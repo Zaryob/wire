@@ -1,7 +1,7 @@
 {
   "order": 38,
   "name": "PTP Announce",
-  "title": "PTP Announce iletisi",
+  "title": "PTP duyuru iletisi (Announce)",
   "layer": "Uygulama",
   "rowBits": 32,
   "summary": "Ana saat olmaya aday her saat, kendi niteliklerini Announce iletisiyle duyurur. Saatler bu iletilerdeki öncelik, sınıf ve doğruluk bilgilerini en iyi ana saat algoritmasında (BMC) karşılaştırır ve alanın ana saatini seçer. Bu sayfa IEEE 1588-2008 metnine dayanır.",

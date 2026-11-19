@@ -31,29 +31,29 @@ for (const name of (await readdir(directory)).filter(file => file.endsWith('.jso
       protocol.layout.mib.checked = { date: same ? protocol.layout.mib.checked.date : today, facts };
     }
     await writeFile(file, `${JSON.stringify(protocol, null, 2)}\n`);
-    console.log(`${protocol.id}: ${text ? 'text' : 'no text'}, ${mib ? 'MIB' : 'no MIB'} recorded from ${entry.short}`);
+    console.log(`${protocol.id}: ${entry.short} doğrulaması kaydedildi (metin: ${text ? 'var' : 'yok'}, MIB: ${mib ? 'var' : 'yok'}).`);
     continue;
   }
   if (protocol.layout.kind === 'standard' && protocol.layout.mib) {
     // MIB modules published with the standard: record the facts the page relies on.
     const text = await mibText(protocol.layout.std);
-    if (!text) { console.log(`${protocol.id}: no MIB files for ${protocol.layout.std}; record kept`); continue; }
+    if (!text) { console.log(`${protocol.id}: ${protocol.layout.std} için MIB dosyası bulunamadı. Doğrulama kaydı korundu.`); continue; }
     const facts = lldpMibFacts(text, protocol.layout.mib.objects);
     const previous = protocol.layout.mib.checked;
     const same = JSON.stringify(previous?.facts) === JSON.stringify(facts);
     protocol.layout.mib.checked = { date: same ? previous.date : today, facts };
     await writeFile(file, `${JSON.stringify(protocol, null, 2)}\n`);
-    console.log(`${protocol.id}: MIB facts recorded from ${standardEntry(protocol.layout.std).short}`);
+    console.log(`${protocol.id}: ${standardEntry(protocol.layout.std).short} MIB verileri kaydedildi.`);
     continue;
   }
   if (protocol.layout.kind !== 'ieee') continue;
   const text = await ieeeText(protocol.layout.std);
-  if (!text) { console.log(`${protocol.id}: no text for ${protocol.layout.std}; record kept`); continue; }
+  if (!text) { console.log(`${protocol.id}: ${protocol.layout.std} metni bulunamadı. Doğrulama kaydı korundu.`); continue; }
   const entry = standardEntry(protocol.layout.std);
   const fields = ieeeFields(text, protocol.layout).map(field => [field.name, field.bits]);
   const sha256 = createHash('sha256').update(await readFile(path.join(root, entry.copy.file))).digest('hex');
   const previous = JSON.stringify(protocol.layout.checked?.fields);
   protocol.layout.checked = { date: previous === JSON.stringify(fields) ? protocol.layout.checked.date : today, sha256, fields };
   await writeFile(file, `${JSON.stringify(protocol, null, 2)}\n`);
-  console.log(`${protocol.id}: ${fields.length} fields recorded from ${entry.short}`);
+  console.log(`${protocol.id}: ${entry.short} standardından ${fields.length} alan kaydedildi.`);
 }

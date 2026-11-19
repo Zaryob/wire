@@ -6,7 +6,7 @@
 /** Text of one PDF page ("\f[pdf N]" markers come from sync-ieee.py). */
 export function pdfPage(text, number) {
   const start = text.indexOf(`\f[pdf ${number}]\n`);
-  if (start < 0) throw new Error(`page ${number} not in the extracted text`);
+  if (start < 0) throw new Error(`${number}. sayfa çıkarılan metinde bulunamadı.`);
   const end = text.indexOf('\f[pdf ', start + 1);
   return text.slice(start, end < 0 ? undefined : end);
 }
@@ -28,7 +28,7 @@ export function pageOf(text, pattern) {
  */
 export function messageTable(text, caption) {
   const at = text.search(new RegExp(`^${caption.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*$`, 'm'));
-  if (at < 0) throw new Error(`table caption not found: ${caption}`);
+  if (at < 0) throw new Error(`Tablo başlığı bulunamadı: ${caption}`);
   const rows = [];
   let offset = 0;
   for (const line of text.slice(at).split('\n').slice(1)) {
@@ -36,7 +36,7 @@ export function messageTable(text, caption) {
     const row = line.trim().match(/^(.+?) (\d+) (\d+)$/);
     if (!row) break;
     const [, names, octets, start] = row;
-    if (Number(start) !== offset) throw new Error(`${caption}: ${names} at offset ${start}, expected ${offset}`);
+    if (Number(start) !== offset) throw new Error(`${caption}: ${names} için başlangıç konumu ${start}, beklenen ${offset}.`);
     const pair = names.split(' ');
     if (Number(octets) === 1 && pair.length === 2 && pair.every(name => /^\w+$/.test(name))) {
       rows.push({ name: pair[0], bits: 4, offset }, { name: pair[1], bits: 4, offset });
@@ -45,7 +45,7 @@ export function messageTable(text, caption) {
     }
     offset += Number(octets);
   }
-  if (!rows.length) throw new Error(`table after ${caption} has no rows`);
+  if (!rows.length) throw new Error(`${caption} başlığından sonra tablo satırı bulunamadı.`);
   return rows;
 }
 
@@ -61,24 +61,24 @@ const primitiveBits = type => {
  */
 export function structMembers(text, name) {
   const at = text.search(new RegExp(`^struct ${name}\\s*$`, 'm'));
-  if (at < 0) throw new Error(`struct not found: ${name}`);
+  if (at < 0) throw new Error(`Yapı bulunamadı: ${name}`);
   const members = [];
   for (const line of text.slice(at).split('\n').slice(1)) {
     const item = line.trim();
     if (item === '{') continue;
     if (item === '};') return members;
     const member = item.match(/^(\w+)(?:\[(\d+)\])? (\w+);$/);
-    if (!member) throw new Error(`struct ${name}: unreadable member ${item}`);
+    if (!member) throw new Error(`${name} yapısının üye tanımı okunamadı: ${item}`);
     const [, type, count = '1', field] = member;
     let bits = primitiveBits(type);
     if (bits === undefined) {
       const typedef = text.match(new RegExp(`^typedef (\\w+)\\[(\\d+)\\] ${type};$`, 'm'));
-      if (!typedef) throw new Error(`struct ${name}: unknown type ${type}`);
+      if (!typedef) throw new Error(`${name} yapısında bilinmeyen tür: ${type}`);
       bits = primitiveBits(typedef[1]) * Number(typedef[2]);
     }
     members.push({ name: field, bits: bits * Number(count) });
   }
-  throw new Error(`struct ${name} has no closing brace`);
+  throw new Error(`${name} yapısının kapanış ayracı bulunamadı.`);
 }
 
 /**
@@ -96,7 +96,7 @@ export function messageFields(text, { tables, structs = {} }) {
       if (!type) { fields.push({ name: row.name, bits: row.bits }); continue; }
       const members = structMembers(text, type);
       const total = members.reduce((sum, member) => sum + member.bits, 0);
-      if (total !== row.bits) throw new Error(`${row.name}: struct ${type} is ${total} bits, the table gives ${row.bits}`);
+      if (total !== row.bits) throw new Error(`${row.name}: ${type} yapısı ${total} bit, tabloda ${row.bits} bit belirtiliyor.`);
       for (const member of members) fields.push({ name: `${row.name}.${member.name}`, bits: member.bits });
     }
   }
@@ -111,16 +111,16 @@ export function messageFields(text, { tables, structs = {} }) {
 /** `name ::= TEXTUAL-CONVENTION … SYNTAX INTEGER { a(1), … }` as [[number, name], …]. */
 export function mibEnum(text, name) {
   const at = text.search(new RegExp(`^${name} ::= TEXTUAL-CONVENTION`, 'm'));
-  if (at < 0) throw new Error(`textual convention not found: ${name}`);
+  if (at < 0) throw new Error(`Metinsel gösterim tanımı bulunamadı: ${name}`);
   const body = text.slice(at).match(/SYNTAX\s+INTEGER\s*\{([^}]*)\}/);
-  if (!body) throw new Error(`${name} has no INTEGER enumeration`);
+  if (!body) throw new Error(`${name} tanımında INTEGER değer listesi yok.`);
   return [...body[1].matchAll(/(\w+)\((\d+)\)/g)].map(([, label, number]) => [Number(number), label]);
 }
 
 /** The SYNTAX, DEFVAL and REFERENCE of a textual convention or an OBJECT-TYPE. */
 export function mibObject(text, name) {
   const at = text.search(new RegExp(`^${name} +(OBJECT-TYPE|::= TEXTUAL-CONVENTION)`, 'm'));
-  if (at < 0) throw new Error(`MIB object not found: ${name}`);
+  if (at < 0) throw new Error(`MIB nesnesi bulunamadı: ${name}`);
   const next = text.slice(at + name.length).search(/^\S+ +(OBJECT-TYPE|::= TEXTUAL-CONVENTION)|^\S+ ::= SEQUENCE/m);
   const block = text.slice(at, next < 0 ? undefined : at + name.length + next);
   const size = block.match(/SYNTAX\s+[^\n]*SIZE\s*\((\d+)\.\.(\d+)\)/);
@@ -145,10 +145,10 @@ export function lldpMibFacts(text, objects) {
   const txInterval = mibObject(text, 'lldpV2MessageTxInterval');
   // "TTL = min(65535, (lldpV2MessageTxInterval*lldpV2MessageTxHoldMultiplier)+1)"
   const formula = holdMultiplier.description.match(/TTL = min\((\d+), \(lldpV2MessageTxInterval\*lldpV2MessageTxHoldMultiplier\)\+1\)/);
-  if (!formula) throw new Error('TTL formula not found in lldpV2MessageTxHoldMultiplier');
+  if (!formula) throw new Error('lldpV2MessageTxHoldMultiplier tanımında TTL formülü bulunamadı.');
   // Reserved TLV types are written as 7-digit binary numbers: "(000 1001 - 111 1110)".
   const reserved = mibObject(text, 'lldpV2StatsRxPortTLVsUnrecognizedTotal').description.match(/\(([01 ]+) - ([01 ]+)\)/);
-  if (!reserved) throw new Error('reserved TLV type range not found');
+  if (!reserved) throw new Error('Ayrılmış TLV türü aralığı bulunamadı.');
   const typeBits = reserved[1].replace(/ /g, '').length;
   const unknown = mibObject(text, 'lldpV2RemUnknownTLVType').range;
   const info = mibObject(text, 'lldpV2RemUnknownTLVInfo').size;
@@ -177,7 +177,7 @@ const words = { seven: 7, eight: 8, nine: 9 };
 const flat = text => text.replace(/\s+/g, ' ');
 const need = (text, pattern, what) => {
   const match = text.match(pattern);
-  if (!match) throw new Error(`802.1AB text: ${what} not found`);
+  if (!match) throw new Error(`${what}, 802.1AB metninde bulunamadı.`);
   return match;
 };
 
@@ -224,7 +224,7 @@ export function lldpTextFacts(text) {
 
 const between = (text, from, to) => {
   const start = text.search(from);
-  if (start < 0) throw new Error(`802.1Q text: ${from} not found`);
+  if (start < 0) throw new Error(`${from}, 802.1Q metninde bulunamadı.`);
   const end = text.slice(start + 1).search(to);
   return text.slice(start, end < 0 ? undefined : start + 1 + end);
 };
@@ -270,7 +270,7 @@ function msStructure(section) {
   const known = [...new Set(defs.map(def => def.name))].sort((a, b) => b.length - a.length);
   while (rest) {
     const next = known.find(name => rest === name || rest.startsWith(`${name} `));
-    if (!next) throw new Error(`MS-SMB2 figure: cannot read "${rest.slice(0, 40)}"`);
+    if (!next) throw new Error(`MS-SMB2 şemasında şu kısım okunamadı: "${rest.slice(0, 40)}"`);
     names.push(next);
     rest = rest.slice(next.length).trim();
   }
@@ -278,7 +278,7 @@ function msStructure(section) {
   let at = 0;
   return names.map(name => {
     while (at < defs.length && defs[at].name !== name) at += 1;
-    if (at === defs.length) throw new Error(`MS-SMB2: no definition for ${name}`);
+    if (at === defs.length) throw new Error(`${name} için MS-SMB2 metninde tanım bulunamadı.`);
     return defs[at++];
   });
 }

@@ -241,7 +241,7 @@
       "destination": "198.51.100.7",
       "protocol": 6
     },
-    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP web sunucusunun 80 numaralı portuna giden, 3 aşamalı el sıkışmanın ilk adımı olan standart bir TCP SYN segmenti (ISN: 0x12345678, Window: 29200). Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP sunucusunun 80 numaralı portuna giden TCP SYN segmenti. Bu segment, üç aşamalı bağlantı kurulumunun ilk adımıdır. Başlangıç sıra numarası 0x12345678, pencere boyutu 29200’dür. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
   },
   "refs": [
     9293,
