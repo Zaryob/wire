@@ -27,7 +27,7 @@
   "fields": [
     {
       "key": "pdu_tag",
-      "name": "GetBulkRequest-PDU etiketi",
+      "name": "GetBulkRequest-PDU Tag",
       "bits": 8,
       "desc": "PDU'nun etiketi: [5] IMPLICIT SEQUENCE, yani bağlama özgü, yapılı 5 numaralı tür.",
       "ref": {
@@ -36,11 +36,14 @@
         "label": "Usage Example"
       },
       "example": 165,
-      "hex": true
+      "hex": true,
+      "label": "GetBulkRequest-PDU etiketi",
+      "desc_en": "PDU tag: [5] IMPLICIT SEQUENCE (context-specific constructed type 5).",
+      "desc_tr": "PDU'nun etiketi: [5] IMPLICIT SEQUENCE, yani bağlama özgü, yapılı 5 numaralı tür."
     },
     {
       "key": "length_form",
-      "name": "Uzunluk biçimi",
+      "name": "Length Form",
       "bits": 8,
       "desc": "0x82: uzunluk uzun biçimde, ardından gelen iki sekizlide.",
       "ref": {
@@ -49,11 +52,14 @@
         "label": "Usage Example"
       },
       "example": 130,
-      "hex": true
+      "hex": true,
+      "label": "Uzunluk biçimi",
+      "desc_en": "ASN.1 BER length encoding indicator; 0x82 indicates long form with 2 subsequent length octets.",
+      "desc_tr": "0x82: uzunluk uzun biçimde, ardından gelen iki sekizlide."
     },
     {
       "key": "length",
-      "name": "Uzunluk",
+      "name": "Length",
       "bits": 16,
       "desc": "PDU içeriğinin uzunluğu, sekizli olarak.",
       "ref": {
@@ -61,11 +67,14 @@
         "section": "8.1",
         "label": "Usage Example"
       },
-      "example": 57
+      "example": 57,
+      "label": "Uzunluk",
+      "desc_en": "Length of PDU contents in octets.",
+      "desc_tr": "PDU içeriğinin uzunluğu, sekizli olarak."
     },
     {
       "key": "rid_tag",
-      "name": "INTEGER etiketi",
+      "name": "INTEGER Tag (request-id)",
       "bits": 8,
       "desc": "request-id'nin türü: INTEGER.",
       "ref": {
@@ -74,11 +83,14 @@
         "label": "Usage Example"
       },
       "example": 2,
-      "hex": true
+      "hex": true,
+      "label": "INTEGER etiketi",
+      "desc_en": "ASN.1 tag for request-id: INTEGER (0x02).",
+      "desc_tr": "request-id'nin türü: INTEGER."
     },
     {
       "key": "rid_len",
-      "name": "Uzunluk",
+      "name": "Length (request-id)",
       "bits": 8,
       "desc": "request-id değerinin uzunluğu.",
       "ref": {
@@ -86,7 +98,10 @@
         "section": "8.1",
         "label": "Usage Example"
       },
-      "example": 4
+      "example": 4,
+      "label": "Uzunluk",
+      "desc_en": "Length in octets of the request-id integer.",
+      "desc_tr": "request-id değerinin uzunluğu."
     },
     {
       "key": "request_id",
@@ -100,11 +115,13 @@
         "label": "Definitions"
       },
       "example": 1414684022,
-      "asn1": "request-id"
+      "asn1": "request-id",
+      "desc_en": "32-bit integer correlating requests with responses.",
+      "desc_tr": "İsteği yanıtla eşleştiren tamsayı."
     },
     {
       "key": "nr_tag",
-      "name": "INTEGER etiketi",
+      "name": "INTEGER Tag (non-repeaters)",
       "bits": 8,
       "desc": "non-repeaters'ın türü.",
       "ref": {
@@ -113,11 +130,14 @@
         "label": "Usage Example"
       },
       "example": 2,
-      "hex": true
+      "hex": true,
+      "label": "INTEGER etiketi",
+      "desc_en": "ASN.1 tag for non-repeaters: INTEGER (0x02).",
+      "desc_tr": "non-repeaters'ın türü."
     },
     {
       "key": "nr_len",
-      "name": "Uzunluk",
+      "name": "Length (non-repeaters)",
       "bits": 8,
       "desc": "non-repeaters değerinin uzunluğu.",
       "ref": {
@@ -125,7 +145,10 @@
         "section": "8.1",
         "label": "Usage Example"
       },
-      "example": 1
+      "example": 1,
+      "label": "Uzunluk",
+      "desc_en": "Length in octets of non-repeaters integer.",
+      "desc_tr": "non-repeaters değerinin uzunluğu."
     },
     {
       "key": "non_repeaters",
@@ -139,11 +162,13 @@
         "label": "Definitions"
       },
       "example": 1,
-      "asn1": "non-repeaters"
+      "asn1": "non-repeaters",
+      "desc_en": "Number of variables at the start of the list that should be retrieved once (single successor).",
+      "desc_tr": "Listenin başından, yalnızca bir kez sıradaki nesneyle yanıtlanacak değişken sayısı."
     },
     {
       "key": "mr_tag",
-      "name": "INTEGER etiketi",
+      "name": "INTEGER Tag (max-repetitions)",
       "bits": 8,
       "desc": "max-repetitions'ın türü.",
       "ref": {
@@ -152,11 +177,14 @@
         "label": "Usage Example"
       },
       "example": 2,
-      "hex": true
+      "hex": true,
+      "label": "INTEGER etiketi",
+      "desc_en": "ASN.1 tag for max-repetitions: INTEGER (0x02).",
+      "desc_tr": "max-repetitions'ın türü."
     },
     {
       "key": "mr_len",
-      "name": "Uzunluk",
+      "name": "Length (max-repetitions)",
       "bits": 8,
       "desc": "max-repetitions değerinin uzunluğu.",
       "ref": {
@@ -164,7 +192,10 @@
         "section": "8.1",
         "label": "Usage Example"
       },
-      "example": 1
+      "example": 1,
+      "label": "Uzunluk",
+      "desc_en": "Length in octets of max-repetitions integer.",
+      "desc_tr": "max-repetitions değerinin uzunluğu."
     },
     {
       "key": "max_repetitions",
@@ -178,11 +209,13 @@
         "label": "Definitions"
       },
       "example": 2,
-      "asn1": "max-repetitions"
+      "asn1": "max-repetitions",
+      "desc_en": "Maximum number of successors to be returned for each remaining variable in the list.",
+      "desc_tr": "Kalan değişkenlerin her biri için en çok kaç sıradaki nesnenin döndürüleceği."
     },
     {
       "key": "vbl_tag",
-      "name": "SEQUENCE OF etiketi",
+      "name": "SEQUENCE OF Tag (variable-bindings)",
       "bits": 8,
       "desc": "variable-bindings listesinin türü.",
       "ref": {
@@ -192,11 +225,14 @@
       },
       "example": 48,
       "hex": true,
-      "asn1": "variable-bindings"
+      "asn1": "variable-bindings",
+      "label": "SEQUENCE OF etiketi",
+      "desc_en": "ASN.1 tag for variable-bindings list: SEQUENCE OF (0x30).",
+      "desc_tr": "variable-bindings listesinin türü."
     },
     {
       "key": "vbl_len",
-      "name": "Uzunluk",
+      "name": "Length (variable-bindings)",
       "bits": 8,
       "desc": "Listenin uzunluğu.",
       "ref": {
@@ -204,7 +240,10 @@
         "section": "8.1",
         "label": "Usage Example"
       },
-      "example": 43
+      "example": 43,
+      "label": "Uzunluk",
+      "desc_en": "Length in octets of the variable-bindings sequence.",
+      "desc_tr": "Listenin uzunluğu."
     },
     {
       "key": "bindings",
@@ -216,17 +255,35 @@
         "rfc": 3416,
         "section": "3",
         "label": "Definitions"
-      }
+      },
+      "desc_en": "List of variable bindings, each consisting of an OID and a value (NULL in requests).",
+      "desc_tr": "Her biri bir OID ve bir değerden oluşan SEQUENCE'lar; istekte değerler NULL'dır."
     }
   ],
   "example": {
     "payload": "300b06072b0601020101030500300d06092b06010201041601020500300d06092b06010201041601040500",
-    "note": "RFC 3417 §8.1'deki örnek: request-id 1414684022, non-repeaters 1, max-repetitions 2 ve üç değişken: sysUpTime (1.3.6.1.2.1.1.3), ipNetToMediaPhysAddress (1.3.6.1.2.1.4.22.1.2) ve ipNetToMediaType (1.3.6.1.2.1.4.22.1.4); değerlerin hepsi NULL (05 00). Toplam 61 sekizlidir."
+    "note": "RFC 3417 §8.1'deki örnek: request-id 1414684022, non-repeaters 1, max-repetitions 2 ve üç değişken: sysUpTime (1.3.6.1.2.1.1.3), ipNetToMediaPhysAddress (1.3.6.1.2.1.4.22.1.2) ve ipNetToMediaType (1.3.6.1.2.1.4.22.1.4); değerlerin hepsi NULL (05 00). Toplam 61 sekizlidir.",
+    "note_tr": "RFC 3417 §8.1'deki örnek: request-id 1414684022, non-repeaters 1, max-repetitions 2 ve üç değişken: sysUpTime (1.3.6.1.2.1.1.3), ipNetToMediaPhysAddress (1.3.6.1.2.1.4.22.1.2) ve ipNetToMediaType (1.3.6.1.2.1.4.22.1.4); değerlerin hepsi NULL (05 00). Toplam 61 sekizlidir.",
+    "note_en": "Example from RFC 3417 §8.1: request-id 1414684022, non-repeaters 1, max-repetitions 2, and three variable bindings: sysUpTime (1.3.6.1.2.1.1.3), ipNetToMediaPhysAddress (1.3.6.1.2.1.4.22.1.2), and ipNetToMediaType (1.3.6.1.2.1.4.22.1.4); all values NULL (05 00). Total 61 octets."
   },
   "refs": [
     3416,
     3417,
     1901
   ],
-  "id": "snmp"
+  "id": "snmp",
+  "summary_tr": "Basit Ağ Yönetim Protokolü (Simple Network Management Protocol - SNMP), yönlendirici ve anahtar gibi cihazların durumunu uzaktan okumayı ve yönetmeyi sağlar. İletiler sabit bir başlık değil, ASN.1 ile tanımlanıp BER ile kodlanan iç içe tür-uzunluk-değer yapılarıdır. Bu sayfa, RFC'nin kendi BER örneğini bayt bayt gösterir.",
+  "summary_en": "Simple Network Management Protocol (SNMP, RFC 3416 / RFC 3417) monitors and manages network devices. Messages use nested ASN.1 structures encoded in Basic Encoding Rules (BER). This page shows the GetBulkRequest PDU octet by octet.",
+  "notes_tr": [
+    "SNMP komut yanıtlayıcıları (ajanlar) UDP 161, bildirim alıcıları UDP 162 numaralı portu dinler (RFC 3417 §3.2).",
+    "SNMPv2c'de PDU, sürüm (1) ve topluluk adı taşıyan bir Message SEQUENCE'ının içinde gönderilir (RFC 1901 §3).",
+    "GetBulkRequest, ilk non-repeaters değişkeni bir kez, kalanları max-repetitions kez sıradaki nesneyle yanıtlatır; tabloları tek istekte okumaya yarar (RFC 3416 §4.2.3).",
+    "Örnekteki ilk uzunluk, en kısa biçimde kodlanmamıştır: 0x82, uzunluğun ardından gelen iki sekizlide olduğunu gösterir. RFC 3417 §8 tanımlı uzunluğun uzun biçimine izin verir."
+  ],
+  "notes_en": [
+    "SNMP command responders (agents) listen on UDP port 161, and notification receivers listen on UDP port 162 (RFC 3417 §3.2).",
+    "In SNMPv2c, the PDU is wrapped in a Message SEQUENCE containing version (1) and community string (RFC 1901 §3).",
+    "GetBulkRequest retrieves the first non-repeaters variables once and remaining variables max-repetitions times with subsequent MIB objects, optimizing table traversal (RFC 3416 §4.2.3).",
+    "The first length in the example uses long-form encoding: 0x82 indicates length is encoded in the subsequent two octets. RFC 3417 §8 permits long-form definite length encoding."
+  ]
 }

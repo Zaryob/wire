@@ -45,7 +45,9 @@
         "label": "Message Header Format"
       },
       "example": "ffffffffffffffffffffffffffffffff",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "16-octet synchronization marker retained for compatibility; all bits must be 1.",
+      "desc_tr": "Uyumluluk için korunan 16 sekizlilik alan; bütün bitleri 1 olmalıdır."
     },
     {
       "key": "length",
@@ -58,7 +60,9 @@
         "section": "4.1",
         "label": "Message Header Format"
       },
-      "example": 29
+      "example": 29,
+      "desc_en": "Total length of BGP message in octets, including 19-octet header (range 19–4096).",
+      "desc_tr": "Başlık dahil mesajın toplam uzunluğu, sekizli olarak; 19 ile 4096 arasında."
     },
     {
       "key": "type",
@@ -89,6 +93,44 @@
           "4",
           "Oturumu canlı tutma (KEEPALIVE)"
         ]
+      ],
+      "desc_en": "BGP message type: 1 OPEN, 2 UPDATE, 3 NOTIFICATION, 4 KEEPALIVE.",
+      "desc_tr": "Mesaj türü.",
+      "values_en": [
+        [
+          "1",
+          "OPEN"
+        ],
+        [
+          "2",
+          "UPDATE"
+        ],
+        [
+          "3",
+          "NOTIFICATION"
+        ],
+        [
+          "4",
+          "KEEPALIVE"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Oturum açma (OPEN)"
+        ],
+        [
+          "2",
+          "Güncelleme (UPDATE)"
+        ],
+        [
+          "3",
+          "Bildirim (NOTIFICATION)"
+        ],
+        [
+          "4",
+          "Oturumu canlı tutma (KEEPALIVE)"
+        ]
       ]
     },
     {
@@ -102,7 +144,9 @@
         "section": "4.2",
         "label": "OPEN Message Format"
       },
-      "example": 4
+      "example": 4,
+      "desc_en": "BGP version; 4 for BGP-4.",
+      "desc_tr": "BGP sürümü; güncel sürüm 4'tür."
     },
     {
       "key": "my_as",
@@ -115,7 +159,9 @@
         "section": "4.2",
         "label": "OPEN Message Format"
       },
-      "example": 64496
+      "example": 64496,
+      "desc_en": "Autonomous System number of the sender.",
+      "desc_tr": "Gönderenin özerk sistem (AS) numarası."
     },
     {
       "key": "hold_time",
@@ -128,7 +174,9 @@
         "section": "4.2",
         "label": "OPEN Message Format"
       },
-      "example": 90
+      "example": 90,
+      "desc_en": "Proposed hold time in seconds; smaller value of both peers is used (must be 0 or >= 3).",
+      "desc_tr": "Önerilen tutma süresi, saniye olarak. İki tarafın önerisinden küçük olanı kullanılır; 0 ya da en az 3 olmalıdır."
     },
     {
       "key": "bgp_id",
@@ -142,7 +190,9 @@
         "label": "OPEN Message Format"
       },
       "example": "192.0.2.1",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "BGP Identifier of the sender; matches an IP address of the router, identical across all sessions.",
+      "desc_tr": "Gönderenin BGP kimliği; yönlendiricinin IP adreslerinden birine eşittir ve bütün oturumlarında aynıdır."
     },
     {
       "key": "opt_len",
@@ -155,7 +205,9 @@
         "section": "4.2",
         "label": "OPEN Message Format"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Total length of optional parameters in octets; 0 if none.",
+      "desc_tr": "İsteğe bağlı parametrelerin toplam uzunluğu, sekizli olarak; parametre yoksa 0."
     },
     {
       "key": "opt_params",
@@ -167,16 +219,34 @@
         "rfc": 4271,
         "section": "4.2",
         "label": "OPEN Message Format"
-      }
+      },
+      "desc_en": "List of optional parameters, each consisting of Parameter Type, Length, and Value.",
+      "desc_tr": "Parametre türü, uzunluğu ve değerinden oluşan isteğe bağlı parametreler."
     }
   ],
   "example": {
-    "note": "AS 64496'daki bir yönlendiricinin, TCP bağlantısı kurulur kurulmaz gönderdiği OPEN mesajı: BGP-4, 90 saniyelik tutma süresi, BGP kimliği 192.0.2.1 ve isteğe bağlı parametre yok. Mesaj 29 sekizlidir: 19 sekizli başlık ve 10 sekizli OPEN gövdesi."
+    "note": "AS 64496'daki bir yönlendiricinin, TCP bağlantısı kurulur kurulmaz gönderdiği OPEN mesajı: BGP-4, 90 saniyelik tutma süresi, BGP kimliği 192.0.2.1 ve isteğe bağlı parametre yok. Mesaj 29 sekizlidir: 19 sekizli başlık ve 10 sekizli OPEN gövdesi.",
+    "note_tr": "AS 64496'daki bir yönlendiricinin, TCP bağlantısı kurulur kurulmaz gönderdiği OPEN mesajı: BGP-4, 90 saniyelik tutma süresi, BGP kimliği 192.0.2.1 ve isteğe bağlı parametre yok. Mesaj 29 sekizlidir: 19 sekizli başlık ve 10 sekizli OPEN gövdesi.",
+    "note_en": "An OPEN message sent by a router in AS 64496 immediately upon TCP connection establishment: BGP-4, 90 seconds hold time, BGP identifier 192.0.2.1, and no optional parameters. Message is 29 octets: 19-octet header and 10-octet OPEN body."
   },
   "refs": [
     4271,
     5398,
     5737
   ],
-  "id": "bgp"
+  "id": "bgp",
+  "summary_tr": "Sınır Ağ Geçidi Protokolü (Border Gateway Protocol - BGP), özerk sistemler arasında yönlendirme bilgisi alışverişi yapar ve internetin yönlendirme protokolüdür. Her BGP mesajı 19 sekizlilik bir başlıkla başlar. TCP bağlantısı kurulduktan sonra iki taraf da önce, sürümü, AS numarasını, tutma süresini ve BGP kimliğini bildiren bir OPEN mesajı gönderir.",
+  "summary_en": "Border Gateway Protocol (BGP-4, RFC 4271) exchanges routing and reachability information between autonomous systems on the Internet. All BGP messages start with a 19-octet header. The OPEN message establishes a BGP session over TCP.",
+  "notes_tr": [
+    "BGP, TCP üzerinde çalışır ve 179 numaralı portu dinler (RFC 4271 §3, §8.2.1).",
+    "Bir BGP mesajı en az 19 (yalnızca başlık), en çok 4096 sekizlidir. Başlıktan sonraki kısım mesaj türüne göre değişir; KEEPALIVE yalnızca başlıktan oluşur (RFC 4271 §4.1, §4.4).",
+    "Tutma süresi içinde KEEPALIVE ya da UPDATE alınmazsa oturum kapatılır. Tutma süresi 0 ya da en az 3 saniye olmalıdır (RFC 4271 §4.2).",
+    "Örnekteki AS numarası 64496, RFC 5398'de belgeleme için ayrılmış 64496–64511 aralığındandır; BGP kimliği 192.0.2.1 de RFC 5737'deki belgeleme bloğundandır."
+  ],
+  "notes_en": [
+    "BGP runs over TCP, listening on port 179 (RFC 4271 §3, §8.2.1).",
+    "A BGP message is at least 19 octets (header only) and at most 4096 octets. Body format depends on message type; KEEPALIVE consists solely of the header (RFC 4271 §4.1, §4.4).",
+    "If neither KEEPALIVE nor UPDATE is received within the Hold Time, the session is terminated. Hold time must be 0 or at least 3 seconds (RFC 4271 §4.2).",
+    "AS number 64496 in the example is from the 64496–64511 documentation range in RFC 5398; BGP identifier 192.0.2.1 is from the RFC 5737 documentation block."
+  ]
 }

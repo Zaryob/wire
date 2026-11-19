@@ -18,7 +18,7 @@
   "fields": [
     {
       "key": "dst",
-      "name": "Hedef adresi",
+      "name": "Destination Address",
       "bits": 48,
       "desc": "Çerçevenin gönderildiği istasyonun 48 bitlik Ethernet adresi.",
       "ref": {
@@ -26,11 +26,14 @@
         "label": "Packet format"
       },
       "type": "mac",
-      "example": "00:00:5e:00:53:02"
+      "example": "00:00:5e:00:53:02",
+      "label": "Hedef adresi",
+      "desc_en": "The 48-bit Ethernet MAC address of the destination station.",
+      "desc_tr": "Çerçevenin gönderildiği istasyonun 48 bitlik Ethernet adresi."
     },
     {
       "key": "src",
-      "name": "Kaynak adresi",
+      "name": "Source Address",
       "bits": 48,
       "desc": "Çerçeveyi gönderen istasyonun 48 bitlik Ethernet adresi.",
       "ref": {
@@ -38,11 +41,14 @@
         "label": "Packet format"
       },
       "type": "mac",
-      "example": "00:00:5e:00:53:01"
+      "example": "00:00:5e:00:53:01",
+      "label": "Kaynak adresi",
+      "desc_en": "The 48-bit Ethernet MAC address of the transmitting station.",
+      "desc_tr": "Çerçeveyi gönderen istasyonun 48 bitlik Ethernet adresi."
     },
     {
       "key": "type",
-      "name": "Tür",
+      "name": "Type",
       "bits": 16,
       "desc": "Veri alanında hangi protokolün taşındığını belirtir. IP datagramı taşıyan çerçevelerde değeri onaltılık 0800 olmalıdır.",
       "ref": {
@@ -60,26 +66,64 @@
           "ether_type$ADDRESS_RESOLUTION",
           "ARP paketi; RFC 826 bu türün sayısal değerini vermez"
         ]
+      ],
+      "label": "Tür",
+      "desc_en": "Specifies the protocol encapsulated in the data field. For frames carrying an IP datagram, this must be hexadecimal 0800.",
+      "desc_tr": "Veri alanında hangi protokolün taşındığını belirtir. IP datagramı taşıyan çerçevelerde değeri onaltılık 0800 olmalıdır.",
+      "values_en": [
+        [
+          "0x0800",
+          "IP datagram (RFC 894)"
+        ],
+        [
+          "ether_type$ADDRESS_RESOLUTION",
+          "ARP packet; RFC 826 does not specify the numeric value"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0800",
+          "IP datagramı (RFC 894)"
+        ],
+        [
+          "ether_type$ADDRESS_RESOLUTION",
+          "ARP paketi; RFC 826 bu türün sayısal değerini vermez"
+        ]
       ]
     },
     {
       "key": "data",
-      "name": "Veri",
+      "name": "Data",
       "bits": null,
       "desc": "Tür alanının belirttiği protokolün paketi. IP için: IP başlığı ve hemen ardından IP verisi.",
       "ref": {
         "rfc": 894,
         "label": "Frame Format"
-      }
+      },
+      "label": "Veri",
+      "desc_en": "Packet of the protocol specified by the Type field. For IP: IP header followed immediately by IP data.",
+      "desc_tr": "Tür alanının belirttiği protokolün paketi. IP için: IP başlığı ve hemen ardından IP verisi."
     }
   ],
   "example": {
-    "note": "Belgeleme için ayrılmış MAC adresleri (RFC 9542 §2.1.4) arasında bir IP çerçevesinin başlığı. Veri alanı gösterilmemiştir."
+    "note": "Belgeleme için ayrılmış MAC adresleri (RFC 9542 §2.1.4) arasında bir IP çerçevesinin başlığı. Veri alanı gösterilmemiştir.",
+    "note_tr": "Belgeleme için ayrılmış MAC adresleri (RFC 9542 §2.1.4) arasında bir IP çerçevesinin başlığı. Veri alanı gösterilmemiştir.",
+    "note_en": "Header of an IP frame between MAC addresses reserved for documentation (RFC 9542 §2.1.4). Payload data is not shown."
   },
   "refs": [
     826,
     894,
     9542
   ],
-  "id": "ethernet"
+  "id": "ethernet",
+  "summary_tr": "Etiketsiz Ethernet II çerçevesinin başlığı 14 bayttır: 6 bayt hedef MAC adresi, 6 bayt kaynak MAC adresi ve 2 bayt EtherType. EtherType, veri alanında IPv4 veya ARP gibi hangi protokolün taşındığını belirtir.",
+  "summary_en": "An untagged Ethernet II frame header is 14 octets: 6 octets destination MAC address, 6 octets source MAC address, and 2 octets EtherType. The EtherType indicates which protocol (such as IPv4 or ARP) is encapsulated in the payload.",
+  "notes_tr": [
+    "Bu sayfa yalnızca RFC’lerin tarif ettiği üç alanı kapsar. Çerçevenin fiziksel katman ayrıntıları (öntakı, çerçeve denetim dizisi) IEEE 802.3 standardındadır ve bu sitenin kaynak kümesinin dışındadır.",
+    "RFC 894’e göre veri alanı en az 46 sekizlidir; gerekirse sıfır sekizlileriyle doldurulur ve bu dolgu IP datagramının parçası sayılmaz. Bir Ethernet çerçevesinde taşınabilecek en uzun IP datagramı 1500 sekizlidir."
+  ],
+  "notes_en": [
+    "This page covers only the three fields described in RFCs. Physical layer framing details (preamble, frame check sequence) are defined in IEEE 802.3 and are outside the scope of this site.",
+    "According to RFC 894, the data field is at least 46 octets; padded with zero octets if necessary, which are not considered part of the IP datagram. The maximum IP datagram carried in an Ethernet frame is 1500 octets."
+  ]
 }

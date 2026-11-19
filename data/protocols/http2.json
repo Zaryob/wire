@@ -22,7 +22,7 @@
     {
       "key": "length",
       "name": "Length",
-      "label": "Uzunluk",
+      "label": "Çerçeve yükü uzunluğu",
       "bits": 24,
       "desc": "Yükün uzunluğu, sekizli olarak; 9 sekizlilik başlık dahil değildir.",
       "ref": {
@@ -30,12 +30,14 @@
         "section": "4.1",
         "label": "Frame Format"
       },
-      "example": 12
+      "example": 12,
+      "desc_en": "24-bit unsigned integer length of the frame payload in octets; 9-octet header is not included.",
+      "desc_tr": "Başlık hariç çerçeve yükünün sekizli cinsinden uzunluğu; 24 bitlik işaretsiz tamsayı."
     },
     {
       "key": "type",
       "name": "Type",
-      "label": "Tür",
+      "label": "Çerçeve türü",
       "bits": 8,
       "desc": "Çerçeve türü; yükün biçimini ve anlamını belirler. Bilinmeyen türler yok sayılır.",
       "ref": {
@@ -74,6 +76,92 @@
           "0x08",
           "Pencere güncelleme (WINDOW_UPDATE)"
         ]
+      ],
+      "desc_en": "8-bit frame type: 0x00 DATA, 0x01 HEADERS, 0x02 PRIORITY, 0x03 RST_STREAM, 0x04 SETTINGS, etc.",
+      "desc_tr": "Çerçevenin türü.",
+      "values_en": [
+        [
+          "0x00",
+          "DATA"
+        ],
+        [
+          "0x01",
+          "HEADERS"
+        ],
+        [
+          "0x02",
+          "PRIORITY"
+        ],
+        [
+          "0x03",
+          "RST_STREAM"
+        ],
+        [
+          "0x04",
+          "SETTINGS"
+        ],
+        [
+          "0x05",
+          "PUSH_PROMISE"
+        ],
+        [
+          "0x06",
+          "PING"
+        ],
+        [
+          "0x07",
+          "GOAWAY"
+        ],
+        [
+          "0x08",
+          "WINDOW_UPDATE"
+        ],
+        [
+          "0x09",
+          "CONTINUATION"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x00",
+          "Veri (DATA)"
+        ],
+        [
+          "0x01",
+          "Başlıklar (HEADERS)"
+        ],
+        [
+          "0x02",
+          "Öncelik (PRIORITY)"
+        ],
+        [
+          "0x03",
+          "Akışı sıfırlama (RST_STREAM)"
+        ],
+        [
+          "0x04",
+          "Ayarlar (SETTINGS)"
+        ],
+        [
+          "0x05",
+          "Sunucu vaadi (PUSH_PROMISE)"
+        ],
+        [
+          "0x06",
+          "Ping (PING)"
+        ],
+        [
+          "0x07",
+          "Oturumu kapatma (GOAWAY)"
+        ],
+        [
+          "0x08",
+          "Pencere güncelleme (WINDOW_UPDATE)"
+        ],
+        [
+          "0x09",
+          "Devam (CONTINUATION)"
+        ]
       ]
     },
     {
@@ -88,12 +176,14 @@
         "label": "Frame Format"
       },
       "example": 0,
-      "hex": true
+      "hex": true,
+      "desc_en": "8-bit flags specific to frame type (e.g. END_STREAM 0x01, END_HEADERS 0x04 for HEADERS).",
+      "desc_tr": "Çerçeve türüne özgü 8 bitlik bayrak dizisi; örneğin HEADERS için 0x01 END_STREAM, 0x04 END_HEADERS."
     },
     {
       "key": "reserved",
-      "name": "Reserved",
-      "label": "Ayrılmış",
+      "name": "R",
+      "label": "Ayrılmış bit",
       "bits": 1,
       "desc": "Anlamı olmayan ayrılmış bit; gönderimde 0, alımda yok sayılır.",
       "ref": {
@@ -101,7 +191,9 @@
         "section": "4.1",
         "label": "Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 1-bit field; must remain unset (0x0) when sending and ignored on receipt.",
+      "desc_tr": "Ayrılmış 1 bit; gönderimde 0 olmalı, alımda yok sayılmalıdır."
     },
     {
       "key": "stream_id",
@@ -114,7 +206,9 @@
         "section": "4.1",
         "label": "Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "31-bit stream identifier; 0x0 identifies control frames for the connection as a whole.",
+      "desc_tr": "31 bitlik akış kimliği; 0x0, tüm bağlantıyı ilgilendiren denetim çerçevelerini belirtir."
     },
     {
       "key": "payload",
@@ -127,15 +221,33 @@
         "section": "6.5.1",
         "label": "SETTINGS Format"
       },
-      "range": ".."
+      "range": "..",
+      "desc_en": "Frame payload whose format and meaning depend entirely on the frame type.",
+      "desc_tr": "Çerçeve türüne bağlı veri yükü (ör. HPACK ile sıkıştırılmış HTTP başlık blokları)."
     }
   ],
   "example": {
     "payload": "000300000064000400010000",
-    "note": "Bağlantının başında istemcinin gönderdiği SETTINGS çerçevesi. Akış 0'dadır, çünkü ayarlar bağlantının tamamına uygulanır. İki ayar taşır: SETTINGS_MAX_CONCURRENT_STREAMS (0x3) = 100 ve SETTINGS_INITIAL_WINDOW_SIZE (0x4) = 65 536. Her ayar 6 sekizli olduğundan yük 12 sekizlidir."
+    "note": "Bağlantının başında istemcinin gönderdiği SETTINGS çerçevesi. Akış 0'dadır, çünkü ayarlar bağlantının tamamına uygulanır. İki ayar taşır: SETTINGS_MAX_CONCURRENT_STREAMS (0x3) = 100 ve SETTINGS_INITIAL_WINDOW_SIZE (0x4) = 65 536. Her ayar 6 sekizli olduğundan yük 12 sekizlidir.",
+    "note_tr": "Bağlantının başında istemcinin gönderdiği SETTINGS çerçevesi. Akış 0'dadır, çünkü ayarlar bağlantının tamamına uygulanır. İki ayar taşır: SETTINGS_MAX_CONCURRENT_STREAMS (0x3) = 100 ve SETTINGS_INITIAL_WINDOW_SIZE (0x4) = 65 536. Her ayar 6 sekizli olduğundan yük 12 sekizlidir.",
+    "note_en": "A SETTINGS frame sent by the client at connection opening. Located on stream 0 because settings apply to the entire connection. Carries two settings: SETTINGS_MAX_CONCURRENT_STREAMS (0x3) = 100 and SETTINGS_INITIAL_WINDOW_SIZE (0x4) = 65,536. Because each setting is 6 octets, payload is 12 octets."
   },
   "refs": [
     9113
   ],
-  "id": "http2"
+  "id": "http2",
+  "summary_tr": "HTTP/2, bir bağlantı üzerinde birden fazla HTTP akışını ikili çerçevelerle çoğullar. Her çerçevenin başlığı sabit 9 bayttır ve yük uzunluğunu, türü, bayrakları ve akış kimliğini taşır. Length alanı 9 baytlık başlığı saymaz.",
+  "summary_en": "HTTP/2 (RFC 9113) multiplexes multiple concurrent HTTP request/response streams over a single TCP connection using binary framing. Every frame has a 9-octet header specifying 24-bit payload length, type, flags, and 31-bit stream identifier.",
+  "notes_tr": [
+    "RFC 9113, QUIC ile aynı şekil biçimini kullanır; wire alan genişliklerini bu şekilden okur.",
+    "Bağlantı, istemcinin gönderdiği \"PRI * HTTP/2.0\" ile başlayan 24 sekizlilik giriş dizisiyle (connection preface) açılır; hemen ardından iki taraf da birer SETTINGS çerçevesi gönderir (RFC 9113 §3.4).",
+    "Varsayılan en büyük çerçeve yükü 16 384 sekizlidir; daha büyüğü yalnızca karşı taraf SETTINGS_MAX_FRAME_SIZE ile izin verirse gönderilebilir.",
+    "TLS üzerinde HTTP/2, ALPN ile \"h2\" adıyla seçilir. HTTP/3 ise aynı çerçeve fikrini QUIC akışları üzerine taşır."
+  ],
+  "notes_en": [
+    "RFC 9113 uses the same diagram format as QUIC; wire parses field widths from this diagram.",
+    "The connection opens with a 24-octet connection preface sent by the client ('PRI * HTTP/2.0...'), immediately followed by a SETTINGS frame from each endpoint (RFC 9113 §3.4).",
+    "Default maximum frame payload is 16,384 octets; larger payloads can be sent only if permitted by the peer's SETTINGS_MAX_FRAME_SIZE.",
+    "HTTP/2 over TLS is negotiated via ALPN using identifier 'h2'. HTTP/3 extends the same framing principles onto QUIC streams."
+  ]
 }

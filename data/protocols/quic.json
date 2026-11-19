@@ -31,7 +31,9 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "1 for Long Header packets (used during connection establishment).",
+      "desc_tr": "Uzun başlık biçimi için 1; el sıkışma ve bağlantı kurulum paketlerinde kullanılır."
     },
     {
       "key": "fixed_bit",
@@ -44,12 +46,14 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Always set to 1 in QUIC packets.",
+      "desc_tr": "QUIC paketlerinde her zaman 1."
     },
     {
       "key": "long_packet_type",
       "name": "Long Packet Type",
-      "label": "Uzun başlıklı paket türü",
+      "label": "Uzun paket türü",
       "bits": 2,
       "desc": "Uzun başlıklı paketin türü; Initial için 0.",
       "ref": {
@@ -59,6 +63,44 @@
       },
       "example": 0,
       "values": [
+        [
+          "0",
+          "Başlangıç (Initial)"
+        ],
+        [
+          "1",
+          "0-RTT"
+        ],
+        [
+          "2",
+          "Bağlantı kurulumu (Handshake)"
+        ],
+        [
+          "3",
+          "Yeniden deneme (Retry)"
+        ]
+      ],
+      "desc_en": "QUIC long header packet type: 0 Initial, 1 0-RTT, 2 Handshake, 3 Retry.",
+      "desc_tr": "Uzun başlık paket türü: 0 Başlangıç (Initial), 1 0-RTT, 2 Bağlantı kurulumu (Handshake), 3 Yeniden deneme (Retry).",
+      "values_en": [
+        [
+          "0",
+          "Initial"
+        ],
+        [
+          "1",
+          "0-RTT"
+        ],
+        [
+          "2",
+          "Handshake"
+        ],
+        [
+          "3",
+          "Retry"
+        ]
+      ],
+      "values_tr": [
         [
           "0",
           "Başlangıç (Initial)"
@@ -88,7 +130,9 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved bits; must be set to 0 after header protection removal.",
+      "desc_tr": "Ayrılmış; başlık koruması kaldırıldıktan sonra 0 olmalıdır."
     },
     {
       "key": "pn_length",
@@ -101,7 +145,9 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Packet Number field length minus one, in octets (0 means 1 octet).",
+      "desc_tr": "Packet Number alanının uzunluğu eksi bir, sekizli olarak; 0 bir sekizli demektir."
     },
     {
       "key": "version",
@@ -115,11 +161,13 @@
         "label": "Long Header Packets"
       },
       "example": 1,
-      "hex": true
+      "hex": true,
+      "desc_en": "QUIC protocol version; 0x00000001 for QUIC version 1 (RFC 9000).",
+      "desc_tr": "QUIC sürümü; sürüm 1 için 0x00000001 (RFC 9000). 0 ise sürüm uzlaşma paketidir."
     },
     {
       "key": "dcid_len",
-      "name": "Destination Connection ID Length",
+      "name": "DCID Length",
       "label": "Hedef bağlantı kimliği uzunluğu",
       "bits": 8,
       "desc": "Ardından gelen hedef bağlantı kimliğinin sekizli cinsinden uzunluğu; QUIC sürüm 1'de en çok 20.",
@@ -128,7 +176,9 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 8
+      "example": 8,
+      "desc_en": "Length in octets of the Destination Connection ID (0–20 octets).",
+      "desc_tr": "Ardından gelen Hedef Bağlantı Kimliği alanının sekizli cinsinden uzunluğu; 0–20 sekizlidir."
     },
     {
       "key": "dcid",
@@ -143,11 +193,13 @@
       },
       "example": "f067a5502a4262b5",
       "type": "bytes",
-      "range": "0..160"
+      "range": "0..160",
+      "desc_en": "Destination Connection ID identifying the connection on the receiving endpoint.",
+      "desc_tr": "Alıcının bu paketi ait olduğu bağlantıyla eşleştirmek için kullandığı bağlantı kimliği."
     },
     {
       "key": "scid_len",
-      "name": "Source Connection ID Length",
+      "name": "SCID Length",
       "label": "Kaynak bağlantı kimliği uzunluğu",
       "bits": 8,
       "desc": "Ardından gelen kaynak bağlantı kimliğinin uzunluğu.",
@@ -156,7 +208,9 @@
         "section": "17.2",
         "label": "Long Header Packets"
       },
-      "example": 8
+      "example": 8,
+      "desc_en": "Length in octets of the Source Connection ID (0–20 octets).",
+      "desc_tr": "Kaynak Bağlantı Kimliği alanının sekizli cinsinden uzunluğu."
     },
     {
       "key": "scid",
@@ -171,7 +225,9 @@
       },
       "example": "c3a7b1e0d24f5590",
       "type": "bytes",
-      "range": "0..160"
+      "range": "0..160",
+      "desc_en": "Source Connection ID that the sender wishes the peer to use for replies.",
+      "desc_tr": "Gönderenin, karşı tarafın kendisine yazarken kullanmasını istediği bağlantı kimliği."
     },
     {
       "key": "token_length",
@@ -186,7 +242,9 @@
       },
       "example": 16,
       "type": "varint",
-      "range": "i"
+      "range": "i",
+      "desc_en": "Length of the Token field as a variable-length integer; 0 if no token.",
+      "desc_tr": "Ardından gelen belirtecin uzunluğu, değişken uzunluklu tamsayı olarak. Belirteç yoksa 0."
     },
     {
       "key": "token",
@@ -201,7 +259,9 @@
       },
       "example": "6a1f3e0c9d2b74a85f0e1c3b2a497d68",
       "type": "bytes",
-      "range": ".."
+      "range": "..",
+      "desc_en": "Address validation token issued previously by server in a Retry packet or NEW_TOKEN frame.",
+      "desc_tr": "Sunucunun bir Retry paketinde ya da önceki bir bağlantıda NEW_TOKEN çerçevesiyle verdiği belirteç; istemcinin adresini doğrulamaya yarar. İçeriği yalnızca sunucu için anlamlıdır."
     },
     {
       "key": "length",
@@ -216,7 +276,9 @@
       },
       "example": 21,
       "type": "varint",
-      "range": "i"
+      "range": "i",
+      "desc_en": "Length of Packet Number and protected payload in octets, encoded as a variable-length integer.",
+      "desc_tr": "Packet Number ve şifreli yükün toplam uzunluğu, değişken uzunluklu tamsayı olarak. Aynı datagramda birden çok QUIC paketi taşınabildiği için gereklidir."
     },
     {
       "key": "packet_number",
@@ -230,7 +292,9 @@
         "label": "Initial Packet"
       },
       "example": 1,
-      "range": "8..32"
+      "range": "8..32",
+      "desc_en": "Packet number; length derived from Packet Number Length in the first octet.",
+      "desc_tr": "Paket numarası; uzunluğu ilk sekizlideki Packet Number Length alanından gelir. Her paket numara uzayı (Initial, Handshake, uygulama) 0'dan başlar."
     },
     {
       "key": "payload",
@@ -243,17 +307,37 @@
         "section": "17.2.2",
         "label": "Initial Packet"
       },
-      "range": "8.."
+      "range": "8..",
+      "desc_en": "Encrypted payload frames (e.g. CRYPTO with TLS ClientHello, ACK, PADDING) plus 16-octet AEAD auth tag.",
+      "desc_tr": "Şifreli çerçeveler: Initial'da TLS ClientHello'yu taşıyan CRYPTO çerçeveleri, ACK ve PADDING. Sonunda AEAD algoritmasının 16 sekizlilik doğrulama etiketi bulunur."
     }
   ],
   "example": {
     "payload": "d1b1c98dd7689fb8ec11d242b123dc9bd8bab936",
-    "note": "Sunucunun Retry paketinden sonra istemcinin gönderdiği ikinci Initial paketi, başlık koruması uygulanmadan önceki haliyle. İlk sekizli 0xc0'dır: uzun başlık, Initial türü, tek sekizlilik paket numarası. Retry'dan aldığı 16 sekizlilik belirteci geri gönderir. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir."
+    "note": "Sunucunun Retry paketinden sonra istemcinin gönderdiği ikinci Initial paketi, başlık koruması uygulanmadan önceki haliyle. İlk sekizli 0xc0'dır: uzun başlık, Initial türü, tek sekizlilik paket numarası. Retry'dan aldığı 16 sekizlilik belirteci geri gönderir. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir.",
+    "note_tr": "Sunucunun Retry paketinden sonra istemcinin gönderdiği ikinci Initial paketi, başlık koruması uygulanmadan önceki haliyle. İlk sekizli 0xc0'dır: uzun başlık, Initial türü, tek sekizlilik paket numarası. Retry'dan aldığı 16 sekizlilik belirteci geri gönderir. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir.",
+    "note_en": "The second Initial packet sent by a client following a server Retry, shown prior to header protection. The first octet is 0xc0: long header, Initial type, 1-octet packet number. Echoes the 16-octet token received in Retry. The 20 payload octets are mock ciphertext and authentication tag."
   },
   "refs": [
     9000,
     9001,
     768
   ],
-  "id": "quic"
+  "id": "quic",
+  "summary_tr": "QUIC, UDP üzerinde şifreleme ve birden fazla bağımsız akış sağlayan bir taşıma protokolüdür. Bu sayfa QUIC v1 Initial paketini gösterir. Uzun başlık sürümü, iki bağlantı kimliğini, belirteç alanlarını, uzunluğu ve paket numarasını taşır.",
+  "summary_en": "QUIC (RFC 9000) is a multiplexed, secure transport protocol built on top of UDP. The Initial packet begins connection establishment, carrying TLS 1.3 handshake cryptographic frames with protected variable-length headers.",
+  "notes_tr": [
+    "RFC 9000 başlıkları ASCII bit şemasıyla değil \"Header Form (1) = 1,\" biçiminde şekillerle tanımlar. wire bu şekli okur: parantez içindeki sayı bit genişliği, 0..160 gibi aralıklar bit cinsinden olası genişlik, i ise değişken uzunluklu tamsayıdır (RFC 9000 §1.3).",
+    "Değişken uzunluklu tamsayılarda ilk iki bit uzunluğu verir: 00 bir, 01 iki, 10 dört, 11 sekiz sekizli. Bu örnekte Token Length tek sekizli (0x10 = 16), Length iki sekizlidir (0x4015 = 21) (RFC 9000 §16).",
+    "İstemci, Initial paketlerini taşıyan UDP datagramlarını en az 1200 sekizliye tamamlamak zorundadır (RFC 9000 §14.1). Bu örnek okunabilir kalsın diye kısaltılmıştır; bu haliyle sunucu tarafından atılır.",
+    "Başlık koruması ilk sekizlinin alt 4 bitini ve Packet Number alanını şifreli yükten türetilen bir maskeyle gizler (RFC 9001 §5.4). Döküm, koruma uygulanmadan önceki başlığı gösterir.",
+    "Initial anahtarları istemcinin seçtiği Destination Connection ID'den türetilir ve herkesçe bilinir. Initial paketleri gizlilik değil, yalnızca yolda değiştirilmeye karşı bir ölçü koruma sağlar (RFC 9001 §5.2)."
+  ],
+  "notes_en": [
+    "RFC 9000 defines headers via diagrams like 'Header Form (1) = 1,' rather than ASCII bit grids. wire parses this notation: numbers in parentheses denote bit width, ranges like 0..160 represent possible widths, and 'i' denotes variable-length integers (RFC 9000 §1.3).",
+    "Variable-length integers encode length in their first two bits: 00 for 1, 01 for 2, 10 for 4, and 11 for 8 octets. In this example, Token Length is 1 octet (0x10 = 16) and Length is 2 octets (0x4015 = 21) (RFC 9000 §16).",
+    "The client must pad UDP datagrams carrying Initial packets to at least 1200 octets (RFC 9000 §14.1). This example is truncated for readability; on the wire, an unpadded packet would be dropped by the server.",
+    "Header protection conceals the lowest 4 bits of the first octet and the Packet Number using a mask derived from ciphertext (RFC 9001 §5.4). The dump shows the header before protection.",
+    "Initial keys are derived from the client's chosen Destination Connection ID and are public knowledge. Initial packets provide integrity against tampering rather than confidentiality (RFC 9001 §5.2)."
+  ]
 }

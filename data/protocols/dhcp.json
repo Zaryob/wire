@@ -32,8 +32,36 @@
       },
       "example": 1,
       "values": [
-        ["1", "Önyükleme isteği (BOOTREQUEST)"],
-        ["2", "Önyükleme yanıtı (BOOTREPLY)"]
+        [
+          "1",
+          "Önyükleme isteği (BOOTREQUEST)"
+        ],
+        [
+          "2",
+          "Önyükleme yanıtı (BOOTREPLY)"
+        ]
+      ],
+      "desc_en": "Message op code: 1 BOOTREQUEST (client to server), 2 BOOTREPLY (server to client).",
+      "desc_tr": "İleti işlem kodu: istemciden sunucuya giden iletilerde 1 (BOOTREQUEST), sunucudan istemciye gidenlerde 2 (BOOTREPLY).",
+      "values_en": [
+        [
+          "1",
+          "BOOTREQUEST"
+        ],
+        [
+          "2",
+          "BOOTREPLY"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Önyükleme isteği (BOOTREQUEST)"
+        ],
+        [
+          "2",
+          "Önyükleme yanıtı (BOOTREPLY)"
+        ]
       ]
     },
     {
@@ -47,7 +75,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Hardware address type; uses ARP hardware types (1 for 10Mb Ethernet).",
+      "desc_tr": "Donanım adresi türü; ARP'nin donanım türü numaralarını kullanır. Ethernet için 1."
     },
     {
       "key": "hlen",
@@ -60,7 +90,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 6
+      "example": 6,
+      "desc_en": "Hardware address length in octets (6 for Ethernet MAC addresses).",
+      "desc_tr": "Donanım adresinin sekizli cinsinden uzunluğu; Ethernet MAC adresi için 6."
     },
     {
       "key": "hops",
@@ -73,7 +105,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Client sets to 0; optionally incremented by relay agents during cross-subnet forwarding.",
+      "desc_tr": "İstemci sıfır yazar; ileti bir aktarıcı ajan (relay agent) üzerinden geçtikçe artırılabilir."
     },
     {
       "key": "xid",
@@ -87,7 +121,9 @@
         "label": "Table 1"
       },
       "example": "0x1a2b3c4d",
-      "hex": true
+      "hex": true,
+      "desc_en": "Transaction ID: random 32-bit integer chosen by client to match requests with server replies.",
+      "desc_tr": "İstemcinin seçtiği rastgele işlem kimliği. İstemci ve sunucu, istek ile yanıtı bu değerle eşleştirir."
     },
     {
       "key": "secs",
@@ -100,7 +136,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Seconds elapsed since client began address acquisition or renewal process.",
+      "desc_tr": "İstemcinin adres alma veya yenileme sürecine başlamasından bu yana geçen saniye."
     },
     {
       "key": "flags",
@@ -114,7 +152,9 @@
         "label": "Figure 2"
       },
       "example": "0x8000",
-      "hex": true
+      "hex": true,
+      "desc_en": "Leftmost bit is BROADCAST (B) flag (1 requests broadcast reply when client lacks IP); remaining 15 bits zero.",
+      "desc_tr": "En soldaki bit BROADCAST (B) bayrağıdır: henüz IP adresi olmadığı için tek noktaya yayın yanıtı alamayan istemci bu biti 1 yaparak yanıtın yayınla gönderilmesini ister. Kalan 15 bit sıfır olmalıdır (MBZ)."
     },
     {
       "key": "ciaddr",
@@ -128,7 +168,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": "0.0.0.0"
+      "example": "0.0.0.0",
+      "desc_en": "Client IP address; only filled when in BOUND, RENEW, or REBINDING state and able to answer ARPs.",
+      "desc_tr": "İstemcinin IP adresi; yalnızca istemci BOUND, RENEW veya REBINDING durumundayken ve ARP isteklerine yanıt verebiliyorken doldurulur."
     },
     {
       "key": "yiaddr",
@@ -142,7 +184,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": "0.0.0.0"
+      "example": "0.0.0.0",
+      "desc_en": "'your' (client) IP address offered or assigned by server in DHCPOFFER and DHCPACK.",
+      "desc_tr": "'your' adresi: sunucunun istemciye önerdiği veya atadığı IP adresi. DHCPOFFER ve DHCPACK'te doldurulur."
     },
     {
       "key": "siaddr",
@@ -156,7 +200,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": "0.0.0.0"
+      "example": "0.0.0.0",
+      "desc_en": "IP address of next server to use in bootstrap (e.g. TFTP server) returned in DHCPOFFER/DHCPACK.",
+      "desc_tr": "Önyüklemenin bir sonraki adımında kullanılacak sunucunun (ör. TFTP sunucusu) adresi; sunucu DHCPOFFER ve DHCPACK'te döndürür."
     },
     {
       "key": "giaddr",
@@ -170,7 +216,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": "0.0.0.0"
+      "example": "0.0.0.0",
+      "desc_en": "Relay agent IP address used in booting via a relay agent; zero on local subnets.",
+      "desc_tr": "İletiyi başka bir alt ağdaki sunucuya ileten aktarıcı ajanın adresi; doğrudan iletişimde sıfırdır."
     },
     {
       "key": "chaddr",
@@ -184,7 +232,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": "00005e00530100000000000000000000"
+      "example": "00005e00530100000000000000000000",
+      "desc_en": "Client hardware address: 6-octet MAC for Ethernet, padded with 10 zeroes to 16 octets.",
+      "desc_tr": "İstemcinin donanım adresi. Ethernet'te ilk 6 sekizli MAC adresidir (hlen), kalan 10 sekizli sıfırla doldurulur."
     },
     {
       "key": "sname",
@@ -197,7 +247,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Optional null-terminated server host name string (64 octets).",
+      "desc_tr": "İsteğe bağlı sunucu konak adı, boş karakterle sonlanan dizgi. Option Overload seçeneğiyle ek seçenek alanı olarak da kullanılabilir."
     },
     {
       "key": "file",
@@ -210,7 +262,9 @@
         "section": "2",
         "label": "Table 1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Boot file name, null-terminated string (128 octets).",
+      "desc_tr": "Önyükleme dosyasının adı, boş karakterle sonlanan dizgi. DHCPDISCOVER'da boş veya genel bir ad, DHCPOFFER'da tam dizin yoludur."
     },
     {
       "key": "options",
@@ -222,12 +276,16 @@
         "rfc": 2131,
         "section": "3",
         "label": "Magic cookie"
-      }
+      },
+      "desc_en": "Options starting with magic cookie 0x63825363; clients must be prepared to receive at least 312 octets.",
+      "desc_tr": "Sihirli çerez (0x63825363) ile başlayan seçenek listesi. İstemci en az 312 sekizlilik seçenek alanı alabilmelidir; bu da 576 sekizlilik bir DHCP iletisi demektir."
     }
   ],
   "example": {
     "payload": "638253633501013703010306ff",
-    "note": "00:00:5e:00:53:01 MAC adresli bir istemcinin ağa katılırken yayınladığı DHCPDISCOVER. Henüz adresi olmadığı için bütün adres alanları sıfırdır ve BROADCAST bayrağı 1'dir. Seçenekler: sihirli çerez 63 82 53 63, Message Type 53 = 1 (DHCPDISCOVER, RFC 2132 §9.6), Parameter Request List 55 = 1, 3, 6 (alt ağ maskesi, yönlendirici, DNS sunucusu; §9.8) ve End 255 (§3.2)."
+    "note": "00:00:5e:00:53:01 MAC adresli bir istemcinin ağa katılırken yayınladığı DHCPDISCOVER. Henüz adresi olmadığı için bütün adres alanları sıfırdır ve BROADCAST bayrağı 1'dir. Seçenekler: sihirli çerez 63 82 53 63, Message Type 53 = 1 (DHCPDISCOVER, RFC 2132 §9.6), Parameter Request List 55 = 1, 3, 6 (alt ağ maskesi, yönlendirici, DNS sunucusu; §9.8) ve End 255 (§3.2).",
+    "note_tr": "00:00:5e:00:53:01 MAC adresli bir istemcinin ağa katılırken yayınladığı DHCPDISCOVER. Henüz adresi olmadığı için bütün adres alanları sıfırdır ve BROADCAST bayrağı 1'dir. Seçenekler: sihirli çerez 63 82 53 63, Message Type 53 = 1 (DHCPDISCOVER, RFC 2132 §9.6), Parameter Request List 55 = 1, 3, 6 (alt ağ maskesi, yönlendirici, DNS sunucusu; §9.8) ve End 255 (§3.2).",
+    "note_en": "A DHCPDISCOVER broadcast by client MAC 00:00:5e:00:53:01 joining the network. Lacking an assigned IP, address fields are zero and BROADCAST flag is 1. Options: magic cookie 63 82 53 63, Message Type 53 = 1 (DHCPDISCOVER, RFC 2132 §9.6), Parameter Request List 55 = 1, 3, 6 (subnet mask, router, DNS; §9.8), and End 255 (§3.2)."
   },
   "refs": [
     2131,
@@ -235,5 +293,19 @@
     768,
     9542
   ],
-  "id": "dhcp"
+  "id": "dhcp",
+  "summary_tr": "DHCPv4 (Dynamic Host Configuration Protocol), istemcilere IPv4 adresi ve ağ yapılandırması sağlar. BOOTP’tan gelen 236 baytlık sabit bölümün ardından 4 baytlık DHCP sihirli değeri ve seçenekler gelir. Sunucu UDP 67, istemci UDP 68 kullanır.",
+  "summary_en": "Dynamic Host Configuration Protocol (DHCPv4, RFC 2131) dynamically assigns IP addresses and configuration parameters to network hosts over UDP (ports 67 and 68). The base BOOTP-derived header is 236 octets, followed by the magic cookie and TLV options.",
+  "notes_tr": [
+    "RFC 2131 Figure 1 ölçekli değildir: chaddr (16 sekizli), sname (64) ve file (128) aynı yükseklikte çizilir. Bu yüzden alan genişlikleri şema yerine, sekizli sayılarını açıkça veren Table 1'den doğrulanır.",
+    "Adres alma dört iletiyle yürür (DORA): DHCPDISCOVER, DHCPOFFER, DHCPREQUEST, DHCPACK. İletinin türünü op alanı değil, 53 numaralı DHCP Message Type seçeneği belirler (RFC 2132 §9.6).",
+    "Seçenekler alanı 99.130.83.99 (0x63825363) sihirli çerezle başlar ve her seçenek kod, uzunluk ve değer sekizlilerinden oluşur; 255 numaralı End seçeneği listeyi kapatır.",
+    "DHCP iletileri UDP üzerinde taşınır; adresi olmayan istemci DHCPDISCOVER'ı 0.0.0.0 kaynağından 255.255.255.255 sınırlı yayın adresine gönderir."
+  ],
+  "notes_en": [
+    "RFC 2131 Figure 1 is not drawn to scale: chaddr (16 octets), sname (64), and file (128) appear equal in height. Field widths are therefore verified from Table 1, which states octet counts explicitly.",
+    "Address allocation proceeds via four messages (DORA): DHCPDISCOVER, DHCPOFFER, DHCPREQUEST, DHCPACK. Message type is identified by DHCP Message Type option 53 rather than the op field (RFC 2132 §9.6).",
+    "The Options field begins with magic cookie 99.130.83.99 (0x63825363); each option consists of code, length, and value octets, terminated by End option 255.",
+    "DHCP messages run over UDP; an unconfigured client sends DHCPDISCOVER from 0.0.0.0 to limited broadcast 255.255.255.255."
+  ]
 }

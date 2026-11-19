@@ -30,12 +30,14 @@
         "section": "4.1",
         "label": "Version (Vers)"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Protocol version; current version is 1.",
+      "desc_tr": "Protokol sürüm numarası. Mevcut sürüm 1'dir."
     },
     {
       "key": "diag",
       "name": "Diag",
-      "label": "Tanı",
+      "label": "Tanı kodu",
       "bits": 5,
       "desc": "Yerel sistemin oturum durumundaki son değişikliğin nedeni. 0 tanı yok, 1 denetim algılama süresi doldu, 3 komşu oturumu kapattı, 7 yönetici kapattı.",
       "ref": {
@@ -81,12 +83,90 @@
           "8",
           "Ters birleşik yol kapalı"
         ]
+      ],
+      "desc_en": "Diagnostic code specifying the reason for the last local session state change.",
+      "desc_tr": "Oturum durumundaki son değişikliğin nedenini belirten tanı kodu.",
+      "values_en": [
+        [
+          "0",
+          "No Diagnostic"
+        ],
+        [
+          "1",
+          "Control Detection Time Expired"
+        ],
+        [
+          "2",
+          "Echo Function Failed"
+        ],
+        [
+          "3",
+          "Neighbor Signaled Session Down"
+        ],
+        [
+          "4",
+          "Forwarding Plane Reset"
+        ],
+        [
+          "5",
+          "Path Down"
+        ],
+        [
+          "6",
+          "Concatenated Path Down"
+        ],
+        [
+          "7",
+          "AdminDown"
+        ],
+        [
+          "8",
+          "Reverse Concatenated Path Down"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Tanı yok"
+        ],
+        [
+          "1",
+          "Denetim algılama süresi doldu"
+        ],
+        [
+          "2",
+          "Echo işlevi başarısız"
+        ],
+        [
+          "3",
+          "Komşu oturumun kapandığını bildirdi"
+        ],
+        [
+          "4",
+          "İletim düzlemi sıfırlandı"
+        ],
+        [
+          "5",
+          "Yol kapalı"
+        ],
+        [
+          "6",
+          "Zincirleme yol kapalı"
+        ],
+        [
+          "7",
+          "Yönetici tarafından kapatılmış (AdminDown)"
+        ],
+        [
+          "8",
+          "Ters zincirleme yol kapalı"
+        ]
       ]
     },
     {
       "key": "sta",
       "name": "Sta",
-      "label": "Oturum durumu",
+      "label": "Durum",
       "bits": 2,
       "desc": "Gönderen sistemin gördüğü oturum durumu.",
       "ref": {
@@ -112,12 +192,50 @@
           "3",
           "Açık (Up)"
         ]
+      ],
+      "desc_en": "Current BFD session state: 0 AdminDown, 1 Down, 2 Init, 3 Up.",
+      "desc_tr": "Mevcut BFD oturum durumu.",
+      "values_en": [
+        [
+          "0",
+          "AdminDown"
+        ],
+        [
+          "1",
+          "Down"
+        ],
+        [
+          "2",
+          "Init"
+        ],
+        [
+          "3",
+          "Up"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Yönetici tarafından kapatılmış (AdminDown)"
+        ],
+        [
+          "1",
+          "Kapalı (Down)"
+        ],
+        [
+          "2",
+          "Başlatılıyor (Init)"
+        ],
+        [
+          "3",
+          "Açık (Up)"
+        ]
       ]
     },
     {
       "key": "p",
       "name": "P",
-      "label": "Yoklama",
+      "label": "Sorgu bayrağı",
       "bits": 1,
       "desc": "Poll: gönderen, bağlantıyı ya da bir parametre değişikliğini doğrulamak istiyor ve F biti 1 olan bir yanıt bekliyor.",
       "ref": {
@@ -125,12 +243,14 @@
         "section": "4.1",
         "label": "Poll (P)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Poll bit; requests a control packet with Final bit set.",
+      "desc_tr": "Yoklama biti; Final biti ayarlanmış bir denetim paketi talep eder."
     },
     {
       "key": "f",
       "name": "F",
-      "label": "Yoklama yanıtı",
+      "label": "Sonuç bayrağı",
       "bits": 1,
       "desc": "Final: gönderen, P biti 1 olan bir pakete yanıt veriyor.",
       "ref": {
@@ -138,12 +258,14 @@
         "section": "4.1",
         "label": "Final (F)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Final bit; response to a control packet that had Poll bit set.",
+      "desc_tr": "Sonuç biti; Poll biti ayarlanmış bir denetim paketine yanıt verir."
     },
     {
       "key": "c",
       "name": "C",
-      "label": "Denetim düzleminden bağımsız",
+      "label": "Denetim/iletim ayrık",
       "bits": 1,
       "desc": "Control Plane Independent: BFD iletim düzleminde çalışıyor ve denetim düzlemindeki kesintilerden etkilenmiyor.",
       "ref": {
@@ -151,7 +273,9 @@
         "section": "4.1",
         "label": "Control Plane Independent (C)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Control/Forwarding Plane Independent bit; 1 if BFD survives forwarding plane reboot.",
+      "desc_tr": "Denetim düzlemi iletim düzleminden bağımsız ise 1."
     },
     {
       "key": "a",
@@ -164,12 +288,14 @@
         "section": "4.1",
         "label": "Authentication Present (A)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Authentication Present bit; 1 indicates authentication section is present.",
+      "desc_tr": "Kimlik doğrulama bölümü varsa 1."
     },
     {
       "key": "d",
       "name": "D",
-      "label": "İstem kipi",
+      "label": "Talep kipi",
       "bits": 1,
       "desc": "Demand: gönderen istem kipinde; karşı tarafın düzenli denetim paketi göndermeyi bırakmasını istiyor.",
       "ref": {
@@ -177,12 +303,14 @@
         "section": "4.1",
         "label": "Demand (D)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Demand mode bit; 1 indicates local system operates in Demand mode.",
+      "desc_tr": "Talep kipi etkin ise 1."
     },
     {
       "key": "m",
       "name": "M",
-      "label": "Çok noktaya iletim",
+      "label": "Çok noktalı",
       "bits": 1,
       "desc": "Multipoint: noktadan çok noktaya uzantılar için ayrılmış; gönderirken ve alırken sıfır olmalıdır.",
       "ref": {
@@ -190,12 +318,14 @@
         "section": "4.1",
         "label": "Multipoint (M)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Multipoint bit; reserved for point-to-multipoint BFD (must be 0).",
+      "desc_tr": "Ayrılmış çok noktalı bit; 0 olmalıdır."
     },
     {
       "key": "detect_mult",
       "name": "Detect Mult",
-      "label": "Algılama süresi çarpanı",
+      "label": "Algılama katsayısı",
       "bits": 8,
       "desc": "Algılama süresi çarpanı. Kararlaştırılan gönderim aralığıyla çarpılınca alıcının algılama süresini verir.",
       "ref": {
@@ -203,7 +333,9 @@
         "section": "4.1",
         "label": "Detect Mult"
       },
-      "example": 3
+      "example": 3,
+      "desc_en": "Detection time multiplier used to compute session timeout.",
+      "desc_tr": "Algılama zaman aşımını hesaplamak için kullanılan algılama çarpanı."
     },
     {
       "key": "length",
@@ -216,12 +348,14 @@
         "section": "4.1",
         "label": "Length"
       },
-      "example": 24
+      "example": 24,
+      "desc_en": "Length of BFD control packet in octets (24 for unauthenticated packets).",
+      "desc_tr": "BFD denetim paketinin sekizli cinsinden uzunluğu."
     },
     {
       "key": "my_disc",
       "name": "My Discriminator",
-      "label": "Yerel oturum ayırıcı",
+      "label": "Kendi ayırt edicisi",
       "bits": 32,
       "desc": "Gönderenin ürettiği benzersiz, sıfır olmayan değer; aynı iki sistem arasındaki birden çok BFD oturumunu ayırır.",
       "ref": {
@@ -230,12 +364,14 @@
         "label": "My Discriminator"
       },
       "example": "0x00000011",
-      "hex": true
+      "hex": true,
+      "desc_en": "Unique, non-zero discriminator value generated by the transmitting system.",
+      "desc_tr": "Gönderen sistemin oturumu ayırt etmek için atadığı sıfır olmayan benzersiz değer."
     },
     {
       "key": "your_disc",
       "name": "Your Discriminator",
-      "label": "Karşı uç oturum ayırıcı",
+      "label": "Karşı tarafın ayırt edicisi",
       "bits": 32,
       "desc": "Karşı sistemden alınan My Discriminator değerinin yansıması; henüz bilinmiyorsa sıfır.",
       "ref": {
@@ -244,12 +380,14 @@
         "label": "Your Discriminator"
       },
       "example": "0x00000022",
-      "hex": true
+      "hex": true,
+      "desc_en": "Discriminator received from remote system; 0 if unknown.",
+      "desc_tr": "Karşı sistemden alınan ayırt edici değer; bilinmiyorsa 0."
     },
     {
       "key": "min_tx",
       "name": "Desired Min TX Interval",
-      "label": "İstenen en kısa gönderim aralığı",
+      "label": "İstenen en kısa iletim aralığı",
       "bits": 32,
       "desc": "Yerel sistemin denetim paketi göndermek istediği en kısa aralık, mikrosaniye cinsinden. Sıfır ayrılmıştır.",
       "ref": {
@@ -257,12 +395,14 @@
         "section": "4.1",
         "label": "Desired Min TX Interval"
       },
-      "example": 300000
+      "example": 300000,
+      "desc_en": "Minimum interval (in microseconds) at which the local system wishes to transmit BFD control packets.",
+      "desc_tr": "Sistemin BFD kontrol paketlerini göndermek istediği mikrosaniye cinsinden en kısa aralık."
     },
     {
       "key": "min_rx",
       "name": "Required Min RX Interval",
-      "label": "Desteklenen en kısa alım aralığı",
+      "label": "Gerekli en kısa alım aralığı",
       "bits": 32,
       "desc": "Sistemin destekleyebildiği, alınan denetim paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, karşı tarafın düzenli paket göndermemesi demektir.",
       "ref": {
@@ -270,12 +410,14 @@
         "section": "4.1",
         "label": "Required Min RX Interval"
       },
-      "example": 300000
+      "example": 300000,
+      "desc_en": "Minimum interval (in microseconds) at which the local system can support receiving BFD control packets.",
+      "desc_tr": "Sistemin BFD kontrol paketlerini alabileceği mikrosaniye cinsinden en kısa aralık."
     },
     {
       "key": "min_echo_rx",
       "name": "Required Min Echo RX Interval",
-      "label": "Desteklenen en kısa yankı alım aralığı",
+      "label": "Gerekli en kısa echo alım aralığı",
       "bits": 32,
       "desc": "Alınan BFD Echo paketleri arasındaki en kısa aralık, mikrosaniye cinsinden. Sıfır, Echo işlevinin desteklenmediğini gösterir.",
       "ref": {
@@ -283,27 +425,48 @@
         "section": "4.1",
         "label": "Required Min Echo RX Interval"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Minimum interval (in microseconds) at which the local system can support receiving BFD echo packets (0 if unsupported).",
+      "desc_tr": "Sistemin BFD Echo paketlerini alabileceği en kısa aralık; echo desteklenmiyorsa 0."
     },
     {
       "key": "auth",
-      "name": "Kimlik doğrulama bölümü",
+      "name": "Auth Section",
       "bits": "değişken",
       "desc": "Yalnızca A biti 1 ise bulunur: Auth Type (8), Auth Len (8) ve türüne göre değişen kimlik doğrulama verisi (basit parola, MD5 ya da SHA1).",
       "ref": {
         "rfc": 5880,
         "section": "4.1",
         "label": "Auth Type"
-      }
+      },
+      "label": "Kimlik doğrulama bölümü",
+      "desc_en": "Optional authentication section present when Auth bit (A) is set.",
+      "desc_tr": "A biti ayarlanmışsa eklenen kimlik doğrulama bölümü."
     }
   ],
   "example": {
-    "note": "Kurulmuş (Up) bir oturumda düzenli gönderilen denetim paketi: sürüm 1, tanı yok, durum Up (ilk iki sekizli 0x20 0xc0). Her iki yönde 300 ms (300000 µs) aralık ve 3 çarpanla çalışır; Echo işlevi kullanılmaz. UDP üzerinde hedef port 3784 ile taşınır (RFC 5881 §4)."
+    "note": "Kurulmuş (Up) bir oturumda düzenli gönderilen denetim paketi: sürüm 1, tanı yok, durum Up (ilk iki sekizli 0x20 0xc0). Her iki yönde 300 ms (300000 µs) aralık ve 3 çarpanla çalışır; Echo işlevi kullanılmaz. UDP üzerinde hedef port 3784 ile taşınır (RFC 5881 §4).",
+    "note_tr": "Kurulmuş (Up) bir oturumda düzenli gönderilen denetim paketi: sürüm 1, tanı yok, durum Up (ilk iki sekizli 0x20 0xc0). Her iki yönde 300 ms (300000 µs) aralık ve 3 çarpanla çalışır; Echo işlevi kullanılmaz. UDP üzerinde hedef port 3784 ile taşınır (RFC 5881 §4).",
+    "note_en": "A control packet transmitted periodically in an established (Up) session: version 1, zero diagnostic, status Up (first two octets 0x20 0xc0). Operates with 300 ms (300,000 µs) intervals in both directions and a multiplier of 3; Echo is disabled. Carried over UDP to destination port 3784 (RFC 5881 §4)."
   },
   "refs": [
     5880,
     5881,
     768
   ],
-  "id": "bfd"
+  "id": "bfd",
+  "summary_tr": "Çift Yönlü İletim Algılama (Bidirectional Forwarding Detection - BFD) denetim paketinin zorunlu bölümü. İki sistem arasındaki iletim yolunun koptuğunu milisaniyeler içinde saptar; zorunlu bölüm 24 sekizlidir. Tek atlamalı BFD, UDP 3784 numaralı portu üzerinde taşınır.",
+  "summary_en": "Bidirectional Forwarding Detection (BFD, RFC 5880) detects communication path faults between two systems within milliseconds. The mandatory control packet section is 24 octets, carried over UDP (port 3784 for single-hop).",
+  "notes_tr": [
+    "Algılama süresi, karşı tarafın Detect Mult değeri ile kararlaştırılan gönderim aralığının çarpımıdır. Örnekteki 300 ms aralık ve 3 çarpanla bağlantı kopukluğu 900 ms içinde fark edilir.",
+    "Oturum Down → Init → Up durumlarıyla üç yönlü el sıkışmayla kurulur; her taraf karşısının My Discriminator değerini kendi Your Discriminator alanına yansıtır (RFC 5880 §6.2).",
+    "Tek atlamalı BFD paketleri TTL veya Hop Limit 255 ile gönderilir ve 255 ile gelmeyenler atılır; bu, uzaktan sahte paket gönderilmesini engeller (RFC 5881 §5).",
+    "A biti 1 olduğunda zorunlu bölümü Auth Type, Auth Len ve kimlik doğrulama verisinden oluşan isteğe bağlı bir bölüm izler."
+  ],
+  "notes_en": [
+    "Detection time is the product of the peer's Detect Mult and negotiated transmission interval. With the 300 ms interval and multiplier 3 in this example, link failure is detected within 900 ms.",
+    "Sessions are established via a 3-way handshake transitioning Down → Init → Up; each system reflects the peer's My Discriminator in its Your Discriminator field (RFC 5880 §6.2).",
+    "Single-hop BFD packets are sent with TTL or Hop Limit 255 and dropped if received with any other value, preventing off-link spoofing attacks (RFC 5881 §5).",
+    "When the A bit is 1, an optional authentication section consisting of Auth Type, Auth Len, and authentication data follows the mandatory header."
+  ]
 }

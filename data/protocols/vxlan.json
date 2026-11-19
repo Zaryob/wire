@@ -19,7 +19,7 @@
   "fields": [
     {
       "key": "r0",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -27,11 +27,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "r1",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -39,11 +42,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "r2",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -51,11 +57,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "r3",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -63,11 +72,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "i",
-      "name": "VNI Bayrağı (I)",
+      "name": "VNI Flag (I)",
       "bits": 1,
       "desc": "Geçerli bir VXLAN Ağ Tanımlayıcısı (VNI) olduğunu belirtir. İletim için 1 olmalıdır.",
       "ref": {
@@ -75,11 +87,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 1
+      "example": 1,
+      "label": "VNI bayrağı",
+      "desc_en": "VXLAN Network Identifier (VNI) presence bit; must be set to 1.",
+      "desc_tr": "Geçerli bir VXLAN Ağ Tanımlayıcısı (VNI) olduğunu belirtir. İletim için 1 olmalıdır."
     },
     {
       "key": "r4",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -87,11 +102,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "r5",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -99,11 +117,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "r6",
-      "name": "Ayrılmış (R)",
+      "name": "Reserved (R)",
       "bits": 1,
       "desc": "Ayrılmış bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -111,11 +132,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved bit; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "res0",
-      "name": "Ayrılmış Alan",
+      "name": "Reserved",
       "bits": 24,
       "desc": "Gelecekteki kullanım için ayrılmış 24 bit. Gönderimde sıfır olmalı, alımda yoksayılmalıdır.",
       "ref": {
@@ -123,11 +147,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış alan",
+      "desc_en": "24-bit reserved field; must be set to 0 on transmission and ignored by receiver.",
+      "desc_tr": "Gelecekteki kullanım için ayrılmış 24 bit. Gönderimde sıfır olmalı, alımda yoksayılmalıdır."
     },
     {
       "key": "vni",
-      "name": "Ağ Tanımlayıcısı (VNI)",
+      "name": "VNI",
       "bits": 24,
       "desc": "İletişim kuran sanal makinelerin bulunduğu bireysel VXLAN mantıksal ağını tanımlayan 24 bitlik kimlik değeri.",
       "ref": {
@@ -135,11 +162,14 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 100
+      "example": 100,
+      "label": "Ağ tanımlayıcısı",
+      "desc_en": "24-bit VXLAN Network Identifier (VNI) specifying the overlay virtual segment.",
+      "desc_tr": "İletişim kuran sanal makinelerin bulunduğu bireysel VXLAN mantıksal ağını tanımlayan 24 bitlik kimlik değeri."
     },
     {
       "key": "res1",
-      "name": "Ayrılmış Alan",
+      "name": "Reserved",
       "bits": 8,
       "desc": "Ayrılmış 8 bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -147,23 +177,31 @@
         "section": "5",
         "label": "VXLAN Frame Format"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış alan",
+      "desc_en": "8-bit reserved field; must be set to 0 on transmission.",
+      "desc_tr": "Ayrılmış 8 bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "inner_frame",
-      "name": "İç Ethernet Çerçevesi",
+      "name": "Inner Ethernet Frame",
       "bits": "değişken",
       "desc": "Tünel içinde taşınan kapsüllenmiş iç Ethernet çerçevesidir (Hedef MAC, Kaynak MAC, EtherType ve yük). FCS alanı dahil edilmez.",
       "ref": {
         "rfc": 7348,
         "section": "5",
         "label": "VXLAN Frame Format"
-      }
+      },
+      "label": "İç Ethernet çerçevesi",
+      "desc_en": "Encapsulated inner Ethernet frame (Destination MAC, Source MAC, EtherType, payload), excluding FCS.",
+      "desc_tr": "Tünel içinde taşınan kapsüllenmiş iç Ethernet çerçevesidir (Hedef MAC, Kaynak MAC, EtherType ve yük). FCS alanı dahil edilmez."
     }
   ],
   "example": {
     "note": "VNI 100 segmentinde taşınan iç Ethernet çerçevesi. Çerçeve, 192.0.2.1'den 192.0.2.2'ye giden geçerli bir IPv4 ICMP Echo İsteği (ping) taşır; IP ve ICMP sağlama toplamları tam doğrulanmıştır. Dış UDP hedef portu 4789'dur (RFC 7348 §5).",
-    "payload": "00005e00530200005e00530108004500001c000100004001f6dcc0000201c00002020800e5ca12340001"
+    "payload": "00005e00530200005e00530108004500001c000100004001f6dcc0000201c00002020800e5ca12340001",
+    "note_tr": "VNI 100 segmentinde taşınan iç Ethernet çerçevesi. Çerçeve, 192.0.2.1'den 192.0.2.2'ye giden geçerli bir IPv4 ICMP Echo İsteği (ping) taşır; IP ve ICMP sağlama toplamları tam doğrulanmıştır. Dış UDP hedef portu 4789'dur (RFC 7348 §5).",
+    "note_en": "An inner Ethernet frame encapsulated in VNI 100. The frame carries a valid IPv4 ICMP Echo Request (ping) from 192.0.2.1 to 192.0.2.2 with verified IP and ICMP checksums. Outer UDP destination port is 4789 (RFC 7348 §5)."
   },
   "refs": [
     7348,
@@ -172,5 +210,15 @@
     791,
     792
   ],
-  "id": "vxlan"
+  "id": "vxlan",
+  "summary_tr": "Sanal Genişletilebilir Yerel Ağ (Virtual eXtensible Local Area Network - VXLAN), Katman 2 Ethernet çerçevelerini Katman 3 UDP paketleri içine kapsülleyerek büyük veri merkezlerinde 16 milyondan fazla izole sanal ağ oluşturulmasını sağlayan bir yerleşim tünelleme protokolüdür. Başlık 8 sekizlidir.",
+  "summary_en": "Virtual eXtensible Local Area Network (VXLAN, RFC 7348) encapsulates Layer 2 Ethernet frames inside Layer 4 UDP datagrams (port 4789). The 8-octet header carries an 8-bit flags field and a 24-bit Virtual Network Identifier (VNI).",
+  "notes_tr": [
+    "VXLAN, IANA tarafından atanan 4789 numaralı UDP hedef portunu kullanır.",
+    "Geleneksel VLAN'ların 12 bitlik (4094 ağ) sınırına karşılık VXLAN 24 bitlik Ağ Tanımlayıcısı (VNI) ile 16.777.216 adede kadar mantıksal ağ segmentini destekler."
+  ],
+  "notes_en": [
+    "VXLAN uses IANA-assigned UDP destination port 4789.",
+    "Compared to traditional VLANs with 12-bit IDs (4094 networks), VXLAN's 24-bit Virtual Network Identifier (VNI) supports up to 16,777,216 logical network segments."
+  ]
 }

@@ -30,7 +30,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "0 for Short Header packets (1-RTT application data).",
+      "desc_tr": "Kısa başlık için 0."
     },
     {
       "key": "fixed_bit",
@@ -43,7 +45,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Always set to 1.",
+      "desc_tr": "Her zaman 1."
     },
     {
       "key": "spin_bit",
@@ -56,7 +60,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Latency spin bit used for passive RTT measurement across network paths (RFC 9000 §17.4).",
+      "desc_tr": "Gecikme ölçümü için kullanılabilen bit; kullanılmıyorsa uç nokta rastgele değer gönderebilir (RFC 9000 §17.4)."
     },
     {
       "key": "reserved_bits",
@@ -69,7 +75,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved bits; must be 0 after header protection removal.",
+      "desc_tr": "Ayrılmış; başlık koruması kaldırıldıktan sonra 0 olmalıdır."
     },
     {
       "key": "key_phase",
@@ -82,7 +90,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Key phase bit indicating which packet protection key is used to protect this packet.",
+      "desc_tr": "Paketi korumak için kullanılan anahtar kuşağı."
     },
     {
       "key": "pn_length",
@@ -95,7 +105,9 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Packet Number field length minus one, in octets (1 means 2 octets).",
+      "desc_tr": "Packet Number alanının uzunluğu eksi bir, sekizli olarak; 1, iki sekizli demektir."
     },
     {
       "key": "dcid",
@@ -110,7 +122,9 @@
       },
       "example": "c3a7b1e0d24f5590",
       "type": "bytes",
-      "range": "0..160"
+      "range": "0..160",
+      "desc_en": "Destination Connection ID chosen by receiver to identify the connection.",
+      "desc_tr": "Alıcının bağlantıyı tanıdığı kimlik. Uzunluğu pakette yazmaz; alıcı onu kendisi seçtiği için bilir."
     },
     {
       "key": "packet_number",
@@ -124,7 +138,9 @@
         "label": "1-RTT Packet"
       },
       "example": 1234,
-      "range": "8..32"
+      "range": "8..32",
+      "desc_en": "Packet number; length specified by Packet Number Length in the first octet.",
+      "desc_tr": "Paket numarası; uzunluğu ilk sekizlideki Packet Number Length'ten gelir."
     },
     {
       "key": "payload",
@@ -137,17 +153,35 @@
         "section": "17.3.1",
         "label": "1-RTT Packet"
       },
-      "range": "8.."
+      "range": "8..",
+      "desc_en": "Encrypted application frames (e.g. STREAM, ACK) followed by 16-octet AEAD auth tag.",
+      "desc_tr": "Şifreli çerçeveler (STREAM, ACK vb.) ve AEAD doğrulama etiketi."
     }
   ],
   "example": {
     "payload": "5d2e9c1f04b6a8733e10c47d92ab65f0811ce4d7",
-    "note": "QUIC Initial sayfasındaki istemcinin, sunucudan aldığı 1-RTT paketi: hedef bağlantı kimliği istemcinin kendi seçtiği c3a7b1e0d24f5590'dır. İlk sekizli 0x41: kısa başlık, Fixed Bit 1, iki sekizlilik paket numarası. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir."
+    "note": "QUIC Initial sayfasındaki istemcinin, sunucudan aldığı 1-RTT paketi: hedef bağlantı kimliği istemcinin kendi seçtiği c3a7b1e0d24f5590'dır. İlk sekizli 0x41: kısa başlık, Fixed Bit 1, iki sekizlilik paket numarası. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir.",
+    "note_tr": "QUIC Initial sayfasındaki istemcinin, sunucudan aldığı 1-RTT paketi: hedef bağlantı kimliği istemcinin kendi seçtiği c3a7b1e0d24f5590'dır. İlk sekizli 0x41: kısa başlık, Fixed Bit 1, iki sekizlilik paket numarası. Yükün 20 sekizlisi şifreli metni ve doğrulama etiketini temsil eden uydurma değerlerdir.",
+    "note_en": "A 1-RTT packet received by the client on the QUIC Initial page: destination connection ID is the client's chosen c3a7b1e0d24f5590. First octet 0x41: short header, Fixed Bit 1, 2-octet packet number. The 20 payload octets represent mock ciphertext and authentication tag."
   },
   "refs": [
     9000,
     9001,
     768
   ],
-  "id": "quic-1rtt"
+  "id": "quic-1rtt",
+  "summary_tr": "QUIC v1 1-RTT paketleri uygulama verisini kısa başlıkla taşır. Başlık bayrakları, varsa hedef bağlantı kimliğini ve paket numarasını içerir. Uzunluk alanı bulunmadığından paket UDP datagramının sonuna kadar uzanır.",
+  "summary_en": "QUIC 1-RTT Short Header packet (RFC 9000) conveys application data after cryptographic handshake completion. Uses a compact 1-octet flag byte, Destination Connection ID, and packet number.",
+  "notes_tr": [
+    "Kısa başlıkta uzunluk alanı olmadığı için 1-RTT paketi UDP datagramının sonuna kadar uzanır; bir datagramdaki son paket olmalıdır (RFC 9000 §12.2).",
+    "Hedef bağlantı kimliğinin uzunluğu pakette yazmaz; alıcı onu kendisi seçtiği için bilir. Bu yüzden kimlik uzunluğu başlıkta 0..160 bit aralığındadır.",
+    "Key Phase biti, paketi korumak için kullanılan anahtar kuşağını gösterir; anahtar güncellemesinde değişir (RFC 9001 §6). Spin Bit, gecikmeyi ağdan pasif olarak ölçmeye yarayabilir (RFC 9000 §17.4).",
+    "Döküm, başlık koruması uygulanmadan önceki başlığı gösterir; korumada ilk sekizlinin alt 5 biti ve paket numarası maskelenir (RFC 9001 §5.4)."
+  ],
+  "notes_en": [
+    "Because the short header lacks a length field, a 1-RTT packet extends to the end of the UDP datagram and must be the final packet in a datagram (RFC 9000 §12.2).",
+    "The length of the Destination Connection ID is not encoded in the packet; the receiver knows it because it chose it. Thus its length ranges from 0..160 bits in the header definition.",
+    "The Key Phase bit indicates the key generation used to protect the packet, toggling on key updates (RFC 9001 §6). The Spin Bit enables passive latency measurement from the network (RFC 9000 §17.4).",
+    "The dump shows the header before header protection; protection masks the lower 5 bits of the first octet and the packet number (RFC 9001 §5.4)."
+  ]
 }

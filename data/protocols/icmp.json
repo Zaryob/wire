@@ -18,7 +18,7 @@
     {
       "key": "type",
       "name": "Type",
-      "label": "Tür",
+      "label": "İleti türü",
       "bits": 8,
       "desc": "İletinin türü. Yankı isteği için 8, yankı yanıtı için 0.",
       "ref": {
@@ -67,19 +67,67 @@
           "15",
           "Bilgi isteği (Information Request)"
         ]
+      ],
+      "desc_en": "ICMP message type: 8 for Echo Request, 0 for Echo Reply.",
+      "desc_tr": "İletinin türü. 8 Yankı İsteği (Echo), 0 Yankı Yanıtıdır (Echo Reply).",
+      "values_en": [
+        [
+          "0",
+          "Echo Reply"
+        ],
+        [
+          "3",
+          "Destination Unreachable"
+        ],
+        [
+          "4",
+          "Source Quench"
+        ],
+        [
+          "8",
+          "Echo Request"
+        ],
+        [
+          "11",
+          "Time Exceeded"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Yankı yanıtı (Echo Reply)"
+        ],
+        [
+          "3",
+          "Hedefe ulaşılamıyor (Destination Unreachable)"
+        ],
+        [
+          "4",
+          "Kaynağın gönderim hızını azaltma isteği (Source Quench)"
+        ],
+        [
+          "8",
+          "Yankı isteği (Echo Request)"
+        ],
+        [
+          "11",
+          "Süre aşıldı (Time Exceeded)"
+        ]
       ]
     },
     {
       "key": "code",
       "name": "Code",
-      "label": "Kod",
+      "label": "Alt kod",
       "bits": 8,
       "desc": "Türün alt ayrımı. Yankı iletilerinde 0.",
       "ref": {
         "rfc": 792,
         "label": "Echo or Echo Reply Message"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Further qualifies the message; 0 for Echo and Echo Reply.",
+      "desc_tr": "Türe bağlı alt kod. Yankı iletilerinde 0'dır."
     },
     {
       "key": "checksum",
@@ -92,7 +140,9 @@
         "label": "Echo or Echo Reply Message"
       },
       "checksum": "message",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit one's complement checksum of the entire ICMP message; zero during computation.",
+      "desc_tr": "ICMP mesajının tamamı üzerinden hesaplanan 16 bitlik bire tümleyen sağlama toplamı."
     },
     {
       "key": "id",
@@ -105,7 +155,9 @@
         "label": "Echo or Echo Reply Message"
       },
       "example": "0x1234",
-      "hex": true
+      "hex": true,
+      "desc_en": "Identifier to match requests with replies; often set to the sending process ID.",
+      "desc_tr": "İstekle yanıtı eşleştirmeye yarayan tanımlayıcı; genellikle gönderen sürecin işlem numarası (PID) kullanılır."
     },
     {
       "key": "seq",
@@ -117,7 +169,9 @@
         "rfc": 792,
         "label": "Echo or Echo Reply Message"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Sequence number incremented with each echo request sent.",
+      "desc_tr": "Her istekte bir artırılan sıra numarası."
     },
     {
       "key": "data",
@@ -128,16 +182,28 @@
       "ref": {
         "rfc": 792,
         "label": "Echo or Echo Reply Message"
-      }
+      },
+      "desc_en": "Optional payload data sent in the request and echoed back in the reply.",
+      "desc_tr": "İstekte gönderilen ve yanıtta aynen geri döndürülen veri."
     }
   ],
   "example": {
     "payload": "77697265",
-    "note": "Dört sekizlilik veri (ASCII “wire”) taşıyan bir yankı isteği."
+    "note": "Dört sekizlilik veri (ASCII “wire”) taşıyan bir yankı isteği.",
+    "note_tr": "Dört sekizlilik veri (ASCII “wire”) taşıyan bir yankı isteği.",
+    "note_en": "An Echo Request carrying four octets of data (ASCII 'wire')."
   },
   "refs": [
     792,
     1071
   ],
-  "id": "icmp"
+  "id": "icmp",
+  "summary_tr": "ICMPv4 (Internet Control Message Protocol), IPv4 hata ve tanılama iletilerini taşır. IPv4 protokol numarası 1’dir. İlk 4 bayt tür, kod ve sağlama toplamıdır; kalan biçim ileti türüne göre değişir. Bu sayfa Echo Request ve Echo Reply biçimini gösterir.",
+  "summary_en": "ICMPv4 (Internet Control Message Protocol, RFC 792) conveys network diagnostics and error messages for IPv4 (protocol 1). The first 4 octets contain Type, Code, and Checksum; remaining fields depend on message type. This page shows Echo Request and Echo Reply.",
+  "notes_tr": [
+    "Sağlama toplamı, Type alanından başlayarak ICMP iletisinin tamamı üzerinde hesaplanır; hesap sırasında alanın kendisi sıfır sayılır."
+  ],
+  "notes_en": [
+    "Checksum is calculated over the entire ICMP message starting from the Type field; the checksum field itself is treated as zero during computation."
+  ]
 }

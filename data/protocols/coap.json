@@ -19,7 +19,7 @@
   "fields": [
     {
       "key": "ver",
-      "name": "Sürüm (Ver)",
+      "name": "Version (Ver)",
       "bits": 2,
       "desc": "CoAP sürüm numarası. Bu belirtim için ikili 01 (1) değerinde olmalıdır.",
       "ref": {
@@ -27,11 +27,14 @@
         "section": "3",
         "label": "Message Format"
       },
-      "example": 1
+      "example": 1,
+      "label": "Sürüm",
+      "desc_en": "CoAP version number; binary 01 (1) in RFC 7252.",
+      "desc_tr": "CoAP sürüm numarası. Bu belirtim için ikili 01 (1) değerinde olmalıdır."
     },
     {
       "key": "t",
-      "name": "İleti Türü (T)",
+      "name": "Type (T)",
       "bits": 2,
       "desc": "İletinin güvenilirlik türünü belirtir: 0: Onaylanabilir (CON), 1: Onaylanamaz (NON), 2: Onay (ACK), 3: Sıfırlama (RST).",
       "ref": {
@@ -57,11 +60,50 @@
           "3",
           "Sıfırlama (Reset - RST)"
         ]
+      ],
+      "label": "İleti türü",
+      "desc_en": "Reliability type: 0 Confirmable (CON), 1 Non-confirmable (NON), 2 Acknowledgement (ACK), 3 Reset (RST).",
+      "desc_tr": "İletinin güvenilirlik türünü belirtir: 0: Onaylanabilir (CON), 1: Onaylanamaz (NON), 2: Onay (ACK), 3: Sıfırlama (RST).",
+      "values_en": [
+        [
+          "0",
+          "Confirmable (CON)"
+        ],
+        [
+          "1",
+          "Non-confirmable (NON)"
+        ],
+        [
+          "2",
+          "Acknowledgement (ACK)"
+        ],
+        [
+          "3",
+          "Reset (RST)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Onaylanabilir (Confirmable - CON)"
+        ],
+        [
+          "1",
+          "Onaylanamaz (Non-confirmable - NON)"
+        ],
+        [
+          "2",
+          "Onay (Acknowledgement - ACK)"
+        ],
+        [
+          "3",
+          "Sıfırlama (Reset - RST)"
+        ]
       ]
     },
     {
       "key": "tkl",
-      "name": "Belirteç Uzunluğu (TKL)",
+      "name": "Token Length (TKL)",
       "bits": 4,
       "desc": "Başlıktan hemen sonra gelen değişken uzunluklu Belirteç (Token) alanının sekizli cinsinden uzunluğu (0-8 sekizli).",
       "ref": {
@@ -69,11 +111,14 @@
         "section": "3",
         "label": "Message Format"
       },
-      "example": 4
+      "example": 4,
+      "label": "Belirteç uzunluğu",
+      "desc_en": "Length in octets of the variable-length Token field following the header (0–8 octets).",
+      "desc_tr": "Başlıktan hemen sonra gelen değişken uzunluklu Belirteç (Token) alanının sekizli cinsinden uzunluğu (0-8 sekizli)."
     },
     {
       "key": "code",
-      "name": "İleti Kodu (Code)",
+      "name": "Code",
       "bits": 8,
       "desc": "İstek yöntemini (0.xx) veya yanıt durum kodunu (2.xx, 4.xx, 5.xx) belirten 8 bitlik kod. 3 bit sınıf ve 5 bit ayrıntıdan oluşur.",
       "ref": {
@@ -107,11 +152,66 @@
           "132",
           "4.04 Not Found (Yanıt)"
         ]
+      ],
+      "label": "İleti kodu",
+      "desc_en": "8-bit code (3-bit class, 5-bit detail) specifying request method (0.xx) or response status (2.xx, 4.xx, 5.xx).",
+      "desc_tr": "İstek yöntemini (0.xx) veya yanıt durum kodunu (2.xx, 4.xx, 5.xx) belirten 8 bitlik kod. 3 bit sınıf ve 5 bit ayrıntıdan oluşur.",
+      "values_en": [
+        [
+          "1",
+          "GET (0.01)"
+        ],
+        [
+          "2",
+          "POST (0.02)"
+        ],
+        [
+          "3",
+          "PUT (0.03)"
+        ],
+        [
+          "4",
+          "DELETE (0.04)"
+        ],
+        [
+          "69",
+          "2.05 Content (Response)"
+        ],
+        [
+          "132",
+          "4.04 Not Found (Response)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "GET (0.01)"
+        ],
+        [
+          "2",
+          "POST (0.02)"
+        ],
+        [
+          "3",
+          "PUT (0.03)"
+        ],
+        [
+          "4",
+          "DELETE (0.04)"
+        ],
+        [
+          "69",
+          "2.05 Content (Yanıt)"
+        ],
+        [
+          "132",
+          "4.04 Not Found (Yanıt)"
+        ]
       ]
     },
     {
       "key": "message_id",
-      "name": "İleti Kimliği (Message ID)",
+      "name": "Message ID",
       "bits": 16,
       "desc": "Yinelenen iletileri tespit etmek ve ACK/RST yanıtlarını isteklerle eşleştirmek için kullanılan 16 bitlik sıra numarası.",
       "ref": {
@@ -120,39 +220,60 @@
         "label": "Message Format"
       },
       "example": "0x7d34",
-      "hex": true
+      "hex": true,
+      "label": "İleti kimliği",
+      "desc_en": "16-bit sequence number used to detect duplicates and match ACK/RST responses to requests.",
+      "desc_tr": "Yinelenen iletileri tespit etmek ve ACK/RST yanıtlarını isteklerle eşleştirmek için kullanılan 16 bitlik sıra numarası."
     },
     {
       "key": "token",
-      "name": "Belirteç (Token)",
+      "name": "Token",
       "bits": "değişken",
       "desc": "İstek ile yanıtı eşleştirmek için istemci tarafından oluşturulan TKL sekizli uzunluğundaki değer.",
       "ref": {
         "rfc": 7252,
         "section": "3",
         "label": "Message Format"
-      }
+      },
+      "label": "Belirteç",
+      "desc_en": "Client-generated token of length TKL used to correlate concurrent requests and responses.",
+      "desc_tr": "İstek ile yanıtı eşleştirmek için istemci tarafından oluşturulan TKL sekizli uzunluğundaki değer."
     },
     {
       "key": "options",
-      "name": "Seçenekler (Options)",
+      "name": "Options",
       "bits": "değişken",
       "desc": "HTTP başlıklarına eşdeğer TLV formatındaki seçenekler (Uri-Path, Content-Format, Max-Age vb.).",
       "ref": {
         "rfc": 7252,
         "section": "3.1",
         "label": "Option Format"
-      }
+      },
+      "label": "Seçenekler",
+      "desc_en": "Sequence of TLV-formatted options equivalent to HTTP headers (Uri-Path, Content-Format, Max-Age, etc.).",
+      "desc_tr": "HTTP başlıklarına eşdeğer TLV formatındaki seçenekler (Uri-Path, Content-Format, Max-Age vb.)."
     }
   ],
   "example": {
     "note": "Sıcaklık algılayıcısına gönderilen bir CoAP GET isteği (CON, Code 0.01, Uri-Path: 'temperature'). UDP port 5683 üzerinde taşınır.",
-    "payload": "73656e73bb74656d7065726174757265"
+    "payload": "73656e73bb74656d7065726174757265",
+    "note_tr": "Sıcaklık algılayıcısına gönderilen bir CoAP GET isteği (CON, Code 0.01, Uri-Path: 'temperature'). UDP port 5683 üzerinde taşınır.",
+    "note_en": "A CoAP GET request sent to a temperature sensor (CON, Code 0.01, Uri-Path: 'temperature'). Carried over UDP port 5683."
   },
   "refs": [
     7252,
     768,
     5737
   ],
-  "id": "coap"
+  "id": "coap",
+  "summary_tr": "Kısıtlı Uygulama Protokolü (Constrained Application Protocol - CoAP), kısıtlı IoT cihazları ve düşük güçlü kablosuz ağlar için tasarlanmış özel bir ikili web aktarım protokolüdür. HTTP benzeri RESTful modelini UDP üzerinde minimum ek yükle çalıştırır. Sabit başlığı 4 sekizlidir.",
+  "summary_en": "Constrained Application Protocol (CoAP, RFC 7252) is a specialized web transfer protocol for constrained nodes and IoT networks over UDP. The 4-octet base header carries version, message type (CON, NON, ACK, RST), token length, and request/response code.",
+  "notes_tr": [
+    "CoAP varsayılan olarak güvenli olmayan iletim için UDP port 5683, DTLS ile güvenli iletim için port 5684 kullanır.",
+    "İleti Kodu (Code) alanı 'sınıf.ayrıntı' (c.dd) biçiminde ifade edilir: 0.01 GET, 0.02 POST, 0.03 PUT, 0.04 DELETE istek yöntemleridir. 2.05 Content ise başarılı bir yanıt kodudur."
+  ],
+  "notes_en": [
+    "CoAP uses UDP port 5683 for unsecure transport by default, and port 5684 for secure transport with DTLS.",
+    "The Code field is formatted as 'class.detail' (c.dd): 0.01 is GET, 0.02 is POST, 0.03 is PUT, and 0.04 is DELETE. 2.05 Content indicates a successful response."
+  ]
 }

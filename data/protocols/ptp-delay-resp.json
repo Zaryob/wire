@@ -146,7 +146,9 @@
         "label": "transportSpecific (Nibble)",
         "page": 125
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Field available to underlying transport protocol (Annex D–I). 0 default in Ethernet (Table F.2); bit 0 in UDP/IPv4 requests 124-octet padding.",
+      "desc_tr": "Alt katmandaki taşıma protokolünün kullanabileceği alan; anlamı taşıma eklerinde (Annex D–I) tanımlanır. Ethernet eşlemesinde 0 DEFAULT değeridir (Table F.2); UDP/IPv4 eşlemesinde bit 0, sürüm 1 donanımı için 124 sekizlilik dolgu ister (Table D.2)."
     },
     {
       "key": "message_type",
@@ -210,6 +212,108 @@
           "0xE–0xF",
           "Ayrılmış"
         ]
+      ],
+      "desc_en": "PTP message type: 0–3 event messages with timestamping; 8–D general messages (0 Sync, 1 Delay_Req, 8 Follow_Up, 9 Delay_Resp, 0xB Announce).",
+      "desc_tr": "İletinin türü. 0–3 olay iletileridir ve gönderim ile alım anları zaman damgasıyla ölçülür; 8–D genel iletilerdir. En anlamlı bit iki sınıfı ayırır.",
+      "values_en": [
+        [
+          "0x0",
+          "Sync (event)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (event)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (event)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (event)"
+        ],
+        [
+          "0x4–0x7",
+          "Reserved"
+        ],
+        [
+          "0x8",
+          "Follow_Up (general)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (general)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (general)"
+        ],
+        [
+          "0xB",
+          "Announce (general)"
+        ],
+        [
+          "0xC",
+          "Signaling (general)"
+        ],
+        [
+          "0xD",
+          "Management (general)"
+        ],
+        [
+          "0xE–0xF",
+          "Reserved"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0",
+          "Sync (olay)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (olay)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (olay)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (olay)"
+        ],
+        [
+          "0x4–0x7",
+          "Ayrılmış"
+        ],
+        [
+          "0x8",
+          "Follow_Up (genel)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (genel)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (genel)"
+        ],
+        [
+          "0xB",
+          "Announce (genel)"
+        ],
+        [
+          "0xC",
+          "Signaling (genel)"
+        ],
+        [
+          "0xD",
+          "Management (genel)"
+        ],
+        [
+          "0xE–0xF",
+          "Ayrılmış"
+        ]
       ]
     },
     {
@@ -224,7 +328,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 4 bits; transmitted as 0 and ignored by receiver (§13.2).",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2). §13.3.2.2'deki nota göre messageType'ın ileride genişletilmesi için ayrılmıştır."
     },
     {
       "key": "version",
@@ -238,7 +344,9 @@
         "label": "versionPTP (UInteger4)",
         "page": 125
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "PTP version number of transmitting port; 2 for IEEE 1588-2008 (§7.5.5).",
+      "desc_tr": "Gönderen portun portDS.versionNumber değeri. Standardın bu sürümü için 2'dir (§7.5.5)."
     },
     {
       "key": "message_length",
@@ -252,7 +360,9 @@
         "label": "messageLength (UInteger16)",
         "page": 125
       },
-      "example": 54
+      "example": 54,
+      "desc_en": "Total length of the PTP message from header start to end, excluding Annex D padding.",
+      "desc_tr": "İletinin başlığın ilk sekizlisinden son sekizlisine kadar toplam uzunluğu. Annex D'deki dolgu dahil değildir."
     },
     {
       "key": "domain",
@@ -266,7 +376,9 @@
         "label": "domainNumber (UInteger8)",
         "page": 125
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Domain number of the sending clock (defaultDS.domainNumber), segregating independent PTP domains on a network.",
+      "desc_tr": "Sıradan ya da sınır saatlerde, gönderen saatin defaultDS.domainNumber değeri. Aynı ağdaki bağımsız zaman alanları bu numarayla ayrılır."
     },
     {
       "key": "reserved_domain",
@@ -280,7 +392,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 8 bits; transmitted as 0 and ignored by receiver.",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar."
     },
     {
       "key": "flags",
@@ -341,6 +455,100 @@
           "0x0020",
           "frequencyTraceable (Announce)"
         ]
+      ],
+      "desc_en": "Two-octet flag array defined in Table 20 (e.g. alternateMasterFlag, twoStepFlag, unicastFlag).",
+      "desc_tr": "İki sekizlilik bayrak dizisi; anlamları Table 20'dedir. Bir ileti türü için tanımlanmamış bayraklar 0 olur. Onaltılık değer, sekizli 0'ın bitlerini üst, sekizli 1'in bitlerini alt baytta gösterir.",
+      "values_en": [
+        [
+          "0x0100",
+          "alternateMasterFlag"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag"
+        ],
+        [
+          "0x0400",
+          "unicastFlag"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61"
+        ],
+        [
+          "0x0002",
+          "leap59"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale"
+        ],
+        [
+          "0x0010",
+          "timeTraceable"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0100",
+          "alternateMasterFlag (Announce, Sync, Follow_Up, Delay_Resp)"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag (Sync, Pdelay_Resp)"
+        ],
+        [
+          "0x0400",
+          "unicastFlag (tümü)"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61 (Announce)"
+        ],
+        [
+          "0x0002",
+          "leap59 (Announce)"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid (Announce)"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale (Announce)"
+        ],
+        [
+          "0x0010",
+          "timeTraceable (Announce)"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable (Announce)"
+        ]
       ]
     },
     {
@@ -356,7 +564,9 @@
         "page": 126
       },
       "example": 0,
-      "hex": true
+      "hex": true,
+      "desc_en": "Correction value in scaled nanoseconds (units of 2^-16 ns); e.g. 2.5 ns is 0x0000000000028000 (Table 21).",
+      "desc_tr": "Düzeltme değeri, nanosaniyenin 2^16 katı biriminde işaretli sayı olarak; örneğin 2,5 ns 0x0000000000028000'dir. Sync'te kesirli nanosaniyeleri, saydam saatlerdeki bekleme süresini, eşler arası saatlerde yol gecikmesini ve asimetri düzeltmesini taşır (Table 21)."
     },
     {
       "key": "reserved_body",
@@ -370,7 +580,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 32 bits; transmitted as 0 and ignored by receiver.",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar."
     },
     {
       "key": "clock_identity",
@@ -385,7 +597,9 @@
         "page": 127
       },
       "example": "00005efffe005301",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "8-octet EUI-64 clock identity of the transmitting port; when derived from MAC-48, FF FE is inserted (§7.5.2.2.2).",
+      "desc_tr": "İletiyi gönderen portun portDS.portIdentity değerinin saat kısmı: 8 sekizlilik bir EUI-64. EUI-48'den türetildiğinde OUI'nin üç sekizlisi başa, 3. ve 4. sekizlilere FF ile FE, kalan üç sekizli sona yazılır (§7.5.2.2.2, NOTE 2)."
     },
     {
       "key": "port_number",
@@ -399,7 +613,9 @@
         "label": "PortIdentity",
         "page": 13
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "PTP port number of the transmitting port; ports on an N-port node are numbered 1, 2, ..., N (§7.5.2.3).",
+      "desc_tr": "Saatin iletiyi gönderen PTP portunun numarası. N portlu bir düğümde portlar 1, 2, …, N numaralanır; 0 ve 0xFFFF ayrılmıştır (§7.5.2.3)."
     },
     {
       "key": "sequence_id",
@@ -413,7 +629,9 @@
         "label": "sequenceId (UInteger16)",
         "page": 127
       },
-      "example": 7
+      "example": 7,
+      "desc_en": "Monotonically increasing sequence number maintained for each message type (§7.3.7; Table 22).",
+      "desc_tr": "Gönderenin her ileti türü için ayrı tuttuğu sıra numarası (§7.3.7). Follow_Up, Delay_Resp gibi yanıtlar ait oldukları iletinin değerini taşır (Table 22)."
     },
     {
       "key": "control",
@@ -453,6 +671,60 @@
           "0x05",
           "Diğerleri"
         ]
+      ],
+      "desc_en": "Legacy control field retained for version 1 hardware compatibility; Table 23 values (0x00 Sync, 0x01 Delay_Req, etc.).",
+      "desc_tr": "Sürüm 1 donanımıyla uyumluluk için korunan alan; alıcının kullanması önerilmez. Değeri ileti türüne göre Table 23'te verilir.",
+      "values_en": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Other"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Diğerleri"
+        ]
       ]
     },
     {
@@ -468,7 +740,9 @@
         "page": 128
       },
       "example": 0,
-      "hex": true
+      "hex": true,
+      "desc_en": "Log2 transmission interval in seconds (Table 24); 0 represents 1 message per second (2^0).",
+      "desc_tr": "İletilerin gönderim aralığının 2 tabanında logaritması, işaretli sayı olarak. Çok noktaya yayınlanan Sync'te portDS.logSyncInterval değeridir, tek noktaya gönderilende 0x7F (Table 24). 0 saniyede bir ileti demektir."
     },
     {
       "key": "receive_seconds",
@@ -482,7 +756,9 @@
         "label": "receiveTimestamp (Timestamp)",
         "page": 131
       },
-      "example": 1767225638
+      "example": 1767225638,
+      "desc_en": "Seconds portion of the arrival time of the corresponding Delay_Req message at the master.",
+      "desc_tr": "Yanıtlanan Delay_Req iletisinin ana saate ulaştığı anın saniye kısmı (§5.3.3)."
     },
     {
       "key": "receive_ns",
@@ -496,7 +772,9 @@
         "label": "Timestamp",
         "page": 13
       },
-      "example": 300041250
+      "example": 300041250,
+      "desc_en": "Nanoseconds portion of the arrival time.",
+      "desc_tr": "Aynı anın nanosaniye kısmı (§5.3.3)."
     },
     {
       "key": "requesting_clock",
@@ -511,7 +789,9 @@
         "page": 131
       },
       "example": "00005efffe005302",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "Clock identity of the port that sent the Delay_Req being answered.",
+      "desc_tr": "Yanıtlanan Delay_Req iletisini gönderen portun saat kimliği."
     },
     {
       "key": "requesting_port",
@@ -525,15 +805,29 @@
         "label": "PortIdentity",
         "page": 13
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Port number of the port that sent the Delay_Req being answered.",
+      "desc_tr": "Aynı portun numarası."
     }
   ],
   "example": {
-    "note": "Ana saatin, 7 numaralı Delay_Req'e verdiği yanıt: istek 41,25 µs sonra ana saate varmıştır (receiveTimestamp). requestingPortIdentity, isteği gönderen bağımlı saatin kimliğidir. İleti 54 sekizlidir (Table 28)."
+    "note": "Ana saatin, 7 numaralı Delay_Req'e verdiği yanıt: istek 41,25 µs sonra ana saate varmıştır (receiveTimestamp). requestingPortIdentity, isteği gönderen bağımlı saatin kimliğidir. İleti 54 sekizlidir (Table 28).",
+    "note_tr": "Ana saatin, 7 numaralı Delay_Req'e verdiği yanıt: istek 41,25 µs sonra ana saate varmıştır (receiveTimestamp). requestingPortIdentity, isteği gönderen bağımlı saatin kimliğidir. İleti 54 sekizlidir (Table 28).",
+    "note_en": "The master clock's response to Delay_Req 7: the request arrived at the master 41.25 µs later (receiveTimestamp). requestingPortIdentity identifies the slave clock that issued the request. Message is 54 octets (Table 28)."
   },
   "refs": [
     "ieee-1588-2008",
     9542
   ],
-  "id": "ptp-delay-resp"
+  "id": "ptp-delay-resp",
+  "summary_tr": "PTP Delay_Resp, ana saatin Delay_Req iletisini aldığı anı ve isteği gönderen portun kimliğini iletir. Bağımlı saat, bu bilgiyi kendi gönderim anıyla birlikte yol gecikmesini hesaplamak için kullanır.",
+  "summary_en": "PTP Delay_Resp message conveys the arrival timestamp of a Delay_Req message at the master clock back to the requesting slave.",
+  "notes_tr": [
+    "Delay_Resp, yanıtladığı Delay_Req iletisinin sequenceId'sini taşır (Table 22); controlField 3'tür (Table 23).",
+    "Delay_Resp bir genel iletidir ve UDP/IPv4 üzerinde 320 numaralı porta gönderilir (Annex D.2). requestingPortIdentity, yanıtın hangi bağımlı saatin isteğine ait olduğunu gösterir (§13.8.2.2)."
+  ],
+  "notes_en": [
+    "Delay_Resp echoes the sequenceId of the Delay_Req message it answers (Table 22); controlField is 3 (Table 23).",
+    "Delay_Resp is a general message sent to port 320 over UDP/IPv4 (Annex D.2). requestingPortIdentity indicates which slave clock the response belongs to (§13.8.2.2)."
+  ]
 }

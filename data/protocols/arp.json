@@ -17,7 +17,7 @@
   "fields": [
     {
       "key": "hrd",
-      "name": "Donanım adres uzayı (ar$hrd)",
+      "name": "Hardware Type (ar$hrd)",
       "bits": 16,
       "desc": "Donanım adresinin türü. Ethernet için 1.",
       "ref": {
@@ -30,11 +30,26 @@
           "1",
           "Ethernet (ares_hrd$Ethernet)"
         ]
+      ],
+      "label": "Donanım adres uzayı",
+      "desc_en": "Hardware type parameter specifying the network hardware type. 1 for Ethernet.",
+      "desc_tr": "Donanım adresinin türü. Ethernet için 1.",
+      "values_en": [
+        [
+          "1",
+          "Ethernet (ares_hrd$Ethernet)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Ethernet (ares_hrd$Ethernet)"
+        ]
       ]
     },
     {
       "key": "pro",
-      "name": "Protokol adres uzayı (ar$pro)",
+      "name": "Protocol Type (ar$pro)",
       "bits": 16,
       "desc": "Çözümlenen protokol adresinin türü. Ethernet donanımında bu değer Ethernet tür alanının değer kümesinden gelir.",
       "ref": {
@@ -42,33 +57,42 @@
         "label": "Packet format"
       },
       "example": "0x0800",
-      "hex": true
+      "hex": true,
+      "label": "Protokol adres uzayı",
+      "desc_en": "Protocol address type being resolved. On Ethernet, taken from the set of EtherType values (0x0800 for IPv4).",
+      "desc_tr": "Çözümlenen protokol adresinin türü. Ethernet donanımında bu değer Ethernet tür alanının değer kümesinden gelir."
     },
     {
       "key": "hln",
-      "name": "Donanım adresi uzunluğu (ar$hln)",
+      "name": "Hardware Address Length (ar$hln)",
       "bits": 8,
       "desc": "Her donanım adresinin sekizli cinsinden uzunluğu.",
       "ref": {
         "rfc": 826,
         "label": "Packet format"
       },
-      "example": 6
+      "example": 6,
+      "label": "Donanım adresi uzunluğu",
+      "desc_en": "Byte length of each hardware address. 6 for 48-bit Ethernet MAC addresses.",
+      "desc_tr": "Her donanım adresinin sekizli cinsinden uzunluğu."
     },
     {
       "key": "pln",
-      "name": "Protokol adresi uzunluğu (ar$pln)",
+      "name": "Protocol Address Length (ar$pln)",
       "bits": 8,
       "desc": "Her protokol adresinin sekizli cinsinden uzunluğu.",
       "ref": {
         "rfc": 826,
         "label": "Packet format"
       },
-      "example": 4
+      "example": 4,
+      "label": "Protokol adresi uzunluğu",
+      "desc_en": "Byte length of each protocol address. 4 for 32-bit IPv4 addresses.",
+      "desc_tr": "Her protokol adresinin sekizli cinsinden uzunluğu."
     },
     {
       "key": "op",
-      "name": "İşlem kodu (ar$op)",
+      "name": "Operation (ar$op)",
       "bits": 16,
       "desc": "Paketin istek mi yanıt mı olduğunu belirtir.",
       "ref": {
@@ -85,11 +109,34 @@
           "2",
           "Yanıt (ares_op$REPLY)"
         ]
+      ],
+      "label": "İşlem kodu",
+      "desc_en": "Specifies the operation: 1 for ARP Request, 2 for ARP Reply.",
+      "desc_tr": "Paketin istek mi yanıt mı olduğunu belirtir.",
+      "values_en": [
+        [
+          "1",
+          "Request (ares_op$REQUEST)"
+        ],
+        [
+          "2",
+          "Reply (ares_op$REPLY)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "İstek (ares_op$REQUEST)"
+        ],
+        [
+          "2",
+          "Yanıt (ares_op$REPLY)"
+        ]
       ]
     },
     {
       "key": "sha",
-      "name": "Gönderenin donanım adresi (ar$sha)",
+      "name": "Sender Hardware Address (ar$sha)",
       "bits": 48,
       "desc": "Bu paketi gönderenin donanım adresi; uzunluğu ar$hln alanından gelir.",
       "ref": {
@@ -98,11 +145,14 @@
       },
       "type": "mac",
       "example": "00:00:5e:00:53:01",
-      "sizedBy": "n"
+      "sizedBy": "n",
+      "label": "Gönderenin donanım adresi",
+      "desc_en": "Hardware address of the sender; length given by ar$hln.",
+      "desc_tr": "Bu paketi gönderenin donanım adresi; uzunluğu ar$hln alanından gelir."
     },
     {
       "key": "spa",
-      "name": "Gönderenin protokol adresi (ar$spa)",
+      "name": "Sender Protocol Address (ar$spa)",
       "bits": 32,
       "desc": "Bu paketi gönderenin protokol adresi; uzunluğu ar$pln alanından gelir.",
       "ref": {
@@ -111,11 +161,14 @@
       },
       "type": "ipv4",
       "example": "192.0.2.1",
-      "sizedBy": "m"
+      "sizedBy": "m",
+      "label": "Gönderenin protokol adresi",
+      "desc_en": "Protocol address of the sender; length given by ar$pln.",
+      "desc_tr": "Bu paketi gönderenin protokol adresi; uzunluğu ar$pln alanından gelir."
     },
     {
       "key": "tha",
-      "name": "Hedefin donanım adresi (ar$tha)",
+      "name": "Target Hardware Address (ar$tha)",
       "bits": 48,
       "desc": "Hedefin donanım adresi, biliniyorsa. İstek paketinde henüz bilinmez.",
       "ref": {
@@ -124,11 +177,14 @@
       },
       "type": "mac",
       "example": "00:00:00:00:00:00",
-      "sizedBy": "n"
+      "sizedBy": "n",
+      "label": "Hedefin donanım adresi",
+      "desc_en": "Hardware address of the target, if known. Undefined and set to zeroes in an ARP request.",
+      "desc_tr": "Hedefin donanım adresi, biliniyorsa. İstek paketinde henüz bilinmez."
     },
     {
       "key": "tpa",
-      "name": "Hedefin protokol adresi (ar$tpa)",
+      "name": "Target Protocol Address (ar$tpa)",
       "bits": 32,
       "desc": "Donanım adresi aranan hedefin protokol adresi.",
       "ref": {
@@ -137,11 +193,16 @@
       },
       "type": "ipv4",
       "example": "192.0.2.2",
-      "sizedBy": "m"
+      "sizedBy": "m",
+      "label": "Hedefin protokol adresi",
+      "desc_en": "Protocol address of the target whose hardware address is requested.",
+      "desc_tr": "Donanım adresi aranan hedefin protokol adresi."
     }
   ],
   "example": {
-    "note": "192.0.2.1 adresli istasyonun 192.0.2.2 için gönderdiği bir ARP isteği. IPv4 adresleri TEST-NET-1 belgeleme bloğundandır (RFC 5737 §3)."
+    "note": "192.0.2.1 adresli istasyonun 192.0.2.2 için gönderdiği bir ARP isteği. IPv4 adresleri TEST-NET-1 belgeleme bloğundandır (RFC 5737 §3).",
+    "note_tr": "192.0.2.1 adresli istasyonun 192.0.2.2 için gönderdiği bir ARP isteği. IPv4 adresleri TEST-NET-1 belgeleme bloğundandır (RFC 5737 §3).",
+    "note_en": "An ARP request sent by host 192.0.2.1 looking up 192.0.2.2. IPv4 addresses are from the TEST-NET-1 documentation block (RFC 5737 §3)."
   },
   "refs": [
     826,
@@ -149,5 +210,13 @@
     5737,
     9542
   ],
-  "id": "arp"
+  "id": "arp",
+  "summary_tr": "ARP (Address Resolution Protocol), yerel bağlantıda bir IPv4 adresine karşılık gelen MAC adresini bulur. Ethernet üzerindeki IPv4 ARP iletisi 28 bayttır ve Ethernet çerçevesinde 0x0806 EtherType değeriyle taşınır.",
+  "summary_en": "Address Resolution Protocol (ARP, RFC 826) maps an IPv4 address to its corresponding hardware MAC address on a local broadcast link. An IPv4 ARP packet over Ethernet is 28 octets and carried with EtherType 0x0806.",
+  "notes_tr": [
+    "Adres alanlarının uzunluğu sabit değildir: donanım adresleri ar$hln, protokol adresleri ar$pln sekizli uzunluğundadır. Aşağıdaki yerleşim Ethernet üzerinde IPv4 içindir (hln = 6, pln = 4)."
+  ],
+  "notes_en": [
+    "Address field lengths are variable: hardware addresses are ar$hln octets and protocol addresses are ar$pln octets. The layout below is for IPv4 over Ethernet (hln = 6, pln = 4)."
+  ]
 }

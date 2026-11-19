@@ -46,12 +46,14 @@
         "section": "4.4",
         "label": "Routing Header"
       },
-      "example": 59
+      "example": 59,
+      "desc_en": "Type of header immediately following the SRH; 59 indicates No Next Header (RFC 8200 §4.7).",
+      "desc_tr": "SRH'den sonra gelen başlığın türü; IPv6 başlığının Next Header alanıyla aynı değerleri kullanır. 59 (No Next Header), SRH'den sonra başka başlık olmadığını gösterir (RFC 8200 §4.7)."
     },
     {
       "key": "hdr_ext_len",
       "name": "Hdr Ext Len",
-      "label": "Uzantı başlığı uzunluğu",
+      "label": "Başlık uzantısı uzunluğu",
       "bits": 8,
       "desc": "İlk 8 sekizli hariç başlık uzunluğu, 8 sekizlilik birimlerle.",
       "ref": {
@@ -59,7 +61,9 @@
         "section": "4.4",
         "label": "Routing Header"
       },
-      "example": 4
+      "example": 4,
+      "desc_en": "Length of SRH header in 8-octet units, not including the first 8 octets (e.g. 4 for 40 octets).",
+      "desc_tr": "İlk 8 sekizli hariç SRH başlığının uzunluğu, 8 sekizlilik birim olarak. 40 sekizlilik başlık için 4'tür."
     },
     {
       "key": "routing_type",
@@ -72,12 +76,14 @@
         "section": "2",
         "label": "Segment Routing Header"
       },
-      "example": 4
+      "example": 4,
+      "desc_en": "Segment Routing Header routing type; must be 4.",
+      "desc_tr": "Yönlendirme türü; SRH için 4."
     },
     {
       "key": "segments_left",
       "name": "Segments Left",
-      "label": "Kalan segment sayısı",
+      "label": "Kalan kesim sayısı",
       "bits": 8,
       "desc": "Hedefe ulaşmadan önce ziyaret edilecek segment sayısı; aynı zamanda listede bir sonraki aktif segmentin indeksi.",
       "ref": {
@@ -85,12 +91,14 @@
         "section": "4.4",
         "label": "Routing Header"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Number of route segments remaining before destination is reached. Points to Segment List[n].",
+      "desc_tr": "Hedefe ulaşana kadar kalan yönlendirme adımlarının sayısı; Segment List'in sıradaki elemanının indisidir."
     },
     {
       "key": "last_entry",
       "name": "Last Entry",
-      "label": "Son girdinin dizini",
+      "label": "Son girdi indisi",
       "bits": 8,
       "desc": "Segment listesindeki son girdinin indeksi (sıfırdan başlar).",
       "ref": {
@@ -98,7 +106,9 @@
         "section": "2",
         "label": "Segment Routing Header"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Index of the last element in Segment List; 0-indexed (e.g. 1 for two segments).",
+      "desc_tr": "Segment List dizisindeki son elemanın indisi; sıfırdan başlar (örneğin iki eleman için 1)."
     },
     {
       "key": "flags",
@@ -111,7 +121,9 @@
         "section": "2",
         "label": "Segment Routing Header"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "8-bit flags field; unused bits must be zero.",
+      "desc_tr": "Sekiz bitlik bayrak dizisi."
     },
     {
       "key": "tag",
@@ -124,12 +136,14 @@
         "section": "2",
         "label": "Segment Routing Header"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Tag grouping a set of packets (e.g. packets sharing the same ingress interface).",
+      "desc_tr": "Bir grup paketi etiketleyen değer; örneğin paketin girdiği arayüz grubunu tanımlayabilir."
     },
     {
       "key": "segment0",
-      "name": "Segment List[0]",
-      "label": "Segment listesi [0]",
+      "name": "Segment List [0]",
+      "label": "Kesim listesi [0]",
       "bits": 128,
       "desc": "SR yolunun son segmenti: paketin varacağı son IPv6 adresi.",
       "ref": {
@@ -138,12 +152,14 @@
         "label": "Segment Routing Header"
       },
       "example": "2001:db8::3",
-      "type": "ipv6"
+      "type": "ipv6",
+      "desc_en": "First segment (final destination); 128-bit IPv6 address.",
+      "desc_tr": "Listenin son adımı olan nihai hedef adres; 128 bitlik IPv6 adresi."
     },
     {
       "key": "segment1",
-      "name": "Segment List[1]",
-      "label": "Segment listesi [1]",
+      "name": "Segment List [1]",
+      "label": "Kesim listesi [1]",
       "bits": 128,
       "desc": "SR yolunun ilk segmenti; bu iki segmentli örnekte listenin son girdisi.",
       "ref": {
@@ -152,28 +168,48 @@
         "label": "Segment Routing Header"
       },
       "example": "2001:db8::2",
-      "type": "ipv6"
+      "type": "ipv6",
+      "desc_en": "Second segment (first intermediate segment router); 128-bit IPv6 address.",
+      "desc_tr": "Listenin ilk adımı olan ara yönlendirici adresi; paket ilk olarak buraya yönlendirilir."
     },
     {
       "key": "tlvs",
       "name": "Optional TLVs",
-      "label": "İsteğe bağlı TLV’ler",
+      "label": "İsteğe bağlı TLV'ler",
       "bits": "değişken",
       "desc": "Segment listesinden sonra gelen isteğe bağlı TLV nesneleri.",
       "ref": {
         "rfc": 8754,
         "section": "2.1",
         "label": "SRH TLVs"
-      }
+      },
+      "desc_en": "Optional variable-length TLV structures following the Segment List.",
+      "desc_tr": "Kesim listesinden sonra gelebilen değişken uzunlukta TLV yapıları."
     }
   ],
   "example": {
-    "note": "İki segmentli bir SR yolu: paket önce 2001:db8::2'ye, sonra 2001:db8::3'e gider; SRH'den sonra başka başlık yoktur (Next Header 59). Liste ters sırada yazıldığından Segment List[0] son segmenttir. İlk segmente gönderilen pakette Segments Left 1'dir; Hdr Ext Len 4, yani başlık 8 + 4 × 8 = 40 sekizlidir."
+    "note": "İki segmentli bir SR yolu: paket önce 2001:db8::2'ye, sonra 2001:db8::3'e gider; SRH'den sonra başka başlık yoktur (Next Header 59). Liste ters sırada yazıldığından Segment List[0] son segmenttir. İlk segmente gönderilen pakette Segments Left 1'dir; Hdr Ext Len 4, yani başlık 8 + 4 × 8 = 40 sekizlidir.",
+    "note_tr": "İki segmentli bir SR yolu: paket önce 2001:db8::2'ye, sonra 2001:db8::3'e gider; SRH'den sonra başka başlık yoktur (Next Header 59). Liste ters sırada yazıldığından Segment List[0] son segmenttir. İlk segmente gönderilen pakette Segments Left 1'dir; Hdr Ext Len 4, yani başlık 8 + 4 × 8 = 40 sekizlidir.",
+    "note_en": "A two-segment SR path: packet visits 2001:db8::2 first, then 2001:db8::3; no further header follows SRH (Next Header 59). Because the list is in reverse order, Segment List[0] is the final segment. In the packet sent to the first segment, Segments Left is 1; Hdr Ext Len is 4, meaning the header is 8 + 4 × 8 = 40 octets."
   },
   "refs": [
     8754,
     8200,
     3849
   ],
-  "id": "srh"
+  "id": "srh",
+  "summary_tr": "Segment Routing Header (SRH), IPv6 Routing başlığının 4 numaralı türüdür. Kaynak, paketin geçeceği segmentlerin (IPv6 adreslerinin) listesini başlığa yazar. Her segment uç noktası Segments Left alanını bir azaltır ve hedef adresi listedeki bir sonraki segmentle değiştirir.",
+  "summary_en": "Segment Routing Header (SRH, RFC 8754) is Type 4 of the IPv6 Routing extension header. The source encodes an ordered list of segments (IPv6 addresses) the packet must traverse. Each segment endpoint decrements Segments Left and updates the destination address.",
+  "notes_tr": [
+    "SRH, IPv6 başlığının Next Header alanında 43 (Routing Header) değeriyle belirtilir (RFC 8200 §4.4).",
+    "Segment listesi ters sıradadır: Segment List[0] SR yolunun son segmentidir, ilk segment listenin sonundadır (RFC 8754 §2).",
+    "Hdr Ext Len, ilk 8 sekizli hariç başlığın uzunluğunu 8 sekizlilik birimlerle verir; TLV yokken her segment için 2'dir (RFC 8200 §4.4).",
+    "Örnekteki adresler RFC 3849'daki belgeleme önekinden (2001:db8::/32) alınmıştır."
+  ],
+  "notes_en": [
+    "SRH is designated in the IPv6 Next Header field with value 43 (Routing Header) (RFC 8200 §4.4).",
+    "Segment list is in reverse order: Segment List[0] is the final segment of the SR path, and the first segment is at the end of the list (RFC 8754 §2).",
+    "Hdr Ext Len expresses header length excluding the first 8 octets in 8-octet units; with no TLVs, it is 2 per segment (RFC 8200 §4.4).",
+    "Addresses in the example are taken from the documentation prefix (2001:db8::/32) in RFC 3849."
+  ]
 }

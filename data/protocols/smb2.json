@@ -224,7 +224,9 @@
         "label": "Transport",
         "page": 32
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "First octet of Direct TCP transport header; must be 0x00.",
+      "desc_tr": "Direct TCP taşıma başlığının ilk sekizlisi; 0 olmalıdır."
     },
     {
       "key": "stream_length",
@@ -238,7 +240,9 @@
         "label": "Transport",
         "page": 32
       },
-      "example": 68
+      "example": 68,
+      "desc_en": "Length in octets of subsequent SMB2 message in network byte order (excludes 4-octet transport header).",
+      "desc_tr": "Ardından gelen SMB2 iletisinin uzunluğu, sekizli olarak, ağ sırasında. 4 sekizlilik taşıma başlığını kapsamaz."
     },
     {
       "key": "protocol_id",
@@ -253,7 +257,9 @@
         "page": 37
       },
       "example": "fe534d42",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "Protocol identifier: 0xFE, 'S', 'M', 'B'.",
+      "desc_tr": "Protokol tanımlayıcısı: 0xFE, 'S', 'M', 'B'."
     },
     {
       "key": "structure_size",
@@ -268,7 +274,9 @@
         "page": 37
       },
       "example": 64,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Structure size of SMB2 header; must be 64 (0x0040), little-endian.",
+      "desc_tr": "Başlığın boyutu; her zaman 64."
     },
     {
       "key": "credit_charge",
@@ -283,7 +291,9 @@
         "page": 37
       },
       "example": 1,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Number of credits consumed by this request; 0 in SMB 2.0.2.",
+      "desc_tr": "İsteğin tükettiği kredi sayısı; SMB 2.0.2 lehçesinde kullanılmaz ve 0'dır."
     },
     {
       "key": "status",
@@ -298,7 +308,9 @@
         "page": 37
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "ChannelSequence/Reserved in requests; NTSTATUS code in responses (0x00000000 SUCCESS).",
+      "desc_tr": "İstekte, SMB 3.x'te ChannelSequence ve Reserved alanları; yanıtta durum kodu. Bu örnekte 0."
     },
     {
       "key": "command",
@@ -344,6 +356,68 @@
           "13",
           "ECHO"
         ]
+      ],
+      "desc_en": "Command code of the message (e.g. 0 NEGOTIATE, 1 SESSION_SETUP, 3 TREE_CONNECT, 13 ECHO).",
+      "desc_tr": "İletinin komut kodu.",
+      "values_en": [
+        [
+          "0",
+          "NEGOTIATE"
+        ],
+        [
+          "1",
+          "SESSION_SETUP"
+        ],
+        [
+          "3",
+          "TREE_CONNECT"
+        ],
+        [
+          "5",
+          "CREATE"
+        ],
+        [
+          "8",
+          "READ"
+        ],
+        [
+          "9",
+          "WRITE"
+        ],
+        [
+          "13",
+          "ECHO"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "NEGOTIATE"
+        ],
+        [
+          "1",
+          "SESSION_SETUP"
+        ],
+        [
+          "3",
+          "TREE_CONNECT"
+        ],
+        [
+          "5",
+          "CREATE"
+        ],
+        [
+          "8",
+          "READ"
+        ],
+        [
+          "9",
+          "WRITE"
+        ],
+        [
+          "13",
+          "ECHO"
+        ]
       ]
     },
     {
@@ -359,7 +433,9 @@
         "page": 37
       },
       "example": 1,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Number of credits requested by client or granted by server.",
+      "desc_tr": "İstekte istemcinin istediği, yanıtta sunucunun verdiği kredi sayısı."
     },
     {
       "key": "flags",
@@ -375,7 +451,9 @@
       },
       "example": 0,
       "endian": "little",
-      "hex": true
+      "hex": true,
+      "desc_en": "Flags indicating message attributes (e.g. Response, Async, Signed).",
+      "desc_tr": "İletinin nasıl işleneceğini gösteren bayraklar (yanıt, asenkron, imzalı vb.); bu örnekte 0."
     },
     {
       "key": "next_command",
@@ -390,7 +468,9 @@
         "page": 37
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Offset in octets to next compound command relative to header start; 0 if uncompounded.",
+      "desc_tr": "Bileşik isteklerde sıradaki başlığın bu başlığa göre konumu; tek iletide 0."
     },
     {
       "key": "message_id",
@@ -405,7 +485,9 @@
         "page": 37
       },
       "example": 5,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Unique 64-bit value correlating requests with responses on a connection.",
+      "desc_tr": "Aynı bağlantıdaki istek ile yanıtı eşleştiren benzersiz değer."
     },
     {
       "key": "reserved",
@@ -420,7 +502,9 @@
         "page": 37
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Reserved 4 octets in synchronous header.",
+      "desc_tr": "SYNC başlığında ayrılmış alan."
     },
     {
       "key": "tree_id",
@@ -435,7 +519,9 @@
         "page": 37
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Identifier of the tree connect share (0 for messages not associated with a tree connect like ECHO).",
+      "desc_tr": "İsteğin ait olduğu paylaşım bağlantısı; ECHO bir paylaşıma bağlı değildir."
     },
     {
       "key": "session_id",
@@ -450,7 +536,9 @@
         "page": 37
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "64-bit session identifier; 0 in NEGOTIATE messages.",
+      "desc_tr": "Kurulmuş oturumun kimliği; NEGOTIATE iletilerinde 0 olmalıdır."
     },
     {
       "key": "signature",
@@ -465,7 +553,9 @@
         "page": 37
       },
       "example": "00000000000000000000000000000000",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "16-octet cryptographic signature if packet is signed; zero if unsigned.",
+      "desc_tr": "İleti imzalıysa 16 sekizlilik imza; imzasızsa 0."
     },
     {
       "key": "echo_structure_size",
@@ -480,7 +570,9 @@
         "page": 116
       },
       "example": 4,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Structure size of ECHO request payload; must be 4.",
+      "desc_tr": "ECHO isteğinin, başlık hariç boyutu; her zaman 4."
     },
     {
       "key": "echo_reserved",
@@ -495,14 +587,32 @@
         "page": 116
       },
       "example": 0,
-      "endian": "little"
+      "endian": "little",
+      "desc_en": "Reserved 2 octets in ECHO body; must be zero.",
+      "desc_tr": "Kullanılmaz; 0 gönderilir."
     }
   ],
   "example": {
-    "note": "İstemcinin, sunucunun istekleri işleyip işlemediğini yoklamak için gönderdiği ECHO isteği (Command 0x000D, MessageId 5). Direct TCP başlığı 68 sekizlilik iletiyi bildirir: 64 sekizli başlık ve 4 sekizli ECHO gövdesi. Oturum kimliği ve imza bu örnekte 0'dır."
+    "note": "İstemcinin, sunucunun istekleri işleyip işlemediğini yoklamak için gönderdiği ECHO isteği (Command 0x000D, MessageId 5). Direct TCP başlığı 68 sekizlilik iletiyi bildirir: 64 sekizli başlık ve 4 sekizli ECHO gövdesi. Oturum kimliği ve imza bu örnekte 0'dır.",
+    "note_tr": "İstemcinin, sunucunun istekleri işleyip işlemediğini yoklamak için gönderdiği ECHO isteği (Command 0x000D, MessageId 5). Direct TCP başlığı 68 sekizlilik iletiyi bildirir: 64 sekizli başlık ve 4 sekizli ECHO gövdesi. Oturum kimliği ve imza bu örnekte 0'dır.",
+    "note_en": "An ECHO request sent by a client to verify server responsiveness (Command 0x000D, MessageId 5). Direct TCP transport header specifies a 68-octet message: 64-octet header and 4-octet ECHO body. Session ID and signature are 0 in this sample."
   },
   "refs": [
     "ms-smb2"
   ],
-  "id": "smb2"
+  "id": "smb2",
+  "summary_tr": "Sunucu İleti Bloğu (Server Message Block - SMB) sürüm 2 ve 3, yerel ağda dosya, yazıcı ve adlandırılmış kanal paylaşımı sağlar. Her SMB2 iletisi 64 sekizlilik bir başlıkla başlar; Direct TCP üzerinde bu başlığın önünde 4 sekizlilik bir taşıma başlığı bulunur. Bu sayfa Microsoft'un [MS-SMB2] açık spesifikasyonuna dayanır.",
+  "summary_en": "Server Message Block (SMB2 / SMB3) protocol provides file and printer sharing. Every SMB2 message begins with a 64-octet header. Over Direct TCP, it is preceded by a 4-octet transport header. Fields are little-endian.",
+  "notes_tr": [
+    "SMB2 alanları, aksi belirtilmedikçe küçük-endian (en anlamsız sekizli önce) iletilir (MS-SMB2 §2.2). wire'daki diğer protokollerin çoğundan farklı olarak örnekteki 64, 40 00 olarak görünür. Yalnızca Direct TCP başlığındaki uzunluk ağ sırasındadır (§2.1).",
+    "Direct TCP bağlantıları TCP 445 numaralı portu kullanır; NetBIOS üzerinden SMB 139 numaralı portu kullanır (MS-SMB2 §3.3.5.1).",
+    "Başlıktaki Flags alanında SMB2_FLAGS_ASYNC_COMMAND biti 1 ise başlık, Reserved ve TreeId yerine 8 sekizlilik AsyncId taşıyan ASYNC biçimini alır (§2.2.1.1). Bu sayfa SYNC biçimini gösterir.",
+    "[MS-SMB2] bir IETF ya da IEEE standardı değil, Microsoft'un yayımladığı açık spesifikasyondur. Belgenin kopyası depoya konmaz; alanlar sürüm v20260928'in metnine karşı doğrulanır."
+  ],
+  "notes_en": [
+    "SMB2 fields are transmitted little-endian (least significant octet first) unless specified otherwise (MS-SMB2 §2.2). Unlike most protocols in wire, decimal 64 appears as 40 00. Only the Direct TCP transport length is network byte order (§2.1).",
+    "Direct TCP connections use TCP port 445; NetBIOS over TCP uses port 139 (MS-SMB2 §3.3.5.1).",
+    "If SMB2_FLAGS_ASYNC_COMMAND is set in Flags, the header takes the ASYNC form carrying an 8-octet AsyncId instead of Reserved and TreeId (§2.2.1.1). This page illustrates the SYNC form.",
+    "[MS-SMB2] is an open specification published by Microsoft rather than an IETF or IEEE standard. The document text is not stored in the repository; fields are validated against version v20260928."
+  ]
 }

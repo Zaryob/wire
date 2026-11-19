@@ -27,7 +27,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 4
+      "example": 4,
+      "desc_en": "Format of the internet header; 4 for IPv4.",
+      "desc_tr": "Başlığın biçimini belirtir. Bu belge sürüm 4’ü tarif eder."
     },
     {
       "key": "ihl",
@@ -39,7 +41,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 5
+      "example": 5,
+      "desc_en": "Internet Header Length in 32-bit words; valid range 5–15 (e.g. 5 means a 20-octet header).",
+      "desc_tr": "IPv4 başlığının 32 bitlik sözcük cinsinden uzunluğu. Geçerli değer 5–15’tir; örneğin IHL 5, 20 baytlık başlık anlamına gelir."
     },
     {
       "key": "tos",
@@ -51,7 +55,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Quality of service indicator in RFC 791; currently first 6 bits are DSCP (RFC 2474), last 2 bits are ECN (RFC 3168).",
+      "desc_tr": "RFC 791’de hizmet niteliği göstergesi. Günümüzde ilk altı biti DSCP (RFC 2474 §3), son iki biti ECN alanıdır (RFC 3168 §5)."
     },
     {
       "key": "length",
@@ -63,7 +69,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 57
+      "example": 57,
+      "desc_en": "Total length of the datagram in octets, including header and data (max 65,535; all hosts must accept at least 576).",
+      "desc_tr": "Datagramın başlık ve veri dahil sekizli cinsinden toplam uzunluğu. En çok 65.535 olabilir; her konak en az 576 sekizlilik datagramı kabul edebilmelidir."
     },
     {
       "key": "id",
@@ -76,7 +84,9 @@
         "section": "3.1"
       },
       "example": "0x0001",
-      "hex": true
+      "hex": true,
+      "desc_en": "Identifying value assigned by the sender to aid in reassembling fragmented datagrams.",
+      "desc_tr": "Gönderenin atadığı, bir datagramın parçalarını birleştirmeye yarayan tanımlayıcı değer."
     },
     {
       "key": "flags",
@@ -102,6 +112,36 @@
           "bit 2 (MF)",
           "0 = son parça, 1 = başka parça var"
         ]
+      ],
+      "desc_en": "Control flags: bit 0 reserved (must be zero), bit 1 DF (Don't Fragment), bit 2 MF (More Fragments).",
+      "desc_tr": "Denetim bayrakları. Bit 0 ayrılmıştır ve sıfır olmalıdır; bit 1 DF (parçalama), bit 2 MF (daha parça var).",
+      "values_en": [
+        [
+          "bit 0",
+          "Reserved, must be zero"
+        ],
+        [
+          "bit 1 (DF)",
+          "0 = fragmentable, 1 = don't fragment"
+        ],
+        [
+          "bit 2 (MF)",
+          "0 = last fragment, 1 = more fragments"
+        ]
+      ],
+      "values_tr": [
+        [
+          "bit 0",
+          "Ayrılmış, sıfır olmalı"
+        ],
+        [
+          "bit 1 (DF)",
+          "0 = parçalanabilir, 1 = parçalanamaz"
+        ],
+        [
+          "bit 2 (MF)",
+          "0 = son parça, 1 = başka parça var"
+        ]
       ]
     },
     {
@@ -114,7 +154,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Position of this fragment in the datagram, measured in 8-octet (64-bit) units; 0 for the first fragment.",
+      "desc_tr": "Bu parçanın datagram içindeki yeri. 8 sekizlilik (64 bit) birimlerle ölçülür; ilk parçanın değeri sıfırdır."
     },
     {
       "key": "ttl",
@@ -126,7 +168,9 @@
         "rfc": 791,
         "section": "3.1"
       },
-      "example": 64
+      "example": 64,
+      "desc_en": "Maximum time the datagram is allowed in the internet system. Decremented at each hop; discarded when 0.",
+      "desc_tr": "Datagramın internet sisteminde kalabileceği en uzun süre. Datagramı işleyen her modül değeri en az bir azaltır; sıfır olduğunda datagram yok edilir."
     },
     {
       "key": "protocol",
@@ -152,6 +196,36 @@
           "17",
           "UDP (RFC 768)"
         ]
+      ],
+      "desc_en": "Next-level protocol used in the data portion of the internet datagram.",
+      "desc_tr": "Veri kısmında kullanılan bir üst düzey protokol.",
+      "values_en": [
+        [
+          "1",
+          "ICMP (RFC 792)"
+        ],
+        [
+          "6",
+          "TCP (RFC 8200 §8.1)"
+        ],
+        [
+          "17",
+          "UDP (RFC 768)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "ICMP (RFC 792)"
+        ],
+        [
+          "6",
+          "TCP (RFC 8200 §8.1)"
+        ],
+        [
+          "17",
+          "UDP (RFC 768)"
+        ]
       ]
     },
     {
@@ -165,7 +239,9 @@
         "section": "3.1"
       },
       "checksum": "header",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit one's complement checksum of all 16-bit words in the header; field itself is zero during computation.",
+      "desc_tr": "Yalnızca başlık üzerinde hesaplanır: başlıktaki 16 bitlik sözcüklerin bire tümleyen toplamının bire tümleyeni. Hesap sırasında bu alan sıfır sayılır."
     },
     {
       "key": "src",
@@ -178,7 +254,9 @@
         "section": "3.1"
       },
       "type": "ipv4",
-      "example": "192.0.2.1"
+      "example": "192.0.2.1",
+      "desc_en": "32-bit IPv4 source address.",
+      "desc_tr": "Kaynak adresi."
     },
     {
       "key": "dst",
@@ -191,7 +269,9 @@
         "section": "3.1"
       },
       "type": "ipv4",
-      "example": "198.51.100.7"
+      "example": "198.51.100.7",
+      "desc_en": "32-bit IPv4 destination address.",
+      "desc_tr": "Hedef adresi."
     },
     {
       "key": "options",
@@ -202,12 +282,16 @@
       "ref": {
         "rfc": 791,
         "section": "3.1"
-      }
+      },
+      "desc_en": "Variable-length optional parameters; padded with zeroes to a multiple of 32 bits when present.",
+      "desc_tr": "Değişken uzunlukta seçenekler. Datagramda bulunmayabilir; bulunduğunda başlık 32 bit sınırına kadar doldurulur."
     }
   ],
   "example": {
     "payloadFrom": "udp",
-    "note": "192.0.2.1’den 198.51.100.7’ye giden, UDP ve DNS sayfalarındaki example.com A kaydı sorgusunu taşıyan tam bir IPv4 datagramı (Toplam uzunluk: 57 sekizli). Adresler belgeleme bloklarındandır (RFC 5737 §3)."
+    "note": "192.0.2.1’den 198.51.100.7’ye giden, UDP ve DNS sayfalarındaki example.com A kaydı sorgusunu taşıyan tam bir IPv4 datagramı (Toplam uzunluk: 57 sekizli). Adresler belgeleme bloklarındandır (RFC 5737 §3).",
+    "note_tr": "192.0.2.1’den 198.51.100.7’ye giden, UDP ve DNS sayfalarındaki example.com A kaydı sorgusunu taşıyan tam bir IPv4 datagramı (Toplam uzunluk: 57 sekizli). Adresler belgeleme bloklarındandır (RFC 5737 §3).",
+    "note_en": "A complete IPv4 datagram from 192.0.2.1 to 198.51.100.7 carrying the example.com A record DNS query from the UDP and DNS pages (Total Length: 57 octets). Addresses are from documentation blocks (RFC 5737 §3)."
   },
   "refs": [
     791,
@@ -219,5 +303,15 @@
     768,
     8200
   ],
-  "id": "ipv4"
+  "id": "ipv4",
+  "summary_tr": "IPv4 (Internet Protocol version 4), 32 bitlik adreslerle datagramları ağlar arasında taşır. IPv4 başlığı 20–60 bayttır; bayt cinsinden uzunluğu IHL alanının dört katıdır. Total Length, başlık ile veri yükünün toplamını verir.",
+  "summary_en": "IPv4 (Internet Protocol version 4, RFC 791) routes datagrams across networks using 32-bit addresses. The header is 20 to 60 octets; length in octets is 4 times the IHL field. Total Length specifies the combined length of header and payload.",
+  "notes_tr": [
+    "Type of Service sekizlisini RFC 2474 DS alanı olarak yeniden tanımlar: ilk altı bit DSCP kod noktasıdır. Kalan iki biti RFC 3168 ECN alanı olarak kullanır.",
+    "Başlık sağlama toplamı yalnızca başlığı kapsar ve başlığın işlendiği her noktada yeniden hesaplanır, çünkü yaşam süresi gibi alanlar yol boyunca değişir."
+  ],
+  "notes_en": [
+    "RFC 2474 redefines the Type of Service octet as the DS field: the first six bits are the DSCP codepoint. The remaining two bits are used by RFC 3168 as the ECN field.",
+    "Header checksum covers only the header and is recomputed at each hop because fields like Time to Live change along the path."
+  ]
 }

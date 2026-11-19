@@ -28,7 +28,9 @@
         "section": "4.1.1"
       },
       "example": "0x1a2b",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit identifier assigned by the program generating the query; copied into replies to match responses.",
+      "desc_tr": "Sorguyu üreten programın atadığı tanımlayıcı. Yanıta kopyalanır; istekte bulunan bununla yanıtları bekleyen sorgularla eşleştirir."
     },
     {
       "key": "qr",
@@ -40,7 +42,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "1 bit indicating whether message is a query (0) or response (1).",
+      "desc_tr": "İletinin sorgu (0) mu yanıt (1) mı olduğunu belirtir."
     },
     {
       "key": "opcode",
@@ -70,6 +74,44 @@
           "3–15",
           "İleride kullanım için ayrılmış"
         ]
+      ],
+      "desc_en": "4-bit field specifying query type: 0 Standard query (QUERY), 1 Inverse query (IQUERY), 2 Status request.",
+      "desc_tr": "Sorgunun türü. Sorguyu başlatan belirler, yanıta kopyalanır.",
+      "values_en": [
+        [
+          "0",
+          "Standard query (QUERY)"
+        ],
+        [
+          "1",
+          "Inverse query (IQUERY)"
+        ],
+        [
+          "2",
+          "Server status (STATUS)"
+        ],
+        [
+          "3–15",
+          "Reserved for future use"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Standart sorgu (QUERY)"
+        ],
+        [
+          "1",
+          "Ters sorgu (IQUERY)"
+        ],
+        [
+          "2",
+          "Sunucu durum isteği (STATUS)"
+        ],
+        [
+          "3–15",
+          "İleride kullanım için ayrılmış"
+        ]
       ]
     },
     {
@@ -82,7 +124,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Authoritative Answer: 1 indicates the responding name server is an authority for the domain in question.",
+      "desc_tr": "Authoritative Answer. Yanıtlarda geçerlidir: yanıtlayan ad sunucusu, soru bölümündeki alan adı için yetkilidir."
     },
     {
       "key": "tc",
@@ -94,7 +138,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "TrunCation: 1 specifies that message was truncated due to length greater than that permitted on channel.",
+      "desc_tr": "TrunCation. İleti, iletim kanalının izin verdiğinden uzun olduğu için kesilmiştir."
     },
     {
       "key": "rd",
@@ -106,7 +152,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Recursion Desired: directs the name server to pursue the query recursively.",
+      "desc_tr": "Recursion Desired. Sorguda ayarlanabilir ve yanıta kopyalanır; ad sunucusundan sorguyu özyinelemeli izlemesini ister."
     },
     {
       "key": "ra",
@@ -118,7 +166,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Recursion Available: set or cleared in response to denote recursive query support by the server.",
+      "desc_tr": "Recursion Available. Yanıtta, ad sunucusunun özyinelemeli sorgu desteği sunup sunmadığını belirtir."
     },
     {
       "key": "z",
@@ -130,7 +180,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved for future use; must be zero in all queries and responses.",
+      "desc_tr": "İleride kullanım için ayrılmıştır. Bütün sorgu ve yanıtlarda sıfır olmalıdır."
     },
     {
       "key": "rcode",
@@ -172,6 +224,68 @@
           "6–15",
           "İleride kullanım için ayrılmış"
         ]
+      ],
+      "desc_en": "Response code: 0 No error, 1 Format error, 2 Server failure, 3 Non-Existent Domain (NXDOMAIN), etc.",
+      "desc_tr": "Yanıt kodu; yanıtlarda ayarlanır.",
+      "values_en": [
+        [
+          "0",
+          "No error"
+        ],
+        [
+          "1",
+          "Format error"
+        ],
+        [
+          "2",
+          "Server failure"
+        ],
+        [
+          "3",
+          "Name Error (NXDOMAIN)"
+        ],
+        [
+          "4",
+          "Not implemented"
+        ],
+        [
+          "5",
+          "Refused"
+        ],
+        [
+          "6–15",
+          "Reserved"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Hata yok"
+        ],
+        [
+          "1",
+          "Biçim hatası"
+        ],
+        [
+          "2",
+          "Sunucu hatası"
+        ],
+        [
+          "3",
+          "Ad hatası: alan adı yok"
+        ],
+        [
+          "4",
+          "Uygulanmamış"
+        ],
+        [
+          "5",
+          "Reddedildi"
+        ],
+        [
+          "6–15",
+          "İleride kullanım için ayrılmış"
+        ]
       ]
     },
     {
@@ -184,7 +298,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Number of entries in the question section.",
+      "desc_tr": "Soru bölümündeki kayıt sayısı."
     },
     {
       "key": "ancount",
@@ -196,7 +312,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Number of resource records in the answer section.",
+      "desc_tr": "Yanıt bölümündeki kaynak kaydı sayısı."
     },
     {
       "key": "nscount",
@@ -208,7 +326,9 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Number of name server resource records in the authority records section.",
+      "desc_tr": "Yetki kayıtları bölümündeki ad sunucusu kaynak kaydı sayısı."
     },
     {
       "key": "arcount",
@@ -220,26 +340,43 @@
         "rfc": 1035,
         "section": "4.1.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Number of resource records in the additional records section.",
+      "desc_tr": "Ek kayıtlar bölümündeki kaynak kaydı sayısı."
     },
     {
       "key": "sections",
-      "name": "Bölümler",
+      "name": "Sections",
       "bits": null,
       "desc": "Soru, yanıt, yetki ve ek bölümleri. Örnekte tek bir soru vardır: QNAME, QTYPE ve QCLASS (RFC 1035 §4.1.2).",
       "ref": {
         "rfc": 1035,
         "section": "4.1"
-      }
+      },
+      "label": "Bölümler",
+      "desc_en": "Question, Answer, Authority, and Additional sections. Example contains a single question (QNAME, QTYPE, QCLASS).",
+      "desc_tr": "Soru, yanıt, yetki ve ek bölümleri. Örnekte tek bir soru vardır: QNAME, QTYPE ve QCLASS (RFC 1035 §4.1.2)."
     }
   ],
   "example": {
     "payload": "076578616d706c6503636f6d0000010001",
-    "note": "Özyineleme isteyen tek soruluk bir sorgu. Başlıktan sonraki 17 sekizli soru bölümüdür: QNAME “example.com”, QTYPE 1 (A), QCLASS 1 (IN). example.com belgeleme için ayrılmış bir alan adıdır (RFC 2606 §3)."
+    "note": "Özyineleme isteyen tek soruluk bir sorgu. Başlıktan sonraki 17 sekizli soru bölümüdür: QNAME “example.com”, QTYPE 1 (A), QCLASS 1 (IN). example.com belgeleme için ayrılmış bir alan adıdır (RFC 2606 §3).",
+    "note_tr": "Özyineleme isteyen tek soruluk bir sorgu. Başlıktan sonraki 17 sekizli soru bölümüdür: QNAME “example.com”, QTYPE 1 (A), QCLASS 1 (IN). example.com belgeleme için ayrılmış bir alan adıdır (RFC 2606 §3).",
+    "note_en": "A single-question query requesting recursion. The 17 octets following the header form the Question section: QNAME 'example.com', QTYPE 1 (A), QCLASS 1 (IN). example.com is reserved for documentation (RFC 2606 §3)."
   },
   "refs": [
     1035,
     2606
   ],
-  "id": "dns"
+  "id": "dns",
+  "summary_tr": "DNS (Domain Name System), alan adları için IP adresi, posta sunucusu gibi kaynak kayıtlarını sorgular. Her DNS iletisi sabit 12 baytlık bir başlıkla başlar. Başlıkta işlem kimliği, sorgu ve yanıt bayrakları ile dört bölümün sayaçları bulunur.",
+  "summary_en": "Domain Name System (DNS, RFC 1035) maps domain names to IP addresses and resource records. The header is 12 octets: Transaction ID, 16-bit flags (QR, Opcode, AA, TC, RD, RA, RCODE), and counts for questions, answers, authority, and additional records.",
+  "notes_tr": [
+    "Başlığı sırasıyla soru, yanıt, yetki ve ek bölümleri izler; QDCOUNT, ANCOUNT, NSCOUNT ve ARCOUNT bu bölümlerdeki kayıt sayılarıdır.",
+    "DNS iletileri UDP üzerinde 53 numaralı porttan (RFC 1035 §4.2.1), TCP üzerinde yine 53 numaralı porttan (§4.2.2) taşınır."
+  ],
+  "notes_en": [
+    "The header is followed by Question, Answer, Authority, and Additional sections; QDCOUNT, ANCOUNT, NSCOUNT, and ARCOUNT specify the record counts in these sections.",
+    "DNS messages are carried over UDP on port 53 (RFC 1035 §4.2.1) and over TCP on port 53 (§4.2.2)."
+  ]
 }

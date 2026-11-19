@@ -31,7 +31,7 @@
     {
       "key": "type",
       "name": "Type",
-      "label": "Tür",
+      "label": "İleti türü",
       "bits": 8,
       "desc": "İleti türü; Membership Query için 0x11.",
       "ref": {
@@ -40,12 +40,34 @@
         "label": "Membership Query Message"
       },
       "example": 17,
-      "hex": true
+      "hex": true,
+      "desc_en": "IGMPv3 message type: 0x11 for Membership Query.",
+      "desc_tr": "İletinin türü. IGMPv3 Üyelik Sorgusu için 0x11'dir.",
+      "values_en": [
+        [
+          "0x11",
+          "Membership Query"
+        ],
+        [
+          "0x22",
+          "v3 Membership Report"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x11",
+          "Üyelik Sorgusu (Membership Query)"
+        ],
+        [
+          "0x22",
+          "v3 Üyelik Raporu (v3 Report)"
+        ]
+      ]
     },
     {
       "key": "max_resp",
       "name": "Max Resp Code",
-      "label": "Azami yanıt süresi kodu",
+      "label": "Azami yanıt kodu",
       "bits": 8,
       "desc": "Yanıt için tanınan en uzun süre, saniyenin onda biri cinsinden ya da üstel kodlanmış. 100, 10 saniyedir.",
       "ref": {
@@ -53,7 +75,9 @@
         "section": "4.1.1",
         "label": "Max Response Code"
       },
-      "example": 100
+      "example": 100,
+      "desc_en": "Maximum response time code in units of 1/10 second; values >= 128 use floating-point decoding.",
+      "desc_tr": "Azami yanıt süresi kodu, 1/10 saniye biriminde. 128'den küçükse doğrudan saniyenin onda biridir; 128 ve üzerinde kayan noktalı olarak çözülür."
     },
     {
       "key": "checksum",
@@ -68,7 +92,9 @@
       },
       "example": 0,
       "checksum": "header",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit one's complement checksum of the entire IGMP message.",
+      "desc_tr": "Tüm IGMP mesajı üzerinden hesaplanan 16 bitlik RFC 1071 sağlama toplamı."
     },
     {
       "key": "group",
@@ -82,12 +108,14 @@
         "label": "Group Address"
       },
       "example": "0.0.0.0",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "Multicast group address being queried; 0.0.0.0 in General Queries.",
+      "desc_tr": "Sorgulanan çok noktaya yayın grup adresi. Genel sorgularda 0.0.0.0'dır."
     },
     {
       "key": "flags",
-      "name": "Flags",
-      "label": "Bayraklar",
+      "name": "Resv",
+      "label": "Ayrılmış",
       "bits": 4,
       "desc": "Ayrılmış bayraklar; 0 gönderilir, alıcı yok sayar.",
       "ref": {
@@ -95,12 +123,14 @@
         "section": "4.1.4",
         "label": "Flags"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 4 bits; set to 0 by sender and ignored by receiver.",
+      "desc_tr": "Ayrılmış 4 bit; gönderici 0 gönderir, alıcı yok sayar."
     },
     {
       "key": "s",
-      "name": "S Flag",
-      "label": "Yönlendirici güncellemesini engelleme",
+      "name": "S (Suppress Router Processing)",
+      "label": "Yönlendirici işlemeyi bastır",
       "bits": 1,
       "desc": "1 ise yönlendiriciler bu sorgu nedeniyle zamanlayıcılarını güncellemez.",
       "ref": {
@@ -108,12 +138,14 @@
         "section": "4.1.5",
         "label": "S Flag (Suppress Router-Side Processing)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Suppress Router-Side Processing bit. When 1, neighbor routers suppress timer updates.",
+      "desc_tr": "Yönlendirici tarafı işlemeyi bastırma bayrağı; 1 olduğunda komşu yönlendiriciler zamanlayıcı güncellemelerini durdurur."
     },
     {
       "key": "qrv",
       "name": "QRV",
-      "label": "Sorgulayıcı sağlamlık değişkeni",
+      "label": "Sorgulayıcı dayanıklılık değeri",
       "bits": 3,
       "desc": "Sorgulayıcının sağlamlık değişkeni (Robustness Variable); varsayılan 2.",
       "ref": {
@@ -121,7 +153,9 @@
         "section": "4.1.6",
         "label": "QRV (Querier's Robustness Variable)"
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "Querier's Robustness Variable (1–7).",
+      "desc_tr": "Sorgulayıcının sağlamlık değişkeni (Robustness Variable); 1–7 arası değer alır."
     },
     {
       "key": "qqic",
@@ -134,7 +168,9 @@
         "section": "4.1.7",
         "label": "QQIC (Querier's Query Interval Code)"
       },
-      "example": 125
+      "example": 125,
+      "desc_en": "Querier's Query Interval Code, specifying the query interval in seconds.",
+      "desc_tr": "Sorgulayıcının sorgu aralığı kodu (Querier's Query Interval Code), saniye cinsinden sorgu aralığını belirtir."
     },
     {
       "key": "n",
@@ -147,27 +183,47 @@
         "section": "4.1.8",
         "label": "Number of Sources (N)"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Number of source IP addresses present in the Source Addresses list.",
+      "desc_tr": "Sorguda listelenen kaynak IP adreslerinin sayısı; genel sorgularda 0'dır."
     },
     {
       "key": "sources",
-      "name": "Source Address [1..N]",
-      "label": "Kaynak adresleri [1..N]",
+      "name": "Source Addresses",
+      "label": "Kaynak adresleri",
       "bits": "değişken",
       "desc": "Sorgunun sınırlandığı kaynakların IPv4 adresleri.",
       "ref": {
         "rfc": 9776,
         "section": "4.1.9",
         "label": "Source Address [i]"
-      }
+      },
+      "desc_en": "List of N 32-bit unicast IP addresses of multicast sources being queried.",
+      "desc_tr": "Sorgulanan kaynakların 32 bitlik tek noktaya yayın (unicast) IP adresleri listesi."
     }
   ],
   "example": {
-    "note": "Sorgulayıcı yönlendiricinin 224.0.0.1'e gönderdiği genel sorgu: grup 0, kaynak yok, yanıt süresi 10 s, QRV 2, QQIC 125. İleti 12 sekizlidir. Sağlama toplamı derleme sırasında hesaplanır."
+    "note": "Sorgulayıcı yönlendiricinin 224.0.0.1'e gönderdiği genel sorgu: grup 0, kaynak yok, yanıt süresi 10 s, QRV 2, QQIC 125. İleti 12 sekizlidir. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_tr": "Sorgulayıcı yönlendiricinin 224.0.0.1'e gönderdiği genel sorgu: grup 0, kaynak yok, yanıt süresi 10 s, QRV 2, QQIC 125. İleti 12 sekizlidir. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_en": "A General Query sent by the querier router to 224.0.0.1: group 0, no sources, response time 10 s, QRV 2, QQIC 125. Message is 12 octets. Checksum is computed during build."
   },
   "refs": [
     9776,
     1071
   ],
-  "id": "igmpv3"
+  "id": "igmpv3",
+  "summary_tr": "IGMP sürüm 3, bir ağdaki sistemlerin hangi çok noktaya yayın gruplarını, hangi kaynaklardan dinlediğini yönlendiriciye bildirmesini sağlar. Sorgulayıcı yönlendirici Membership Query iletileriyle üyelikleri yoklar; IGMPv2'den farkı, sorgunun belirli kaynaklarla sınırlanabilmesidir.",
+  "summary_en": "IGMPv3 (RFC 3376 / RFC 9776) enables hosts to report multicast group memberships and specify source filtering (INCLUDE or EXCLUDE lists of source addresses) to local multicast routers.",
+  "notes_tr": [
+    "Genel sorgular (General Query) bütün sistemlere ait 224.0.0.1 adresine gönderilir; Group Address alanı 0'dır (RFC 9776 §4.1.12, §4.1.3).",
+    "Max Resp Code 128'den küçükse doğrudan saniyenin onda biri cinsinden süredir; 128 ve üstü üstel bir kodlamayla daha uzun süreleri gösterir (RFC 9776 §4.1.1). QQIC de aynı kodlamayı kullanır.",
+    "Varsayılan değerler: Robustness Variable 2, Query Interval 125 s, Query Response Interval 100 (10 s) (RFC 9776 §8).",
+    "Sağlama toplamı bütün IGMP iletisi, yani IP yükünün tamamı üzerinden RFC 1071 yöntemiyle hesaplanır (RFC 9776 §4.1.2)."
+  ],
+  "notes_en": [
+    "General Queries are sent to the all-systems multicast address 224.0.0.1; Group Address is 0 (RFC 9776 §4.1.12, §4.1.3).",
+    "If Max Resp Code is less than 128, it specifies time directly in tenths of a second; 128 and above uses exponential encoding for longer intervals (RFC 9776 §4.1.1). QQIC uses the same encoding.",
+    "Default values: Robustness Variable 2, Query Interval 125 s, Query Response Interval 100 (10 s) (RFC 9776 §8).",
+    "Checksum is calculated over the entire IGMP message (the full IP payload) using RFC 1071 arithmetic (RFC 9776 §4.1.2)."
+  ]
 }

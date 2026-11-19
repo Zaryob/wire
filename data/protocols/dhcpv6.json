@@ -84,6 +84,116 @@
           "13",
           "Aktarılan yanıt (RELAY-REPL)"
         ]
+      ],
+      "desc_en": "DHCPv6 message type (e.g. 1 SOLICIT, 2 ADVERTISE, 3 REQUEST, 7 REPLY).",
+      "desc_tr": "DHCP ileti türü (§7.3).",
+      "values_en": [
+        [
+          "1",
+          "SOLICIT"
+        ],
+        [
+          "2",
+          "ADVERTISE"
+        ],
+        [
+          "3",
+          "REQUEST"
+        ],
+        [
+          "4",
+          "CONFIRM"
+        ],
+        [
+          "5",
+          "RENEW"
+        ],
+        [
+          "6",
+          "REBIND"
+        ],
+        [
+          "7",
+          "REPLY"
+        ],
+        [
+          "8",
+          "RELEASE"
+        ],
+        [
+          "9",
+          "DECLINE"
+        ],
+        [
+          "10",
+          "RECONFIGURE"
+        ],
+        [
+          "11",
+          "INFORMATION-REQUEST"
+        ],
+        [
+          "12",
+          "RELAY-FORW"
+        ],
+        [
+          "13",
+          "RELAY-REPL"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Sunucu arama (SOLICIT)"
+        ],
+        [
+          "2",
+          "Sunucu duyurusu (ADVERTISE)"
+        ],
+        [
+          "3",
+          "İstek (REQUEST)"
+        ],
+        [
+          "4",
+          "Onaylama (CONFIRM)"
+        ],
+        [
+          "5",
+          "Yenileme (RENEW)"
+        ],
+        [
+          "6",
+          "Yeniden bağlanma (REBIND)"
+        ],
+        [
+          "7",
+          "Yanıt (REPLY)"
+        ],
+        [
+          "8",
+          "Adresi bırakma (RELEASE)"
+        ],
+        [
+          "9",
+          "Adresi reddetme (DECLINE)"
+        ],
+        [
+          "10",
+          "Yeniden yapılandırma (RECONFIGURE)"
+        ],
+        [
+          "11",
+          "Bilgi isteği (INFORMATION-REQUEST)"
+        ],
+        [
+          "12",
+          "Aktarılan istek (RELAY-FORW)"
+        ],
+        [
+          "13",
+          "Aktarılan yanıt (RELAY-REPL)"
+        ]
       ]
     },
     {
@@ -98,7 +208,9 @@
         "label": "Figure 2"
       },
       "example": "0x0a0b0c",
-      "hex": true
+      "hex": true,
+      "desc_en": "Transaction ID chosen by client to correlate message exchanges with server.",
+      "desc_tr": "Bu ileti alışverişinin işlem kimliği. İstemci rastgele seçer; sunucu yanıtta aynı değeri döndürür."
     },
     {
       "key": "options",
@@ -110,17 +222,35 @@
         "rfc": 8415,
         "section": "8",
         "label": "Figure 2"
-      }
+      },
+      "desc_en": "Variable-length DHCPv6 options carried in the message (§21).",
+      "desc_tr": "İletinin taşıdığı seçenekler (§21); iletinin boyutundan 4 sekizli eksik uzunlukta."
     }
   ],
   "example": {
     "payload": "0001000a0003000100005e0053010006000200520008000200000003000c000000010000000000000000",
-    "note": "00:00:5e:00:53:01 MAC adresli bir istemcinin ff02::1:2 adresine gönderdiği Solicit iletisi. Seçenekler: Client Identifier (kod 1, DUID-LL: tür 3, donanım türü 1 Ethernet, MAC adresi; §21.2, §11.4), Option Request (kod 6; Solicit'te zorunlu SOL_MAX_RT kodu 82'yi ister; §21.7, §21.24), Elapsed Time (kod 8, 0 = ilk deneme; §21.9) ve adres isteyen IA_NA (kod 3, IAID 1, T1 ve T2 sıfır; §21.4)."
+    "note": "00:00:5e:00:53:01 MAC adresli bir istemcinin ff02::1:2 adresine gönderdiği Solicit iletisi. Seçenekler: Client Identifier (kod 1, DUID-LL: tür 3, donanım türü 1 Ethernet, MAC adresi; §21.2, §11.4), Option Request (kod 6; Solicit'te zorunlu SOL_MAX_RT kodu 82'yi ister; §21.7, §21.24), Elapsed Time (kod 8, 0 = ilk deneme; §21.9) ve adres isteyen IA_NA (kod 3, IAID 1, T1 ve T2 sıfır; §21.4).",
+    "note_tr": "00:00:5e:00:53:01 MAC adresli bir istemcinin ff02::1:2 adresine gönderdiği Solicit iletisi. Seçenekler: Client Identifier (kod 1, DUID-LL: tür 3, donanım türü 1 Ethernet, MAC adresi; §21.2, §11.4), Option Request (kod 6; Solicit'te zorunlu SOL_MAX_RT kodu 82'yi ister; §21.7, §21.24), Elapsed Time (kod 8, 0 = ilk deneme; §21.9) ve adres isteyen IA_NA (kod 3, IAID 1, T1 ve T2 sıfır; §21.4).",
+    "note_en": "A Solicit message sent by client MAC 00:00:5e:00:53:01 to ff02::1:2. Options: Client Identifier (code 1, DUID-LL: type 3, hardware Ethernet, MAC address; §21.2, §11.4), Option Request (code 6, requesting mandatory SOL_MAX_RT code 82; §21.7, §21.24), Elapsed Time (code 8, 0 = first try; §21.9), and IA_NA requesting address (code 3, IAID 1, T1/T2 zero; §21.4)."
   },
   "refs": [
     8415,
     768,
     9542
   ],
-  "id": "dhcpv6"
+  "id": "dhcpv6",
+  "summary_tr": "DHCPv6, istemcilere IPv6 adresi, önek veya başka ağ ayarları sağlayabilir. Bu sayfadaki istemci–sunucu iletisinin sabit bölümü 4 bayttır: 1 bayt ileti türü ve 3 bayt işlem kimliği. İstemci UDP 546, sunucu ve aktarıcı UDP 547 kullanır.",
+  "summary_en": "Dynamic Host Configuration Protocol for IPv6 (DHCPv6, RFC 8415) provides stateful and stateless configuration for IPv6 hosts over UDP (ports 546 and 547). Client/Server messages share a 4-octet header with message type and a 24-bit Transaction ID.",
+  "notes_tr": [
+    "İstemci, sunucuların adresini bilmeden ff02::1:2 (All_DHCP_Relay_Agents_and_Servers) bağlantı yerel çok noktaya yayın adresine gönderir (RFC 8415 §7.1). DHCPv4'teki gibi sınırlı yayın ya da BROADCAST bayrağı yoktur.",
+    "Adres alma dört iletiyle yürür: Solicit, Advertise, Request, Reply. Rapid Commit seçeneğiyle Solicit ve Reply'a iner.",
+    "Her seçenek 16 bitlik kod, 16 bitlik uzunluk ve değerden oluşur; seçenekler arasında dolgu yoktur ve 2 ya da 4 sekizli sınırına hizalanmaz (RFC 8415 §8).",
+    "İstemci ve sunucu, MAC adresi yerine DUID (DHCP Unique Identifier) ile tanımlanır. Röle ajanlarının kullandığı Relay-forward ve Relay-reply iletileri 34 sekizlilik farklı bir başlık taşır (RFC 8415 §9)."
+  ],
+  "notes_en": [
+    "The client multicasts to link-local address ff02::1:2 (All_DHCP_Relay_Agents_and_Servers) without knowing server addresses (RFC 8415 §7.1). There is no broadcast address or BROADCAST flag like DHCPv4.",
+    "Address allocation uses four messages: Solicit, Advertise, Request, Reply. With Rapid Commit, it simplifies to Solicit and Reply.",
+    "Each option comprises a 16-bit code, 16-bit length, and value; options are not padded or aligned to 2- or 4-octet boundaries (RFC 8415 §8).",
+    "Clients and servers are identified by DUIDs (DHCP Unique Identifiers) instead of MAC addresses. Relay-forward and Relay-reply messages used by relay agents carry a different 34-octet header (RFC 8415 §9)."
+  ]
 }

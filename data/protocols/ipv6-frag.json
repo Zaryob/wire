@@ -19,7 +19,7 @@
   "fields": [
     {
       "key": "next_header",
-      "name": "Sonraki Başlık (Next Header)",
+      "name": "Next Header",
       "bits": 8,
       "desc": "Parçalanan yükün ilk başlık türünü tanımlar. IPv4 Protokol alanıyla aynı IANA değerlerini kullanır (örneğin UDP için 17, TCP için 6, ICMPv6 için 58).",
       "ref": {
@@ -27,11 +27,14 @@
         "section": "4.5",
         "label": "Fragment Header"
       },
-      "example": 17
+      "example": 17,
+      "label": "Sonraki başlık",
+      "desc_en": "Identifies the initial header type of the Fragmentable Part. Uses standard IANA protocol numbers.",
+      "desc_tr": "Parçalanan yükün ilk başlık türünü tanımlar. IPv4 Protokol alanıyla aynı IANA değerlerini kullanır (örneğin UDP için 17, TCP için 6, ICMPv6 için 58)."
     },
     {
       "key": "reserved",
-      "name": "Ayrılmış (Reserved)",
+      "name": "Reserved",
       "bits": 8,
       "desc": "Gelecekteki kullanım için ayrılmış 8 bitlik alan. İletimde sıfır olmalı, alımda yoksayılmalıdır.",
       "ref": {
@@ -39,11 +42,14 @@
         "section": "4.5",
         "label": "Fragment Header"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "8-bit reserved field; initialized to zero by sender and ignored by receiver.",
+      "desc_tr": "Gelecekteki kullanım için ayrılmış 8 bitlik alan. İletimde sıfır olmalı, alımda yoksayılmalıdır."
     },
     {
       "key": "fragment_offset",
-      "name": "Parça Kayması (Fragment Offset)",
+      "name": "Fragment Offset",
       "bits": 13,
       "desc": "Bu başlığı izleyen verinin, orijinal paketin parçalanabilir kısmının başlangıcına göre 8 sekizlilik birimler cinsinden kayma miktarı.",
       "ref": {
@@ -51,11 +57,14 @@
         "section": "4.5",
         "label": "Fragment Header"
       },
-      "example": 0
+      "example": 0,
+      "label": "Parça kayması",
+      "desc_en": "Offset (in 8-octet units) of data following this header, relative to the start of the Fragmentable Part.",
+      "desc_tr": "Bu başlığı izleyen verinin, orijinal paketin parçalanabilir kısmının başlangıcına göre 8 sekizlilik birimler cinsinden kayma miktarı."
     },
     {
       "key": "res",
-      "name": "Ayrılmış (Res)",
+      "name": "Res",
       "bits": 2,
       "desc": "Ayrılmış 2 bit. Gönderimde sıfır olmalıdır.",
       "ref": {
@@ -63,11 +72,14 @@
         "section": "4.5",
         "label": "Fragment Header"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış bitler",
+      "desc_en": "2-bit reserved field; must be initialized to zero on transmission.",
+      "desc_tr": "Ayrılmış 2 bit. Gönderimde sıfır olmalıdır."
     },
     {
       "key": "m",
-      "name": "Daha Fazla Parça (M)",
+      "name": "More Fragments (M)",
       "bits": 1,
       "desc": "1 ise bu parçadan sonra başka parçaların da geleceğini; 0 ise bu parçanın son parça olduğunu belirtir.",
       "ref": {
@@ -85,11 +97,34 @@
           "1",
           "Devam eden parçalar var"
         ]
+      ],
+      "label": "Daha fazla parça",
+      "desc_en": "1 indicates more fragments follow; 0 indicates last fragment.",
+      "desc_tr": "1 ise bu parçadan sonra başka parçaların da geleceğini; 0 ise bu parçanın son parça olduğunu belirtir.",
+      "values_en": [
+        [
+          "0",
+          "Last fragment"
+        ],
+        [
+          "1",
+          "More fragments follow"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Son parça"
+        ],
+        [
+          "1",
+          "Devam eden parçalar var"
+        ]
       ]
     },
     {
       "key": "identification",
-      "name": "Tanımlayıcı (Identification)",
+      "name": "Identification",
       "bits": 32,
       "desc": "Aynı kaynak ve hedef adreslerine sahip parçaları yeniden birleştirirken doğru pakete ait parçaları eşleştiren benzersiz 32 bitlik kimlik.",
       "ref": {
@@ -98,28 +133,46 @@
         "label": "Fragment Header"
       },
       "example": "0x0001a4b2",
-      "hex": true
+      "hex": true,
+      "label": "Tanımlayıcı",
+      "desc_en": "32-bit unique identifier to correlate fragments from the same original IPv6 packet.",
+      "desc_tr": "Aynı kaynak ve hedef adreslerine sahip parçaları yeniden birleştirirken doğru pakete ait parçaları eşleştiren benzersiz 32 bitlik kimlik."
     },
     {
       "key": "payload",
-      "name": "Parçalanmış Yük Verisi",
+      "name": "Fragmented Payload Data",
       "bits": "değişken",
       "desc": "Orijinal paketin bu parçaya düşen sekizlileridir. Son parça hariç tüm parçaların veri uzunluğu 8 sekizlinin katı olmalıdır.",
       "ref": {
         "rfc": 8200,
         "section": "4.5",
         "label": "Fragment Header"
-      }
+      },
+      "label": "Parçalanmış yük verisi",
+      "desc_en": "Payload octets of this fragment. Length must be a multiple of 8 octets, except for the final fragment.",
+      "desc_tr": "Orijinal paketin bu parçaya düşen sekizlileridir. Son parça hariç tüm parçaların veri uzunluğu 8 sekizlinin katı olmalıdır."
     }
   ],
   "example": {
     "note": "1500 sekizliyi aşan bir IPv6 UDP paketinin ilk parçası (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header değeri 17'dir (UDP). Yük, geçerli UDP başlığının ilk 8 sekizlisini taşır (RFC 8200 §8.1 uyarınca IPv6 UDP sağlama toplamı sıfır olamaz).",
-    "payload": "1f90003504d27b10"
+    "payload": "1f90003504d27b10",
+    "note_tr": "1500 sekizliyi aşan bir IPv6 UDP paketinin ilk parçası (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header değeri 17'dir (UDP). Yük, geçerli UDP başlığının ilk 8 sekizlisini taşır (RFC 8200 §8.1 uyarınca IPv6 UDP sağlama toplamı sıfır olamaz).",
+    "note_en": "First fragment of an IPv6 UDP packet exceeding 1500 octets (Offset: 0, M: 1, Identification: 0x0001a4b2). Next Header is 17 (UDP). Payload carries the first 8 octets of a valid UDP header (per RFC 8200 §8.1, IPv6 UDP checksum cannot be zero)."
   },
   "refs": [
     8200,
     768,
     3849
   ],
-  "id": "ipv6-frag"
+  "id": "ipv6-frag",
+  "summary_tr": "IPv6 Fragment Header, parçalanmış IPv6 paketlerinin hedefte yeniden birleştirilmesi için kullanılan sabit 8 baytlık uzantı başlığıdır. Kaynak düğüm ekler; IPv6 yönlendiricileri geçişte paket parçalamaz. Fragment Offset, parçanın konumunu 8 baytlık birimlerle verir.",
+  "summary_en": "The IPv6 Fragment Header is a fixed 8-octet extension header used to reassemble fragmented IPv6 datagrams at the destination. Added only by the source node; intermediate routers do not fragment packets. Fragment Offset is measured in 8-octet units.",
+  "notes_tr": [
+    "IPv6 ana başlığında parçalama alanları bulunmaz; parçalama gerektiğinde Sonraki Başlık (Next Header) değeri 44 (0x2c) olan bu uzantı başlığı eklenir.",
+    "Parça Kayması (Fragment Offset), parçalanabilir verinin orijinal paketteki başlangıç konumunu 8 sekizlilik (64 bit) birimler cinsinden ifade eder."
+  ],
+  "notes_en": [
+    "The base IPv6 header does not contain fragmentation fields; when fragmentation is needed, this extension header with Next Header value 44 (0x2c) is inserted.",
+    "Fragment Offset specifies the offset of the fragmentable data relative to the start of the unfragmented packet in 8-octet (64-bit) units."
+  ]
 }

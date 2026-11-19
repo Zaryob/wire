@@ -52,6 +52,52 @@
           "16–1048575",
           "Sıradan etiketler"
         ]
+      ],
+      "desc_en": "20-bit label value determining forwarding at the next hop. 0–15 are reserved values; 16 is first unreserved label.",
+      "desc_tr": "Bir sonraki atlamanın paketi nasıl ileteceğini belirleyen etiket değeri. 0–15 özel değerlerdir; 16 ilk sıradan etikettir.",
+      "values_en": [
+        [
+          "0",
+          "IPv4 Explicit NULL"
+        ],
+        [
+          "1",
+          "Router Alert"
+        ],
+        [
+          "2",
+          "IPv6 Explicit NULL"
+        ],
+        [
+          "3",
+          "Implicit NULL (signaling only)"
+        ],
+        [
+          "16–1048575",
+          "Unreserved labels"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "IPv4 açık boş etiket (IPv4 Explicit NULL)"
+        ],
+        [
+          "1",
+          "Yönlendirici uyarısı (Router Alert)"
+        ],
+        [
+          "2",
+          "IPv6 açık boş etiket (IPv6 Explicit NULL)"
+        ],
+        [
+          "3",
+          "Örtük boş etiket (Implicit NULL), yalnızca sinyalleşmede"
+        ],
+        [
+          "16–1048575",
+          "Sıradan etiketler"
+        ]
       ]
     },
     {
@@ -65,7 +111,9 @@
         "section": "2.1",
         "label": "RFC 3032"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Traffic Class for QoS (DiffServ and ECN). Formerly designated Exp in RFC 3032.",
+      "desc_tr": "Trafik sınıfı; DiffServ ve ECN için kullanılır. RFC 3032'deki adı Exp'ti."
     },
     {
       "key": "s",
@@ -78,7 +126,9 @@
         "section": "2.1",
         "label": "Encoding the Label Stack"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Set to 1 if this entry is the bottom of the label stack; 0 if another label stack entry follows.",
+      "desc_tr": "Bu girdi yığının son girdisiyse 1, ardından başka bir etiket geliyorsa 0."
     },
     {
       "key": "ttl",
@@ -91,17 +141,35 @@
         "section": "2.4",
         "label": "Processing the Time to Live Field"
       },
-      "example": 64
+      "example": 64,
+      "desc_en": "Decremented at each label switching hop; packet discarded if 0. Typically copied from IP header TTL on push.",
+      "desc_tr": "Her etiket anahtarlama atlamasında bir azaltılır; 0'a inen paket atılır. Etiket eklenirken genellikle IP başlığının TTL değeri kopyalanır."
     }
   ],
   "example": {
     "payloadFrom": "ipv4",
-    "note": "Tek girdilik bir yığın: etiket 16, TC 0, S biti 1 (yığının sonu), TTL 64. Ardından wire'ın IPv4 örneği gelir; S biti 1 olduğu için alıcı, etiketi çıkardıktan sonra yükü IP paketi olarak işler. Dört sekizli 00 01 01 40 olarak görünür."
+    "note": "Tek girdilik bir yığın: etiket 16, TC 0, S biti 1 (yığının sonu), TTL 64. Ardından wire'ın IPv4 örneği gelir; S biti 1 olduğu için alıcı, etiketi çıkardıktan sonra yükü IP paketi olarak işler. Dört sekizli 00 01 01 40 olarak görünür.",
+    "note_tr": "Tek girdilik bir yığın: etiket 16, TC 0, S biti 1 (yığının sonu), TTL 64. Ardından wire'ın IPv4 örneği gelir; S biti 1 olduğu için alıcı, etiketi çıkardıktan sonra yükü IP paketi olarak işler. Dört sekizli 00 01 01 40 olarak görünür.",
+    "note_en": "A single-entry stack: label 16, TC 0, S bit 1 (bottom of stack), TTL 64. Followed by wire's IPv4 example; because S=1, after popping the label the receiver processes the payload as an IP packet. Appears as four octets: 00 01 01 40."
   },
   "refs": [
     3032,
     5462,
     791
   ],
-  "id": "mpls"
+  "id": "mpls",
+  "summary_tr": "Çok Protokollü Etiket Anahtarlama (Multiprotocol Label Switching - MPLS) paketleri IP adresine bakmadan, bağlantı katmanı başlığı ile IP başlığı arasına eklenen 4 sekizlilik etiketlerle iletir. Her girdi 20 bitlik bir etiket, 3 bitlik trafik sınıfı, yığının sonunu gösteren bir bit ve bir TTL taşır.",
+  "summary_en": "Multiprotocol Label Switching (MPLS, RFC 3032) forwards packets based on 4-octet label stack entries inserted between the link-layer and network-layer headers. Each entry contains a 20-bit label, 3-bit Traffic Class, 1-bit Bottom-of-Stack flag, and 8-bit TTL.",
+  "notes_tr": [
+    "Ethernet üzerinde tek noktaya MPLS paketi EtherType 0x8847 ile taşınır (RFC 3032 §5).",
+    "Etiketler bir yığın oluşturur: her girdi 4 sekizlidir ve S biti 1 olan girdi yığının son, IP başlığına en yakın girdisidir. Yönlendiriciler yalnızca en üstteki etiketi okur, değiştirir ya da çıkarır.",
+    "RFC 3032 üçüncü alanı deneysel kullanım için \"Exp\" olarak adlandırmıştı; RFC 5462 adı Traffic Class (TC) olarak değiştirdi ve alan bugün DiffServ sınıflandırması için kullanılır.",
+    "Etiket değerleri 0–15 özel anlam taşır (RFC 3032 §2.1): 0 IPv4 Explicit NULL, 1 Router Alert, 2 IPv6 Explicit NULL, 3 Implicit NULL. 3 hiçbir zaman pakette görünmez; yalnızca son atlamadan bir önceki yönlendiricinin etiketi çıkarmasını ister."
+  ],
+  "notes_en": [
+    "Unicast MPLS packets over Ethernet are carried with EtherType 0x8847 (RFC 3032 §5).",
+    "Labels form a stack: each entry is 4 octets, and the entry with S=1 is the bottom of the stack, closest to the IP header. Routers examine, modify, or pop only the topmost label.",
+    "RFC 3032 originally named the third field 'Exp' for experimental use; RFC 5462 renamed it Traffic Class (TC) and it is used today for DiffServ classification.",
+    "Label values 0–15 have reserved special meanings (RFC 3032 §2.1): 0 IPv4 Explicit NULL, 1 Router Alert, 2 IPv6 Explicit NULL, 3 Implicit NULL. 3 never appears on the wire; it signals penultimate hop popping (PHP)."
+  ]
 }

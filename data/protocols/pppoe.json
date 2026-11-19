@@ -19,7 +19,7 @@
   "fields": [
     {
       "key": "ver",
-      "name": "Sürüm (VER)",
+      "name": "Version (VER)",
       "bits": 4,
       "desc": "PPPoE belirtim sürümü. Bu sürüm için değeri 1 (0x1) olmalıdır.",
       "ref": {
@@ -27,11 +27,14 @@
         "section": "4",
         "label": "Payloads"
       },
-      "example": 1
+      "example": 1,
+      "label": "Sürüm",
+      "desc_en": "PPPoE specification version. Must be set to 1 (0x1).",
+      "desc_tr": "PPPoE belirtim sürümü. Bu sürüm için değeri 1 (0x1) olmalıdır."
     },
     {
       "key": "type",
-      "name": "Tür (TYPE)",
+      "name": "Type (TYPE)",
       "bits": 4,
       "desc": "PPPoE belirtim türü. Bu sürüm için değeri 1 (0x1) olmalıdır.",
       "ref": {
@@ -39,11 +42,14 @@
         "section": "4",
         "label": "Payloads"
       },
-      "example": 1
+      "example": 1,
+      "label": "Tür",
+      "desc_en": "PPPoE specification type. Must be set to 1 (0x1).",
+      "desc_tr": "PPPoE belirtim türü. Bu sürüm için değeri 1 (0x1) olmalıdır."
     },
     {
       "key": "code",
-      "name": "İşlem Kodu (CODE)",
+      "name": "Code (CODE)",
       "bits": 8,
       "desc": "Paketin Keşif (Discovery) veya Oturum (Session) aşamasındaki işlevini belirtir.",
       "ref": {
@@ -77,11 +83,66 @@
           "0xa7",
           "PADT (Active Discovery Terminate)"
         ]
+      ],
+      "label": "İşlem kodu",
+      "desc_en": "Indicates the packet function during Discovery or Session stage.",
+      "desc_tr": "Paketin Keşif (Discovery) veya Oturum (Session) aşamasındaki işlevini belirtir.",
+      "values_en": [
+        [
+          "0x00",
+          "Session Data"
+        ],
+        [
+          "0x09",
+          "PADI (Active Discovery Initiation)"
+        ],
+        [
+          "0x07",
+          "PADO (Active Discovery Offer)"
+        ],
+        [
+          "0x19",
+          "PADR (Active Discovery Request)"
+        ],
+        [
+          "0x65",
+          "PADS (Active Discovery Session-confirmation)"
+        ],
+        [
+          "0xa7",
+          "PADT (Active Discovery Terminate)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x00",
+          "Oturum Verisi (Session Data)"
+        ],
+        [
+          "0x09",
+          "PADI (Active Discovery Initiation)"
+        ],
+        [
+          "0x07",
+          "PADO (Active Discovery Offer)"
+        ],
+        [
+          "0x19",
+          "PADR (Active Discovery Request)"
+        ],
+        [
+          "0x65",
+          "PADS (Active Discovery Session-confirmation)"
+        ],
+        [
+          "0xa7",
+          "PADT (Active Discovery Terminate)"
+        ]
       ]
     },
     {
       "key": "session_id",
-      "name": "Oturum Kimliği (SESSION_ID)",
+      "name": "Session ID (SESSION_ID)",
       "bits": 16,
       "desc": "Kurulan PPPoE oturumunu benzersiz olarak tanımlayan 16 bitlik kimlik. Keşif paketlerinde 0x0000 olarak başlar, PADS aşamasında Erişim Yoğunlaştırıcı (Access Concentrator) tarafından atanır.",
       "ref": {
@@ -90,11 +151,14 @@
         "label": "Payloads"
       },
       "example": "0x002a",
-      "hex": true
+      "hex": true,
+      "label": "Oturum kimliği",
+      "desc_en": "16-bit identifier uniquely identifying the PPPoE session. 0x0000 in discovery; assigned by the Access Concentrator in PADS.",
+      "desc_tr": "Kurulan PPPoE oturumunu benzersiz olarak tanımlayan 16 bitlik kimlik. Keşif paketlerinde 0x0000 olarak başlar, PADS aşamasında Erişim Yoğunlaştırıcı (Access Concentrator) tarafından atanır."
     },
     {
       "key": "length",
-      "name": "Yük Uzunluğu (LENGTH)",
+      "name": "Payload Length (LENGTH)",
       "bits": 16,
       "desc": "PPPoE başlığından sonra gelen yükün sekizli cinsinden uzunluğu. Ethernet veya PPPoE başlıklarının boyutunu içermez.",
       "ref": {
@@ -102,23 +166,31 @@
         "section": "4",
         "label": "Payloads"
       },
-      "example": 30
+      "example": 30,
+      "label": "Yük uzunluğu",
+      "desc_en": "Byte length of the PPPoE payload following the header, excluding Ethernet or PPPoE headers.",
+      "desc_tr": "PPPoE başlığından sonra gelen yükün sekizli cinsinden uzunluğu. Ethernet veya PPPoE başlıklarının boyutunu içermez."
     },
     {
       "key": "payload",
-      "name": "Yük ve Etiketler",
+      "name": "Payload and Tags",
       "bits": "değişken",
       "desc": "Keşif aşamasında PPPoE etiketleri (TAG_TYPE, TAG_LENGTH, TAG_VALUE); oturum aşamasında ise 2 sekizlilik PPP protokol kimliği ve taşınan ağ katmanı paketidir (örneğin IPv4 veya IPv6).",
       "ref": {
         "rfc": 2516,
         "section": "4",
         "label": "Payloads"
-      }
+      },
+      "label": "Yük ve etiketler",
+      "desc_en": "PPPoE tags in discovery stage (TAG_TYPE, TAG_LENGTH, TAG_VALUE); 2-octet PPP protocol ID and network packet in session stage.",
+      "desc_tr": "Keşif aşamasında PPPoE etiketleri (TAG_TYPE, TAG_LENGTH, TAG_VALUE); oturum aşamasında ise 2 sekizlilik PPP protokol kimliği ve taşınan ağ katmanı paketidir (örneğin IPv4 veya IPv6)."
     }
   ],
   "example": {
     "note": "Aktif bir PPPoE oturumunda (SESSION_ID: 0x002a) taşınan ve 192.0.2.1'den 192.0.2.2'ye giden geçerli bir ICMP Echo İsteği (ping) taşıyan IPv4 datagramı (PPP Protokolü: 0x0021, Yük boyutu: 30 sekizli). IP ve ICMP sağlama toplamları tam doğrulanmıştır. Ethernet EtherType değeri 0x8864'tür.",
-    "payload": "00214500001c000100004001f6dcc0000201c00002020800e5ca12340001"
+    "payload": "00214500001c000100004001f6dcc0000201c00002020800e5ca12340001",
+    "note_tr": "Aktif bir PPPoE oturumunda (SESSION_ID: 0x002a) taşınan ve 192.0.2.1'den 192.0.2.2'ye giden geçerli bir ICMP Echo İsteği (ping) taşıyan IPv4 datagramı (PPP Protokolü: 0x0021, Yük boyutu: 30 sekizli). IP ve ICMP sağlama toplamları tam doğrulanmıştır. Ethernet EtherType değeri 0x8864'tür.",
+    "note_en": "An IPv4 datagram carrying a valid ICMP Echo Request (ping) from 192.0.2.1 to 192.0.2.2 over an active PPPoE session (SESSION_ID: 0x002a; PPP Protocol: 0x0021, Payload size: 30 octets). IP and ICMP checksums are fully verified. Ethernet EtherType is 0x8864."
   },
   "refs": [
     2516,
@@ -126,5 +198,15 @@
     792,
     5737
   ],
-  "id": "pppoe"
+  "id": "pppoe",
+  "summary_tr": "PPPoE (Point-to-Point Protocol over Ethernet), PPP oturumlarının Ethernet üzerinde kurulmasını ve taşınmasını sağlar. Keşif ve oturum paketleri 6 baytlık ortak bir başlık kullanır. Ethernet EtherType değerleri keşif için 0x8863, oturum için 0x8864’tür.",
+  "summary_en": "Point-to-Point Protocol over Ethernet (PPPoE, RFC 2516) encapsulates PPP sessions inside Ethernet frames. Discovery and session packets use a common 6-octet header. Carried with EtherType 0x8863 (Discovery) and 0x8864 (Session).",
+  "notes_tr": [
+    "PPPoE iki aşamada çalışır: Keşif (Discovery Stage - EtherType 0x8863) ve Oturum (PPP Session Stage - EtherType 0x8864).",
+    "Maksimum iletim birimi (MTU), PPPoE başlığı (6 sekizli) ve PPP protokol alanı (2 sekizli) nedeniyle standart Ethernet MTU'su olan 1500 sekizliden en fazla 1492 sekizliye düşer."
+  ],
+  "notes_en": [
+    "PPPoE operates in two stages: Discovery Stage (EtherType 0x8863) and PPP Session Stage (EtherType 0x8864).",
+    "The maximum transmission unit (MTU) is reduced from standard 1500-octet Ethernet MTU to at most 1492 octets due to the PPPoE header (6 octets) and PPP protocol field (2 octets)."
+  ]
 }

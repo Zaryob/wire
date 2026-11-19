@@ -180,7 +180,9 @@
         "label": "transportSpecific (Nibble)",
         "page": 125
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Field available to underlying transport protocol (Annex D–I). 0 default in Ethernet (Table F.2); bit 0 in UDP/IPv4 requests 124-octet padding.",
+      "desc_tr": "Alt katmandaki taşıma protokolünün kullanabileceği alan; anlamı taşıma eklerinde (Annex D–I) tanımlanır. Ethernet eşlemesinde 0 DEFAULT değeridir (Table F.2); UDP/IPv4 eşlemesinde bit 0, sürüm 1 donanımı için 124 sekizlilik dolgu ister (Table D.2)."
     },
     {
       "key": "message_type",
@@ -244,6 +246,108 @@
           "0xE–0xF",
           "Ayrılmış"
         ]
+      ],
+      "desc_en": "PTP message type: 0–3 event messages with timestamping; 8–D general messages (0 Sync, 1 Delay_Req, 8 Follow_Up, 9 Delay_Resp, 0xB Announce).",
+      "desc_tr": "İletinin türü. 0–3 olay iletileridir ve gönderim ile alım anları zaman damgasıyla ölçülür; 8–D genel iletilerdir. En anlamlı bit iki sınıfı ayırır.",
+      "values_en": [
+        [
+          "0x0",
+          "Sync (event)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (event)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (event)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (event)"
+        ],
+        [
+          "0x4–0x7",
+          "Reserved"
+        ],
+        [
+          "0x8",
+          "Follow_Up (general)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (general)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (general)"
+        ],
+        [
+          "0xB",
+          "Announce (general)"
+        ],
+        [
+          "0xC",
+          "Signaling (general)"
+        ],
+        [
+          "0xD",
+          "Management (general)"
+        ],
+        [
+          "0xE–0xF",
+          "Reserved"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0",
+          "Sync (olay)"
+        ],
+        [
+          "0x1",
+          "Delay_Req (olay)"
+        ],
+        [
+          "0x2",
+          "Pdelay_Req (olay)"
+        ],
+        [
+          "0x3",
+          "Pdelay_Resp (olay)"
+        ],
+        [
+          "0x4–0x7",
+          "Ayrılmış"
+        ],
+        [
+          "0x8",
+          "Follow_Up (genel)"
+        ],
+        [
+          "0x9",
+          "Delay_Resp (genel)"
+        ],
+        [
+          "0xA",
+          "Pdelay_Resp_Follow_Up (genel)"
+        ],
+        [
+          "0xB",
+          "Announce (genel)"
+        ],
+        [
+          "0xC",
+          "Signaling (genel)"
+        ],
+        [
+          "0xD",
+          "Management (genel)"
+        ],
+        [
+          "0xE–0xF",
+          "Ayrılmış"
+        ]
       ]
     },
     {
@@ -258,7 +362,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 4 bits; transmitted as 0 and ignored by receiver (§13.2).",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar (§13.2). §13.3.2.2'deki nota göre messageType'ın ileride genişletilmesi için ayrılmıştır."
     },
     {
       "key": "version",
@@ -272,7 +378,9 @@
         "label": "versionPTP (UInteger4)",
         "page": 125
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "PTP version number of transmitting port; 2 for IEEE 1588-2008 (§7.5.5).",
+      "desc_tr": "Gönderen portun portDS.versionNumber değeri. Standardın bu sürümü için 2'dir (§7.5.5)."
     },
     {
       "key": "message_length",
@@ -286,7 +394,9 @@
         "label": "messageLength (UInteger16)",
         "page": 125
       },
-      "example": 64
+      "example": 64,
+      "desc_en": "Total length of the PTP message from header start to end, excluding Annex D padding.",
+      "desc_tr": "İletinin başlığın ilk sekizlisinden son sekizlisine kadar toplam uzunluğu. Annex D'deki dolgu dahil değildir."
     },
     {
       "key": "domain",
@@ -300,7 +410,9 @@
         "label": "domainNumber (UInteger8)",
         "page": 125
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Domain number of the sending clock (defaultDS.domainNumber), segregating independent PTP domains on a network.",
+      "desc_tr": "Sıradan ya da sınır saatlerde, gönderen saatin defaultDS.domainNumber değeri. Aynı ağdaki bağımsız zaman alanları bu numarayla ayrılır."
     },
     {
       "key": "reserved_domain",
@@ -314,7 +426,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 8 bits; transmitted as 0 and ignored by receiver.",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar."
     },
     {
       "key": "flags",
@@ -375,6 +489,100 @@
           "0x0020",
           "frequencyTraceable (Announce)"
         ]
+      ],
+      "desc_en": "Two-octet flag array defined in Table 20 (e.g. alternateMasterFlag, twoStepFlag, unicastFlag).",
+      "desc_tr": "İki sekizlilik bayrak dizisi; anlamları Table 20'dedir. Bir ileti türü için tanımlanmamış bayraklar 0 olur. Onaltılık değer, sekizli 0'ın bitlerini üst, sekizli 1'in bitlerini alt baytta gösterir.",
+      "values_en": [
+        [
+          "0x0100",
+          "alternateMasterFlag"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag"
+        ],
+        [
+          "0x0400",
+          "unicastFlag"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61"
+        ],
+        [
+          "0x0002",
+          "leap59"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale"
+        ],
+        [
+          "0x0010",
+          "timeTraceable"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0100",
+          "alternateMasterFlag (Announce, Sync, Follow_Up, Delay_Resp)"
+        ],
+        [
+          "0x0200",
+          "twoStepFlag (Sync, Pdelay_Resp)"
+        ],
+        [
+          "0x0400",
+          "unicastFlag (tümü)"
+        ],
+        [
+          "0x2000",
+          "PTP profile Specific 1"
+        ],
+        [
+          "0x4000",
+          "PTP profile Specific 2"
+        ],
+        [
+          "0x0001",
+          "leap61 (Announce)"
+        ],
+        [
+          "0x0002",
+          "leap59 (Announce)"
+        ],
+        [
+          "0x0004",
+          "currentUtcOffsetValid (Announce)"
+        ],
+        [
+          "0x0008",
+          "ptpTimescale (Announce)"
+        ],
+        [
+          "0x0010",
+          "timeTraceable (Announce)"
+        ],
+        [
+          "0x0020",
+          "frequencyTraceable (Announce)"
+        ]
       ]
     },
     {
@@ -390,7 +598,9 @@
         "page": 126
       },
       "example": 0,
-      "hex": true
+      "hex": true,
+      "desc_en": "Correction value in scaled nanoseconds (units of 2^-16 ns); e.g. 2.5 ns is 0x0000000000028000 (Table 21).",
+      "desc_tr": "Düzeltme değeri, nanosaniyenin 2^16 katı biriminde işaretli sayı olarak; örneğin 2,5 ns 0x0000000000028000'dir. Sync'te kesirli nanosaniyeleri, saydam saatlerdeki bekleme süresini, eşler arası saatlerde yol gecikmesini ve asimetri düzeltmesini taşır (Table 21)."
     },
     {
       "key": "reserved_body",
@@ -404,7 +614,9 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 32 bits; transmitted as 0 and ignored by receiver.",
+      "desc_tr": "Ayrılmış; 0 gönderilir, alıcı yok sayar."
     },
     {
       "key": "clock_identity",
@@ -419,7 +631,9 @@
         "page": 127
       },
       "example": "00005efffe005301",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "8-octet EUI-64 clock identity of the transmitting port; when derived from MAC-48, FF FE is inserted (§7.5.2.2.2).",
+      "desc_tr": "İletiyi gönderen portun portDS.portIdentity değerinin saat kısmı: 8 sekizlilik bir EUI-64. EUI-48'den türetildiğinde OUI'nin üç sekizlisi başa, 3. ve 4. sekizlilere FF ile FE, kalan üç sekizli sona yazılır (§7.5.2.2.2, NOTE 2)."
     },
     {
       "key": "port_number",
@@ -433,7 +647,9 @@
         "label": "PortIdentity",
         "page": 13
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "PTP port number of the transmitting port; ports on an N-port node are numbered 1, 2, ..., N (§7.5.2.3).",
+      "desc_tr": "Saatin iletiyi gönderen PTP portunun numarası. N portlu bir düğümde portlar 1, 2, …, N numaralanır; 0 ve 0xFFFF ayrılmıştır (§7.5.2.3)."
     },
     {
       "key": "sequence_id",
@@ -447,7 +663,9 @@
         "label": "sequenceId (UInteger16)",
         "page": 127
       },
-      "example": 300
+      "example": 300,
+      "desc_en": "Monotonically increasing sequence number maintained for each message type (§7.3.7; Table 22).",
+      "desc_tr": "Gönderenin her ileti türü için ayrı tuttuğu sıra numarası (§7.3.7). Follow_Up, Delay_Resp gibi yanıtlar ait oldukları iletinin değerini taşır (Table 22)."
     },
     {
       "key": "control",
@@ -487,6 +705,60 @@
           "0x05",
           "Diğerleri"
         ]
+      ],
+      "desc_en": "Legacy control field retained for version 1 hardware compatibility; Table 23 values (0x00 Sync, 0x01 Delay_Req, etc.).",
+      "desc_tr": "Sürüm 1 donanımıyla uyumluluk için korunan alan; alıcının kullanması önerilmez. Değeri ileti türüne göre Table 23'te verilir.",
+      "values_en": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Other"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x00",
+          "Sync"
+        ],
+        [
+          "0x01",
+          "Delay_Req"
+        ],
+        [
+          "0x02",
+          "Follow_Up"
+        ],
+        [
+          "0x03",
+          "Delay_Resp"
+        ],
+        [
+          "0x04",
+          "Management"
+        ],
+        [
+          "0x05",
+          "Diğerleri"
+        ]
       ]
     },
     {
@@ -502,7 +774,9 @@
         "page": 128
       },
       "example": 1,
-      "hex": true
+      "hex": true,
+      "desc_en": "Log2 transmission interval in seconds (Table 24); 0 represents 1 message per second (2^0).",
+      "desc_tr": "İletilerin gönderim aralığının 2 tabanında logaritması, işaretli sayı olarak. Çok noktaya yayınlanan Sync'te portDS.logSyncInterval değeridir, tek noktaya gönderilende 0x7F (Table 24). 0 saniyede bir ileti demektir."
     },
     {
       "key": "origin_seconds",
@@ -516,7 +790,9 @@
         "label": "originTimestamp (Timestamp)",
         "page": 129
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Seconds portion of transmission time since PTP epoch.",
+      "desc_tr": "PTP çağından bu yana geçen saniye."
     },
     {
       "key": "origin_ns",
@@ -530,12 +806,14 @@
         "label": "Timestamp",
         "page": 13
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Nanoseconds portion of transmission time.",
+      "desc_tr": "Aynı anın nanosaniye kısmı."
     },
     {
       "key": "utc_offset",
       "name": "currentUtcOffset",
-      "label": "Güncel UTC farkı",
+      "label": "UTC farkı",
       "bits": 16,
       "desc": "TAI ile UTC arasındaki fark, saniye olarak; timePropertiesDS.currentUtcOffset değeri. flagField'daki currentUtcOffsetValid 1 ise geçerlidir.",
       "ref": {
@@ -544,7 +822,9 @@
         "label": "currentUtcOffset (Integer16)",
         "page": 129
       },
-      "example": 37
+      "example": 37,
+      "desc_en": "Current difference in seconds between TAI and UTC (TAI - UTC); valid if currentUtcOffsetValid flag is set.",
+      "desc_tr": "TAI ile UTC arasındaki güncel fark, saniye olarak. currentUtcOffsetValid bayrağı 1 ise geçerlidir."
     },
     {
       "key": "reserved_announce",
@@ -558,12 +838,14 @@
         "label": "General message format requirements",
         "page": 124
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 8 bits; transmitted as 0 and ignored by receiver.",
+      "desc_tr": "Ayrılmış; 0 gönderilir."
     },
     {
       "key": "priority1",
       "name": "grandmasterPriority1",
-      "label": "Ana saatin birinci önceliği",
+      "label": "Ana saatin 1. önceliği",
       "bits": 8,
       "desc": "Ana saatin birinci önceliği; BMC algoritmasında küçük değer önce gelir. Başlangıç değeri PTP profilinde belirlenir, 0–255 arasında yapılandırılabilir (§7.6.2.2).",
       "ref": {
@@ -572,12 +854,14 @@
         "label": "grandmasterPriority1 (UInteger8)",
         "page": 129
       },
-      "example": 128
+      "example": 128,
+      "desc_en": "First priority attribute of the grandmaster clock used by the Best Master Clock algorithm (0–255).",
+      "desc_tr": "En İyi Ana Saat (BMCA) algoritmasında ilk karşılaştırılan öncelik değeri; 0–255."
     },
     {
       "key": "clock_class",
       "name": "grandmasterClockQuality.clockClass",
-      "label": "Ana saatin sınıfı",
+      "label": "Saat sınıfı",
       "bits": 8,
       "desc": "Ana saatin dağıttığı zamanın izlenebilirliği (Table 5). 6, birincil bir zaman kaynağına eşitlenmiş ve PTP zaman ölçeği dağıtan bir saattir.",
       "ref": {
@@ -604,12 +888,42 @@
           "14",
           "Eskiden 13; tutma kipinde"
         ]
+      ],
+      "desc_en": "Clock class indicating traceability and operational state of the grandmaster clock.",
+      "desc_tr": "Ana saatin izlenebilirliğini ve çalışma kipini belirten sınıf.",
+      "values_en": [
+        [
+          "6",
+          "Synchronized to primary ref, PTP timescale"
+        ],
+        [
+          "7",
+          "Holdover mode after loss of primary ref"
+        ],
+        [
+          "13",
+          "App-specific timescale (ARB)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "6",
+          "Birincil zaman kaynağına eşitli, PTP zaman ölçeği"
+        ],
+        [
+          "7",
+          "Eskiden 6; kaynağını kaybetmiş, tutma (holdover) kipinde"
+        ],
+        [
+          "13",
+          "Uygulamaya özgü kaynağa eşitli, ARB zaman ölçeği"
+        ]
       ]
     },
     {
       "key": "clock_accuracy",
       "name": "grandmasterClockQuality.clockAccuracy",
-      "label": "Ana saatin doğruluğu",
+      "label": "Saat doğruluğu",
       "bits": 8,
       "desc": "Ana saatin zaman doğruluğu (Table 6). 0x21, 100 ns içinde doğru demektir.",
       "ref": {
@@ -645,12 +959,42 @@
           "0xFE",
           "Bilinmiyor"
         ]
+      ],
+      "desc_en": "Expected accuracy of the grandmaster clock with respect to the PTP timescale.",
+      "desc_tr": "Ana saatin PTP zaman ölçeğine göre beklenen doğruluğu.",
+      "values_en": [
+        [
+          "0x20",
+          "within 25 ns"
+        ],
+        [
+          "0x21",
+          "within 100 ns"
+        ],
+        [
+          "0x23",
+          "within 1 µs"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x20",
+          "25 ns içinde"
+        ],
+        [
+          "0x21",
+          "100 ns içinde"
+        ],
+        [
+          "0x23",
+          "1 µs içinde"
+        ]
       ]
     },
     {
       "key": "variance",
       "name": "grandmasterClockQuality.offsetScaledLogVariance",
-      "label": "Ana saatin ölçeklenmiş logaritmik varyansı",
+      "label": "Varyans ölçeği",
       "bits": 16,
       "desc": "Ana saatin kararlılığının, ölçeklenmiş logaritmik varyans olarak tahmini (§7.6.3); BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
       "ref": {
@@ -660,12 +1004,14 @@
         "page": 14
       },
       "example": 20061,
-      "hex": true
+      "hex": true,
+      "desc_en": "Estimate of grandmaster clock stability characterizing frequency stability.",
+      "desc_tr": "Ana saatin kararlılık tahmini; saatin frekans kararlılığını niteler."
     },
     {
       "key": "priority2",
       "name": "grandmasterPriority2",
-      "label": "Ana saatin ikinci önceliği",
+      "label": "Ana saatin 2. önceliği",
       "bits": 8,
       "desc": "Ana saatin ikinci önceliği; parentDS.grandmasterPriority2 değeri (§7.6.2.3). BMC algoritmasında karşılaştırılan niteliklerden biridir (Table 12).",
       "ref": {
@@ -674,12 +1020,14 @@
         "label": "grandmasterPriority2 (UInteger8)",
         "page": 129
       },
-      "example": 128
+      "example": 128,
+      "desc_en": "Second priority attribute of the grandmaster clock used to break ties in BMCA (0–255).",
+      "desc_tr": "BMCA'da eşitlikleri bozmak için kullanılan ikinci öncelik değeri."
     },
     {
       "key": "grandmaster_identity",
       "name": "grandmasterIdentity",
-      "label": "Ana saat kimliği",
+      "label": "Ana saatin kimliği",
       "bits": 64,
       "desc": "Ana saatin kimliği; parentDS.grandmasterIdentity değeri.",
       "ref": {
@@ -689,12 +1037,14 @@
         "page": 129
       },
       "example": "00005efffe005301",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "Clock identity (8-octet EUI-64) of the grandmaster clock.",
+      "desc_tr": "Ana saatin 8 sekizlilik saat kimliği."
     },
     {
       "key": "steps_removed",
       "name": "stepsRemoved",
-      "label": "Ana saate olan adım sayısı",
+      "label": "Atlama sayısı",
       "bits": 16,
       "desc": "Gönderen saat ile ana saat arasındaki iletişim yolu sayısı; ana saatin kendisi için 0.",
       "ref": {
@@ -703,7 +1053,9 @@
         "label": "stepsRemoved (UInteger16)",
         "page": 129
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Number of boundary clock hops between this port and the grandmaster clock.",
+      "desc_tr": "Bu iletiyi gönderen saat ile ana saat arasındaki sınır saat (boundary clock) sayısı."
     },
     {
       "key": "time_source",
@@ -748,15 +1100,93 @@
           "0x90",
           "OTHER"
         ]
+      ],
+      "desc_en": "Source of time used by the grandmaster clock (e.g. GPS, ATOMIC_CLOCK, NTP).",
+      "desc_tr": "Ana saatin kullandığı zaman kaynağı türü.",
+      "values_en": [
+        [
+          "0x10",
+          "ATOMIC_CLOCK"
+        ],
+        [
+          "0x20",
+          "GPS"
+        ],
+        [
+          "0x30",
+          "TERRESTRIAL_RADIO"
+        ],
+        [
+          "0x40",
+          "PTP"
+        ],
+        [
+          "0x50",
+          "NTP"
+        ],
+        [
+          "0x90",
+          "OTHER"
+        ],
+        [
+          "0xA0",
+          "INTERNAL_OSCILLATOR"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x10",
+          "ATOMIC_CLOCK"
+        ],
+        [
+          "0x20",
+          "GPS (uydu sistemleri)"
+        ],
+        [
+          "0x30",
+          "TERRESTRIAL_RADIO"
+        ],
+        [
+          "0x40",
+          "PTP"
+        ],
+        [
+          "0x50",
+          "NTP"
+        ],
+        [
+          "0x90",
+          "DİĞER"
+        ],
+        [
+          "0xA0",
+          "DAHİLİ_OSİLATÖR"
+        ]
       ]
     }
   ],
   "example": {
-    "note": "GPS'e eşitlenmiş (timeSource 0x20, clockClass 6, 100 ns doğruluk) bir ana saatin iki saniyede bir gönderdiği Announce (logMessageInterval 1). flagField 0x000c: ptpTimescale ve currentUtcOffsetValid 1'dir. Ana saatin kendisi olduğu için stepsRemoved 0'dır. İleti 64 sekizlidir (Table 25)."
+    "note": "GPS'e eşitlenmiş (timeSource 0x20, clockClass 6, 100 ns doğruluk) bir ana saatin iki saniyede bir gönderdiği Announce (logMessageInterval 1). flagField 0x000c: ptpTimescale ve currentUtcOffsetValid 1'dir. Ana saatin kendisi olduğu için stepsRemoved 0'dır. İleti 64 sekizlidir (Table 25).",
+    "note_tr": "GPS'e eşitlenmiş (timeSource 0x20, clockClass 6, 100 ns doğruluk) bir ana saatin iki saniyede bir gönderdiği Announce (logMessageInterval 1). flagField 0x000c: ptpTimescale ve currentUtcOffsetValid 1'dir. Ana saatin kendisi olduğu için stepsRemoved 0'dır. İleti 64 sekizlidir (Table 25).",
+    "note_en": "An Announce message sent every two seconds (logMessageInterval 1) by a GPS-locked master clock (timeSource 0x20, clockClass 6, 100 ns accuracy). flagField is 0x000c: ptpTimescale and currentUtcOffsetValid are 1. Because it is the grandmaster clock, stepsRemoved is 0. Message is 64 octets (Table 25)."
   },
   "refs": [
     "ieee-1588-2008",
     9542
   ],
-  "id": "ptp-announce"
+  "id": "ptp-announce",
+  "summary_tr": "PTP Announce, bir saatin kimliğini, önceliğini, sınıfını ve doğruluğunu ağdaki diğer saatlere bildirir. IEEE 1588-2008’de ortak başlık 34 bayt, Announce gövdesinin sabit kısmı 30 bayttır. Bu bilgiler ana saat seçiminde kullanılır.",
+  "summary_en": "PTP Announce message advertises a clock’s identity, priority, grandmaster clock class, accuracy, and variance to participate in Best Master Clock Algorithm (BMCA) election.",
+  "notes_tr": [
+    "Announce, zaman özelliklerini taşıyan tek iletidir: flagField'daki leap61, leap59, currentUtcOffsetValid, ptpTimescale, timeTraceable ve frequencyTraceable bayrakları yalnızca Announce'ta tanımlıdır (Table 20).",
+    "En iyi ana saat (BMC) algoritması Announce'taki grandmasterPriority1, grandmasterClockQuality, grandmasterPriority2, grandmasterIdentity ve stepsRemoved alanlarını karşılaştırır (§9.3.4, Table 12). Karşılaştırmanın sırası Figure 27 ve 28'de verilir; priority1 için küçük değer önce gelir (§7.6.2.2).",
+    "Announce'ın controlField değeri 5'tir (\"All others\", Table 23); logMessageInterval portDS.logAnnounceInterval değeridir (Table 24).",
+    "currentUtcOffset değeri örnek içindir; güncel fark IERS tarafından duyurulur ve bu standardın kapsamı dışındadır."
+  ],
+  "notes_en": [
+    "Announce is the only message carrying clock quality and time properties: leap61, leap59, currentUtcOffsetValid, ptpTimescale, timeTraceable, and frequencyTraceable flags in flagField are defined only for Announce (Table 20).",
+    "The Best Master Clock Algorithm (BMCA) compares grandmasterPriority1, grandmasterClockQuality, grandmasterPriority2, grandmasterIdentity, and stepsRemoved in Announce messages (§9.3.4, Table 12). Comparison order is specified in Figures 27 and 28; lower priority1 values take precedence (§7.6.2.2).",
+    "The controlField of Announce is 5 ('All others', Table 23); logMessageInterval reflects portDS.logAnnounceInterval (Table 24).",
+    "The currentUtcOffset value is illustrative; active offsets are announced by the IERS and are outside the scope of this standard."
+  ]
 }

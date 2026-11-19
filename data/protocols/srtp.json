@@ -45,7 +45,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "RTP version; 2 as defined in RFC 3550.",
+      "desc_tr": "Version: RTP sürümü. Bu belgede tanımlanan sürüm 2'dir."
     },
     {
       "key": "p",
@@ -58,7 +60,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Padding bit; indicates padding octets at end of packet before authentication tag.",
+      "desc_tr": "Padding: 1 ise paketin sonunda dolgu sekizlileri vardır."
     },
     {
       "key": "x",
@@ -71,7 +75,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Extension bit; 1 indicates header extension is present.",
+      "desc_tr": "Extension: 1 ise sabit başlığı bir uzantı izler."
     },
     {
       "key": "cc",
@@ -84,7 +90,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "CSRC count: number of Contributing Source identifiers.",
+      "desc_tr": "CSRC count: sabit başlığı izleyen CSRC tanımlayıcılarının sayısı."
     },
     {
       "key": "m",
@@ -97,7 +105,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Marker bit: profile-defined marker.",
+      "desc_tr": "Marker: profile bağlı işaretçi."
     },
     {
       "key": "pt",
@@ -132,6 +142,52 @@
           "96–127",
           "Dinamik"
         ]
+      ],
+      "desc_en": "Payload format identifier: static profiles in RFC 3551 (0 PCMU, 8 PCMA, 9 G722), or dynamic 96–127.",
+      "desc_tr": "Yükün biçimi; RTP'dekiyle aynı statik veya dinamik değerler kullanılır.",
+      "values_en": [
+        [
+          "0",
+          "PCMU (G.711 µ-law)"
+        ],
+        [
+          "8",
+          "PCMA (G.711 A-law)"
+        ],
+        [
+          "9",
+          "G722"
+        ],
+        [
+          "18",
+          "G729"
+        ],
+        [
+          "96–127",
+          "Dynamic"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "PCMU (G.711 µ-law)"
+        ],
+        [
+          "8",
+          "PCMA (G.711 A-law)"
+        ],
+        [
+          "9",
+          "G722"
+        ],
+        [
+          "18",
+          "G729"
+        ],
+        [
+          "96–127",
+          "Dinamik"
+        ]
       ]
     },
     {
@@ -145,7 +201,9 @@
         "section": "3.1",
         "label": "Secure RTP"
       },
-      "example": 4660
+      "example": 4660,
+      "desc_en": "16-bit sequence number incremented for each SRTP packet, unencrypted in header.",
+      "desc_tr": "Gönderilen her SRTP paketinde bir artar; başlıkta şifresiz kalır."
     },
     {
       "key": "ts",
@@ -159,7 +217,9 @@
         "label": "Secure RTP"
       },
       "example": "0x00000a00",
-      "hex": true
+      "hex": true,
+      "desc_en": "Sampling instant of payload data, unencrypted in header.",
+      "desc_tr": "Yükün örnekleme anı; başlıkta şifresiz kalır."
     },
     {
       "key": "ssrc",
@@ -173,12 +233,14 @@
         "label": "Secure RTP"
       },
       "example": "0xdeadbeef",
-      "hex": true
+      "hex": true,
+      "desc_en": "Synchronization source identifier, unencrypted in header.",
+      "desc_tr": "Akışın kaynağını tanımlayan rastgele 32 bitlik kimlik; başlıkta şifresiz kalır."
     },
     {
       "key": "encrypted_payload",
-      "name": "Encrypted Portion (payload)",
-      "label": "Şifreli yük",
+      "name": "Encrypted Payload",
+      "label": "Şifrelenmiş yük",
       "bits": 1280,
       "desc": "RTP yükünün şifrelenmiş hali. Önceden tanımlı dönüşümlerde düz metinle aynı uzunluktadır; burada 160 sekizlilik PCMU yükü.",
       "ref": {
@@ -188,12 +250,14 @@
       },
       "example": "aeb5318406af6fe8d322e0abcc308999a49cc051f0df1943ddba0b18cce7625f880df761256e244405c64a1c183c0b1f36a927733f3fcfa1157a61a7b9500d17ee15f010d7eb2e8f14983dc7ba248b41f600f04c59bfc5518dd5296885c92324f7981e0c17a27dfded431deebcea213d4d99e15c55f4201eda127989fb042417bc6b9836edbb4e9fdcb66466cb4374c5cb8a7bb5462f55218706016fdf620134",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Media data encrypted using keystream cipher (e.g. AES-CTR).",
+      "desc_tr": "Yük türünün belirlediği biçimde, anahtar akışı şifreleyicisi (ör. AES-CTR) ile şifrelenmiş ses veya görüntü verisi."
     },
     {
       "key": "auth_tag",
       "name": "Authentication Tag",
-      "label": "Doğrulama etiketi",
+      "label": "Kimlik doğrulama etiketi",
       "bits": 80,
       "desc": "Başlık ve şifreli yük üzerinden hesaplanan doğrulama etiketi. Tam 80 bitlik etiket kullanılmalıdır (SHOULD).",
       "ref": {
@@ -202,15 +266,33 @@
         "label": "Short and Zero-length Message Authentication"
       },
       "example": "89f54c4209d43fe59d5e",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "Message authentication tag (e.g. 80-bit HMAC-SHA1) computed over entire packet and rollover counter.",
+      "desc_tr": "Bütünlük denetimi ve kaynak doğrulaması sağlayan kimlik doğrulama etiketi (ör. 80 bitlik HMAC-SHA1); başlık, şifreli yük ve ROC üzerinden hesaplanır."
     }
   ],
   "example": {
-    "note": "wire'ın RTP örneğindeki ilk ses paketinin SRTP ile korunmuş hali: başlık aynıdır (SSRC 0xdeadbeef, sıra numarası 4660), 160 sekizlilik PCMU yükü şifrelenmiştir ve sona 10 sekizlilik (80 bit) doğrulama etiketi eklenmiştir. Şifreli yük ve etiket uydurma değerlerdir."
+    "note": "wire'ın RTP örneğindeki ilk ses paketinin SRTP ile korunmuş hali: başlık aynıdır (SSRC 0xdeadbeef, sıra numarası 4660), 160 sekizlilik PCMU yükü şifrelenmiştir ve sona 10 sekizlilik (80 bit) doğrulama etiketi eklenmiştir. Şifreli yük ve etiket uydurma değerlerdir.",
+    "note_tr": "wire'ın RTP örneğindeki ilk ses paketinin SRTP ile korunmuş hali: başlık aynıdır (SSRC 0xdeadbeef, sıra numarası 4660), 160 sekizlilik PCMU yükü şifrelenmiştir ve sona 10 sekizlilik (80 bit) doğrulama etiketi eklenmiştir. Şifreli yük ve etiket uydurma değerlerdir.",
+    "note_en": "The first voice packet from wire's RTP example protected with SRTP: header is identical (SSRC 0xdeadbeef, sequence number 4660), the 160-octet PCMU payload is encrypted, and a 10-octet (80-bit) authentication tag is appended. Encrypted payload and tag are mock values."
   },
   "refs": [
     3711,
     3550
   ],
-  "id": "srtp"
+  "id": "srtp",
+  "summary_tr": "Güvenli RTP (Secure Real-time Transport Protocol - SRTP), RTP akışlarına gizlilik, bütünlük ve tekrar saldırısına karşı koruma ekler. Başlık RTP'ninkiyle aynıdır ve şifrelenmez; yük şifrelenir ve paketin sonuna, başlığı ve şifreli yükü kapsayan bir doğrulama etiketi eklenir.",
+  "summary_en": "Secure Real-time Transport Protocol (SRTP, RFC 3711) provides confidentiality, message authentication, and replay protection for RTP traffic. The packet header matches RTP unencrypted, payload is encrypted, and an authentication tag trailer is appended.",
+  "notes_tr": [
+    "Başlık şifrelenmez; şifrelenen kısım yalnızca RTP yükü (ve varsa RTP dolgusu), doğrulanan kısım ise başlık ile şifreli yüktür (RFC 3711 §3.1, Figure 1).",
+    "Önceden tanımlı dönüşümlerde şifreli yük, düz metinle aynı uzunluktadır (RFC 3711 §3.1, Figure 1 notu). Bu yüzden SRTP paketi, RTP paketinden yalnızca etiket (ve varsa MKI) kadar uzundur.",
+    "Alıcı, 16 bitlik sıra numarasının kaç kez başa döndüğünü 32 bitlik bir sayaçta (rollover counter, ROC) tutar; ROC pakette taşınmaz ama paket indeksinin bir parçasıdır (RFC 3711 §3.2.1, §3.3.1).",
+    "MKI (Master Key Identifier) isteğe bağlıdır ve hangi ana anahtarın kullanıldığını gösterir; bu örnekte yoktur."
+  ],
+  "notes_en": [
+    "The header is not encrypted; encryption covers only the RTP payload (and RTP padding if present), while authentication covers the header and encrypted payload (RFC 3711 §3.1, Figure 1).",
+    "In default transforms, ciphertext matches plaintext in length (RFC 3711 §3.1, Figure 1 note). Thus an SRTP packet is longer than an RTP packet only by the tag (and MKI if present).",
+    "The receiver maintains a 32-bit rollover counter (ROC) tracking how many times the 16-bit sequence number has wrapped; ROC is not transmitted on the wire but is part of the packet index (RFC 3711 §3.2.1, §3.3.1).",
+    "MKI (Master Key Identifier) is optional and indicates which master key was used; omitted in this example."
+  ]
 }

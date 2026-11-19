@@ -26,7 +26,9 @@
         "rfc": 768,
         "label": "Fields"
       },
-      "example": 50194
+      "example": 50194,
+      "desc_en": "Optional source port; indicates sending process when meaningful, otherwise zero.",
+      "desc_tr": "İsteğe bağlı alan. Anlamlı olduğunda gönderen sürecin portunu belirtir; kullanılmıyorsa sıfır konur."
     },
     {
       "key": "dport",
@@ -38,7 +40,9 @@
         "rfc": 768,
         "label": "Fields"
       },
-      "example": 53
+      "example": 53,
+      "desc_en": "Destination port meaningful within the context of the destination IP address.",
+      "desc_tr": "Belirli bir internet hedef adresi bağlamında anlam taşıyan hedef portu."
     },
     {
       "key": "length",
@@ -50,7 +54,9 @@
         "rfc": 768,
         "label": "Fields"
       },
-      "example": 37
+      "example": 37,
+      "desc_en": "Length in octets of the UDP datagram, including this 8-octet header and data.",
+      "desc_tr": "UDP datagramının bayt cinsinden toplam uzunluğu. 8 baytlık sabit başlığı ve veri yükünü kapsar."
     },
     {
       "key": "checksum",
@@ -63,7 +69,9 @@
         "label": "Fields"
       },
       "checksum": "pseudo4",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit one's complement of one's complement sum of pseudo-header, UDP header, and data.",
+      "desc_tr": "IP başlığından alınan bilgilerle kurulan sözde başlığın, UDP başlığının ve verinin bire tümleyen toplamının 16 bitlik bire tümleyeni."
     },
     {
       "key": "data",
@@ -74,7 +82,9 @@
       "ref": {
         "rfc": 768,
         "label": "Format"
-      }
+      },
+      "desc_en": "Payload data octets carried by the datagram.",
+      "desc_tr": "Datagramın taşıdığı veri sekizlileri."
     }
   ],
   "example": {
@@ -84,7 +94,9 @@
       "destination": "198.51.100.7",
       "protocol": 17
     },
-    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki DNS sunucusunun 53 numaralı portuna giden, DNS sayfasındaki example.com A kaydı sorgusunu taşıyan standart bir UDP datagramı. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki DNS sunucusunun 53 numaralı portuna giden, DNS sayfasındaki example.com A kaydı sorgusunu taşıyan standart bir UDP datagramı. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır.",
+    "note_tr": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki DNS sunucusunun 53 numaralı portuna giden, DNS sayfasındaki example.com A kaydı sorgusunu taşıyan standart bir UDP datagramı. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır.",
+    "note_en": "A standard UDP datagram from client 192.0.2.1 to DNS server 198.51.100.7 port 53, carrying the example.com A record query from the DNS page. Checksum is computed with the 192.0.2.1 → 198.51.100.7 IPv4 pseudo-header."
   },
   "refs": [
     768,
@@ -93,5 +105,15 @@
     5737,
     1035
   ],
-  "id": "udp"
+  "id": "udp",
+  "summary_tr": "UDP (User Datagram Protocol), uygulamalar arasında bağlantı kurmadan datagram taşır. Sabit 8 baytlık başlığı, her biri 16 bit olan kaynak portu, hedef portu, uzunluk ve sağlama toplamından oluşur. Length alanı başlık ile veri yükünün toplam uzunluğunu verir.",
+  "summary_en": "User Datagram Protocol (UDP, RFC 768) provides a lightweight, connectionless datagram delivery service with minimal overhead. The header is exactly 8 octets: 16-bit Source and Destination ports, 16-bit Length, and a 16-bit Checksum.",
+  "notes_tr": [
+    "Hesaplanan sağlama toplamı sıfır çıkarsa tümü bir olarak gönderilir. Sıfır olarak gönderilen değer, gönderenin sağlama toplamı üretmediği anlamına gelir.",
+    "IPv6 üzerinde sözde başlık 128 bitlik adresleri içerir (RFC 8200 §8.1)."
+  ],
+  "notes_en": [
+    "If the computed checksum evaluates to zero, it is transmitted as all ones. A transmitted value of all zeros indicates the sender generated no checksum.",
+    "Over IPv6, the pseudo-header incorporates 128-bit addresses (RFC 8200 §8.1)."
+  ]
 }

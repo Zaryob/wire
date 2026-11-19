@@ -40,10 +40,60 @@
       },
       "example": 0,
       "values": [
-        ["0", "Uyarı yok"],
-        ["1", "Son dakika 61 saniye"],
-        ["2", "Son dakika 59 saniye"],
-        ["3", "Bilinmiyor (saat eşzamanlı değil)"]
+        [
+          "0",
+          "Uyarı yok"
+        ],
+        [
+          "1",
+          "Son dakika 61 saniye"
+        ],
+        [
+          "2",
+          "Son dakika 59 saniye"
+        ],
+        [
+          "3",
+          "Bilinmiyor (saat eşzamanlı değil)"
+        ]
+      ],
+      "desc_en": "Leap Indicator warning of impending leap second insertion or deletion; 3 means unsynchronized clock.",
+      "desc_tr": "Leap Indicator (artık saniye göstergesi). Günün son dakikasına artık saniye eklenip çıkarılacağını bildirir. 3, saatin henüz eşzamanlanmadığı anlamına gelir.",
+      "values_en": [
+        [
+          "0",
+          "no warning"
+        ],
+        [
+          "1",
+          "last minute has 61 seconds"
+        ],
+        [
+          "2",
+          "last minute has 59 seconds"
+        ],
+        [
+          "3",
+          "alarm condition (clock unsynchronized)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Uyarı yok"
+        ],
+        [
+          "1",
+          "Son dakika 61 saniye"
+        ],
+        [
+          "2",
+          "Son dakika 59 saniye"
+        ],
+        [
+          "3",
+          "Bilinmiyor (saat eşzamanlı değil)"
+        ]
       ]
     },
     {
@@ -57,7 +107,9 @@
         "section": "7.3",
         "label": "Version Number"
       },
-      "example": 4
+      "example": 4,
+      "desc_en": "NTP version number; 4 for NTPv4.",
+      "desc_tr": "Version Number: NTP sürüm numarası; NTPv4 için 4."
     },
     {
       "key": "mode",
@@ -72,14 +124,108 @@
       },
       "example": 4,
       "values": [
-        ["0", "Ayrılmış"],
-        ["1", "Simetrik etkin"],
-        ["2", "Simetrik edilgen"],
-        ["3", "İstemci"],
-        ["4", "Sunucu"],
-        ["5", "Yayın (broadcast)"],
-        ["6", "NTP denetim iletisi"],
-        ["7", "Özel kullanım için ayrılmış"]
+        [
+          "0",
+          "Ayrılmış"
+        ],
+        [
+          "1",
+          "Simetrik etkin"
+        ],
+        [
+          "2",
+          "Simetrik edilgen"
+        ],
+        [
+          "3",
+          "İstemci"
+        ],
+        [
+          "4",
+          "Sunucu"
+        ],
+        [
+          "5",
+          "Yayın (broadcast)"
+        ],
+        [
+          "6",
+          "NTP denetim iletisi"
+        ],
+        [
+          "7",
+          "Özel kullanım için ayrılmış"
+        ]
+      ],
+      "desc_en": "Association mode: 3 client request, 4 server reply, 1 symmetric active, 2 symmetric passive.",
+      "desc_tr": "İletişim kipi. İstemci isteği 3, sunucu yanıtı 4 taşır.",
+      "values_en": [
+        [
+          "0",
+          "reserved"
+        ],
+        [
+          "1",
+          "symmetric active"
+        ],
+        [
+          "2",
+          "symmetric passive"
+        ],
+        [
+          "3",
+          "client"
+        ],
+        [
+          "4",
+          "server"
+        ],
+        [
+          "5",
+          "broadcast"
+        ],
+        [
+          "6",
+          "NTP control message"
+        ],
+        [
+          "7",
+          "reserved for private use"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Ayrılmış"
+        ],
+        [
+          "1",
+          "Simetrik etkin"
+        ],
+        [
+          "2",
+          "Simetrik edilgen"
+        ],
+        [
+          "3",
+          "İstemci"
+        ],
+        [
+          "4",
+          "Sunucu"
+        ],
+        [
+          "5",
+          "Yayın (broadcast)"
+        ],
+        [
+          "6",
+          "NTP denetim iletisi"
+        ],
+        [
+          "7",
+          "Özel kullanım için ayrılmış"
+        ]
       ]
     },
     {
@@ -95,10 +241,60 @@
       },
       "example": 2,
       "values": [
-        ["0", "Belirtilmemiş / geçersiz (Kiss-o'-Death)"],
-        ["1", "Birincil sunucu"],
-        ["2–15", "İkincil sunucu"],
-        ["16", "Eşzamansız"]
+        [
+          "0",
+          "Belirtilmemiş / geçersiz (Kiss-o'-Death)"
+        ],
+        [
+          "1",
+          "Birincil sunucu"
+        ],
+        [
+          "2–15",
+          "İkincil sunucu"
+        ],
+        [
+          "16",
+          "Eşzamansız"
+        ]
+      ],
+      "desc_en": "Stratum level of the clock: 1 primary reference, 2–15 secondary via NTP, 16 unsynchronized, 0 Kiss-o'-Death.",
+      "desc_tr": "Sunucunun başvuru saatine uzaklığı. 1 birincil sunucu (ör. GPS alıcılı), 2–15 NTP ile eşzamanlanan ikincil sunucu, 16 eşzamansızdır. 0 ise Kiss-o'-Death paketini belirtir.",
+      "values_en": [
+        [
+          "0",
+          "unspecified or invalid (Kiss-o'-Death)"
+        ],
+        [
+          "1",
+          "primary server"
+        ],
+        [
+          "2–15",
+          "secondary server"
+        ],
+        [
+          "16",
+          "unsynchronized"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Belirtilmemiş / geçersiz (Kiss-o'-Death)"
+        ],
+        [
+          "1",
+          "Birincil sunucu"
+        ],
+        [
+          "2–15",
+          "İkincil sunucu"
+        ],
+        [
+          "16",
+          "Eşzamansız"
+        ]
       ]
     },
     {
@@ -112,7 +308,9 @@
         "section": "7.3",
         "label": "Poll"
       },
-      "example": 6
+      "example": 6,
+      "desc_en": "Maximum interval between successive messages, in log2 seconds (e.g. 6 represents 2^6 = 64 seconds).",
+      "desc_tr": "Ardışık iletiler arasındaki en uzun aralık, log₂ saniye cinsinden işaretli tamsayı. 6 değeri 2⁶ = 64 saniyedir."
     },
     {
       "key": "precision",
@@ -126,7 +324,9 @@
         "label": "Precision"
       },
       "example": "0xe9",
-      "hex": true
+      "hex": true,
+      "desc_en": "Precision of system clock, in log2 seconds (e.g. -23 represents 2^-23 ≈ 119 nanoseconds).",
+      "desc_tr": "Sistem saatinin duyarlılığı, log₂ saniye cinsinden işaretli (ikiye tümleyen) tamsayı. Örnekteki 0xe9 = −23, yani 2⁻²³ ≈ 119 nanosaniyedir."
     },
     {
       "key": "rootdelay",
@@ -140,7 +340,9 @@
         "label": "Root Delay"
       },
       "example": "0x00000a3d",
-      "hex": true
+      "hex": true,
+      "desc_en": "Total round-trip delay to reference clock, in NTP short format (16-bit integer, 16-bit fraction).",
+      "desc_tr": "Başvuru saatine kadar toplam gidiş-dönüş gecikmesi, NTP kısa biçiminde (16.16). Örnekteki 0x00000a3d ≈ 0,040 saniyedir."
     },
     {
       "key": "rootdisp",
@@ -154,7 +356,9 @@
         "label": "Root Dispersion"
       },
       "example": "0x00000831",
-      "hex": true
+      "hex": true,
+      "desc_en": "Total dispersion accumulated to reference clock, in NTP short format.",
+      "desc_tr": "Başvuru saatine kadar biriken toplam belirsizlik (dispersion), NTP kısa biçiminde. Örnekteki 0x00000831 ≈ 0,032 saniyedir."
     },
     {
       "key": "refid",
@@ -168,7 +372,9 @@
         "section": "7.3",
         "label": "Reference ID"
       },
-      "example": "192.0.2.123"
+      "example": "192.0.2.123",
+      "desc_en": "Reference identifier: 4-character ASCII source for stratum 1 (\"GPS\", \"PPS\"), kiss code for stratum 0, IPv4 for stratum > 1.",
+      "desc_tr": "Başvuru kaynağının kimliği. Stratum 1'de dört karakterlik ASCII saat kaynağı (\"GPS\", \"PPS\" gibi), Stratum 0'da kiss kodu (\"RATE\", \"DENY\"), daha üst stratumlarda IPv4 üzerinden üst sunucunun adresidir."
     },
     {
       "key": "reftime",
@@ -182,7 +388,9 @@
         "label": "Reference Timestamp"
       },
       "example": "0xeea56e5c00000000",
-      "hex": true
+      "hex": true,
+      "desc_en": "Time when system clock was last set or corrected, in 64-bit NTP timestamp format.",
+      "desc_tr": "Sistem saatinin en son ayarlandığı an, 64 bitlik NTP zaman damgası biçiminde. Örnek: 16 Kasım 2026 11:58:20 UTC."
     },
     {
       "key": "org",
@@ -196,7 +404,9 @@
         "label": "Origin Timestamp"
       },
       "example": "0xeea56ec000000000",
-      "hex": true
+      "hex": true,
+      "desc_en": "Time request departed client, copied by server from client's Transmit Timestamp.",
+      "desc_tr": "İsteğin istemciden ayrıldığı an. Sunucu, istemcinin Transmit Timestamp değerini bu alana kopyalar; istemci bununla yanıtı kendi isteğiyle eşleştirir. Örnek: 12:00:00,000 UTC."
     },
     {
       "key": "rec",
@@ -210,7 +420,9 @@
         "label": "Receive Timestamp"
       },
       "example": "0xeea56ec003126e98",
-      "hex": true
+      "hex": true,
+      "desc_en": "Time request arrived at server in 64-bit NTP timestamp format.",
+      "desc_tr": "İsteğin sunucuya ulaştığı an. Örnek: 12:00:00,012 UTC."
     },
     {
       "key": "xmt",
@@ -224,27 +436,48 @@
         "label": "Transmit Timestamp"
       },
       "example": "0xeea56ec00353f7cf",
-      "hex": true
+      "hex": true,
+      "desc_en": "Time response departed server in 64-bit NTP timestamp format.",
+      "desc_tr": "Yanıtın sunucudan ayrıldığı an. Örnek: 12:00:00,013 UTC."
     },
     {
       "key": "ext",
-      "name": "Uzantı alanları ve MAC",
+      "name": "Extension Fields and MAC",
       "bits": "değişken",
       "desc": "İsteğe bağlı uzantı alanları ile Key Identifier (32 bit) ve ileti özeti (dgst). Temel 48 sekizlilik başlıkta bulunmaz.",
       "ref": {
         "rfc": 5905,
         "section": "7.3",
         "label": "Figure 8"
-      }
+      },
+      "label": "Uzantı alanları ve MAC",
+      "desc_en": "Optional extension fields and Key Identifier plus message digest (MAC); not present in base 48-octet header.",
+      "desc_tr": "İsteğe bağlı uzantı alanları ile Key Identifier (32 bit) ve ileti özeti (dgst). Temel 48 sekizlilik başlıkta bulunmaz."
     }
   ],
   "example": {
-    "note": "192.0.2.123 adresli üst sunucuya eşzamanlanmış Stratum 2 bir sunucunun istemciye gönderdiği yanıt (LI 0, VN 4, Mode 4, ilk sekizli 0x24). İstemci isteğini 12:00:00,000'da göndermiş, sunucu 12 ms sonra almış ve 1 ms sonra yanıtlamıştır. UDP üzerinde kaynak ve hedef portu 123'tür."
+    "note": "192.0.2.123 adresli üst sunucuya eşzamanlanmış Stratum 2 bir sunucunun istemciye gönderdiği yanıt (LI 0, VN 4, Mode 4, ilk sekizli 0x24). İstemci isteğini 12:00:00,000'da göndermiş, sunucu 12 ms sonra almış ve 1 ms sonra yanıtlamıştır. UDP üzerinde kaynak ve hedef portu 123'tür.",
+    "note_tr": "192.0.2.123 adresli üst sunucuya eşzamanlanmış Stratum 2 bir sunucunun istemciye gönderdiği yanıt (LI 0, VN 4, Mode 4, ilk sekizli 0x24). İstemci isteğini 12:00:00,000'da göndermiş, sunucu 12 ms sonra almış ve 1 ms sonra yanıtlamıştır. UDP üzerinde kaynak ve hedef portu 123'tür.",
+    "note_en": "A response sent to a client by a Stratum 2 server synchronized to upstream server 192.0.2.123 (LI 0, VN 4, Mode 4, first octet 0x24). The client sent its query at 12:00:00.000, the server received it 12 ms later and answered 1 ms thereafter. Source and destination port is 123 over UDP."
   },
   "refs": [
     5905,
     768,
     5737
   ],
-  "id": "ntp"
+  "id": "ntp",
+  "summary_tr": "NTPv4 (Network Time Protocol), ağdaki saatleri eşzamanlamak için zaman damgaları alışverişi yapar. Temel NTP başlığı 48 bayttır ve dört 64 bitlik zaman damgası içerir. NTP sunucuları UDP 123 numaralı portu kullanır.",
+  "summary_en": "Network Time Protocol (NTPv4, RFC 5905) synchronizes computer clocks across packet-switched networks over UDP (port 123). The fixed header is 48 octets (384 bits), carrying leap indicator, version, mode, stratum, poll, precision, root delay, root dispersion, and timestamps.",
+  "notes_tr": [
+    "RFC 5905 Figure 8'in ilk satırı bit ızgarasına tam oturmaz: Stratum ve Precision hücreleri bir karakter kaymış çizilmiştir. Bu yüzden ilk altı alanın genişliği §7.3 metnindeki \"2-bit\", \"3-bit\", \"8-bit\" tanımlarından, kalan alanlar şemadan doğrulanır.",
+    "Zaman damgaları 1 Ocak 1900 00:00 UTC'den bu yana geçen saniyeleri verir: üst 32 bit saniye, alt 32 bit saniyenin kesridir (RFC 5905 §6). Root Delay ve Root Dispersion ise 16 bit saniye + 16 bit kesirden oluşan kısa biçimdedir.",
+    "Destination Timestamp başlıkta taşınmaz; istemci yanıt geldiği anda kendisi kaydeder. Gidiş-dönüş gecikmesi (T4 − T1) − (T3 − T2), saat farkı ise ((T2 − T1) + (T3 − T4)) / 2 formülüyle hesaplanır.",
+    "Temel başlığın ardından isteğe bağlı uzantı alanları ile Key Identifier ve özetten (dgst) oluşan ileti doğrulama kodu (MAC) gelebilir."
+  ],
+  "notes_en": [
+    "The first row of RFC 5905 Figure 8 is drawn off the bit grid: Stratum and Precision cells are offset by one character. The widths of the first six fields are verified from the '2-bit', '3-bit', '8-bit' definitions in §7.3 prose, and remaining fields from the diagram.",
+    "Timestamps express seconds elapsed since January 1, 1900 00:00 UTC: upper 32 bits are seconds, lower 32 bits are fractional seconds (RFC 5905 §6). Root Delay and Root Dispersion use short format (16 bits seconds + 16 bits fraction).",
+    "Destination Timestamp is not transmitted in the header; the client records it upon arrival. Round-trip delay is (T4 − T1) − (T3 − T2), and clock offset is ((T2 − T1) + (T3 − T4)) / 2.",
+    "The base header may be followed by optional extension fields and a Message Authentication Code (MAC) containing Key Identifier and digest."
+  ]
 }

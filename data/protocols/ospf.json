@@ -51,7 +51,9 @@
         "section": "A.3.1",
         "label": "The OSPF packet header"
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "OSPF version; 2 for OSPFv2 (RFC 2328).",
+      "desc_tr": "OSPF sürümü; bu belge sürüm 2'yi tanımlar."
     },
     {
       "key": "type",
@@ -86,6 +88,52 @@
           "5",
           "Bağlantı durumu onayı (Link State Acknowledgment)"
         ]
+      ],
+      "desc_en": "OSPF packet type: 1 Hello, 2 Database Description, 3 Link State Request, 4 Link State Update, 5 Link State Ack.",
+      "desc_tr": "OSPF paket türü.",
+      "values_en": [
+        [
+          "1",
+          "Hello"
+        ],
+        [
+          "2",
+          "Database Description"
+        ],
+        [
+          "3",
+          "Link State Request"
+        ],
+        [
+          "4",
+          "Link State Update"
+        ],
+        [
+          "5",
+          "Link State Acknowledgment"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Komşu keşfi (Hello)"
+        ],
+        [
+          "2",
+          "Veritabanı tanımı (Database Description)"
+        ],
+        [
+          "3",
+          "Bağlantı durumu isteği (Link State Request)"
+        ],
+        [
+          "4",
+          "Bağlantı durumu güncellemesi (Link State Update)"
+        ],
+        [
+          "5",
+          "Bağlantı durumu onayı (Link State Acknowledgment)"
+        ]
       ]
     },
     {
@@ -99,7 +147,9 @@
         "section": "A.3.1",
         "label": "The OSPF packet header"
       },
-      "example": 48
+      "example": 48,
+      "desc_en": "Total length of the OSPF packet in octets, including the 24-octet standard header.",
+      "desc_tr": "Başlık dahil OSPF paketinin uzunluğu, sekizli olarak."
     },
     {
       "key": "router_id",
@@ -113,7 +163,9 @@
         "label": "The OSPF packet header"
       },
       "example": "192.0.2.1",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "32-bit Router ID of the router originating the packet.",
+      "desc_tr": "Paketi gönderen yönlendiricinin kimliği."
     },
     {
       "key": "area_id",
@@ -127,7 +179,9 @@
         "label": "The OSPF packet header"
       },
       "example": "0.0.0.0",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "32-bit Area ID to which the packet belongs; 0.0.0.0 represents the backbone area.",
+      "desc_tr": "Paketin ait olduğu alan; omurga alanı 0.0.0.0'dır."
     },
     {
       "key": "checksum",
@@ -142,7 +196,9 @@
       },
       "example": 0,
       "checksum": "packet",
-      "hex": true
+      "hex": true,
+      "desc_en": "Standard IP checksum of the entire OSPF packet except authentication.",
+      "desc_tr": "Kimlik doğrulama alanı hariç bütün paketin IP sağlama toplamı."
     },
     {
       "key": "autype",
@@ -169,6 +225,36 @@
           "2",
           "Kriptografik kimlik doğrulama (Cryptographic authentication)"
         ]
+      ],
+      "desc_en": "Authentication type: 0 Null, 1 Simple password, 2 Cryptographic authentication.",
+      "desc_tr": "Kullanılan kimlik doğrulama yöntemi.",
+      "values_en": [
+        [
+          "0",
+          "Null authentication"
+        ],
+        [
+          "1",
+          "Simple password"
+        ],
+        [
+          "2",
+          "Cryptographic authentication"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Kimlik doğrulama yok (Null authentication)"
+        ],
+        [
+          "1",
+          "Basit parola (Simple password)"
+        ],
+        [
+          "2",
+          "Kriptografik kimlik doğrulama (Cryptographic authentication)"
+        ]
       ]
     },
     {
@@ -183,7 +269,9 @@
         "label": "The OSPF packet header"
       },
       "example": "0000000000000000",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "64-bit authentication field; uninterpreted when AuType is 0.",
+      "desc_tr": "Kimlik doğrulama yönteminin kullandığı 64 bitlik alan; AuType 0 iken anlamı yoktur."
     },
     {
       "key": "network_mask",
@@ -197,7 +285,9 @@
         "label": "The Hello packet"
       },
       "example": "255.255.255.0",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "Network mask associated with the interface over which the Hello packet is sent.",
+      "desc_tr": "Paketin gönderildiği arayüzün ağ maskesi."
     },
     {
       "key": "hello_interval",
@@ -210,7 +300,9 @@
         "section": "A.3.2",
         "label": "The Hello packet"
       },
-      "example": 10
+      "example": 10,
+      "desc_en": "Number of seconds between Hello packets transmitted by this router (e.g. 10 s for broadcast networks).",
+      "desc_tr": "Yönlendiricinin Hello paketleri arasındaki süre, saniye olarak. Yerel ağ için örnek değer 10 s'dir (RFC 2328 C.3)."
     },
     {
       "key": "options",
@@ -224,7 +316,9 @@
         "label": "The Hello packet"
       },
       "example": 2,
-      "hex": true
+      "hex": true,
+      "desc_en": "Optional routing capabilities supported by the router (RFC 2328 A.2); 0x02 indicates E-bit (external LSA support).",
+      "desc_tr": "Yönlendiricinin desteklediği isteğe bağlı yetenekler (RFC 2328 A.2). 0x02, E bitidir: AS dışı LSA'ların alana taşınabildiğini gösterir."
     },
     {
       "key": "rtr_pri",
@@ -237,7 +331,9 @@
         "section": "A.3.2",
         "label": "The Hello packet"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Router priority in Designated Router election; 0 indicates ineligible to become DR or BDR.",
+      "desc_tr": "Yönlendiricinin Designated Router seçimindeki önceliği; 0, yönlendiricinin DR ya da BDR olamayacağını gösterir."
     },
     {
       "key": "dead_interval",
@@ -250,7 +346,9 @@
         "section": "A.3.2",
         "label": "The Hello packet"
       },
-      "example": 40
+      "example": 40,
+      "desc_en": "Seconds to wait without receiving Hellos before declaring a neighbor down (typically 4 × HelloInterval).",
+      "desc_tr": "Bir komşudan Hello alınmayınca onun kapandığına karar verilene kadar geçen süre, saniye olarak. HelloInterval'ın bir katı olmalıdır (örneğin 4) (RFC 2328 C.3)."
     },
     {
       "key": "dr",
@@ -264,7 +362,9 @@
         "label": "The Hello packet"
       },
       "example": "192.0.2.1",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "IP address of the Designated Router for this network; 0.0.0.0 if none.",
+      "desc_tr": "Gönderenin bu ağ için bildiği Designated Router'ın arayüz adresi; yoksa 0.0.0.0."
     },
     {
       "key": "bdr",
@@ -278,7 +378,9 @@
         "label": "The Hello packet"
       },
       "example": "0.0.0.0",
-      "type": "ipv4"
+      "type": "ipv4",
+      "desc_en": "IP address of the Backup Designated Router for this network; 0.0.0.0 if none.",
+      "desc_tr": "Backup Designated Router'ın arayüz adresi; yoksa 0.0.0.0."
     },
     {
       "key": "neighbor",
@@ -293,16 +395,34 @@
       },
       "example": "192.0.2.2",
       "type": "ipv4",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Router IDs of neighbors from which valid Hello packets were received within RouterDeadInterval.",
+      "desc_tr": "Son RouterDeadInterval içinde Hello paketi alınan bir komşunun Router ID'si. Liste uzunluğu değişkendir; bu örnekte bir komşu vardır."
     }
   ],
   "example": {
-    "note": "Omurga alanındaki 192.0.2.1 yönlendiricisinin gönderdiği Hello: kendisi DR'dir, yedek DR yoktur ve 192.0.2.2'yi komşu olarak görmüştür. HelloInterval 10 s, RouterDeadInterval 40 s. Paket 48 sekizlidir: 24 sekizli başlık, 20 sekizli Hello gövdesi ve bir komşu. Sağlama toplamı derleme sırasında hesaplanır."
+    "note": "Omurga alanındaki 192.0.2.1 yönlendiricisinin gönderdiği Hello: kendisi DR'dir, yedek DR yoktur ve 192.0.2.2'yi komşu olarak görmüştür. HelloInterval 10 s, RouterDeadInterval 40 s. Paket 48 sekizlidir: 24 sekizli başlık, 20 sekizli Hello gövdesi ve bir komşu. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_tr": "Omurga alanındaki 192.0.2.1 yönlendiricisinin gönderdiği Hello: kendisi DR'dir, yedek DR yoktur ve 192.0.2.2'yi komşu olarak görmüştür. HelloInterval 10 s, RouterDeadInterval 40 s. Paket 48 sekizlidir: 24 sekizli başlık, 20 sekizli Hello gövdesi ve bir komşu. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_en": "A Hello sent by router 192.0.2.1 in the backbone area: it is DR, no BDR exists, and it sees 192.0.2.2 as a neighbor. HelloInterval is 10 s, RouterDeadInterval is 40 s. Packet is 48 octets: 24-octet header, 20-octet Hello body, and one neighbor. Checksum computed during build."
   },
   "refs": [
     2328,
     1071,
     5737
   ],
-  "id": "ospf"
+  "id": "ospf",
+  "summary_tr": "OSPFv2 (Open Shortest Path First), bir özerk sistem içinde çalışan IPv4 bağlantı durumu yönlendirme protokolüdür. Ortak paket başlığı 24 bayttır. Bu sayfadaki Hello paketi komşuları bulur ve komşuluk için gereken ağ ayarlarını bildirir.",
+  "summary_en": "Open Shortest Path First (OSPFv2, RFC 2328) is an interior gateway link-state routing protocol for IPv4. Every OSPF packet shares a 24-octet base header. The Hello packet discovers neighbors and establishes adjacencies.",
+  "notes_tr": [
+    "OSPF doğrudan IP üzerinde, 89 numaralı protokolle çalışır. Hello paketleri yayın ağlarında AllSPFRouters adresine (224.0.0.5) gönderilir (RFC 2328 §4, A.1).",
+    "Sağlama toplamı, 64 bitlik kimlik doğrulama alanı dışında bütün OSPF paketi üzerinden hesaplanan IP sağlama toplamıdır (RFC 2328 D.4.1). Bu örnekte kimlik doğrulama alanı sıfır olduğundan sonuç aynıdır.",
+    "Aynı ağdaki yönlendiricilerin Network Mask, HelloInterval ve RouterDeadInterval değerleri aynı olmalıdır; aksi halde komşuluk kurulmaz (RFC 2328 A.3.2).",
+    "Neighbor listesi, son RouterDeadInterval süresi içinde Hello paketi alınan yönlendiricilerin kimliklerini taşır; uzunluğu paket uzunluğundan anlaşılır."
+  ],
+  "notes_en": [
+    "OSPF runs directly over IP using protocol number 89. Hello packets on broadcast networks are sent to AllSPFRouters (224.0.0.5) (RFC 2328 §4, A.1).",
+    "Checksum is the standard IP checksum computed over the entire OSPF packet excluding the 64-bit authentication field (RFC 2328 D.4.1). In this example authentication is null, so the result is identical.",
+    "Routers on the same network must agree on Network Mask, HelloInterval, and RouterDeadInterval; otherwise no adjacency is formed (RFC 2328 A.3.2).",
+    "The Neighbor list contains router IDs of neighbors from which valid Hello packets were received within RouterDeadInterval; its length is deduced from total packet length."
+  ]
 }

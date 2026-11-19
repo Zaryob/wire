@@ -39,7 +39,9 @@
         "section": "5.2.1",
         "label": "Version"
       },
-      "example": 3
+      "example": 3,
+      "desc_en": "VRRP version; 3 for VRRPv3 (RFC 9568).",
+      "desc_tr": "VRRP sürümü; bu belge için 3."
     },
     {
       "key": "type",
@@ -52,7 +54,9 @@
         "section": "5.2.2",
         "label": "Type"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "VRRP packet type; only type 1 (ADVERTISEMENT) is defined.",
+      "desc_tr": "Paket türü; tanımlı tek tür 1, ADVERTISEMENT'tır."
     },
     {
       "key": "vrid",
@@ -65,7 +69,9 @@
         "section": "5.2.3",
         "label": "Virtual Rtr ID (VRID)"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Identifies the virtual router on this LAN; range 1–255.",
+      "desc_tr": "Paketin ait olduğu sanal yönlendirici, 1–255."
     },
     {
       "key": "priority",
@@ -92,6 +98,36 @@
           "0",
           "Etkin yönlendirici görevi bırakıyor"
         ]
+      ],
+      "desc_en": "Priority of the sending VRRP router for the virtual router (default 100 for backups, 255 for owner).",
+      "desc_tr": "Gönderen yönlendiricinin bu sanal yönlendirici için önceliği. Yedekler için varsayılan 100'dür.",
+      "values_en": [
+        [
+          "255",
+          "Address owner"
+        ],
+        [
+          "1–254",
+          "Backup routers; default 100"
+        ],
+        [
+          "0",
+          "Master releasing responsibility"
+        ]
+      ],
+      "values_tr": [
+        [
+          "255",
+          "Sanal adreslerin sahibi"
+        ],
+        [
+          "1–254",
+          "Yedek yönlendiriciler; varsayılan 100"
+        ],
+        [
+          "0",
+          "Etkin yönlendirici görevi bırakıyor"
+        ]
       ]
     },
     {
@@ -105,7 +141,9 @@
         "section": "5.2.5",
         "label": "IPvX Addr Count"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Number of IPv4 or IPv6 addresses included in this VRRP advertisement; at least 1.",
+      "desc_tr": "Pakette bulunan IPv4 ya da IPv6 adreslerinin sayısı; en az 1."
     },
     {
       "key": "rsvd",
@@ -118,7 +156,9 @@
         "section": "5.2.6",
         "label": "Reserve"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved 4 bits; set to 0 by sender and ignored by receiver.",
+      "desc_tr": "0 gönderilir, alıcı yok sayar."
     },
     {
       "key": "max_adv",
@@ -131,7 +171,9 @@
         "section": "5.2.7",
         "label": "Maximum Advertisement Interval (Max Advertise Interval)"
       },
-      "example": 100
+      "example": 100,
+      "desc_en": "Interval between advertisements in centiseconds (10 ms units); default is 100 (1 second).",
+      "desc_tr": "Duyurular arasındaki süre, santisaniye olarak; varsayılan 100 (1 saniye)."
     },
     {
       "key": "checksum",
@@ -146,7 +188,9 @@
       },
       "example": 0,
       "checksum": "packet",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit RFC 1071 checksum calculated over the entire VRRP message with Checksum set to 0.",
+      "desc_tr": "IPv4'te VRRP mesajının, Checksum alanı 0 alınarak hesaplanan RFC 1071 sağlama toplamı."
     },
     {
       "key": "address",
@@ -161,16 +205,32 @@
       },
       "example": "192.0.2.254",
       "type": "ipv4",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "IPv4 address associated with the virtual router; count specified by IPvX Addr Count.",
+      "desc_tr": "Sanal yönlendiriciyle ilişkili IPv4 adresi. Adres sayısı IPvX Addr Count'tan gelir; bu örnekte bir adres vardır."
     }
   ],
   "example": {
-    "note": "VRID 1 için öncelik 100 ile çalışan etkin yönlendiricinin saniyede bir gönderdiği IPv4 duyurusu. Sanal adres 192.0.2.254'tür. Paket 12 sekizlidir: 8 sekizli başlık ve bir IPv4 adresi. Sağlama toplamı derleme sırasında hesaplanır."
+    "note": "VRID 1 için öncelik 100 ile çalışan etkin yönlendiricinin saniyede bir gönderdiği IPv4 duyurusu. Sanal adres 192.0.2.254'tür. Paket 12 sekizlidir: 8 sekizli başlık ve bir IPv4 adresi. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_tr": "VRID 1 için öncelik 100 ile çalışan etkin yönlendiricinin saniyede bir gönderdiği IPv4 duyurusu. Sanal adres 192.0.2.254'tür. Paket 12 sekizlidir: 8 sekizli başlık ve bir IPv4 adresi. Sağlama toplamı derleme sırasında hesaplanır.",
+    "note_en": "An IPv4 advertisement sent once per second by the master router operating with priority 100 for VRID 1. Virtual IP address is 192.0.2.254. Packet is 12 octets: 8-octet header and one IPv4 address. Checksum computed during build."
   },
   "refs": [
     9568,
     1071,
     5737
   ],
-  "id": "vrrp"
+  "id": "vrrp",
+  "summary_tr": "Sanal Yönlendirici Yedeklilik Protokolü (Virtual Router Redundancy Protocol - VRRP), bir ağdaki birkaç yönlendiricinin tek bir sanal yönlendiriciyi paylaşmasını sağlar. Etkin yönlendirici düzenli duyurular gönderir; duyurular kesilirse en yüksek öncelikli yedek, sanal IP adresini devralır. Sürüm 3 hem IPv4 hem IPv6 için aynı paketi kullanır.",
+  "summary_en": "Virtual Router Redundancy Protocol (VRRPv3, RFC 9568) provides dynamic router failover on local multi-access networks. The master virtual router periodically broadcasts advertisements containing Virtual Router ID, priority, and IPv4/IPv6 addresses.",
+  "notes_tr": [
+    "IPv4'te VRRP paketleri 112 numaralı protokolle, 224.0.0.18 adresine, TTL 255 ile gönderilir; TTL'si 255 olmayan paket atılır (RFC 9568 §5.1.1).",
+    "IPv4 sağlama toplamı yalnızca Version alanından son IPv4 adresine kadar olan VRRP mesajını kapsar. IPv6'da RFC 8200'deki sözde başlık da eklenir (RFC 9568 §5.2.8).",
+    "Öncelik 255, sanal adreslerin sahibi olan yönlendiricidir; 0, etkin yönlendiricinin görevi bıraktığını bildirir ve yedeğin hemen devralmasını sağlar (RFC 9568 §5.2.4)."
+  ],
+  "notes_en": [
+    "In IPv4, VRRP packets are sent with protocol 112 to multicast address 224.0.0.18 with TTL 255; packets without TTL 255 are dropped (RFC 9568 §5.1.1).",
+    "The IPv4 checksum covers only the VRRP message from Version through the last IPv4 address. In IPv6, the RFC 8200 pseudo-header is also prepended (RFC 9568 §5.2.8).",
+    "Priority 255 denotes the router that owns the virtual addresses; priority 0 signals that the master is relinquishing responsibility, triggering immediate backup takeover (RFC 9568 §5.2.4)."
+  ]
 }

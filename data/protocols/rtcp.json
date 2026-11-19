@@ -31,7 +31,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "RTP version; matches RTP header version (2).",
+      "desc_tr": "RTP sürümü; RTP başlığındakiyle aynı olarak 2."
     },
     {
       "key": "p",
@@ -44,7 +46,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Padding bit; 1 indicates the packet ends with padding octets whose count is in the last octet.",
+      "desc_tr": "1 ise paketin sonunda, son sekizlisi dolgu uzunluğunu veren dolgu baytları vardır."
     },
     {
       "key": "rc",
@@ -57,7 +61,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Number of reception report blocks contained in this packet (0–31).",
+      "desc_tr": "Bu pakette bulunan alım raporu bloklarının sayısı (0–31)."
     },
     {
       "key": "pt",
@@ -92,6 +98,52 @@
           "204",
           "APP: uygulamaya özgü"
         ]
+      ],
+      "desc_en": "RTCP packet type; 200 for Sender Report (SR).",
+      "desc_tr": "RTCP paket türü; gönderici raporu için 200.",
+      "values_en": [
+        [
+          "200",
+          "SR: Sender Report"
+        ],
+        [
+          "201",
+          "RR: Receiver Report"
+        ],
+        [
+          "202",
+          "SDES: Source Description"
+        ],
+        [
+          "203",
+          "BYE: Goodbye"
+        ],
+        [
+          "204",
+          "APP: Application-Defined"
+        ]
+      ],
+      "values_tr": [
+        [
+          "200",
+          "SR: gönderici raporu"
+        ],
+        [
+          "201",
+          "RR: alıcı raporu"
+        ],
+        [
+          "202",
+          "SDES: kaynak tanımı"
+        ],
+        [
+          "203",
+          "BYE: ayrılma"
+        ],
+        [
+          "204",
+          "APP: uygulamaya özgü"
+        ]
       ]
     },
     {
@@ -105,7 +157,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 12
+      "example": 12,
+      "desc_en": "Length of RTCP packet in 32-bit words minus one, including header and padding.",
+      "desc_tr": "Paketin uzunluğu, 32 bitlik sözcük olarak, eksi bir. Ortak başlık ve dolgu dahildir."
     },
     {
       "key": "ssrc",
@@ -119,7 +173,9 @@
         "label": "SR: Sender Report RTCP Packet"
       },
       "example": "0xdeadbeef",
-      "hex": true
+      "hex": true,
+      "desc_en": "Synchronization source identifier of the sender of this report.",
+      "desc_tr": "Bu raporu gönderen kaynağın senkronizasyon kaynağı kimliği; aynı kaynağın RTP paketlerindeki SSRC ile aynıdır."
     },
     {
       "key": "ntp_msw",
@@ -133,7 +189,9 @@
         "label": "SR: Sender Report RTCP Packet"
       },
       "example": 3976214400,
-      "hex": true
+      "hex": true,
+      "desc_en": "Integer part of NTP timestamp when this report was sent (seconds since 1900).",
+      "desc_tr": "Raporun gönderildiği an, NTP biçiminde: 1900'den bu yana geçen saniyelerin tam sayı kısmı."
     },
     {
       "key": "ntp_lsw",
@@ -147,7 +205,9 @@
         "label": "SR: Sender Report RTCP Packet"
       },
       "example": 2147483648,
-      "hex": true
+      "hex": true,
+      "desc_en": "Fractional part of NTP timestamp (units of 2^-32 seconds).",
+      "desc_tr": "Aynı anın saniye kesri; 2^32 bir saniyeye karşılık gelir."
     },
     {
       "key": "rtp_ts",
@@ -160,7 +220,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 10560
+      "example": 10560,
+      "desc_en": "RTP timestamp corresponding to the same instant as the NTP timestamp, in media clock rate.",
+      "desc_tr": "NTP zaman damgasıyla aynı ana karşılık gelen RTP zaman damgası, akışın örnekleme saati biriminde."
     },
     {
       "key": "packet_count",
@@ -173,7 +235,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 50
+      "example": 50,
+      "desc_en": "Total number of RTP data packets transmitted by the sender since transmission started.",
+      "desc_tr": "Akışın başından bu rapora kadar gönderilen RTP paketlerinin sayısı."
     },
     {
       "key": "octet_count",
@@ -186,7 +250,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 8000
+      "example": 8000,
+      "desc_en": "Total number of payload octets transmitted in RTP data packets by the sender.",
+      "desc_tr": "Aynı süre içinde gönderilen RTP yükü sekizlilerinin sayısı; başlıklar ve dolgu dahil değildir."
     },
     {
       "key": "ssrc_1",
@@ -200,7 +266,9 @@
         "label": "SR: Sender Report RTCP Packet"
       },
       "example": "0x5eed0001",
-      "hex": true
+      "hex": true,
+      "desc_en": "SSRC identifier of the source to which this reception report block pertains.",
+      "desc_tr": "Bu alım raporu bloğunun hangi kaynağın akışı hakkında olduğu."
     },
     {
       "key": "fraction_lost",
@@ -213,7 +281,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Fraction of RTP packets lost since the previous SR or RR, expressed as an 8-bit fixed point fraction (divided by 256).",
+      "desc_tr": "Son rapordan bu yana kaybolan paketlerin oranı, 256 ile çarpılmış sabit noktalı sayı olarak."
     },
     {
       "key": "cumulative_lost",
@@ -226,7 +296,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Cumulative number of packets lost since the beginning of reception.",
+      "desc_tr": "Alım başladığından beri beklenip gelmeyen paketlerin toplam sayısı."
     },
     {
       "key": "ext_highest_seq",
@@ -239,7 +311,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 12345
+      "example": 12345,
+      "desc_en": "Low 16 bits highest sequence number received; high 16 bits corresponding sequence number cycle count.",
+      "desc_tr": "Alt 16 biti alınan en yüksek sıra numarası, üst 16 biti sıra numarasının kaç kez başa döndüğü."
     },
     {
       "key": "jitter",
@@ -252,7 +326,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 12
+      "example": 12,
+      "desc_en": "Statistical estimate of variance in packet arrival intervals, in timestamp units.",
+      "desc_tr": "Paketlerin varış aralıklarındaki değişimin istatistiksel tahmini, zaman damgası biriminde."
     },
     {
       "key": "lsr",
@@ -265,7 +341,9 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Middle 32 bits of the 64-bit NTP timestamp received in the most recent SR from this source; 0 if none.",
+      "desc_tr": "Bu kaynaktan alınan son SR'nin NTP zaman damgasının ortadaki 32 biti; henüz SR alınmadıysa 0."
     },
     {
       "key": "dlsr",
@@ -278,14 +356,34 @@
         "section": "6.4.1",
         "label": "SR: Sender Report RTCP Packet"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Delay between receiving last SR from this source and sending this reception report block, in 1/65536 seconds.",
+      "desc_tr": "O SR'nin alınmasıyla bu raporun gönderilmesi arasındaki süre, 1/65536 saniye biriminde; SR alınmadıysa 0."
     }
   ],
   "example": {
-    "note": "wire'ın RTP örneğindeki 0xdeadbeef kaynağının, aramanın ilk saniyesinin sonunda gönderdiği gönderici raporu: 50 paket ve 8000 sekizli PCMU yükü gönderilmiştir. NTP zaman damgası 1 Ocak 2026 00:00:00,5 UTC'dir. Tek alım raporu bloğu karşı taraftaki 0x5eed0001 kaynağı içindir: kayıp yoktur ve henüz SR alınmadığı için LSR ile DLSR 0'dır. Paket 52 sekizlidir, Length alanı 52 / 4 − 1 = 12."
+    "note": "wire'ın RTP örneğindeki 0xdeadbeef kaynağının, aramanın ilk saniyesinin sonunda gönderdiği gönderici raporu: 50 paket ve 8000 sekizli PCMU yükü gönderilmiştir. NTP zaman damgası 1 Ocak 2026 00:00:00,5 UTC'dir. Tek alım raporu bloğu karşı taraftaki 0x5eed0001 kaynağı içindir: kayıp yoktur ve henüz SR alınmadığı için LSR ile DLSR 0'dır. Paket 52 sekizlidir, Length alanı 52 / 4 − 1 = 12.",
+    "note_tr": "wire'ın RTP örneğindeki 0xdeadbeef kaynağının, aramanın ilk saniyesinin sonunda gönderdiği gönderici raporu: 50 paket ve 8000 sekizli PCMU yükü gönderilmiştir. NTP zaman damgası 1 Ocak 2026 00:00:00,5 UTC'dir. Tek alım raporu bloğu karşı taraftaki 0x5eed0001 kaynağı içindir: kayıp yoktur ve henüz SR alınmadığı için LSR ile DLSR 0'dır. Paket 52 sekizlidir, Length alanı 52 / 4 − 1 = 12.",
+    "note_en": "Sender report sent by source 0xdeadbeef from wire's RTP example at the end of the first second of a call: 50 packets and 8000 octets of PCMU payload transmitted. NTP timestamp is January 1, 2026 00:00:00.5 UTC. The single reception report block covers remote source 0x5eed0001: zero loss, and LSR/DLSR are 0 because no SR was received yet. Packet is 52 octets; Length field is 52 / 4 − 1 = 12."
   },
   "refs": [
     3550
   ],
-  "id": "rtcp"
+  "id": "rtcp",
+  "summary_tr": "RTP Denetim Protokolü (RTCP), her RTP oturumuna eşlik eden denetim akışıdır. Gönderici raporu (Sender Report - SR) gönderilen paket ve sekizli sayılarını, akışın RTP zaman damgasını duvar saatine bağlayan bir NTP zaman damgasını ve alınan her kaynak için kayıp ile titreşim istatistiklerini taşır.",
+  "summary_en": "RTP Control Protocol (RTCP, RFC 3550) provides out-of-band monitoring and QoS statistics for RTP sessions. The Sender Report (SR) carries transmission counters, an NTP wall-clock timestamp tied to the RTP timestamp, and receiver reception blocks.",
+  "notes_tr": [
+    "RTCP genellikle RTP'nin bir üst port numarasında taşınır; RTP çift numaralı portu, RTCP bir sonraki tek numaralı portu kullanır (RFC 3550 §11).",
+    "NTP ve RTP zaman damgası aynı anı gösterir. Alıcı bu eşlemeyle ses ve görüntü gibi farklı akışları dudak senkronu için aynı zaman çizgisine yerleştirir.",
+    "Alıcı, LSR ve DLSR alanlarından gidiş-dönüş süresini hesaplar: varış zamanı − LSR − DLSR (RFC 3550 §6.4.1).",
+    "RTCP trafiği oturum bant genişliğinin yaklaşık %5'iyle sınırlıdır; katılımcı sayısı arttıkça rapor aralığı uzar (RFC 3550 §6.2).",
+    "RTCP paketleri genellikle bileşik paket olarak gönderilir; ilk paket her zaman bir SR ya da RR olur."
+  ],
+  "notes_en": [
+    "RTCP is typically carried on the port number one above RTP: RTP uses an even port, and RTCP uses the subsequent odd port (RFC 3550 §11).",
+    "NTP and RTP timestamps reflect the same wall-clock instant. Receivers use this mapping to synchronize separate audio and video streams for lip sync.",
+    "Receivers calculate round-trip time from LSR and DLSR fields: arrival time − LSR − DLSR (RFC 3550 §6.4.1).",
+    "RTCP traffic is throttled to approximately 5% of total session bandwidth; reporting intervals scale dynamically as participant count grows (RFC 3550 §6.2).",
+    "RTCP packets are typically sent as compound packets; the first packet must always be an SR or RR."
+  ]
 }

@@ -31,7 +31,9 @@
         "section": "6",
         "label": "Binary Packet Protocol"
       },
-      "example": 28
+      "example": 28,
+      "desc_en": "Length in octets of the packet, not including 'packet_length' itself or the MAC field.",
+      "desc_tr": "Kendisi ve MAC alanı hariç paketin sekizli cinsinden uzunluğu; 32 bitlik işaretsiz tamsayı."
     },
     {
       "key": "padding_length",
@@ -44,12 +46,14 @@
         "section": "6",
         "label": "Binary Packet Protocol"
       },
-      "example": 10
+      "example": 10,
+      "desc_en": "Length in octets of 'random padding' (at least 4 octets).",
+      "desc_tr": "random padding alanının bayt cinsinden uzunluğu; en az 4 sekizli olmalıdır."
     },
     {
       "key": "payload",
       "name": "payload",
-      "label": "Yük",
+      "label": "Yük verisi",
       "bits": 136,
       "desc": "Paketin yararlı içeriği; ilk sekizlisi ileti numarasıdır. Sıkıştırma anlaşıldıysa sıkıştırılmıştır.",
       "ref": {
@@ -59,7 +63,9 @@
       },
       "example": "050000000c7373682d7573657261757468",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Useful contents of the packet; uncompressed length is packet_length minus padding_length minus 1.",
+      "desc_tr": "Paketin taşıdığı asıl veri; uzunluğu packet_length - padding_length - 1 sekizlidir."
     },
     {
       "key": "padding",
@@ -74,12 +80,14 @@
       },
       "example": "b5cea95e13677fb7c995",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Random padding octets to make total packet size a multiple of cipher block size (or 8).",
+      "desc_tr": "Paketin şifreleme blok boyutunun katı olmasını sağlayan rastgele dolgu baytları."
     },
     {
       "key": "mac",
       "name": "mac",
-      "label": "İleti doğrulama kodu",
+      "label": "İleti doğrulama kodu (MAC)",
       "bits": 256,
       "desc": "İleti doğrulama kodu; MAC anlaşıldıysa paketin tamamı ve sıra numarası üzerinden hesaplanır. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 32 sekizli.",
       "ref": {
@@ -89,16 +97,36 @@
       },
       "example": "2bf35cef3ff456f6d65c97cc373aae5a793d48834cb70d7c0486207fa85d1f03",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Message Authentication Code computed over packet sequence number and unencrypted packet (if MAC negotiated).",
+      "desc_tr": "İleti doğrulama kodu; MAC anlaşıldıysa paketin tamamı ve sıra numarası üzerinden hesaplanır. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 32 sekizli."
     }
   ],
   "example": {
-    "note": "İstemcinin anahtar değişiminden sonra kullanıcı doğrulama hizmetini istediği paket, şifreleme öncesi görünümüyle: yük SSH_MSG_SERVICE_REQUEST (5, RFC 4253 §12) ve \"ssh-userauth\" dizesidir (uzunluk önekiyle 17 sekizli). 10 sekizli dolgu toplamı 16'nın katına tamamlar. Dolgu ve MAC uydurma değerlerdir."
+    "note": "İstemcinin anahtar değişiminden sonra kullanıcı doğrulama hizmetini istediği paket, şifreleme öncesi görünümüyle: yük SSH_MSG_SERVICE_REQUEST (5, RFC 4253 §12) ve \"ssh-userauth\" dizesidir (uzunluk önekiyle 17 sekizli). 10 sekizli dolgu toplamı 16'nın katına tamamlar. Dolgu ve MAC uydurma değerlerdir.",
+    "note_tr": "İstemcinin anahtar değişiminden sonra kullanıcı doğrulama hizmetini istediği paket, şifreleme öncesi görünümüyle: yük SSH_MSG_SERVICE_REQUEST (5, RFC 4253 §12) ve \"ssh-userauth\" dizesidir (uzunluk önekiyle 17 sekizli). 10 sekizli dolgu toplamı 16'nın katına tamamlar. Dolgu ve MAC uydurma değerlerdir.",
+    "note_en": "Packet in which the client requests user authentication service after key exchange, shown prior to encryption: payload is SSH_MSG_SERVICE_REQUEST (5, RFC 4253 §12) and string 'ssh-userauth' (17 octets with length prefix). 10 octets of padding bring total length to a multiple of 16. Padding and MAC are mock values."
   },
   "refs": [
     4253,
     4251,
     4254
   ],
-  "id": "ssh"
+  "id": "ssh",
+  "summary_tr": "SSH (Secure Shell), uzak oturum ve diğer uygulamalar için güvenli bir kanal sağlar. RFC 4253’teki ikili paket biçimi 4 bayt paket uzunluğu, 1 bayt dolgu uzunluğu, yük ve rastgele dolgudan oluşur. Kullanılan MAC algoritmasına göre paketi bir doğrulama kodu izler.",
+  "summary_en": "Secure Shell (SSH, RFC 4253) binary packet protocol provides an encrypted transport channel. The packet format consists of a 4-octet packet length, 1-octet padding length, payload, random padding, and message authentication code (MAC).",
+  "notes_tr": [
+    "SSH sunucuları TCP 22 numaralı portu dinler (RFC 4253 §4.1).",
+    "Dolgu en az 4 sekizlidir ve packet_length, padding_length, yük ile dolgunun toplamı, şifrenin blok boyunun ya da 8'in (hangisi büyükse) katı olmalıdır (RFC 4253 §6).",
+    "packet_length, ne kendisini ne de MAC'i kapsar. Şifreleme anlaşıldıktan sonra packet_length dahil bütün paket şifrelenir (RFC 4253 §6); MAC şifrelenmeden paketin sonuna eklenir (RFC 4253 §6.4).",
+    "SFTP, ayrı bir protokol değil, SSH bağlantısı üzerinde çalışan bir alt sistemdir (RFC 4254 §6.5); dosya aktarım iletileri bu paketlerin yükünde taşınır.",
+    "Paket tanımındaki uint32 ve byte[n] gibi veri türleri RFC 4251 §5'te tanımlanır; bütün çok sekizlili sayılar ağ sırasında (en anlamlı sekizli önce) iletilir."
+  ],
+  "notes_en": [
+    "SSH servers listen on TCP port 22 (RFC 4253 §4.1).",
+    "Padding is at least 4 octets, and packet_length, padding_length, payload, and padding combined must be a multiple of the cipher block size or 8, whichever is larger (RFC 4253 §6).",
+    "packet_length excludes itself and the MAC. After encryption is negotiated, the entire packet including packet_length is encrypted (RFC 4253 §6); MAC is appended unencrypted (RFC 4253 §6.4).",
+    "SFTP is not a standalone protocol but a subsystem running over an established SSH connection (RFC 4254 §6.5); file transfer messages are carried in SSH payloads.",
+    "Data types like uint32 and byte[n] are defined in RFC 4251 §5; all multi-octet integers are transmitted in network byte order (most significant octet first)."
+  ]
 }

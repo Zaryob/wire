@@ -36,7 +36,7 @@
     {
       "key": "fin",
       "name": "FIN",
-      "label": "Son parça",
+      "label": "Son çerçeve bayrağı",
       "bits": 1,
       "desc": "İletinin son parçasıysa 1. Tek parçalık iletilerde ilk çerçeve aynı zamanda sondur.",
       "ref": {
@@ -44,7 +44,9 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "1 indicates this is the final fragment in a message; 0 for intermediate fragments.",
+      "desc_tr": "1 ise bu çerçevenin iletinin son parçası olduğunu gösterir; parçalanmamış iletilerde 1'dir."
     },
     {
       "key": "rsv1",
@@ -57,7 +59,9 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved bit; must be 0 unless an extension negotiating RSV1 usage is defined.",
+      "desc_tr": "Uzantılar için ayrılmış bit; uzantı uzlaşılmadıkça 0 olmalıdır."
     },
     {
       "key": "rsv2",
@@ -70,7 +74,9 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved bit; must be 0 unless an extension is negotiated.",
+      "desc_tr": "Uzantılar için ayrılmış bit; uzantı uzlaşılmadıkça 0 olmalıdır."
     },
     {
       "key": "rsv3",
@@ -83,7 +89,9 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved bit; must be 0 unless an extension is negotiated.",
+      "desc_tr": "Uzantılar için ayrılmış bit; uzantı uzlaşılmadıkça 0 olmalıdır."
     },
     {
       "key": "opcode",
@@ -122,12 +130,66 @@
           "0xA",
           "Yoklama yanıtı (Pong)"
         ]
+      ],
+      "desc_en": "Frame opcode: 0 Continuation, 1 Text (UTF-8), 2 Binary, 8 Close, 9 Ping, 10 Pong.",
+      "desc_tr": "Çerçevenin işlevini tanımlayan 4 bitlik kod.",
+      "values_en": [
+        [
+          "0x0",
+          "Continuation frame"
+        ],
+        [
+          "0x1",
+          "Text frame (UTF-8)"
+        ],
+        [
+          "0x2",
+          "Binary frame"
+        ],
+        [
+          "0x8",
+          "Connection Close"
+        ],
+        [
+          "0x9",
+          "Ping"
+        ],
+        [
+          "0xa",
+          "Pong"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x0",
+          "Devam çerçevesi"
+        ],
+        [
+          "0x1",
+          "Metin (UTF-8)"
+        ],
+        [
+          "0x2",
+          "İkili veri"
+        ],
+        [
+          "0x8",
+          "Bağlantıyı kapatma"
+        ],
+        [
+          "0x9",
+          "Ping"
+        ],
+        [
+          "0xa",
+          "Pong"
+        ]
       ]
     },
     {
       "key": "mask",
       "name": "MASK",
-      "label": "Maske bayrağı",
+      "label": "Maskeleme bayrağı",
       "bits": 1,
       "desc": "Yük maskelenmişse 1 ve Masking-key alanı vardır. İstemciden gelen çerçevelerde her zaman 1'dir.",
       "ref": {
@@ -135,12 +197,14 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "1 indicates payload is masked with a 4-octet Masking-Key (mandatory for client-to-server frames).",
+      "desc_tr": "1 ise yükün 4 baytlık Maskeleme Anahtarı ile maskelendiğini belirtir; istemciden sunucuya giden çerçevelerde zorunludur."
     },
     {
       "key": "payload_len",
-      "name": "Payload len",
-      "label": "Yük uzunluğu",
+      "name": "Payload length",
+      "label": "Yük uzunluğu göstergesi",
       "bits": 7,
       "desc": "Yük uzunluğu. 0–125 doğrudan uzunluktur; 126 ve 127 genişletilmiş uzunluk alanının izlediğini gösterir.",
       "ref": {
@@ -148,7 +212,9 @@
         "section": "5.2",
         "label": "Base Framing Protocol"
       },
-      "example": 5
+      "example": 5,
+      "desc_en": "7-bit length indicator: 0–125 is literal length; 126 means next 2 octets are length; 127 means next 8 octets are length.",
+      "desc_tr": "0–125 ise doğrudan yükün bayt cinsinden uzunluğudur; 126 ise sonraki 2 sekizli, 127 ise sonraki 8 sekizli uzunluğu verir."
     },
     {
       "key": "ext_len",
@@ -160,7 +226,9 @@
         "rfc": 6455,
         "section": "5.2",
         "label": "Base Framing Protocol"
-      }
+      },
+      "desc_en": "Extended 16-bit or 64-bit payload length field when 7-bit length indicator is 126 or 127.",
+      "desc_tr": "Yük uzunluğu 126 veya 127 olduğunda eklenen 16 bitlik veya 64 bitlik genişletilmiş uzunluk alanı."
     },
     {
       "key": "masking_key",
@@ -174,7 +242,9 @@
         "label": "Client-to-Server Masking"
       },
       "example": "0x37fa213d",
-      "hex": true
+      "hex": true,
+      "desc_en": "4-octet masking key present when Mask bit is 1; used to unmask payload octets.",
+      "desc_tr": "Mask biti 1 olduğunda bulunan 4 sekizlilik rastgele anahtar; yük verisi bu anahtarla XOR'lanarak maskelenir."
     },
     {
       "key": "payload",
@@ -186,15 +256,33 @@
         "rfc": 6455,
         "section": "5.2",
         "label": "Base Framing Protocol"
-      }
+      },
+      "desc_en": "Application data (text, binary, or control payload).",
+      "desc_tr": "Taşınan uygulama verisi; istemciden giden iletilerde Maskeleme Anahtarı ile maskelenmiştir."
     }
   ],
   "example": {
     "payload": "7f9f4d5158",
-    "note": "RFC 6455 §5.7'deki örnek: istemcinin gönderdiği, maskelenmiş tek çerçevelik \"Hello\" metin iletisi. 0x81 FIN biti 1 ve opcode 1 (metin), 0x85 MASK biti 1 ve 5 sekizli yüktür. Ardından 37 fa 21 3d anahtarı ve maskelenmiş yük gelir: 7f ^ 37 = 48 (\"H\"), 9f ^ fa = 65 (\"e\") vb."
+    "note": "RFC 6455 §5.7'deki örnek: istemcinin gönderdiği, maskelenmiş tek çerçevelik \"Hello\" metin iletisi. 0x81 FIN biti 1 ve opcode 1 (metin), 0x85 MASK biti 1 ve 5 sekizli yüktür. Ardından 37 fa 21 3d anahtarı ve maskelenmiş yük gelir: 7f ^ 37 = 48 (\"H\"), 9f ^ fa = 65 (\"e\") vb.",
+    "note_tr": "RFC 6455 §5.7'deki örnek: istemcinin gönderdiği, maskelenmiş tek çerçevelik \"Hello\" metin iletisi. 0x81 FIN biti 1 ve opcode 1 (metin), 0x85 MASK biti 1 ve 5 sekizli yüktür. Ardından 37 fa 21 3d anahtarı ve maskelenmiş yük gelir: 7f ^ 37 = 48 (\"H\"), 9f ^ fa = 65 (\"e\") vb.",
+    "note_en": "Example from RFC 6455 §5.7: a masked single-frame 'Hello' text message sent by the client. 0x81 has FIN=1 and opcode 1 (text), 0x85 has MASK=1 and 5 payload octets. Followed by masking key 37 fa 21 3d and masked payload: 7f ^ 37 = 48 ('H'), 9f ^ fa = 65 ('e'), etc."
   },
   "refs": [
     6455
   ],
-  "id": "websocket"
+  "id": "websocket",
+  "summary_tr": "WebSocket, açılış el sıkışmasından sonra iki yönlü iletileri çerçeveler halinde taşır. Çerçevenin ilk 2 baytı türü, bayrakları, maske bitini ve kısa uzunluğu taşır. İstemciden sunucuya giden her çerçeve 4 baytlık bir anahtarla maskelenir.",
+  "summary_en": "WebSocket Protocol (RFC 6455) provides full-duplex communication over a single TCP connection. The 2-octet base framing header carries FIN, opcode, mask flag, and payload length. Client-to-server frames are masked with a 4-octet masking key.",
+  "notes_tr": [
+    "Bağlantı, Upgrade: websocket başlıklı bir HTTP/1.1 isteğiyle açılır; sunucu 101 Switching Protocols ile yanıt verdikten sonra bağlantı yalnızca çerçeve taşır (RFC 6455 §4).",
+    "İstemci her çerçeveyi maskelemek zorundadır, sunucu hiçbirini maskelemez. Maske, aradaki önbellek ve vekil sunucuların çerçeve içeriğini HTTP isteği sanmasını önler (RFC 6455 §5.3, §10.3).",
+    "Yük uzunluğu 125 sekizliye kadar 7 bitlik alana sığar; 126 ardından 16 bitlik, 127 ardından 64 bitlik genişletilmiş uzunluk geldiğini gösterir.",
+    "Denetim çerçeveleri (Close, Ping, Pong) en çok 125 sekizli yük taşır ve parçalanamaz; bir iletinin parçaları arasına girebilirler (RFC 6455 §5.5)."
+  ],
+  "notes_en": [
+    "Connection begins with an HTTP/1.1 request carrying an Upgrade: websocket header; after the server answers with 101 Switching Protocols, the connection transfers binary WebSocket frames exclusively (RFC 6455 §4).",
+    "Clients must mask every frame; servers never mask frames. Masking prevents intermediate caching proxies from misinterpreting frame contents as HTTP requests (RFC 6455 §5.3, §10.3).",
+    "Payload lengths up to 125 octets fit in the 7-bit length field; 126 signals a following 16-bit extended length, and 127 signals a 64-bit extended length.",
+    "Control frames (Close, Ping, Pong) carry at most 125 octets of payload and cannot be fragmented; they may be injected between fragments of a fragmented message (RFC 6455 §5.5)."
+  ]
 }

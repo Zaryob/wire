@@ -20,7 +20,7 @@
   "fields": [
     {
       "key": "next_header",
-      "name": "Sonraki Başlık (Next Header)",
+      "name": "Next Header",
       "bits": 8,
       "desc": "Taşınan sonraki yükün protokol türünü belirtir (örneğin TCP için 6, UDP için 17, IPv4 tünellemesi için 4).",
       "ref": {
@@ -42,11 +42,42 @@
           "4",
           "IPv4 Kapsüllemesi (RFC 2003)"
         ]
+      ],
+      "label": "Sonraki başlık",
+      "desc_en": "Specifies the protocol type of the payload following this header (e.g. 6 for TCP, 17 for UDP, 4 for IPv4 encapsulation).",
+      "desc_tr": "Taşınan sonraki yükün protokol türünü belirtir (örneğin TCP için 6, UDP için 17, IPv4 tünellemesi için 4).",
+      "values_en": [
+        [
+          "6",
+          "TCP (RFC 9293)"
+        ],
+        [
+          "17",
+          "UDP (RFC 768)"
+        ],
+        [
+          "4",
+          "IPv4 Encapsulation (RFC 2003)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "6",
+          "TCP (RFC 9293)"
+        ],
+        [
+          "17",
+          "UDP (RFC 768)"
+        ],
+        [
+          "4",
+          "IPv4 Kapsüllemesi (RFC 2003)"
+        ]
       ]
     },
     {
       "key": "payload_len",
-      "name": "Yük Uzunluğu (Payload Len)",
+      "name": "Payload Len",
       "bits": 8,
       "desc": "AH başlığının 32 bitlik sözcük (4 sekizli) cinsinden toplam uzunluğundan 2 çıkarılmış değeri. 24 sekizlilik standart başlık için 4'tür.",
       "ref": {
@@ -54,11 +85,14 @@
         "section": "2.2",
         "label": "Payload Length"
       },
-      "example": 4
+      "example": 4,
+      "label": "Yük uzunluğu",
+      "desc_en": "Length of AH in 32-bit words (4 octets) minus 2. Value is 4 for the standard 24-octet header.",
+      "desc_tr": "AH başlığının 32 bitlik sözcük (4 sekizli) cinsinden toplam uzunluğundan 2 çıkarılmış değeri. 24 sekizlilik standart başlık için 4'tür."
     },
     {
       "key": "reserved",
-      "name": "Ayrılmış (RESERVED)",
+      "name": "Reserved",
       "bits": 16,
       "desc": "Gelecekteki kullanım için ayrılmıştır; gönderici tarafından sıfırlanmalı ve alıcı tarafından yoksayılmalıdır.",
       "ref": {
@@ -66,11 +100,14 @@
         "section": "2.3",
         "label": "Reserved"
       },
-      "example": 0
+      "example": 0,
+      "label": "Ayrılmış",
+      "desc_en": "Reserved for future use; must be zero on transmission and ignored by receiver.",
+      "desc_tr": "Gelecekteki kullanım için ayrılmıştır; gönderici tarafından sıfırlanmalı ve alıcı tarafından yoksayılmalıdır."
     },
     {
       "key": "spi",
-      "name": "Güvenlik Parametreleri Dizini (SPI)",
+      "name": "Security Parameters Index (SPI)",
       "bits": 32,
       "desc": "Alıcı tarafta paketin hangi Güvenlik İlişkisine (Security Association - SA) ait olduğunu belirten 32 bitlik dizin değeri.",
       "ref": {
@@ -79,11 +116,14 @@
         "label": "Security Parameters Index (SPI)"
       },
       "example": "0x00001000",
-      "hex": true
+      "hex": true,
+      "label": "Güvenlik parametreleri dizini",
+      "desc_en": "32-bit index value specifying the Security Association (SA) on the receiving side.",
+      "desc_tr": "Alıcı tarafta paketin hangi Güvenlik İlişkisine (Security Association - SA) ait olduğunu belirten 32 bitlik dizin değeri."
     },
     {
       "key": "seq",
-      "name": "Sıra Numarası (Sequence Number)",
+      "name": "Sequence Number",
       "bits": 32,
       "desc": "Tekrar oynatma saldırılarını önlemek için her gönderilen pakette bir artırılan tekdüze artan 32 bitlik sıra numarası.",
       "ref": {
@@ -91,28 +131,48 @@
         "section": "2.5",
         "label": "Sequence Number"
       },
-      "example": 1
+      "example": 1,
+      "label": "Sıra numarası",
+      "desc_en": "Monotonically increasing 32-bit counter incremented for each transmitted packet to prevent replay attacks.",
+      "desc_tr": "Tekrar oynatma saldırılarını önlemek için her gönderilen pakette bir artırılan tekdüze artan 32 bitlik sıra numarası."
     },
     {
       "key": "icv",
-      "name": "Bütünlük Denetim Değeri (ICV)",
+      "name": "Integrity Check Value (ICV)",
       "bits": null,
       "desc": "Kriptografik HMAC algoritmasıyla üretilen değişken uzunluklu (genellikle 96 veya 128 bit) Bütünlük Denetim Değeri. 32 bitin katı olacak şekilde doldurulur.",
       "ref": {
         "rfc": 4302,
         "section": "2.6",
         "label": "Integrity Check Value (ICV)"
-      }
+      },
+      "label": "Bütünlük denetim değeri",
+      "desc_en": "Variable-length cryptographic HMAC value (commonly 96 or 128 bits), padded to a multiple of 32 bits.",
+      "desc_tr": "Kriptografik HMAC algoritmasıyla üretilen değişken uzunluklu (genellikle 96 veya 128 bit) Bütünlük Denetim Değeri. 32 bitin katı olacak şekilde doldurulur."
     }
   ],
   "example": {
     "note": "192.0.2.1 ile 198.51.100.7 arasındaki bir SA (SPI: 0x00001000) kapsamında bir TCP segmentini (Next Header: 6) koruyan 24 sekizlilik IPsec AH başlığı. Sıra numarası 1'dir ve 96 bitlik (12 sekizli) ICV taşır.",
-    "payload": "a1b2c3d4e5f60718293a4b5c"
+    "payload": "a1b2c3d4e5f60718293a4b5c",
+    "note_tr": "192.0.2.1 ile 198.51.100.7 arasındaki bir SA (SPI: 0x00001000) kapsamında bir TCP segmentini (Next Header: 6) koruyan 24 sekizlilik IPsec AH başlığı. Sıra numarası 1'dir ve 96 bitlik (12 sekizli) ICV taşır.",
+    "note_en": "A 24-octet IPsec AH header protecting a TCP segment (Next Header: 6) under an SA (SPI: 0x00001000) between 192.0.2.1 and 198.51.100.7. Sequence number is 1, carrying a 96-bit (12-octet) ICV."
   },
   "refs": [
     4302,
     791,
     9293
   ],
-  "id": "ah"
+  "id": "ah",
+  "summary_tr": "IP Kimlik Doğrulama Başlığı (IP Authentication Header - AH), IP datagramlarına bağlantısız veri bütünlüğü (integrity), veri kaynağı kimlik doğrulaması (authentication) ve isteğe bağlı tekrar oynatma saldırısı koruması (anti-replay) sağlar. IPv4 Protokol veya IPv6 Next Header numarası 51'dir.",
+  "summary_en": "IPsec Authentication Header (AH, RFC 4302) provides connectionless integrity, data origin authentication, and anti-replay protection for IP datagrams. The base header carries SPI, Sequence Number, and an Integrity Check Value (ICV).",
+  "notes_tr": [
+    "AH başlığı, taşınan üst katman başlığından hemen önce yer alır; örneğin TCP taşınıyorsa Next Header değeri 6 olur.",
+    "Yük Uzunluğu (Payload Len), 32 bitlik sözcükler (4 sekizli) cinsinden AH başlığının toplam uzunluğundan 2 çıkarılarak hesaplanır (RFC 4302 §2.2). Örneğin 24 sekizlilik bir başlıkta değer (24 / 4) - 2 = 4 olur.",
+    "Bütünlük Denetim Değeri (ICV), IP başlığının değişmeyen alanları, AH başlığı (ICV sıfırlanmış olarak) ve paket yükü üzerinden kriptografik özet fonksiyonuyla (örneğin HMAC-SHA1-96 veya HMAC-SHA-256-128) hesaplanır."
+  ],
+  "notes_en": [
+    "The AH header appears immediately before the encapsulated upper-layer header; for example, if carrying TCP, Next Header is 6.",
+    "Payload Len is calculated in 32-bit words (4 octets) as total AH header length minus 2 (RFC 4302 §2.2). For example, for a 24-octet header, (24 / 4) - 2 = 4.",
+    "The Integrity Check Value (ICV) is calculated over immutable IP header fields, the AH header (with ICV zeroed), and the packet payload using a cryptographic digest (e.g. HMAC-SHA1-96 or HMAC-SHA-256-128)."
+  ]
 }

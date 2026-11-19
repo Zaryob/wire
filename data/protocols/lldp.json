@@ -294,7 +294,9 @@
         "label": "TLV type",
         "page": 24
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "TLV type; 1 for Chassis ID (Table 8-1). Mandatory first TLV of every LLDPDU. High 7 bits of the first octet.",
+      "desc_tr": "TLV türü; Chassis ID için 1 (Table 8-1). Her LLDPDU'nun ilk TLV'sidir. Tür alanı, TLV'nin ilk sekizlisinin en anlamlı yedi bitidir; 9–126 ileride kullanılmak üzere ayrılmıştır."
     },
     {
       "key": "chassis_len",
@@ -308,7 +310,9 @@
         "label": "TLV information string length",
         "page": 26
       },
-      "example": 7
+      "example": 7,
+      "desc_en": "Length of information string in octets: subtype octet plus identifier (§8.5.2.1). 9-bit field.",
+      "desc_tr": "Bilgi dizisinin sekizli cinsinden uzunluğu: alt tür sekizlisi ile kimliğin toplamı (§8.5.2.1). Alan, ilk sekizlinin en az anlamlı bitiyle başlar ve 9 bittir."
     },
     {
       "key": "chassis_subtype",
@@ -353,6 +357,68 @@
           "7",
           "Yerel olarak atanmış (local)"
         ]
+      ],
+      "desc_en": "Basis for chassis identification (Table 8-2). 4 indicates MAC address of a port on the chassis.",
+      "desc_tr": "Kimliğin neye dayandığı (Table 8-2). 4, kasadaki bir portun MAC adresidir. 0 ve 8–255 ayrılmıştır.",
+      "values_en": [
+        [
+          "1",
+          "chassisComponent"
+        ],
+        [
+          "2",
+          "interfaceAlias"
+        ],
+        [
+          "3",
+          "portComponent"
+        ],
+        [
+          "4",
+          "macAddress"
+        ],
+        [
+          "5",
+          "networkAddress"
+        ],
+        [
+          "6",
+          "interfaceName"
+        ],
+        [
+          "7",
+          "local"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Kasa bileşeni (chassisComponent)"
+        ],
+        [
+          "2",
+          "Arayüz takma adı (interfaceAlias)"
+        ],
+        [
+          "3",
+          "Port bileşeni (portComponent)"
+        ],
+        [
+          "4",
+          "MAC adresi (macAddress)"
+        ],
+        [
+          "5",
+          "Ağ adresi (networkAddress)"
+        ],
+        [
+          "6",
+          "Arayüz adı (interfaceName)"
+        ],
+        [
+          "7",
+          "Yerel olarak atanmış (local)"
+        ]
       ]
     },
     {
@@ -369,7 +435,9 @@
         "mib": "lldpV2LocChassisId"
       },
       "example": "00:00:5e:00:53:01",
-      "type": "mac"
+      "type": "mac",
+      "desc_en": "Identifier value for the chassis; must not be empty. MAC address of a port in this example.",
+      "desc_tr": "Kasayı tanımlayan değer; boş olamaz. Bu örnekte bir portunun MAC adresi."
     },
     {
       "key": "port_type",
@@ -383,7 +451,9 @@
         "label": "Port ID TLV",
         "page": 27
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "TLV type; 2 for Port ID (Table 8-1). Mandatory second TLV of every LLDPDU.",
+      "desc_tr": "TLV türü; Port ID için 2 (Table 8-1). LLDPDU'nun ikinci TLV'si olmalıdır."
     },
     {
       "key": "port_len",
@@ -397,7 +467,9 @@
         "label": "TLV information string length",
         "page": 28
       },
-      "example": 5
+      "example": 5,
+      "desc_en": "Total length in octets of subtype octet plus port identifier (§8.5.3.1).",
+      "desc_tr": "Alt tür sekizlisi ile port kimliğinin toplam uzunluğu, sekizli olarak (§8.5.3.1)."
     },
     {
       "key": "port_subtype",
@@ -442,6 +514,68 @@
           "7",
           "Yerel olarak atanmış (local)"
         ]
+      ],
+      "desc_en": "Basis for port identification (Table 8-3). 5 indicates interface ifName.",
+      "desc_tr": "Port kimliğinin neye dayandığı (Table 8-3). 5, arayüzün ifName değeridir. 0 ve 8–255 ayrılmıştır.",
+      "values_en": [
+        [
+          "1",
+          "interfaceAlias"
+        ],
+        [
+          "2",
+          "portComponent"
+        ],
+        [
+          "3",
+          "macAddress"
+        ],
+        [
+          "4",
+          "networkAddress"
+        ],
+        [
+          "5",
+          "interfaceName"
+        ],
+        [
+          "6",
+          "agentCircuitId"
+        ],
+        [
+          "7",
+          "local"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Arayüz takma adı (interfaceAlias)"
+        ],
+        [
+          "2",
+          "Port bileşeni (portComponent)"
+        ],
+        [
+          "3",
+          "MAC adresi (macAddress)"
+        ],
+        [
+          "4",
+          "Ağ adresi (networkAddress)"
+        ],
+        [
+          "5",
+          "Arayüz adı (interfaceName)"
+        ],
+        [
+          "6",
+          "Agent circuit ID (agentCircuitId)"
+        ],
+        [
+          "7",
+          "Yerel olarak atanmış (local)"
+        ]
       ]
     },
     {
@@ -458,7 +592,9 @@
         "mib": "lldpV2LocPortId"
       },
       "example": "65746830",
-      "type": "bytes"
+      "type": "bytes",
+      "desc_en": "Identifier of the transmitting port; must not be empty. ASCII string \"eth0\" in this example.",
+      "desc_tr": "Çerçeveyi gönderen portun kimliği; boş olamaz. Bu örnekte ASCII \"eth0\"."
     },
     {
       "key": "ttl_type",
@@ -472,7 +608,9 @@
         "label": "Time To Live TLV",
         "page": 29
       },
-      "example": 3
+      "example": 3,
+      "desc_en": "TLV type; 3 for Time To Live (Table 8-1). Mandatory third TLV of every LLDPDU.",
+      "desc_tr": "TLV türü; Time To Live için 3 (Table 8-1). LLDPDU'nun üçüncü TLV'si olmalıdır."
     },
     {
       "key": "ttl_len",
@@ -486,7 +624,9 @@
         "label": "TLV information string length",
         "page": 25
       },
-      "example": 2
+      "example": 2,
+      "desc_en": "Length of TTL field: 2 octets.",
+      "desc_tr": "TTL alanının uzunluğu: 2 sekizli."
     },
     {
       "key": "ttl",
@@ -500,7 +640,9 @@
         "label": "time to live (TTL)",
         "page": 29
       },
-      "example": 121
+      "example": 121,
+      "desc_en": "Seconds the receiver considers this information valid; 0–65535. 0 requests deletion of all stored info for this port.",
+      "desc_tr": "Alıcının bu bilgileri kaç saniye geçerli sayacağı; 0–65535. Değeri txTTL'dir: min(msgTxInterval × msgTxHold + 1, 65535) (§9.2.5.22). Varsayılan değerlerle (30 s, 4) 121'dir. 0, alıcının bu porta ait bütün bilgileri silmesini ister."
     },
     {
       "key": "end_type",
@@ -514,7 +656,9 @@
         "label": "End Of LLDPDU TLV",
         "page": 26
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "End TLV type, 0. Optional; when present, must be the last TLV (§8.2).",
+      "desc_tr": "Bitiş TLV'sinin türü, 0. Bitiş TLV'si isteğe bağlıdır; varsa son TLV olmalıdır (§8.2)."
     },
     {
       "key": "end_len",
@@ -528,15 +672,37 @@
         "label": "End Of LLDPDU TLV",
         "page": 26
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "End TLV is a 2-octet all-zero TLV; length is 0.",
+      "desc_tr": "Bitiş TLV'si 2 sekizlilik, tamamı sıfır bir TLV'dir; uzunluğu 0'dır."
     }
   ],
   "example": {
-    "note": "Zorunlu üç TLV ile isteğe bağlı bitiş TLV'sini taşıyan kısa bir LLDPDU: kasa kimliği MAC adresi 00:00:5e:00:53:01, port kimliği \"eth0\", 121 saniyelik geçerlilik. İlk iki sekizli 02 07, tür 1 ile uzunluk 7'nin 16 bite sığdırılmış halidir (1 << 9 | 7). Toplam 22 sekizlidir."
+    "note": "Zorunlu üç TLV ile isteğe bağlı bitiş TLV'sini taşıyan kısa bir LLDPDU: kasa kimliği MAC adresi 00:00:5e:00:53:01, port kimliği \"eth0\", 121 saniyelik geçerlilik. İlk iki sekizli 02 07, tür 1 ile uzunluk 7'nin 16 bite sığdırılmış halidir (1 << 9 | 7). Toplam 22 sekizlidir.",
+    "note_tr": "Zorunlu üç TLV ile isteğe bağlı bitiş TLV'sini taşıyan kısa bir LLDPDU: kasa kimliği MAC adresi 00:00:5e:00:53:01, port kimliği \"eth0\", 121 saniyelik geçerlilik. İlk iki sekizli 02 07, tür 1 ile uzunluk 7'nin 16 bite sığdırılmış halidir (1 << 9 | 7). Toplam 22 sekizlidir.",
+    "note_en": "A short LLDPDU carrying the three mandatory TLVs and an optional End of LLDPDU TLV: chassis ID MAC 00:00:5e:00:53:01, port ID 'eth0', 121 seconds TTL. First two octets 02 07 encode Type 1 and Length 7 packed into 16 bits (1 << 9 | 7). Total 22 octets."
   },
   "refs": [
     "ieee-802.1ab-2016",
     9542
   ],
-  "id": "lldp"
+  "id": "lldp",
+  "summary_tr": "Bağlantı Katmanı Keşif Protokolü (Link Layer Discovery Protocol - LLDP), bir cihazın kimliğini ve port bilgisini doğrudan bağlı komşularına duyurmasını sağlar. Veri birimi (LLDPDU), 7 bitlik tür ve 9 bitlik uzunluk başlığı taşıyan TLV'lerden oluşur ve sırasıyla Chassis ID, Port ID ve Time To Live TLV'leriyle başlamak zorundadır. Bu sayfa IEEE 802.1AB-2016 metnine dayanır.",
+  "summary_en": "Link Layer Discovery Protocol (LLDP, IEEE 802.1AB) allows network devices to advertise identity and capabilities to directly connected neighbors. The LLDPDU is a sequence of TLVs starting with mandatory Chassis ID, Port ID, and Time To Live TLVs.",
+  "notes_tr": [
+    "LLDP çerçeveleri EtherType 88-CC ile gönderilir (Table 7-3). Hedef adres genellikle 01-80-C2-00-00-0E'dir: \"nearest bridge\" adresini hiçbir köprü iletmez, bu yüzden LLDPDU yalnızca aynı fiziksel bağlantıdaki komşuya ulaşır (Table 7-1).",
+    "TLV başlığının 7 bitlik türü ve 9 bitlik uzunluğu sekizli sınırına oturmaz: tür, ilk sekizlinin en anlamlı yedi bitidir; o sekizlinin son biti uzunluğun en anlamlı bitidir (§8.4).",
+    "Tür 127, kurumlara özgü TLV'lerin ortak türüdür; değerin başında kurumun OUI'si ve bir alt tür bulunur (§8.6.1). 4–8 isteğe bağlı temel TLV'ler, 9–126 ayrılmıştır (Table 8-1).",
+    "IEEE 802.3'te LLDPDU en çok 1500 sekizli olabilir (§8.2). En küçük uzunluk tanımlı değildir; bitiş TLV'si, 802.3'ün kısa çerçevelere eklediği dolgu baytlarının yeni bir TLV sanılmasını önler (§8.5.1, NOTE).",
+    "IEEE 802.1AB-2016 metni lisanslıdır ve depoda bulunmaz; TLV figürleri PDF'te görüntü olduğu için yerleşim, aynı bilgiyi yazıyla ve tablolarla veren maddelerden okunur. Standardın MIB modülleri de ayrıca okunur.",
+    "Örnekteki MAC adresi RFC 9542 §2.1.4'te belgeleme için ayrılmış aralıktandır."
+  ],
+  "notes_en": [
+    "LLDP frames are sent with EtherType 88-CC (Table 7-3). Destination address is typically 01-80-C2-00-00-0E: no bridge forwards this 'nearest bridge' address, so the LLDPDU reaches only the neighbor on the same physical link (Table 7-1).",
+    "The TLV header's 7-bit type and 9-bit length do not align to an octet boundary: type occupies the 7 most significant bits of the first octet; that octet's final bit is the most significant bit of the length (§8.4).",
+    "Type 127 is the common type for organizationally specific TLVs, prefixed by the organization's OUI and a subtype (§8.6.1). Types 4–8 are optional basic TLVs, and 9–126 are reserved (Table 8-1).",
+    "In IEEE 802.3, an LLDPDU can be at most 1500 octets (§8.2). Minimum length is not defined; the End TLV prevents padding bytes added by 802.3 for short frames from being misparsed as a new TLV (§8.5.1, NOTE).",
+    "IEEE 802.1AB-2016 text is licensed and not stored in this repository; because TLV figures are images in PDF, layout is extracted from clauses providing the same data in prose and tables. Standard MIB modules are also verified.",
+    "The MAC address in the example is from the range reserved for documentation in RFC 9542 §2.1.4."
+  ]
 }

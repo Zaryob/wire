@@ -27,7 +27,9 @@
         "rfc": 8200,
         "section": "3"
       },
-      "example": 6
+      "example": 6,
+      "desc_en": "Internet Protocol version number; 4 bits set to 6.",
+      "desc_tr": "İnternet Protokolü sürüm numarası; değeri 6’dır."
     },
     {
       "key": "tc",
@@ -39,7 +41,9 @@
         "rfc": 8200,
         "section": "3"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "8-bit traffic class field for DSCP and ECN (RFC 8200 §7).",
+      "desc_tr": "8 bitlik trafik sınıfı alanı."
     },
     {
       "key": "flow",
@@ -51,7 +55,9 @@
         "rfc": 8200,
         "section": "3"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "20-bit flow label used by source to label sequences of packets requiring special handling (RFC 6437).",
+      "desc_tr": "20 bitlik akış etiketi."
     },
     {
       "key": "length",
@@ -63,7 +69,9 @@
         "rfc": 8200,
         "section": "3"
       },
-      "example": 12
+      "example": 12,
+      "desc_en": "Length of the IPv6 payload in octets, including any extension headers following the 40-octet IPv6 base header.",
+      "desc_tr": "Bu başlıktan sonra gelen yükün sekizli cinsinden uzunluğu. Uzantı başlıkları yükün parçası sayılır."
     },
     {
       "key": "next",
@@ -89,6 +97,36 @@
           "58",
           "ICMPv6 (RFC 4443 §2.3)"
         ]
+      ],
+      "desc_en": "Identifies the type of header immediately following the IPv6 header; uses the same values as IPv4 Protocol.",
+      "desc_tr": "IPv6 başlığının hemen ardından gelen başlığın türü. IPv4 Protocol alanıyla aynı değerleri kullanır.",
+      "values_en": [
+        [
+          "6",
+          "TCP (RFC 8200 §8.1)"
+        ],
+        [
+          "17",
+          "UDP (RFC 8200 §8.1)"
+        ],
+        [
+          "58",
+          "ICMPv6 (RFC 4443 §2.3)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "6",
+          "TCP (RFC 8200 §8.1)"
+        ],
+        [
+          "17",
+          "UDP (RFC 8200 §8.1)"
+        ],
+        [
+          "58",
+          "ICMPv6 (RFC 4443 §2.3)"
+        ]
       ]
     },
     {
@@ -101,7 +139,9 @@
         "rfc": 8200,
         "section": "3"
       },
-      "example": 64
+      "example": 64,
+      "desc_en": "Decremented by 1 by each node that forwards the packet; packet is discarded if Hop Limit reaches 0.",
+      "desc_tr": "Paketi ileten her düğüm değeri bir azaltır. Sıfır olarak gelen ya da sıfıra düşen paket iletilmez, atılır."
     },
     {
       "key": "src",
@@ -114,7 +154,9 @@
         "section": "3"
       },
       "type": "ipv6",
-      "example": "2001:db8::1"
+      "example": "2001:db8::1",
+      "desc_en": "128-bit address of the originator of the packet.",
+      "desc_tr": "Paketi oluşturanın 128 bitlik adresi."
     },
     {
       "key": "dst",
@@ -127,12 +169,16 @@
         "section": "3"
       },
       "type": "ipv6",
-      "example": "2001:db8::2"
+      "example": "2001:db8::2",
+      "desc_en": "128-bit address of the recipient of the packet (or next router if a Routing header is present).",
+      "desc_tr": "Paketin hedeflenen alıcısının 128 bitlik adresi. Routing başlığı varsa nihai alıcı olmayabilir."
     }
   ],
   "example": {
     "payloadFrom": "icmpv6",
-    "note": "2001:db8::1’den 2001:db8::2’ye giden, ICMPv6 sayfasındaki yankı isteğini taşıyan bir paket. Adresler belgeleme önekindendir (RFC 3849)."
+    "note": "2001:db8::1’den 2001:db8::2’ye giden, ICMPv6 sayfasındaki yankı isteğini taşıyan bir paket. Adresler belgeleme önekindendir (RFC 3849).",
+    "note_tr": "2001:db8::1’den 2001:db8::2’ye giden, ICMPv6 sayfasındaki yankı isteğini taşıyan bir paket. Adresler belgeleme önekindendir (RFC 3849).",
+    "note_en": "A packet from 2001:db8::1 to 2001:db8::2 carrying the echo request from the ICMPv6 page. Addresses are from the documentation prefix (RFC 3849)."
   },
   "refs": [
     8200,
@@ -141,5 +187,15 @@
     4443,
     3849
   ],
-  "id": "ipv6"
+  "id": "ipv6",
+  "summary_tr": "IPv6 (Internet Protocol version 6), 128 bitlik adreslerle paketleri ağlar arasında taşır. Temel IPv6 başlığı sabit 40 bayttır. Next Header alanı, hemen ardından gelen uzantı başlığını veya üst katman protokolünü tanımlar.",
+  "summary_en": "IPv6 (Internet Protocol version 6, RFC 8200) routes packets across networks using 128-bit addresses and a fixed 40-octet base header. The Next Header field identifies the subsequent extension header or transport protocol.",
+  "notes_tr": [
+    "IPv6 başlığında sağlama toplamı yoktur. Üst katman protokolleri sağlama toplamlarına 128 bitlik adresleri içeren bir sözde başlık katar (RFC 8200 §8.1).",
+    "Traffic Class sekizlisi IPv4’teki gibi DS alanı (RFC 2474 §3) ve ECN alanı (RFC 3168 §5) olarak kullanılır."
+  ],
+  "notes_en": [
+    "The IPv6 header does not contain a checksum. Upper-layer protocols incorporate a pseudo-header containing 128-bit addresses into their own checksums (RFC 8200 §8.1).",
+    "The Traffic Class octet is used as DS field (RFC 2474 §3) and ECN field (RFC 3168 §5) analogous to IPv4."
+  ]
 }

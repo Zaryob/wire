@@ -156,6 +156,36 @@
           "0x88e7",
           "I-TAG (Backbone Service Instance Tag)"
         ]
+      ],
+      "desc_en": "Two-octet EtherType identifying the frame as tagged and specifying the tag type. 0x8100 for Customer VLAN Tag (C-TAG).",
+      "desc_tr": "Çerçevenin etiketli olduğunu ve etiketin türünü gösteren EtherType; iki sekizlidir. Müşteri VLAN etiketi (C-TAG) için 81-00.",
+      "values_en": [
+        [
+          "0x8100",
+          "C-TAG (Customer VLAN Tag)"
+        ],
+        [
+          "0x88a8",
+          "S-TAG (Service VLAN Tag) or B-TAG"
+        ],
+        [
+          "0x88e7",
+          "I-TAG (Backbone Service Instance Tag)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0x8100",
+          "C-TAG (Customer VLAN Tag)"
+        ],
+        [
+          "0x88a8",
+          "S-TAG (Service VLAN Tag) ya da B-TAG"
+        ],
+        [
+          "0x88e7",
+          "I-TAG (Backbone Service Instance Tag)"
+        ]
       ]
     },
     {
@@ -204,6 +234,76 @@
           "7",
           "Ağ denetimi (NC)"
         ]
+      ],
+      "desc_en": "Priority of the frame and drop eligibility according to encoding. In default 8P0D encoding, PCP equals priority (1 lowest, 7 highest; Table I-2).",
+      "desc_tr": "Çerçevenin önceliği ve, seçilen kodlamaya göre, atılabilirliği. Varsayılan 8P0D kodlamasında PCP önceliğe eşittir. Öncelik değerlerinin önerilen trafik türleri Table I-2'dedir; 1 en düşük, 7 en yüksek önceliktir.",
+      "values_en": [
+        [
+          "1",
+          "Background (BK)"
+        ],
+        [
+          "0",
+          "Best Effort, default (BE)"
+        ],
+        [
+          "2",
+          "Excellent Effort (EE)"
+        ],
+        [
+          "3",
+          "Critical Applications (CA)"
+        ],
+        [
+          "4",
+          "Video, under 100 ms (VI)"
+        ],
+        [
+          "5",
+          "Voice, under 10 ms (VO)"
+        ],
+        [
+          "6",
+          "Internetwork Control (IC)"
+        ],
+        [
+          "7",
+          "Network Control (NC)"
+        ]
+      ],
+      "values_tr": [
+        [
+          "1",
+          "Arka plan (Background) (BK)"
+        ],
+        [
+          "0",
+          "Eldeki olanaklarla iletim (Best Effort), varsayılan (BE)"
+        ],
+        [
+          "2",
+          "Yüksek öncelikli iletim (Excellent Effort) (EE)"
+        ],
+        [
+          "3",
+          "Kritik uygulamalar (CA)"
+        ],
+        [
+          "4",
+          "Görüntü, 100 ms altında (VI)"
+        ],
+        [
+          "5",
+          "Ses, 10 ms altında (VO)"
+        ],
+        [
+          "6",
+          "Ağlar arası denetim (IC)"
+        ],
+        [
+          "7",
+          "Ağ denetimi (NC)"
+        ]
       ]
     },
     {
@@ -218,7 +318,9 @@
         "label": "Priority Code Point encoding",
         "page": 158
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Conveys the drop_eligible parameter when port is configured with Use_DEI: 1 indicates frames eligible for dropping in congestion.",
+      "desc_tr": "Port Use_DEI ile yapılandırıldığında çerçevenin drop_eligible parametresini taşır: 1, tıkanıklıkta öncelikle atılabilecek çerçeveyi gösterir."
     },
     {
       "key": "vid",
@@ -250,6 +352,44 @@
           "0xFFF",
           "Uygulamaya ayrılmış; etikette gönderilmez"
         ]
+      ],
+      "desc_en": "12-bit unsigned integer specifying the VLAN to which the frame belongs. Special values are defined in Table 9-2.",
+      "desc_tr": "Çerçevenin ait olduğu VLAN; 12 bitlik işaretsiz sayı. Bazı değerlerin özel anlamı vardır (Table 9-2).",
+      "values_en": [
+        [
+          "0",
+          "Null VID: tag carries priority only"
+        ],
+        [
+          "1",
+          "Default PVID"
+        ],
+        [
+          "2",
+          "Default SR_PVID (SRP stream traffic)"
+        ],
+        [
+          "0xFFF",
+          "Reserved for implementation; not transmitted"
+        ]
+      ],
+      "values_tr": [
+        [
+          "0",
+          "Null VID: etiket yalnızca öncelik taşır"
+        ],
+        [
+          "1",
+          "Varsayılan PVID"
+        ],
+        [
+          "2",
+          "Varsayılan SR_PVID (SRP akış trafiği)"
+        ],
+        [
+          "0xFFF",
+          "Uygulamaya ayrılmış; etikette gönderilmez"
+        ]
       ]
     },
     {
@@ -263,12 +403,16 @@
         "label": "Frame Format"
       },
       "example": 2048,
-      "hex": true
+      "hex": true,
+      "desc_en": "Type of payload following the VLAN tag; matches EtherType in untagged frames. 0x0800 indicates IPv4 datagram.",
+      "desc_tr": "Etiketin ardından gelen yükün türü; etiketsiz çerçevedeki EtherType ile aynıdır. 0x0800 IPv4 datagramıdır."
     }
   ],
   "example": {
     "payloadFrom": "ipv4",
-    "note": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: TPID 0x8100 (C-TAG), PCP 5 (Voice), DEI 0, VID 100, dolayısıyla TCI 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır."
+    "note": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: TPID 0x8100 (C-TAG), PCP 5 (Voice), DEI 0, VID 100, dolayısıyla TCI 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır.",
+    "note_tr": "Bir IP telefonunun VLAN 100 üzerinden gönderdiği çerçevenin etiket kısmı: TPID 0x8100 (C-TAG), PCP 5 (Voice), DEI 0, VID 100, dolayısıyla TCI 0xa064. Etiketten sonra özgün EtherType (0x0800) ve wire'ın IPv4 örneği gelir. Gerçek çerçevede bu dört sekizli hedef ve kaynak MAC adreslerinden hemen sonra yer alır.",
+    "note_en": "Tag portion of a frame sent by an IP phone over VLAN 100: TPID 0x8100 (C-TAG), PCP 5 (Voice), DEI 0, VID 100, resulting in TCI 0xa064. Followed by the original EtherType (0x0800) and wire's IPv4 example. In a real frame, these four octets immediately follow the destination and source MAC addresses."
   },
   "refs": [
     "ieee-802.1q-2022",
@@ -276,5 +420,21 @@
     6325,
     7348
   ],
-  "id": "vlan"
+  "id": "vlan",
+  "summary_tr": "IEEE 802.1Q, bir Ethernet çerçevesine kaynak MAC adresi ile EtherType arasına giren 4 sekizlilik bir etiket ekleyerek tek bir fiziksel ağı birbirinden yalıtılmış sanal yerel ağlara (VLAN) böler. Etiket, 2 sekizlilik Tag Protocol Identifier (TPID) ile önceliği (PCP), atılabilirlik bitini (DEI) ve 12 bitlik VLAN kimliğini (VID) taşıyan 2 sekizlilik Tag Control Information'dan (TCI) oluşur. Bu sayfa IEEE 802.1Q-2022 metnine dayanır.",
+  "summary_en": "IEEE 802.1Q inserts a 4-octet tag between the source MAC and EtherType, dividing a single physical network into isolated virtual local area networks (VLANs). The tag consists of a 2-octet Tag Protocol Identifier (TPID, 0x8100) and 2-octet Tag Control Information (TCI) containing Priority Code Point (PCP), Drop Eligible Indicator (DEI), and 12-bit VLAN Identifier (VID).",
+  "notes_tr": [
+    "Etiketin türü TPID'deki EtherType'tan anlaşılır: müşteri etiketi (C-TAG) 81-00, servis etiketi (S-TAG) 88-A8, omurga servis örneği etiketi (I-TAG) 88-E7'dir (Table 9-1). Servis sağlayıcı ağlarında S-TAG ile C-TAG üst üste kullanılabilir; bu sayfa C-TAG'i ele alır.",
+    "Varsayılan kodlamada (8P0D) PCP değeri önceliğin kendisidir ve atılabilirlik PCP'de taşınmaz. Port Use_DEI ile yapılandırıldığında drop_eligible parametresi DEI bitinde taşınır (§6.9.3).",
+    "Uç istasyonların varsayılan önceliği 0'dır ve Best Effort trafiğe karşılık gelir; Background için 1 kullanıldığından 1, 0'dan daha düşük bir önceliktir (§I.4).",
+    "Bir köprü 0'dan en çok 4094'e kadar VID'leri desteklemek zorundadır; 0 yalnızca öncelik taşıyan etiketi, FFF uygulamaya ayrılmış değeri gösterir ve etikette gönderilmez (§9.6, Table 9-2). Daha büyük ağlar için VXLAN ve Geneve 24 bitlik kimlik kullanır.",
+    "IEEE 802.1Q-2022 metni lisanslıdır ve depoda bulunmaz. Figure 9-1'in yalnızca bit etiketleri metin olarak okunabildiği için alan genişlikleri, onları yazıyla veren §9.4, §9.6 ve §6.9.3'ten de denetlenir. RFC 6325 §4.1.1 ve RFC 7348 §5 aynı alanları kendi şemalarında yeniden çizer."
+  ],
+  "notes_en": [
+    "Tag type is identified by the EtherType in TPID: customer tag (C-TAG) is 81-00, service tag (S-TAG) is 88-A8, and backbone service instance tag (I-TAG) is 88-E7 (Table 9-1). In provider networks, S-TAG and C-TAG may be stacked; this page covers C-TAG.",
+    "In default encoding (8P0D), the PCP value is priority itself and drop eligibility is not encoded in PCP. When a port is configured with Use_DEI, the drop_eligible parameter is carried in the DEI bit (§6.9.3).",
+    "Default priority for end stations is 0, corresponding to Best Effort traffic; because 1 is used for Background, priority 1 is lower than priority 0 (§I.4).",
+    "A bridge must support VIDs from 0 up to 4094; VID 0 indicates a priority-tagged frame, and FFF is reserved for implementation use and is not transmitted (§9.6, Table 9-2). For larger overlays, VXLAN and Geneve use 24-bit identifiers.",
+    "IEEE 802.1Q-2022 text is licensed and not stored in this repository. Because bit labels in Figure 9-1 are readable in PDF text, field widths are also verified against §9.4, §9.6, and §6.9.3 which specify them in prose. RFC 6325 §4.1.1 and RFC 7348 §5 redraw the same fields in their own diagrams."
+  ]
 }

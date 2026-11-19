@@ -48,11 +48,13 @@
         "label": "Security Parameters Index (SPI)"
       },
       "example": 4096,
-      "hex": true
+      "hex": true,
+      "desc_en": "32-bit index specifying the Security Association (SA) on the receiving side. Cannot be 0.",
+      "desc_tr": "Alıcı tarafta paketin hangi Güvenlik İlişkisine (SA) ait olduğunu belirten 32 bitlik dizin; 0 olamaz."
     },
     {
       "key": "seq",
-      "name": "Sıra numarası",
+      "name": "Sequence Number",
       "bits": 32,
       "desc": "Her pakette bir artan sayaç. SA kurulurken 0'dır, ilk paket 1 taşır; alıcı tekrar saldırılarını bu değerle ayıklar.",
       "ref": {
@@ -60,7 +62,10 @@
         "section": "2.2",
         "label": "Sequence Number"
       },
-      "example": 1
+      "example": 1,
+      "label": "Sıra numarası",
+      "desc_en": "Monotonically increasing 32-bit counter starting at 1 for anti-replay protection.",
+      "desc_tr": "Her pakette bir artan sayaç. SA kurulurken 0'dır, ilk paket 1 taşır; alıcı tekrar saldırılarını bu değerle ayıklar."
     },
     {
       "key": "payload_data",
@@ -75,7 +80,9 @@
       },
       "example": "c4120035002565871a2b01000001000000000000076578616d706c6503636f6d0000010001",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Encrypted payload data specified by Next Header; includes IV if required by the cipher.",
+      "desc_tr": "Next Header alanının türünü belirttiği veri; şifreleme algoritması gerektiriyorsa başında bir başlatma vektörü (IV) bulunur. Uzunluğu pakete göre değişir; buradaki genişlik bu örneğe aittir."
     },
     {
       "key": "padding",
@@ -90,7 +97,9 @@
       },
       "example": "01",
       "type": "bytes",
-      "range": "0–255 sekizli"
+      "range": "0–255 sekizli",
+      "desc_en": "0–255 octets of padding to align ciphertext to cipher block size or 4-octet boundary.",
+      "desc_tr": "Şifreli metni blok ya da 4 sekizli sınırına tamamlayan 0–255 sekizlilik dolgu. Varsayılan içerik 1'den başlayan artan baytlardır."
     },
     {
       "key": "pad_length",
@@ -103,7 +112,9 @@
         "section": "2.5",
         "label": "Pad Length"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Number of padding octets immediately preceding this field; 0 indicates no padding.",
+      "desc_tr": "Hemen önündeki dolgu baytlarının sayısı; 0, dolgu olmadığını gösterir."
     },
     {
       "key": "next_header",
@@ -118,6 +129,52 @@
       },
       "example": 17,
       "values": [
+        [
+          "4",
+          "IPv4 (tünel kipi)"
+        ],
+        [
+          "6",
+          "TCP"
+        ],
+        [
+          "17",
+          "UDP"
+        ],
+        [
+          "41",
+          "IPv6 (tünel kipi)"
+        ],
+        [
+          "59",
+          "Sahte paket (trafik gizleme)"
+        ]
+      ],
+      "desc_en": "Protocol type of the payload data; uses same values as IPv4 Protocol (e.g. 4 IPv4, 6 TCP, 17 UDP, 59 dummy).",
+      "desc_tr": "Payload Data'daki verinin türü; IPv4 Protocol alanıyla aynı değerleri kullanır. 4 iç IPv4 paketi (tünel kipi), 6 TCP, 17 UDP, 59 sahte (dummy) pakettir.",
+      "values_en": [
+        [
+          "4",
+          "IPv4 (tunnel mode)"
+        ],
+        [
+          "6",
+          "TCP"
+        ],
+        [
+          "17",
+          "UDP"
+        ],
+        [
+          "41",
+          "IPv6 (tunnel mode)"
+        ],
+        [
+          "59",
+          "Dummy packet (traffic masking)"
+        ]
+      ],
+      "values_tr": [
         [
           "4",
           "IPv4 (tünel kipi)"
@@ -153,15 +210,35 @@
       },
       "example": "5e8f1c2a9b7d43e0a6c1f2b38d4e7a90",
       "type": "bytes",
-      "range": "değişken"
+      "range": "değişken",
+      "desc_en": "Cryptographic checksum computed over ESP header, payload, and trailer; 16 octets in this example.",
+      "desc_tr": "ESP başlığı, yük ve kuyruk üzerinden hesaplanan bütünlük değeri. Uzunluğu seçilen algoritmaya bağlıdır; bu örnekte 16 sekizlidir."
     }
   ],
   "example": {
-    "note": "Taşıma kipinde, wire'ın UDP örneğini (example.com için bir DNS sorgusu) taşıyan bir ESP paketi, şifreleme öncesi görünümüyle. Payload Data 37 sekizlilik UDP datagramının kendisidir; ardından 1 sekizli dolgu (01), Pad Length 1 ve Next Header 17 (UDP) gelir, böylece 37 + 1 + 2 = 40 sekizli 4'ün katı olur. Gerçek pakette Payload Data'dan Next Header'a kadarki kısım şifrelidir. ICV burada uydurma bir değerdir."
+    "note": "Taşıma kipinde, wire'ın UDP örneğini (example.com için bir DNS sorgusu) taşıyan bir ESP paketi, şifreleme öncesi görünümüyle. Payload Data 37 sekizlilik UDP datagramının kendisidir; ardından 1 sekizli dolgu (01), Pad Length 1 ve Next Header 17 (UDP) gelir, böylece 37 + 1 + 2 = 40 sekizli 4'ün katı olur. Gerçek pakette Payload Data'dan Next Header'a kadarki kısım şifrelidir. ICV burada uydurma bir değerdir.",
+    "note_tr": "Taşıma kipinde, wire'ın UDP örneğini (example.com için bir DNS sorgusu) taşıyan bir ESP paketi, şifreleme öncesi görünümüyle. Payload Data 37 sekizlilik UDP datagramının kendisidir; ardından 1 sekizli dolgu (01), Pad Length 1 ve Next Header 17 (UDP) gelir, böylece 37 + 1 + 2 = 40 sekizli 4'ün katı olur. Gerçek pakette Payload Data'dan Next Header'a kadarki kısım şifrelidir. ICV burada uydurma bir değerdir.",
+    "note_en": "An ESP packet in transport mode carrying wire's UDP example (DNS query for example.com), shown in pre-encryption plaintext layout. Payload Data is the 37-octet UDP datagram itself; followed by 1 octet padding (01), Pad Length 1, and Next Header 17 (UDP), making 37 + 1 + 2 = 40 octets (a multiple of 4). In a live packet, Payload Data through Next Header is encrypted. ICV here is mock data."
   },
   "refs": [
     4303,
     768
   ],
-  "id": "esp"
+  "id": "esp",
+  "summary_tr": "Kapsüllenen Güvenlik Yükü (Encapsulating Security Payload - ESP), IPsec'in gizlilik sağlayan protokolüdür. 8 sekizlilik başlığı SPI ve sıra numarasından oluşur; şifrelenen yükü dolgu, dolgu uzunluğu ve Next Header alanlarından oluşan bir kuyruk ve bütünlük denetim değeri (ICV) izler. AH'den farklı olarak alanları baştan sona değil, bir başlık ve bir kuyruk olarak yerleşir.",
+  "summary_en": "IPsec Encapsulating Security Payload (ESP, RFC 4303) provides confidentiality, origin authentication, integrity, and anti-replay protection. Carries an 8-octet SPI and Sequence Number header, encrypted payload, padding, Pad Length, Next Header, and optional ICV trailer.",
+  "notes_tr": [
+    "ESP, IPv4 Protocol ya da IPv6 Next Header alanında 50 değeriyle belirtilir; AH ise 51 kullanır.",
+    "Gizlilik Payload Data'dan Next Header'a kadar olan kısmı kapsar; ICV ise ESP başlığını, yükü ve kuyruğu korur. SPI ve sıra numarası şifrelenmez, çünkü alıcı SA'yı ve tekrar saldırısı penceresini şifreyi çözmeden önce bunlarla bulur (RFC 4303 §2).",
+    "Dolgu, şifreli metnin 4 sekizlilik sınırda bitmesini sağlar: Payload Data, Padding, Pad Length ve Next Header birlikte 4'ün katı olmalıdır. Varsayılan dolgu baytları 1, 2, 3 … diye sayar (RFC 4303 §2.4).",
+    "Genişletilmiş sıra numarası (ESN) kullanıldığında 64 bitlik sayacın yalnızca alt 32 biti iletilir; üst yarı yalnızca ICV hesabına girer (RFC 4303 §2.2.1).",
+    "Taşıma kipinde Payload Data özgün paketin üst katman verisidir; tünel kipinde ise iç IP başlığıyla birlikte paketin tamamıdır."
+  ],
+  "notes_en": [
+    "ESP is designated by protocol number 50 in IPv4 Protocol or IPv6 Next Header; AH uses 51.",
+    "Confidentiality covers Payload Data through Next Header; ICV protects ESP header, payload, and trailer. SPI and sequence number are unencrypted so the receiver can locate the SA and replay window before decryption (RFC 4303 §2).",
+    "Padding ensures ciphertext aligns to a 4-octet boundary: Payload Data, Padding, Pad Length, and Next Header together must be a multiple of 4. Default padding bytes count 1, 2, 3 … (RFC 4303 §2.4).",
+    "When Extended Sequence Numbers (ESN) are negotiated, only the lower 32 bits are transmitted; the upper half is included only in ICV computation (RFC 4303 §2.2.1).",
+    "In transport mode, Payload Data is upper-layer data of the original packet; in tunnel mode, it is the entire inner IP packet including inner IP header."
+  ]
 }

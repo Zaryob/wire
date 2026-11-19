@@ -27,7 +27,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 50194
+      "example": 50194,
+      "desc_en": "Source port number.",
+      "desc_tr": "Kaynak port numarası."
     },
     {
       "key": "dport",
@@ -39,7 +41,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 80
+      "example": 80,
+      "desc_en": "Destination port number (e.g. 80 for HTTP web servers).",
+      "desc_tr": "Hedef port numarası. Örneğin standart HTTP web sunucusu için 80."
     },
     {
       "key": "seq",
@@ -52,7 +56,9 @@
         "section": "3.1"
       },
       "example": "0x12345678",
-      "hex": true
+      "hex": true,
+      "desc_en": "Sequence number of the first data octet in this segment (or Initial Sequence Number if SYN is set).",
+      "desc_tr": "Segmentteki ilk veri sekizlisinin sıra numarası. SYN bayrağı varsa bu değer başlangıç sıra numarasıdır (ISN) ve ilk veri sekizlisi ISN+1’dir."
     },
     {
       "key": "ack",
@@ -64,7 +70,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "If ACK is set, this is the next sequence number the sender is expecting to receive.",
+      "desc_tr": "ACK biti varsa, gönderenin almayı beklediği bir sonraki sıra numarası. Bağlantı kurulduktan sonra her zaman gönderilir."
     },
     {
       "key": "doff",
@@ -76,7 +84,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 5
+      "example": 5,
+      "desc_en": "Length of the TCP header in 32-bit words (range 5–15; multiply by 4 to get bytes).",
+      "desc_tr": "TCP başlığının 32 bitlik sözcük cinsinden uzunluğu. Geçerli değer 5–15’tir; bu değerin dört katı, yükün başladığı bayt ofsetini verir."
     },
     {
       "key": "rsrvd",
@@ -88,7 +98,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reserved control bits for future use; must be zero in transmitted segments.",
+      "desc_tr": "İleride kullanılmak üzere ayrılmış denetim bitleri. Üretilen segmentlerde sıfır olmalı, alınan segmentlerde yok sayılmalıdır."
     },
     {
       "key": "cwr",
@@ -100,7 +112,9 @@
         "rfc": 3168,
         "section": "6.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Congestion Window Reduced flag (RFC 3168).",
+      "desc_tr": "Congestion Window Reduced."
     },
     {
       "key": "ece",
@@ -112,7 +126,9 @@
         "rfc": 3168,
         "section": "6.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "ECN-Echo flag (RFC 3168).",
+      "desc_tr": "ECN-Echo."
     },
     {
       "key": "urg",
@@ -124,7 +140,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Urgent Pointer field significant.",
+      "desc_tr": "Urgent Pointer alanı anlamlıdır."
     },
     {
       "key": "ackf",
@@ -136,7 +154,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Acknowledgment field significant.",
+      "desc_tr": "Acknowledgment alanı anlamlıdır."
     },
     {
       "key": "psh",
@@ -148,7 +168,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Push Function: request immediate delivery of data to receiving application.",
+      "desc_tr": "Push işlevi."
     },
     {
       "key": "rst",
@@ -160,7 +182,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Reset the connection.",
+      "desc_tr": "Bağlantıyı sıfırla."
     },
     {
       "key": "syn",
@@ -172,7 +196,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 1
+      "example": 1,
+      "desc_en": "Synchronize sequence numbers during connection establishment.",
+      "desc_tr": "Sıra numaralarını eşzamanla."
     },
     {
       "key": "fin",
@@ -184,7 +210,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "No more data from sender; initiates connection teardown.",
+      "desc_tr": "Gönderenden başka veri yok."
     },
     {
       "key": "window",
@@ -196,7 +224,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 29200
+      "example": 29200,
+      "desc_en": "Number of data octets beginning with ACK number that sender is willing to accept (receive window).",
+      "desc_tr": "Gönderenin, Acknowledgment alanındaki numaradan başlayarak kabul etmeye hazır olduğu veri sekizlisi sayısı. İşaretsiz sayı olarak ele alınmalıdır."
     },
     {
       "key": "checksum",
@@ -209,7 +239,9 @@
         "section": "3.1"
       },
       "checksum": "pseudo4",
-      "hex": true
+      "hex": true,
+      "desc_en": "16-bit one's complement checksum of all 16-bit words in header, pseudo-header, and text.",
+      "desc_tr": "Başlık ve metindeki 16 bitlik sözcüklerin bire tümleyen toplamının 16 bitlik bire tümleyeni. Hesap sırasında alanın kendisi sıfır sayılır."
     },
     {
       "key": "urgent",
@@ -221,7 +253,9 @@
         "rfc": 9293,
         "section": "3.1"
       },
-      "example": 0
+      "example": 0,
+      "desc_en": "Positive offset from sequence number indicating the location of urgent data; valid only if URG flag is set.",
+      "desc_tr": "Acil verinin yerini segmentin sıra numarasına göre pozitif bir uzaklık olarak verir. Yalnızca URG biti olan segmentlerde yorumlanır."
     },
     {
       "key": "options",
@@ -232,7 +266,9 @@
       "ref": {
         "rfc": 9293,
         "section": "3.1"
-      }
+      },
+      "desc_en": "Variable-length options (e.g. MSS, Window Scale, SACK, Timestamps); padded to a 32-bit boundary.",
+      "desc_tr": "Değişken uzunlukta seçenekler; başlık 32 bitin katı olacak biçimde doldurulur."
     }
   ],
   "example": {
@@ -241,7 +277,9 @@
       "destination": "198.51.100.7",
       "protocol": 6
     },
-    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP sunucusunun 80 numaralı portuna giden TCP SYN segmenti. Bu segment, üç aşamalı bağlantı kurulumunun ilk adımıdır. Başlangıç sıra numarası 0x12345678, pencere boyutu 29200’dür. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır."
+    "note": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP sunucusunun 80 numaralı portuna giden TCP SYN segmenti. Bu segment, üç aşamalı bağlantı kurulumunun ilk adımıdır. Başlangıç sıra numarası 0x12345678, pencere boyutu 29200’dür. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır.",
+    "note_tr": "192.0.2.1 istemcisinden 198.51.100.7 adresindeki HTTP sunucusunun 80 numaralı portuna giden TCP SYN segmenti. Bu segment, üç aşamalı bağlantı kurulumunun ilk adımıdır. Başlangıç sıra numarası 0x12345678, pencere boyutu 29200’dür. Sağlama toplamı 192.0.2.1 → 198.51.100.7 IPv4 sözde başlığıyla hesaplanmıştır.",
+    "note_en": "A standard TCP SYN segment from client 192.0.2.1 to HTTP server 198.51.100.7 port 80, representing the first step of the 3-way handshake (ISN: 0x12345678, Window: 29200). Checksum is computed with the 192.0.2.1 → 198.51.100.7 IPv4 pseudo-header."
   },
   "refs": [
     9293,
@@ -251,5 +289,15 @@
     5737,
     1035
   ],
-  "id": "tcp"
+  "id": "tcp",
+  "summary_tr": "TCP (Transmission Control Protocol), uygulamalar arasında güvenilir ve sıralı bir bayt akışı taşır. TCP başlığı 20–60 bayttır; bayt cinsinden uzunluğu, 4 bitlik Data Offset alanının dört katıdır.",
+  "summary_en": "Transmission Control Protocol (TCP, RFC 9293) provides reliable, ordered, and error-checked byte-stream delivery between applications. The base header is 20 octets, carrying sequence and acknowledgment numbers, window size, and control flags (SYN, ACK, FIN, RST, PSH, URG).",
+  "notes_tr": [
+    "Sağlama toplamı, başlık ve veriyle birlikte bir sözde başlığı da kapsar: IPv4 için 96 bit, IPv6 için 320 bit.",
+    "CWR ve ECE bayraklarını RFC 3168 tanımlar; RFC 9293 bu iki bit için o belgeye gönderme yapar."
+  ],
+  "notes_en": [
+    "Checksum covers a pseudo-header along with the header and data: 96 bits for IPv4, 320 bits for IPv6.",
+    "Flags CWR and ECE are defined in RFC 3168; RFC 9293 references that specification for these two bits."
+  ]
 }
