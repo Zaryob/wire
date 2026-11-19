@@ -1,0 +1,65 @@
+# Wire — Network Protocol Header Reference
+
+> Source-verified, bit-level packet header reference for 51 network protocols across 4 TCP/IP layers.
+
+Wire provides bit-accurate packet diagrams, byte offsets, field widths, flag breakdowns, and descriptions verified against authoritative IETF RFCs and licensed IEEE specifications (802.1Q-2022, 1588-2008, 802.1AB-2016).
+
+## Overview & Architecture
+
+- [Wire Homepage](https://zaryob.github.io/wire/): Interactive protocol explorer and layer catalog.
+- [Katmanlar (Layers)](https://zaryob.github.io/wire/#katmanlar): Explanation of the 4 TCP/IP layers, protocol encapsulations, and summaries.
+- [Kılavuz (Guide)](https://zaryob.github.io/wire/kilavuz/): Usage guide for packet inspection and header analysis.
+- [Kaynakça (Bibliography)](https://zaryob.github.io/wire/kaynakca/): Direct references to RFCs and IEEE standards used to verify every field.
+
+## Link Layer (Bağlantı Katmanı)
+
+- [Ethernet (RFC 826, RFC 894, RFC 9542)](https://zaryob.github.io/wire/ethernet/): 48-bit MAC addresses, EtherType field, and frame structure.
+- [802.1Q VLAN Tag (IEEE 802.1Q-2022)](https://zaryob.github.io/wire/vlan/): TPID, PCP priority, DEI, and 12-bit VLAN ID.
+- [ARP (RFC 826)](https://zaryob.github.io/wire/arp/): Address Resolution Protocol packet layout and hardware/protocol mappings.
+- [RARP (RFC 903)](https://zaryob.github.io/wire/rarp/): Reverse Address Resolution Protocol.
+- [PPPoE (RFC 2516)](https://zaryob.github.io/wire/pppoe/): PPP over Ethernet discovery and session stages.
+- [LLDP (IEEE 802.1AB-2016)](https://zaryob.github.io/wire/lldp/): Link Layer Discovery Protocol TLVs (Chassis ID, Port ID, TTL).
+- [MPLS (RFC 3032, RFC 5462)](https://zaryob.github.io/wire/mpls/): 20-bit label, Traffic Class, Bottom of Stack (BoS), and TTL.
+
+## Internet Layer (Ağ Katmanı)
+
+- [IPv4 (RFC 791, RFC 2474, RFC 3168)](https://zaryob.github.io/wire/ipv4/): 20-60 byte header, DSCP/ECN, fragmentation, TTL, and checksum.
+- [IPv6 (RFC 8200, RFC 2474)](https://zaryob.github.io/wire/ipv6/): Fixed 40-byte header, 128-bit addresses, Traffic Class, and Flow Label.
+- [IPv6 Fragment Header (RFC 8200 §4.5)](https://zaryob.github.io/wire/ipv6-frag/): 8-byte fragment extension header.
+- [IPv6 Segment Routing Header - SRH (RFC 8754)](https://zaryob.github.io/wire/srh/): Routing type 4 header with segment lists.
+- [ICMPv4 (RFC 792)](https://zaryob.github.io/wire/icmp/): Diagnostic and error reporting packets (Ping, Destination Unreachable).
+- [ICMPv6 (RFC 4443)](https://zaryob.github.io/wire/icmpv6/): IPv6 diagnostic and neighbor discovery messages.
+- [IGMPv2 (RFC 2236)](https://zaryob.github.io/wire/igmp/): Multicast group membership reports.
+- [IGMPv3 (RFC 9776)](https://zaryob.github.io/wire/igmpv3/): Source-specific multicast group query and reports.
+- [GRE (RFC 2784)](https://zaryob.github.io/wire/gre/): Generic Routing Encapsulation header.
+- [IPsec AH (RFC 4302)](https://zaryob.github.io/wire/ah/): Authentication Header for packet integrity.
+- [IPsec ESP (RFC 4303)](https://zaryob.github.io/wire/esp/): Encapsulating Security Payload header and trailer.
+- [OSPFv2 (RFC 2328)](https://zaryob.github.io/wire/ospf/): 24-byte OSPF common header and Hello packets.
+- [VRRPv3 (RFC 9568)](https://zaryob.github.io/wire/vrrp/): Virtual Router Redundancy Protocol packet layout.
+
+## Transport Layer (İletim Katmanı)
+
+- [UDP (RFC 768)](https://zaryob.github.io/wire/udp/): Minimal 8-byte connectionless header.
+- [TCP (RFC 9293, RFC 3168)](https://zaryob.github.io/wire/tcp/): Reliable stream header, flags (SYN, ACK, FIN, RST, PSH, URG), sequence numbers, and window size.
+- [QUIC (RFC 9000, RFC 9001)](https://zaryob.github.io/wire/quic/): Long and short header formats, Connection IDs, and packet protection.
+- [QUIC 1-RTT (RFC 9000)](https://zaryob.github.io/wire/quic-1rtt/): 1-RTT short header format.
+- [SCTP (RFC 9260)](https://zaryob.github.io/wire/sctp/): Stream Control Transmission Protocol common header and chunks.
+- [DCCP (RFC 4340)](https://zaryob.github.io/wire/dccp/): Datagram Congestion Control Protocol header.
+- [VXLAN (RFC 7348)](https://zaryob.github.io/wire/vxlan/): Layer 2 overlay over UDP tunnel header (VNI).
+- [Geneve (RFC 8926)](https://zaryob.github.io/wire/geneve/): Generic Network Virtualization Encapsulation header with variable TLVs.
+
+## Application Layer (Uygulama Katmanı)
+
+- [DNS (RFC 1035)](https://zaryob.github.io/wire/dns/): 12-byte header, query/reply flags (QR, Opcode, RCODE), questions, and Resource Records.
+- [DHCP (RFC 2131)](https://zaryob.github.io/wire/dhcp/): Bootstrap and dynamic host configuration protocol message format.
+- [DHCPv6 (RFC 8415)](https://zaryob.github.io/wire/dhcpv6/): DHCP for IPv6 client/server messages.
+- [TLS Record Layer (RFC 8446)](https://zaryob.github.io/wire/tls/): TLS 1.3 plaintext and ciphertext records.
+- [WebSocket (RFC 6455)](https://zaryob.github.io/wire/websocket/): Framing, FIN bit, RSV, Opcode, Masking key, and payload.
+- [HTTP/2 (RFC 9113)](https://zaryob.github.io/wire/http2/): 9-byte frame header (Length, Type, Flags, Stream ID).
+- [HTTP/3 (RFC 9114)](https://zaryob.github.io/wire/http3/): Frame format over QUIC streams.
+- [NTP (RFC 5905)](https://zaryob.github.io/wire/ntp/): Network Time Protocol packet layout and timestamps.
+- [PTP (IEEE 1588-2008)](https://zaryob.github.io/wire/ptp/): Precision Time Protocol common header.
+- [BGP-4 (RFC 4271)](https://zaryob.github.io/wire/bgp/): 19-byte common header and message types.
+- [SSH Binary Packet (RFC 4253)](https://zaryob.github.io/wire/ssh/): SSH transport layer packet framing.
+- [CoAP (RFC 7252)](https://zaryob.github.io/wire/coap/): Constrained Application Protocol 4-byte header and token.
+- [SNMP (RFC 1157, RFC 3416)](https://zaryob.github.io/wire/snmp/): SNMP message formats.
