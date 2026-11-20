@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import path from 'node:path';
 import { root, bibliography, standards, rfcEntry, standardEntry, isRfc, refKey, verifyLayout, loadProtocols } from '../src/sources.mjs';
 import { encodeExample } from '../src/encode.mjs';
+import { busIds, busPage, busSearch } from '../src/bus-atlas.mjs';
 import { englishTitles, englishSummaries, layerNames, osiDescriptionsEn, groupTitlesEn } from '../src/translations.mjs';
 
 const out = path.join(root, '_site');
@@ -273,6 +274,7 @@ function topbar(current, title = '', layer = '', lang = 'en') {
     </nav>
   </div>
   <div class="topbar-right">
+    <a href="${url('buses', lang)}" class="button secondary bus-atlas-link">${isTr ? 'Veri Yolu Atlası' : 'Bus Atlas'}</a>
     <a href="${url('', lang)}#${isTr ? 'katmanlar' : 'layers'}" class="button secondary help-btn layers-btn">
       ${layersIcon}
       <span>${isTr ? 'Katmanlar' : 'Layers'}</span>
@@ -287,7 +289,7 @@ function topbar(current, title = '', layer = '', lang = 'en') {
 </header>`;
 }
 
-function suiteFooter(lang = 'en') {
+function suiteFooter(lang, isBusPage) {
   const isTr = lang === 'tr';
   const column = (title, label, links, listClass = '') => `<nav class="suite-footer__col" aria-label="${e(label)}"><p class="suite-footer__title">${title}</p><ul${listClass ? ` class="${listClass}"` : ''}>${links.map(link => `<li>${link}</li>`).join('')}</ul></nav>`;
   const siteLinks = [
@@ -321,14 +323,18 @@ function suiteFooter(lang = 'en') {
   const legalLine1 = isTr
     ? '<span aria-hidden="true"># </span>© Süleyman Poyraz · Ağ protokolü başlıkları, bit bit.'
     : '<span aria-hidden="true"># </span>© Süleyman Poyraz · Network protocol headers, bit by bit.';
+  const busNote = isTr ? 'CAN başvurusu, standartlara ve Linux belgelerine dayanır.' : 'CAN reference sourced from standards and Linux documentation.';
+  const protocolNote = isTr ? 'Her alan bir RFC’ye dayanır.' : 'Every field is backed by an RFC.';
+  const notice = isBusPage ? busNote : protocolNote;
   const legalLine2 = isTr
-    ? `Her alan bir RFC’ye dayanır.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a>`
-    : `Every field is backed by an RFC.<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Back to top</a>`;
+    ? `${notice}<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Başa dön</a>`
+    : `${notice}<a class="suite-footer__top" href="#main"><span aria-hidden="true">↑ </span>Back to top</a>`;
   return `<footer class="suite-footer" id="site-footer"><div class="suite-footer__inner"><p class="suite-footer__prompt" aria-hidden="true"><span class="suite-footer__host">zaryob</span>:~/wire $ <span class="suite-footer__cmd">ls -F</span></p><div class="suite-footer__cols">${site}${suite}${contact}</div><div class="suite-footer__legal"><span>${legalLine1}</span><span>${legalLine2}</span></div></div></footer>`;
 }
 
-function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '', lang = 'en' }) {
+function page({ id, title, description, body, hero = '', indexable = true, className = '', pageTitle = '', layer = '', lang = 'en', stylesheet = '' }) {
   const isTr = lang === 'tr';
+  const isBusPage = busIds.includes(id);
   const fullTitle = id === ''
     ? (isTr ? 'Wire · Ağ protokolü başlıkları, bit bit' : 'Wire · Network protocol headers, bit by bit')
     : `${title} · Wire`;
@@ -342,11 +348,11 @@ function page({ id, title, description, body, hero = '', indexable = true, class
 <html lang="${lang}" data-route-language="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content"><meta name="theme-color" content="#f5f3ed" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#171a1f" media="(prefers-color-scheme: dark)"><meta name="description" content="${e(description)}"><title>${e(fullTitle)}</title><link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">${indexable ? `<link rel="canonical" href="${canonical}">
 <link rel="alternate" hreflang="en" href="${altEn}" data-language-route="${routeEn}">
 <link rel="alternate" hreflang="tr" href="${altTr}" data-language-route="${routeTr}">
-<link rel="alternate" hreflang="x-default" href="${altEn}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="${isTr ? 'tr_TR' : 'en_US'}"><meta property="og:type" content="website"><script src="${asset('assets/console/language.js')}"></script><script src="${asset('assets/console/i18n.js')}"></script><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}"><script type="module" src="${asset('app.js')}"></script></head>
+<link rel="alternate" hreflang="x-default" href="${altEn}">` : '<meta name="robots" content="noindex">'}<meta property="og:title" content="${e(fullTitle)}"><meta property="og:description" content="${e(description)}"><meta property="og:site_name" content="wire"><meta property="og:locale" content="${isTr ? 'tr_TR' : 'en_US'}"><meta property="og:type" content="website"><script src="${asset('assets/console/language.js')}"></script><script src="${asset('assets/console/i18n.js')}"></script><script src="${asset('assets/console/theme.js')}"></script><link rel="stylesheet" href="${asset('assets/console/theme.css')}"><link rel="stylesheet" href="${asset('style.css')}">${stylesheet ? `<link rel="stylesheet" href="${asset(stylesheet)}">` : ''}<script type="module" src="${asset('app.js')}"></script></head>
 <body class="console-site wire-site${className ? ` ${className}` : ''}">${header(id, lang)}
-${topbar(id, pageTitle || title, layer, lang)}
+${isBusPage ? '' : topbar(id, pageTitle || title, layer, lang)}
 <main id="main" tabindex="-1">${hero}<div class="wire-main">${body}</div></main>
-${suiteFooter(lang)}
+${suiteFooter(lang, isBusPage)}
 </body></html>`;
 }
 
@@ -1574,6 +1580,7 @@ async function save(name, content) {
 for (const lang of ['en', 'tr']) {
   const prefix = lang === 'tr' ? 'tr/' : '';
   await save(`${prefix}index.html`, home(lang));
+  for (const id of busIds) await save(`${prefix}${id}/index.html`, page(busPage(id, lang, url, asset)));
   for (const protocol of protocols) {
     await save(`${prefix}${protocol.id}/index.html`, protocolPage(protocol, lang));
   }
@@ -1596,6 +1603,7 @@ await save('.nojekyll', '');
 
 // Bilingual search index
 await save('search.json', JSON.stringify([
+  ...busSearch,
   ...protocols.map(protocol => ({
     title: protocolTitle(protocol, 'en'),
     description: protocolSummary(protocol, 'en'),
@@ -1646,7 +1654,7 @@ await save('search.json', JSON.stringify([
   }
 ], null, 2));
 
-const sitemapPages = ['', ...protocols.map(p => p.id), 'kilavuz', 'yontem', 'kaynakca'];
+const sitemapPages = ['', ...protocols.map(p => p.id), ...busIds, 'kilavuz', 'yontem', 'kaynakca'];
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${sitemapPages.map(id => {

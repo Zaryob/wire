@@ -1,0 +1,12 @@
+# Synthetic teaching data. Eleven 0x123 frames at nominal 10 ms with one 250 us excursion.
+(0.000000) vcan0 123#00
+(0.010000) vcan0 123#01
+(0.020000) vcan0 123#02
+(0.030000) vcan0 123#03
+(0.040000) vcan0 123#04
+(0.050250) vcan0 123#05
+(0.060000) vcan0 123#06
+(0.070000) vcan0 123#07
+(0.080000) vcan0 123#08
+(0.090000) vcan0 123#09
+(0.100000) vcan0 123#0A

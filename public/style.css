@@ -560,3 +560,7 @@ body.is-searching .home-layers { display: none; }
 .layers-group[open] > summary { border-bottom: 1px solid var(--line); }
 .layers-group > .layers-summary { padding: 12px; }
 @media (max-width: 640px) { .protocol-list--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (max-width: 640px) {
+  .topbar .bus-atlas-link { order: 2; min-height: 44px; }
+}
